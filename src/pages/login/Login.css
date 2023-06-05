@@ -1,0 +1,80 @@
+
+    
+
+    .wrapper {
+      /* background: url('../../../src/assets/login-bg/vaccine-bg2.jpg') no-repeat center center fixed; */
+      background: #345392;
+      background-size: cover;
+      transform: scale(1);
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .login-card {
+        width: 90%;
+        margin: 0 auto;
+        padding: 30px;
+        background: rgba(255, 255, 255, 0);
+        -webkit-backdrop-filter: blur(10px);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        box-shadow: 0px 10px 30px 0 rgba(43, 45, 66, 0.3);
+        border: 1px solid rgba(255,255,255,0.5);
+        border-top: 1px solid transparent;
+        border-left: 1px solid transparent;
+    /* } */
+    }
+    
+    .form-container {
+      padding: 20px;
+    }
+    
+    .login-form {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .input-container {
+      position: relative;
+      margin-bottom: 5px;
+    }
+    .input-container > * {
+      font-weight: 500;
+      font-family: inherit;
+      color: #fff !important;
+    }
+    
+    .animated-input {
+      padding: 10px;
+      border: none;
+      border-bottom: 1px solid #ccc;
+      border-radius: 0;
+      transition: all 0.3s ease;
+      width: 100%;
+    }
+    
+    #myicon {
+      position: absolute;
+      font-size: 12px;
+      top: 7px;
+      left: -2px;
+    }
+
+    .animated-input:focus {
+      border-color: var(--ion-color-primary);
+      
+    }
+    /* .animated-input:focus + #myicon {
+      
+    } */
+
+    
+
+  
+    
+    /* .custom-button {
+      --ripple-color: #ccc;
+      color: rgba(0, 0, 0, 0.991);
+    } */
