@@ -1,8 +1,8 @@
 import { IonContent,IonPage } from '@ionic/react';
 import React from 'react';
 import Header from '../../components/header/Header';
-import PatientSearch from '../../components/PatientSearch';
-import PatientCard from './PatientCard';
+import PatientSearch from '../../components/patient/PatientSearch';
+import PatientCard from '../../components/patient/PatientCard';
 
 const PatientCardList: React.FC = () => {
 

@@ -1,5 +1,5 @@
 import {
-    IonButton,
+  IonButton,
   IonCard,
   IonCardContent,
   IonContent,
@@ -8,13 +8,20 @@ import {
   IonLabel,
   IonPage,
 } from "@ionic/react";
-import React, { FormEvent } from "react";
+import React, { FormEvent, useState } from "react";
 import Header from "../../components/header/Header";
 
 const EditProfile: React.FC = () => {
-    function handleSubmit(event: FormEvent<HTMLFormElement>): void {
-        throw new Error("Function not implemented.");
-    }
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [pdmc, setPdmc] = useState("");
+
+  function handleSubmit(event: FormEvent<HTMLFormElement>): void {
+    event.preventDefault();
+    // Perform form submission logic here
+  }
 
   return (
     <IonPage>
@@ -23,27 +30,49 @@ const EditProfile: React.FC = () => {
         <IonCard>
           <IonCardContent>
             <form onSubmit={handleSubmit}>
-                <IonItem>
-                  <IonLabel position="floating">First Name</IonLabel>
-                  <IonInput type="text" />
-                </IonItem>
-                <IonItem>
-                  <IonLabel position="floating">Last Name</IonLabel>
-                  <IonInput type="text" />
-                </IonItem>
-                <IonItem>
-                  <IonLabel position="floating">Email</IonLabel>
-                  <IonInput type="email" />
-                </IonItem>
-                <IonItem>
-                  <IonLabel position="floating">Phone No</IonLabel>
-                  <IonInput type="tel" />
-                </IonItem>
-                <IonItem>
-                  <IonLabel position="floating">PDMC</IonLabel>
-                  <IonInput type="text" />
-                </IonItem>
-            <IonButton type="submit" expand="full">Update</IonButton>
+              <IonItem>
+                <IonLabel position="floating">First Name</IonLabel>
+                <IonInput
+                  type="text"
+                  value={firstName}
+                  onIonChange={(e) => setFirstName(e.detail.value!)}
+                />
+              </IonItem>
+              <IonItem>
+                <IonLabel position="floating">Last Name</IonLabel>
+                <IonInput
+                  type="text"
+                  value={lastName}
+                  onIonChange={(e) => setLastName(e.detail.value!)}
+                />
+              </IonItem>
+              <IonItem>
+                <IonLabel position="floating">Email</IonLabel>
+                <IonInput
+                  type="email"
+                  value={email}
+                  onIonChange={(e) => setEmail(e.detail.value!)}
+                />
+              </IonItem>
+              <IonItem>
+                <IonLabel position="floating">Phone No</IonLabel>
+                <IonInput
+                  type="tel"
+                  value={phone}
+                  onIonChange={(e) => setPhone(e.detail.value!)}
+                />
+              </IonItem>
+              <IonItem>
+                <IonLabel position="floating">PDMC</IonLabel>
+                <IonInput
+                  type="text"
+                  value={pdmc}
+                  onIonChange={(e) => setPdmc(e.detail.value!)}
+                />
+              </IonItem>
+              <IonButton type="submit" expand="full">
+                Update
+              </IonButton>
             </form>
           </IonCardContent>
         </IonCard>
