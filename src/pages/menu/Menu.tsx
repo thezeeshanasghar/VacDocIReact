@@ -16,13 +16,12 @@ import {
 import { useLocation } from "react-router-dom";
 import {
   archiveSharp,
-  trashSharp,
-  warningSharp,
   home,
   alertOutline,
   mail,
   powerSharp,
   personAdd,
+  man,
 } from "ionicons/icons";
 import "./Menu.css";
 import Routes from "../../routes/Routes";
@@ -105,10 +104,18 @@ const Menu: React.FC = () => {
             </IonList>
           </IonContent>
           <IonFooter>
-            <IonItem routerLink="/members/child/add" routerDirection="back">
-              <IonIcon icon={personAdd} slot="start" color="primary" />
-              Add
-            </IonItem>
+            <IonMenuToggle autoHide={false}>
+              <IonItem routerLink="/members/child" routerDirection="back">
+                <IonIcon icon={man} slot="start" color="primary" />
+                Patients
+              </IonItem>
+            </IonMenuToggle>
+            <IonMenuToggle autoHide={false}>
+              <IonItem routerLink="/members/child/add" routerDirection="back">
+                <IonIcon icon={personAdd} slot="start" color="primary" />
+                Add
+              </IonItem>
+            </IonMenuToggle>
             <IonItem routerLink="/" routerDirection="back">
               <IonIcon icon={powerSharp} slot="start" color="primary" />
               Logout

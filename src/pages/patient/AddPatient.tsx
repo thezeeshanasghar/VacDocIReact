@@ -21,7 +21,7 @@ import {
 } from "@ionic/react";
 import React from "react";
 import Header from "../../components/header/Header";
-import "./addpatient.css";
+import "./css/addpatient.css";
 
 const AddPatient: React.FC = () => {
   return (

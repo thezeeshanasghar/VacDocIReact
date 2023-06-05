@@ -28,7 +28,7 @@ const Header: React.FC<IHeaderProps> = ({ pageName }) => {
             slot="start"
             className="buttons-first-slot sc-IonButtons-md-h sc-IonButtons-md-s md hydrated"
           ></IonButtons>
-          <IonTitle className="md title-default hydrated">{pageName}</IonTitle>
+          <IonTitle slot="start" className="md title-default hydrated">{pageName}</IonTitle>
           <IonTitle
             slot="end"
             className="ng-star-inserted md title-default hydrated"
