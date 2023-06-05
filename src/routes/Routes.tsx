@@ -5,7 +5,6 @@ import Dashboard from "../pages/dashboard/Dashboard";
 import Alert from "../pages/alert/Alert";
 import Test from "../pages/Test";
 import AddPatient from "../pages/patient/AddPatient";
-import PatientCard from "../pages/patient/PatientCard";
 import PatientCardList from "../pages/patient/PatientCardList";
 
 const Routes: React.FC = () => {
