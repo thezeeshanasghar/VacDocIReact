@@ -1,0 +1,7 @@
+{
+  "name": "VacDocIReact",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react-vite"
+}
