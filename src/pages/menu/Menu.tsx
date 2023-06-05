@@ -22,6 +22,7 @@ import {
   powerSharp,
   personAdd,
   man,
+  create,
 } from "ionicons/icons";
 import "./Menu.css";
 import Routes from "../../routes/Routes";
@@ -45,9 +46,9 @@ const appPages: AppPage[] = [
     mdIcon: alertOutline,
   },
   {
-    title: "Message",
-    url: "/page/Favorites",
-    mdIcon: mail,
+    title: "Edit Profile",
+    url: "/members/doctor/edit-profile",
+    mdIcon: create,
   },
   {
     title: "Archived",

@@ -6,6 +6,7 @@ import Alert from "../pages/alert/Alert";
 import Test from "../pages/Test";
 import AddPatient from "../pages/patient/AddPatient";
 import PatientCardList from "../pages/patient/PatientCardList";
+import EditProfile from "../pages/doctor/EditProfile";
 
 const Routes: React.FC = () => {
   return (
@@ -15,6 +16,11 @@ const Routes: React.FC = () => {
         <Route exact path="/members/alert/vaccine-alert" component={Alert} />
         <Route exact path="/members/child/add" component={AddPatient} />
         <Route exact path="/members/child" component={PatientCardList} />
+        <Route
+          exact
+          path="/members/doctor/edit-profile"
+          component={EditProfile}
+        />
 
         <Route exact path={"/members/test"} component={Test} />
         <Route exact path="/members">

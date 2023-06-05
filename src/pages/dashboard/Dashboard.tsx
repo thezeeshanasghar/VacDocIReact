@@ -19,7 +19,7 @@ const Dashboard: React.FC = () => {
         <IonCard className="welcome-card md hydrated image-card">
           <IonImg
             src={dashboardImage}
-            style={{height: '30vh', }}
+            style={{ height: "40vh", objectFit: "cover" }}
             className="md hydrated custom-image"
           ></IonImg>
           <IonCardHeader className="ion-inherit-color md hydrated">
