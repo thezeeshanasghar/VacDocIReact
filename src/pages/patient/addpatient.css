@@ -1,0 +1,7 @@
+.patient-checkboxes {
+    display: flex;
+}
+
+.patient-checkboxes > * {
+    width: 50%;
+}

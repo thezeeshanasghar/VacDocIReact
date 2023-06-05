@@ -1,9 +1,9 @@
 import {
   IonContent,
+  IonFooter,
   IonHeader,
   IonIcon,
   IonItem,
-
   IonLabel,
   IonList,
   IonMenu,
@@ -21,6 +21,8 @@ import {
   home,
   alertOutline,
   mail,
+  powerSharp,
+  personAdd,
 } from "ionicons/icons";
 import "./Menu.css";
 import Routes from "../../routes/Routes";
@@ -52,16 +54,6 @@ const appPages: AppPage[] = [
     title: "Archived",
     url: "/page/Archived",
     mdIcon: archiveSharp,
-  },
-  {
-    title: "Trash",
-    url: "/page/Trash",
-    mdIcon: trashSharp,
-  },
-  {
-    title: "Spam",
-    url: "/page/Spam",
-    mdIcon: warningSharp,
   },
 ];
 
@@ -112,6 +104,16 @@ const Menu: React.FC = () => {
               })}
             </IonList>
           </IonContent>
+          <IonFooter>
+            <IonItem routerLink="/members/child/add" routerDirection="back">
+              <IonIcon icon={personAdd} slot="start" color="primary" />
+              Add
+            </IonItem>
+            <IonItem routerLink="/" routerDirection="back">
+              <IonIcon icon={powerSharp} slot="start" color="primary" />
+              Logout
+            </IonItem>
+          </IonFooter>
         </IonMenu>
         <Routes />
       </IonSplitPane>

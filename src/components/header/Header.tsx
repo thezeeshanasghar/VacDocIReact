@@ -10,10 +10,10 @@ import {
 } from "@ionic/react";
 import { add, alert, medkit, personAdd } from "ionicons/icons";
 import { useLocation } from "react-router";
-type IHeaderProps =  {pageName: string}
-const Header: React.FC<IHeaderProps> = ({ pageName}) => {
-    const location = useLocation();
-    const router = useIonRouter();
+type IHeaderProps = { pageName: string };
+const Header: React.FC<IHeaderProps> = ({ pageName }) => {
+  const location = useLocation();
+  const router = useIonRouter();
   return (
     <>
       <IonHeader
@@ -36,22 +36,24 @@ const Header: React.FC<IHeaderProps> = ({ pageName}) => {
             {" "}
             Baby Medics{" "}
           </IonTitle>
-        {location.pathname === "/members/doctor/clinic" && <IonItem
-        color="primary"
-        routerLink="/members/doctor/clinic/add"
-        slot="end"
-        tabIndex={0}
-        className="ion-color ion-color-primary item md ion-activatable ion-focusable hydrated"
-        >
-        <IonIcon
-            color="light"
-            icon={add}
-            slot="end"
-            role="img"
-            className="md ion-color ion-color-light hydrated"
-            aria-label="add"
-        ></IonIcon>
-        </IonItem>}
+          {location.pathname === "/members/doctor/clinic" && (
+            <IonItem
+              color="primary"
+              routerLink="/members/doctor/clinic/add"
+              slot="end"
+              tabIndex={0}
+              className="ion-color ion-color-primary item md ion-activatable ion-focusable hydrated"
+            >
+              <IonIcon
+                color="light"
+                icon={add}
+                slot="end"
+                role="img"
+                className="md ion-color ion-color-light hydrated"
+                aria-label="add"
+              ></IonIcon>
+            </IonItem>
+          )}
         </IonToolbar>
         <IonToolbar
           color="primary"
@@ -64,6 +66,7 @@ const Header: React.FC<IHeaderProps> = ({ pageName}) => {
             <IonIcon
               icon={personAdd}
               // routerLink="/members/child/add"
+              onClick={() => router.push("/members/child/add")}
               size="large"
               style={{ marginLeft: "10%" }}
               tabIndex={0}
@@ -80,7 +83,9 @@ const Header: React.FC<IHeaderProps> = ({ pageName}) => {
               role="img"
               className="md icon-large hydrated"
               aria-label="alert"
-              onClick={() => router.push("/members/alert/vaccine-alert","root")}
+              onClick={() =>
+                router.push("/members/alert/vaccine-alert", "root")
+              }
             ></IonIcon>
             <IonIcon
               icon={medkit}

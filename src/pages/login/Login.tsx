@@ -19,7 +19,7 @@ const Login: React.FC = () => {
   const [showLoading, setShowLoading] = useState(false);
   const navigation = useIonRouter();
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    setShowLoading(true);
+    // setShowLoading(true);
     event.preventDefault();
     navigation.push("/members", "root");
   };
