@@ -3,7 +3,7 @@ import React from "react";
 import { Redirect, Route } from "react-router";
 import Dashboard from "../pages/dashboard/Dashboard";
 import Alert from "../pages/alert/Alert";
-import Test from "../pages/Test";
+import Test from "../pages/test/Test";
 import AddPatient from "../pages/patient/AddPatient";
 import PatientCardList from "../pages/patient/PatientCardList";
 import EditProfile from "../pages/doctor/EditProfile";

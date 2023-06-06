@@ -12,11 +12,12 @@ import {
   IonPage,
   IonRow,
 } from "@ionic/react";
-import React, { FormEvent, useState } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
 import Header from "../../components/header/Header";
 import useFetch from "../../hook/useFetch";
 import { format } from "date-fns";
-type UserData = {
+import Toast from "../../components/custom-toast/Toast";
+type DoctorData = {
   Id: number;
   Name: string;
   MobileNumber: string;
@@ -29,39 +30,84 @@ type UserData = {
   ValidUpto: string;
 };
 const EditProfile: React.FC = () => {
-  const { data, error, isLoading } = useFetch<UserData>(
-    "http://localhost:5041/api/Doctor/1"
-  );
-  console.log(data);
+  const [data, setData] = useState<DoctorData>();
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [pdmc, setPdmc] = useState("");
+  const [mobileNumber, setMobileNumber] = useState("");
+  const [pmdc, setPmdc] = useState("");
   const [doctorType, setDoctorType] = useState("");
   const [validUpto, setValidUpto] = useState("");
-  const [isApproved, setIsApproved] = useState(false);
   const [isEnabled, setIsEnabled] = useState(false);
 
+  const [success, setSuccess] = useState<boolean>(false);
+  const [error, setError] = useState<boolean>(false);
   function handleSubmit(event: FormEvent<HTMLFormElement>): void {
     event.preventDefault();
-    console.log("name:", name);
-    console.log("password:", password);
-    console.log("email:", email);
-    console.log("phone:", phone);
-    console.log("pdmc:", pdmc);
-    console.log("doctorType:", doctorType);
-    console.log("validUpto:", validUpto);
-    console.log("isApproved:", isApproved);
-    console.log("isEnabled:", isEnabled);
+    //@ts-ignore
+    const data_to_be_sent = {
+      id: 1,
+      name: name ? name : data?.Name,
+      mobileNumber: mobileNumber ? mobileNumber : data?.MobileNumber,
+      password: password ? password : data?.Password,
+      isEnabled: isEnabled ? 1 : 0,
+      email: email ? email : data?.Email,
+      doctorType: doctorType ? doctorType : data?.DoctorType,
+      pmdc: pmdc ? pmdc : data?.PMDC,
+    };
+    fetch(`http://localhost:5041/api/Doctor/doctors/${1}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data_to_be_sent),
+    })
+      .then((response) => {
+        response.status === 204 ? setSuccess(true) : setError(true);
+      })
+      .catch((error) => setError(true))
+      .finally(() => {
+        clearVariables();
+        fetchInitialDocData();
+      });
   }
+  //function to clear all state variables;
+  const clearVariables = () => {
+    setName("");
+    setPassword("");
+    setEmail("");
+    setMobileNumber("");
+    setPmdc("");
+    setDoctorType("");
+    setValidUpto("");
+    setIsEnabled(false);
+  };
+  const fetchInitialDocData = () => {
+    fetch(`http://localhost:5041/api/Doctor/${1}`)
+      .then((response) => response.json())
+      .then((data: DoctorData) => setData(data))
+      .catch((error) => console.log(error));
+  };
 
-  if (isLoading) return <h1>loading..</h1>;
-  if (error) new Error("couldnt get data");
+  useEffect(() => {
+    fetchInitialDocData();
+  }, []);
   return (
     <>
       {data && (
         <IonPage>
+          <Toast
+            isOpen={success}
+            setOpen={setSuccess}
+            message="Updated successfully."
+            color="success"
+          />
+          <Toast
+            isOpen={error}
+            setOpen={setError}
+            message="An error occurred while updating doctor profile. plz try again"
+            color="danger"
+          />
           <Header pageName="Update Profile" />
           <IonContent className="ion-padding">
             <IonCard>
@@ -71,7 +117,7 @@ const EditProfile: React.FC = () => {
                     <IonLabel position="floating">Name</IonLabel>
                     <IonInput
                       type="text"
-                      value={(data && data.Name) || name}
+                      value={name || data.Name}
                       onIonChange={(e) => setName(e.detail.value!)}
                     />
                   </IonItem>
@@ -79,74 +125,43 @@ const EditProfile: React.FC = () => {
                     <IonLabel position="floating">Email</IonLabel>
                     <IonInput
                       type="email"
-                      value={(data && data.Email) || email}
+                      value={email || data.Email}
                       onIonChange={(e) => setEmail(e.detail.value!)}
                     />
                   </IonItem>
                   <IonItem>
-                    <IonLabel position="floating">Phone No</IonLabel>
+                    <IonLabel position="floating">Mobile Number</IonLabel>
                     <IonInput
                       type="tel"
-                      value={(data && data.MobileNumber) || phone}
-                      onIonChange={(e) => setPhone(e.detail.value!)}
+                      value={mobileNumber || data.MobileNumber}
+                      onIonChange={(e) => setMobileNumber(e.detail.value!)}
                     />
                   </IonItem>
                   <IonItem>
-                    <IonLabel position="floating">Password</IonLabel>
+                    <IonLabel position="floating">pmdc</IonLabel>
                     <IonInput
                       type="text"
-                      value={(data && data.Password) || password}
-                      onIonChange={(e) => setPassword(e.detail.value!)}
-                    />
-                  </IonItem>
-                  <IonItem>
-                    <IonLabel position="floating">PDMC</IonLabel>
-                    <IonInput
-                      type="text"
-                      value={(data && data.PMDC) || pdmc}
-                      onIonChange={(e) => setPdmc(e.detail.value!)}
+                      value={pmdc || data.PMDC}
+                      onIonChange={(e) => setPmdc(e.detail.value!)}
                     />
                   </IonItem>
                   <IonItem>
                     <IonLabel position="floating">Doctor Type</IonLabel>
                     <IonInput
                       type="text"
-                      value={(data && data.DoctorType) || doctorType}
+                      value={doctorType || data.DoctorType}
                       onIonChange={(e) => setDoctorType(e.detail.value!)}
-                    />
-                  </IonItem>
-                  <IonItem>
-                    <IonLabel position="stacked">Valid UpTo</IonLabel>
-                    <IonInput
-                      type="date"
-                      value={
-                        (data &&
-                          format(new Date(data.ValidUpto), "yyyy-MM-dd")) ||
-                        validUpto
-                      }
-                      onIonChange={(e) => setValidUpto(e.detail.value!)}
                     />
                   </IonItem>
                   <IonGrid>
                     <IonRow>
                       <IonCol>
                         <IonItem>
-                          <IonLabel>Set as Approved</IonLabel>
-                          <IonCheckbox
-                            slot="start"
-                            name="isApproved"
-                            checked={(data && data.Isapproved) || isApproved}
-                            onIonChange={(e) => setIsApproved(e.detail.checked)}
-                          />
-                        </IonItem>
-                      </IonCol>
-                      <IonCol>
-                        <IonItem>
                           <IonLabel>Set as Enabled</IonLabel>
                           <IonCheckbox
                             slot="start"
                             name="isEnabled"
-                            checked={(data && data.IsEnabled) || isEnabled}
+                            checked={isEnabled || data.IsEnabled}
                             onIonChange={(e) => setIsEnabled(e.detail.checked)}
                           />
                         </IonItem>

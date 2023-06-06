@@ -12,15 +12,15 @@ import {
 } from "@ionic/react";
 import { create, trash, mail, call, person, calendar } from "ionicons/icons";
 import maleThumbmail from "../../assets/male.png";
-const PatientCard = () => {
+const PatientMaleCard = () => {
   const router = useIonRouter();
   return (
-    <IonCard className="girl">
+    <IonCard style={{ border: "2px solid blue" }}>
       <IonItem className="item">
         <IonThumbnail slot="start" className="avatar">
           <IonImg className="avatar-image" src={maleThumbmail}></IonImg>
         </IonThumbnail>
-        <IonLabel className="name">Umar</IonLabel>
+        <IonLabel className="name">Atta</IonLabel>
       </IonItem>
       <IonItem className="ion-justify-content-center">
         <IonIcon
@@ -31,6 +31,7 @@ const PatientCard = () => {
           slot="start"
           tabIndex={0}
           aria-label="create"
+          style={{ marginRight: "50px" }}
         ></IonIcon>
         <IonIcon
           className="iconchild"
@@ -39,6 +40,7 @@ const PatientCard = () => {
           slot="start"
           role="img"
           aria-label="trash"
+          style={{ marginRight: "50px" }}
         ></IonIcon>
         <IonIcon
           className="iconchild"
@@ -47,6 +49,7 @@ const PatientCard = () => {
           slot="start"
           tabIndex={0}
           aria-label="mail"
+          style={{ marginRight: "60px" }}
         ></IonIcon>
         <IonIcon
           className="iconchild"
@@ -65,7 +68,7 @@ const PatientCard = () => {
           className="icon"
           aria-label="person"
         ></IonIcon>
-        Umar Fayaz &nbsp;
+        &nbsp;Doctor Atta Ullah &nbsp;
         <IonIcon
           color="primary"
           icon={calendar}
@@ -73,7 +76,7 @@ const PatientCard = () => {
           className="icon"
           aria-label="calendar"
         ></IonIcon>
-        09-05-2023 &nbsp;
+        &nbsp;09-05-2023 &nbsp;
         <IonIcon
           color="primary"
           icon={call}
@@ -81,7 +84,7 @@ const PatientCard = () => {
           className="icon"
           aria-label="call"
         ></IonIcon>
-        3335408191 &nbsp;
+        &nbsp;3335408191 &nbsp;
         <br />
         <IonButton
           color="tertiary"
@@ -115,4 +118,4 @@ const PatientCard = () => {
   );
 };
 
-export default PatientCard;
+export default PatientMaleCard;

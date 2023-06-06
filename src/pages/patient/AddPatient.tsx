@@ -20,6 +20,7 @@ import React, { useEffect, useState } from "react";
 import Header from "../../components/header/Header";
 import "./css/addpatient.css";
 import { format } from "date-fns";
+import Toast from "../../components/custom-toast/Toast";
 type DoctorClinicType = { Id: number; Name: string };
 const AddPatient: React.FC = () => {
   const [name, setName] = useState("");
@@ -40,6 +41,9 @@ const AddPatient: React.FC = () => {
 
   const [clinicData, setClinicData] = useState<DoctorClinicType[]>([]);
   const [doctorData, setDoctorData] = useState<DoctorClinicType[]>([]);
+  const [success, setSuccess] = useState<boolean>(false);
+  const [error, setError] = useState<boolean>(false);
+
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // const formatedDate = format(
@@ -71,8 +75,8 @@ const AddPatient: React.FC = () => {
       },
       body: JSON.stringify(data_to_be_sent),
     })
-      .then((res) => res.status === 201 && console.log("success"))
-      .catch((err) => console.log("error"))
+      .then((res) => (res.status === 201 ? setSuccess(true) : setError(true)))
+      .catch((err) => setError(true))
       .finally(() => {
         clearStateVariables();
       });
@@ -110,6 +114,18 @@ const AddPatient: React.FC = () => {
   }, []);
   return (
     <IonPage>
+      <Toast
+        isOpen={success}
+        setOpen={setSuccess}
+        message="Patient added successfully."
+        color="success"
+      />
+      <Toast
+        isOpen={error}
+        setOpen={setError}
+        message="An error occurred while adding patient. plz try again"
+        color="danger"
+      />
       <Header pageName="Add Patient" />
       <IonCard style={{ overflowY: "scroll" }}>
         <IonCardContent>
@@ -120,6 +136,7 @@ const AddPatient: React.FC = () => {
                 type="text"
                 value={name}
                 onIonChange={(e) => setName(e.detail.value!)}
+                required
               />
             </IonItem>
             <IonItem>
@@ -136,6 +153,7 @@ const AddPatient: React.FC = () => {
                 type="text"
                 value={fatherName}
                 onIonChange={(e) => setFatherName(e.detail.value!)}
+                required
               />
             </IonItem>
             <IonItem>
@@ -153,6 +171,7 @@ const AddPatient: React.FC = () => {
                 placeholder="CNIC"
                 value={cnic}
                 onIonChange={(e) => setCnic(e.detail.value!)}
+                required
               />
             </IonItem>
             <IonItem>
