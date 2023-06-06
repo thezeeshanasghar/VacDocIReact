@@ -88,6 +88,8 @@ const PatientCard = () => {
           fill="outline"
           size="small"
           className="action-button"
+          routerLink="/members/child/vaccine/9011"
+          routerDirection="forward"
         >
           Vaccine
         </IonButton>

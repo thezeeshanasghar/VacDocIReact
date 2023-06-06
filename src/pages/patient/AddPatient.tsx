@@ -16,47 +16,98 @@ import {
   IonCheckbox,
   IonListHeader,
 } from "@ionic/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "../../components/header/Header";
 import "./css/addpatient.css";
-
+import { format } from "date-fns";
+type DoctorClinicType = { Id: number; Name: string };
 const AddPatient: React.FC = () => {
-  const [patientName, setPatientName] = useState("");
+  const [name, setName] = useState("");
   const [fatherName, setFatherName] = useState("");
-  const [guardianName, setGuardianName] = useState("");
+  const [guardian, setGuardian] = useState("");
   const [cnic, setCnic] = useState("");
   const [gender, setGender] = useState("Boy");
   const [scheduleType, setScheduleType] = useState("special");
-  const [dateOfBirth, setDateOfBirth] = useState("");
+  const [dob, setDob] = useState("");
   const [email, setEmail] = useState("");
   const [mobileNumber, setMobileNumber] = useState("");
-  const [preferredDayOfWeek, setPreferredDayOfWeek] = useState<string[]>([]);
-  const [preferredDayOfReminder, setPreferredDayOfReminder] = useState<
-    string[]
-  >([]);
-  const [city, setCity] = useState<string[]>([]);
-  const [isEpilepsyPatient, setIsEpilepsyPatient] = useState(false);
+  const [preferredSchedule, setpreferredSchedule] = useState<string>("");
+  const [selectedDoctor, setSelectedDoctor] = useState<number>();
+  const [selectedClinic, setSelectedClinic] = useState<number>();
+  const [city, setCity] = useState<string>("");
+  const [isEPIDone, setIsEPIDone] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
 
+  const [clinicData, setClinicData] = useState<DoctorClinicType[]>([]);
+  const [doctorData, setDoctorData] = useState<DoctorClinicType[]>([]);
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    // const formatedDate = format(
+    //   new Date(dob),
+    //   "yyyy-MM-dd'T'HH:mm:ss.SSSX"
+    // );
+    const data_to_be_sent = {
+      name,
+      guardian,
+      fatherName,
+      email,
+      dob,
+      gender,
+      type: scheduleType,
+      city,
+      cnic,
+      preferredSchedule,
+      isEPIDone,
+      isVerified,
+      isInactive: false,
+      clinicId: selectedClinic,
+      doctorId: selectedDoctor,
+    };
 
-    // Reseting the form fields
-    setPatientName("");
-    setGuardianName("");
+    fetch("https://myapi.fernflowers.com/api/Child", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data_to_be_sent),
+    })
+      .then((res) => res.status === 201 && console.log("success"))
+      .catch((err) => console.log("error"))
+      .finally(() => {
+        clearStateVariables();
+      });
+  };
+  // function to clear all state variables
+  const clearStateVariables = () => {
+    setName("");
     setFatherName("");
+    setGuardian("");
     setCnic("");
     setGender("Boy");
     setScheduleType("special");
-    setDateOfBirth("");
+    setDob("");
     setEmail("");
     setMobileNumber("");
-    setPreferredDayOfWeek([]);
-    setPreferredDayOfReminder([]);
-    setIsEpilepsyPatient(false);
+    setpreferredSchedule("");
+    setSelectedDoctor("");
+    setSelectedClinic("");
+    setCity("");
+    setIsEPIDone(false);
     setIsVerified(false);
   };
 
+  // getting doctors list for dropdown and clinic;
+  useEffect(() => {
+    fetch("https://myapi.fernflowers.com/api/Doctor")
+      .then((res) => res.json())
+      .then((data) => setDoctorData(data))
+      .catch((err) => console.error(err));
+
+    fetch("https://myapi.fernflowers.com/api/Clinic")
+      .then((res) => res.json())
+      .then((data) => setClinicData(data))
+      .catch((err) => console.error(err));
+  }, []);
   return (
     <IonPage>
       <Header pageName="Add Patient" />
@@ -67,16 +118,16 @@ const AddPatient: React.FC = () => {
               <IonLabel position="floating">Patient Name</IonLabel>
               <IonInput
                 type="text"
-                value={patientName}
-                onIonChange={(e) => setPatientName(e.detail.value!)}
+                value={name}
+                onIonChange={(e) => setName(e.detail.value!)}
               />
             </IonItem>
             <IonItem>
               <IonLabel position="floating">Guardian's Name</IonLabel>
               <IonInput
                 type="text"
-                value={guardianName}
-                onIonChange={(e) => setGuardianName(e.detail.value!)}
+                value={guardian}
+                onIonChange={(e) => setGuardian(e.detail.value!)}
               />
             </IonItem>
             <IonItem>
@@ -111,6 +162,15 @@ const AddPatient: React.FC = () => {
                 placeholder="3331231231"
                 value={mobileNumber}
                 onIonChange={(e) => setMobileNumber(e.detail.value!)}
+              />
+            </IonItem>
+            <IonItem>
+              <IonLabel position="floating">Date of Birth</IonLabel>
+              <IonInput
+                slot="end"
+                type="date"
+                value={dob}
+                onIonChange={(e) => setDob(e.detail.value!)}
               />
             </IonItem>
             <IonRadioGroup
@@ -158,55 +218,45 @@ const AddPatient: React.FC = () => {
               </IonGrid>
             </IonRadioGroup>
             <IonItem>
-              <IonLabel position="floating">Date of Birth</IonLabel>
+              <IonLabel position="floating">Preferred Schedule</IonLabel>
               <IonInput
-                slot="end"
-                type="date"
-                value={dateOfBirth}
-                onIonChange={(e) => setDateOfBirth(e.detail.value!)}
+                type="text"
+                value={preferredSchedule}
+                onIonChange={(e) => setpreferredSchedule(e.detail.value!)}
               />
+            </IonItem>
+            <IonItem>
+              <IonLabel position="floating">Select Doctor</IonLabel>
+              <IonSelect
+                value={selectedDoctor}
+                onIonChange={(e) => setSelectedDoctor(e.detail.value!)}
+              >
+                {doctorData &&
+                  doctorData.map((item, index) => (
+                    <IonSelectOption key={index} value={item.Id}>
+                      {item.Name}
+                    </IonSelectOption>
+                  ))}
+              </IonSelect>
             </IonItem>
 
             <IonItem>
-              <IonLabel position="floating">Preferred Day of week</IonLabel>
+              <IonLabel position="floating">Select Clinic</IonLabel>
               <IonSelect
-                multiple
-                value={preferredDayOfWeek}
-                onIonChange={(e) => setPreferredDayOfWeek(e.detail.value!)}
+                value={selectedClinic}
+                onIonChange={(e) => setSelectedClinic(e.detail.value!)}
               >
-                <IonSelectOption value="Any">Any</IonSelectOption>
-                <IonSelectOption value="Monday">Monday</IonSelectOption>
-                <IonSelectOption value="Tuesday">Tuesday</IonSelectOption>
-                <IonSelectOption value="Wednesday">Wednesday</IonSelectOption>
-                <IonSelectOption value="Thursday">Thursday</IonSelectOption>
-                <IonSelectOption value="Friday">Friday</IonSelectOption>
-                <IonSelectOption value="Saturday">Saturday</IonSelectOption>
-                <IonSelectOption value="Sunday">Sunday</IonSelectOption>
-              </IonSelect>
-            </IonItem>
-            <IonItem>
-              <IonLabel position="floating">Preferred Day of Reminder</IonLabel>
-              <IonSelect
-                multiple
-                value={preferredDayOfReminder}
-                onIonChange={(e) => setPreferredDayOfReminder(e.detail.value!)}
-              >
-                <IonSelectOption value="0">On Due Day</IonSelectOption>
-                <IonSelectOption value="1">
-                  Due Day + 1 Day before
-                </IonSelectOption>
-                <IonSelectOption value="2">
-                  Due Day + 2 Day before
-                </IonSelectOption>
-                <IonSelectOption value="3">
-                  Due Day + 3 Day before
-                </IonSelectOption>
+                {clinicData &&
+                  clinicData.map((item, index) => (
+                    <IonSelectOption key={index} value={item.Id}>
+                      {item.Name}
+                    </IonSelectOption>
+                  ))}
               </IonSelect>
             </IonItem>
             <IonItem>
               <IonSelect
-                label="Select a City"
-                multiple
+                label="Select City"
                 value={city}
                 onIonChange={(e) => setCity(e.detail.value!)}
                 labelPlacement="floating"
@@ -604,24 +654,32 @@ const AddPatient: React.FC = () => {
                 <IonSelectOption value="Other">Other</IonSelectOption>
               </IonSelect>
             </IonItem>
-            <div className="patient-checkboxes">
-              <IonItem>
-                <IonCheckbox
-                  slot="start"
-                  checked={isEpilepsyPatient}
-                  onIonChange={(e) => setIsEpilepsyPatient(e.detail.checked)}
-                />
-                <IonLabel>Is Epilepsy patient?</IonLabel>
-              </IonItem>
-              <IonItem>
-                <IonCheckbox
-                  slot="start"
-                  checked={isVerified}
-                  onIonChange={(e) => setIsVerified(e.detail.checked)}
-                />
-                <IonLabel>Verified</IonLabel>
-              </IonItem>
-            </div>
+            <IonGrid>
+              <IonRow>
+                <IonCol>
+                  <IonItem>
+                    <IonLabel>Is EPI done?</IonLabel>
+                    <IonCheckbox
+                      slot="start"
+                      name="isEPIDone"
+                      checked={isEPIDone}
+                      onIonChange={(e) => setIsEPIDone(e.detail.checked)}
+                    />
+                  </IonItem>
+                </IonCol>
+                <IonCol>
+                  <IonItem>
+                    <IonLabel>Is Verified?</IonLabel>
+                    <IonCheckbox
+                      slot="start"
+                      name="IsVerified"
+                      checked={isVerified}
+                      onIonChange={(e) => setIsVerified(e.detail.checked)}
+                    />
+                  </IonItem>
+                </IonCol>
+              </IonRow>
+            </IonGrid>
             <IonButton expand="full" type="submit">
               Add Patient
             </IonButton>
