@@ -8,10 +8,12 @@ import {
   IonImg,
   IonLabel,
   IonThumbnail,
+  useIonRouter,
 } from "@ionic/react";
 import { create, trash, mail, call, person, calendar } from "ionicons/icons";
 import maleThumbmail from "../../assets/male.png";
 const PatientCard = () => {
+  const router = useIonRouter();
   return (
     <IonCard className="girl">
       <IonItem className="item">
@@ -25,6 +27,7 @@ const PatientCard = () => {
           className="iconchild"
           color="primary"
           icon={create}
+          onClick={() => router.push(`/members/child/edit/${1}`, "forward")}
           slot="start"
           tabIndex={0}
           aria-label="create"

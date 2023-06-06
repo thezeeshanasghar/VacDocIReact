@@ -1,9 +1,6 @@
 import {
   IonCard,
   IonCardContent,
-  IonCardHeader,
-  IonCardTitle,
-  IonImg,
   IonInput,
   IonItem,
   IonLabel,
@@ -26,6 +23,8 @@ import "./css/addpatient.css";
 const AddPatient: React.FC = () => {
   const [patientName, setPatientName] = useState("");
   const [fatherName, setFatherName] = useState("");
+  const [guardianName, setGuardianName] = useState("");
+  const [cnic, setCnic] = useState("");
   const [gender, setGender] = useState("Boy");
   const [scheduleType, setScheduleType] = useState("special");
   const [dateOfBirth, setDateOfBirth] = useState("");
@@ -42,12 +41,11 @@ const AddPatient: React.FC = () => {
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Perform form submission logic with the state values
-    // ...
-
-    // Reset the form fields
+    // Reseting the form fields
     setPatientName("");
+    setGuardianName("");
     setFatherName("");
+    setCnic("");
     setGender("Boy");
     setScheduleType("special");
     setDateOfBirth("");
@@ -74,11 +72,45 @@ const AddPatient: React.FC = () => {
               />
             </IonItem>
             <IonItem>
+              <IonLabel position="floating">Guardian's Name</IonLabel>
+              <IonInput
+                type="text"
+                value={guardianName}
+                onIonChange={(e) => setGuardianName(e.detail.value!)}
+              />
+            </IonItem>
+            <IonItem>
               <IonLabel position="floating">Father's Name</IonLabel>
               <IonInput
                 type="text"
                 value={fatherName}
                 onIonChange={(e) => setFatherName(e.detail.value!)}
+              />
+            </IonItem>
+            <IonItem>
+              <IonLabel position="floating">Email</IonLabel>
+              <IonInput
+                type="email"
+                value={email}
+                onIonChange={(e) => setEmail(e.detail.value!)}
+              />
+            </IonItem>
+            <IonItem>
+              <IonLabel position="floating">CNIC</IonLabel>
+              <IonInput
+                type="text"
+                placeholder="CNIC"
+                value={cnic}
+                onIonChange={(e) => setCnic(e.detail.value!)}
+              />
+            </IonItem>
+            <IonItem>
+              <IonLabel position="floating">Mobile Number</IonLabel>
+              <IonInput
+                type="tel"
+                placeholder="3331231231"
+                value={mobileNumber}
+                onIonChange={(e) => setMobileNumber(e.detail.value!)}
               />
             </IonItem>
             <IonRadioGroup
@@ -134,23 +166,7 @@ const AddPatient: React.FC = () => {
                 onIonChange={(e) => setDateOfBirth(e.detail.value!)}
               />
             </IonItem>
-            <IonItem>
-              <IonLabel position="floating">Email</IonLabel>
-              <IonInput
-                type="email"
-                value={email}
-                onIonChange={(e) => setEmail(e.detail.value!)}
-              />
-            </IonItem>
-            <IonItem>
-              <IonLabel position="floating">Mobile Number</IonLabel>
-              <IonInput
-                type="tel"
-                placeholder="3331231231"
-                value={mobileNumber}
-                onIonChange={(e) => setMobileNumber(e.detail.value!)}
-              />
-            </IonItem>
+
             <IonItem>
               <IonLabel position="floating">Preferred Day of week</IonLabel>
               <IonSelect
@@ -189,7 +205,7 @@ const AddPatient: React.FC = () => {
             </IonItem>
             <IonItem>
               <IonSelect
-                label="City"
+                label="Select a City"
                 multiple
                 value={city}
                 onIonChange={(e) => setCity(e.detail.value!)}
@@ -607,7 +623,7 @@ const AddPatient: React.FC = () => {
               </IonItem>
             </div>
             <IonButton expand="full" type="submit">
-              Submit
+              Add Patient
             </IonButton>
           </form>
         </IonCardContent>

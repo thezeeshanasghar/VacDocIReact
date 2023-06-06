@@ -93,6 +93,7 @@ const Menu: React.FC = () => {
                       routerDirection="none"
                     >
                       <IonIcon
+                        color="primary"
                         aria-hidden="true"
                         slot="start"
                         md={appPage.mdIcon}
@@ -104,6 +105,7 @@ const Menu: React.FC = () => {
               })}
             </IonList>
           </IonContent>
+          &nbsp;&nbsp;<IonLabel style={{margin: ".5rem 1rem"}}color="primary">Child</IonLabel>
           <IonFooter>
             <IonMenuToggle autoHide={false}>
               <IonItem routerLink="/members/child" routerDirection="back">
