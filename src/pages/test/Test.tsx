@@ -6,6 +6,7 @@ import {
   IonCardSubtitle,
   IonCardTitle,
   IonCol,
+  IonContent,
   IonGrid,
   IonIcon,
   IonItem,
@@ -28,6 +29,7 @@ import {
   trash,
 } from "ionicons/icons";
 import thumbnail from "../../assets/male.png";
+import Header from "../../components/header/Header";
 
 const ChildCard: React.FC = () => {
   const dummyData = {
@@ -46,163 +48,172 @@ const ChildCard: React.FC = () => {
   const router = useIonRouter();
   return (
     <IonPage>
-      <IonCard>
-        <IonCardHeader style={{ textAlign: "center" }}>
-          <IonItem lines="none">
-            <IonItem slot="start">
-              <IonThumbnail style={{ marginRight: "3rem" }}>
-                <img src={thumbnail} alt="Thumbnail" />
-              </IonThumbnail>
-              <IonCardTitle>{dummyData.name}</IonCardTitle>
+      <IonContent>
+        <Header pageName="Patients" />
+        <IonCard style={{border: '2px solid blue'}}>
+          <IonCardHeader style={{ textAlign: "center" }}>
+            <IonItem lines="none">
+              <IonItem slot="start">
+                <IonThumbnail style={{ marginRight: "3rem" }}>
+                  <img src={thumbnail} alt="Thumbnail" />
+                </IonThumbnail>
+                <IonCardTitle>{dummyData.name}</IonCardTitle>
+              </IonItem>
+              <IonItem slot="end" lines="none">
+                <IonIcon
+                  className="iconchild"
+                  color="primary"
+                  icon={create}
+                  onClick={() =>
+                    router.push(`/members/child/edit/${0}`, "forward")
+                  }
+                  slot="start"
+                  tabIndex={0}
+                  aria-label="create"
+                  style={{ marginRight: "50px" }}
+                ></IonIcon>
+                <IonIcon
+                  className="iconchild"
+                  color="primary"
+                  icon={trash}
+                  slot="start"
+                  role="img"
+                  aria-label="trash"
+                  style={{ marginRight: "50px" }}
+                ></IonIcon>
+                <IonIcon
+                  className="iconchild"
+                  color="primary"
+                  icon={mail}
+                  slot="start"
+                  tabIndex={0}
+                  aria-label="mail"
+                  style={{ marginRight: "60px" }}
+                ></IonIcon>
+                <IonIcon
+                  className="iconchild"
+                  color="primary"
+                  icon={call}
+                  slot="start"
+                  role="img"
+                  aria-label="call"
+                ></IonIcon>
+              </IonItem>
             </IonItem>
-            <IonItem slot="end" lines="none">
-              <IonIcon
-                className="iconchild"
-                color="primary"
-                icon={create}
-                onClick={() =>
-                  router.push(`/members/child/edit/${1}`, "forward")
-                }
-                slot="start"
-                tabIndex={0}
-                aria-label="create"
-                style={{ marginRight: "50px" }}
-              ></IonIcon>
-              <IonIcon
-                className="iconchild"
-                color="primary"
-                icon={trash}
-                slot="start"
-                role="img"
-                aria-label="trash"
-                style={{ marginRight: "50px" }}
-              ></IonIcon>
-              <IonIcon
-                className="iconchild"
-                color="primary"
-                icon={mail}
-                slot="start"
-                tabIndex={0}
-                aria-label="mail"
-                style={{ marginRight: "60px" }}
-              ></IonIcon>
-              <IonIcon
-                className="iconchild"
-                color="primary"
-                icon={call}
-                slot="start"
-                role="img"
-                aria-label="call"
-              ></IonIcon>
-            </IonItem>
-          </IonItem>
-          <IonCardSubtitle>Guardian: {dummyData.guardian}</IonCardSubtitle>
-        </IonCardHeader>
-        <IonCardContent>
-          <IonGrid>
-            <IonRow>
-              <IonCol>
-                <p
-                  style={{
-                    borderBottom: "3px solid rgba(0, 0, 0, 0.1)",
-                    paddingBottom: "9px",
-                  }}
-                >
-                  <IonIcon
-                    icon={person}
-                    style={{ marginRight: "8px" }}
-                  ></IonIcon>
-                  {dummyData.fatherName}
-                </p>
-              </IonCol>
-              <IonCol>
-                <p
-                  style={{
-                    borderBottom: "3px solid rgba(0, 0, 0, 0.1)",
-                    paddingBottom: "9px",
-                  }}
-                >
-                  <IonIcon icon={mail} style={{ marginRight: "8px" }}></IonIcon>
-                  {dummyData.email}
-                </p>
-              </IonCol>
-            </IonRow>
-            <IonRow>
-              <IonCol>
-                <p
-                  style={{
-                    borderBottom: "3px solid rgba(0, 0, 0, 0.1)",
-                    paddingBottom: "9px",
-                  }}
-                >
-                  <IonIcon
-                    icon={calendar}
-                    style={{ marginRight: "8px" }}
-                  ></IonIcon>
-                  {formattedDob}
-                </p>
-              </IonCol>
-              <IonCol>
-                <p
-                  style={{
-                    borderBottom: "3px solid rgba(0, 0, 0, 0.1)",
-                    paddingBottom: "9px",
-                  }}
-                >
-                  <IonIcon
-                    icon={personCircle}
-                    style={{ marginRight: "8px" }}
-                  ></IonIcon>
-                  {dummyData.type}
-                </p>
-              </IonCol>
-            </IonRow>
-            <IonRow>
-              <IonCol>
-                <p
-                  style={{
-                    borderBottom: "3px solid rgba(0, 0, 0, 0.1)",
-                    paddingBottom: "9px",
-                  }}
-                >
-                  <IonIcon
-                    icon={location}
-                    style={{ marginRight: "8px" }}
-                  ></IonIcon>
-                  {dummyData.city}
-                </p>
-              </IonCol>
-              <IonCol>
-                <p
-                  style={{
-                    borderBottom: "3px solid rgba(0, 0, 0, 0.1)",
-                    paddingBottom: "9px",
-                  }}
-                >
-                  <IonIcon
-                    icon={documentText}
-                    style={{ marginRight: "8px" }}
-                  ></IonIcon>
-                  {dummyData.cnic}
-                </p>
-              </IonCol>
-            </IonRow>
-            <IonRow>
-              <IonCol>
-                <p
-                  style={{
-                    borderBottom: "3px solid rgba(0, 0, 0, 0.1)",
-                    paddingBottom: "9px",
-                  }}
-                >
-                  <IonIcon icon={time} style={{ marginRight: "8px" }}></IonIcon>
-                  {dummyData.preferredSchedule}
-                </p>
-              </IonCol>
-            </IonRow>
-          </IonGrid>
-        </IonCardContent>
-      </IonCard>
+            <IonCardSubtitle>Guardian: {dummyData.guardian}</IonCardSubtitle>
+          </IonCardHeader>
+          <IonCardContent>
+            <IonGrid>
+              <IonRow>
+                <IonCol>
+                  <p
+                    style={{
+                      borderBottom: "3px solid rgba(0, 0, 0, 0.1)",
+                      paddingBottom: "9px",
+                    }}
+                  >
+                    <IonIcon
+                      icon={person}
+                      style={{ marginRight: "8px" }}
+                    ></IonIcon>
+                    {dummyData.fatherName}
+                  </p>
+                </IonCol>
+                <IonCol>
+                  <p
+                    style={{
+                      borderBottom: "3px solid rgba(0, 0, 0, 0.1)",
+                      paddingBottom: "9px",
+                    }}
+                  >
+                    <IonIcon
+                      icon={mail}
+                      style={{ marginRight: "8px" }}
+                    ></IonIcon>
+                    {dummyData.email}
+                  </p>
+                </IonCol>
+              </IonRow>
+              <IonRow>
+                <IonCol>
+                  <p
+                    style={{
+                      borderBottom: "3px solid rgba(0, 0, 0, 0.1)",
+                      paddingBottom: "9px",
+                    }}
+                  >
+                    <IonIcon
+                      icon={calendar}
+                      style={{ marginRight: "8px" }}
+                    ></IonIcon>
+                    {formattedDob}
+                  </p>
+                </IonCol>
+                <IonCol>
+                  <p
+                    style={{
+                      borderBottom: "3px solid rgba(0, 0, 0, 0.1)",
+                      paddingBottom: "9px",
+                    }}
+                  >
+                    <IonIcon
+                      icon={personCircle}
+                      style={{ marginRight: "8px" }}
+                    ></IonIcon>
+                    {dummyData.type}
+                  </p>
+                </IonCol>
+              </IonRow>
+              <IonRow>
+                <IonCol>
+                  <p
+                    style={{
+                      borderBottom: "3px solid rgba(0, 0, 0, 0.1)",
+                      paddingBottom: "9px",
+                    }}
+                  >
+                    <IonIcon
+                      icon={location}
+                      style={{ marginRight: "8px" }}
+                    ></IonIcon>
+                    {dummyData.city}
+                  </p>
+                </IonCol>
+                <IonCol>
+                  <p
+                    style={{
+                      borderBottom: "3px solid rgba(0, 0, 0, 0.1)",
+                      paddingBottom: "9px",
+                    }}
+                  >
+                    <IonIcon
+                      icon={documentText}
+                      style={{ marginRight: "8px" }}
+                    ></IonIcon>
+                    {dummyData.cnic}
+                  </p>
+                </IonCol>
+              </IonRow>
+              <IonRow>
+                <IonCol>
+                  <p
+                    style={{
+                      borderBottom: "3px solid rgba(0, 0, 0, 0.1)",
+                      paddingBottom: "9px",
+                    }}
+                  >
+                    <IonIcon
+                      icon={time}
+                      style={{ marginRight: "8px" }}
+                    ></IonIcon>
+                    {dummyData.preferredSchedule}
+                  </p>
+                </IonCol>
+              </IonRow>
+            </IonGrid>
+          </IonCardContent>
+        </IonCard>
+      </IonContent>
     </IonPage>
   );
 };

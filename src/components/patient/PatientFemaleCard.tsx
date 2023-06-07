@@ -10,9 +10,11 @@ import {
   IonThumbnail,
   useIonRouter,
 } from "@ionic/react";
+import { IPatientData } from "../../pages/patient/PatientCardList";
 import { create, trash, mail, call, person, calendar } from "ionicons/icons";
 import femaleThumbmail from "../../assets/female.png";
-const PatientFemaleCard = () => {
+type PatientFemaleType = Pick<IPatientData, 'Name' | 'Guardian' | 'DOB'>;
+const PatientFemaleCard : React.FC<PatientFemaleType> = ({Name, DOB,Guardian}) => {
   const router = useIonRouter();
   return (
     <IonCard style={{ border: "2px solid #f50ca7" }}>
@@ -20,7 +22,7 @@ const PatientFemaleCard = () => {
         <IonThumbnail slot="start" className="avatar">
           <IonImg className="avatar-image" src={femaleThumbmail}></IonImg>
         </IonThumbnail>
-        <IonLabel className="name">Maria</IonLabel>
+        <IonLabel className="name">{Name}</IonLabel>
       </IonItem>
       <IonItem className="ion-justify-content-center">
         <IonIcon
@@ -68,7 +70,7 @@ const PatientFemaleCard = () => {
           className="icon"
           aria-label="person"
         ></IonIcon>
-        &nbsp;Mary Maria &nbsp;
+        &nbsp;{Guardian} &nbsp;
         <IonIcon
           color="primary"
           icon={calendar}
@@ -76,7 +78,7 @@ const PatientFemaleCard = () => {
           className="icon"
           aria-label="calendar"
         ></IonIcon>
-        &nbsp;09-05-2023 &nbsp;
+        &nbsp;{DOB} &nbsp;
         <IonIcon
           color="primary"
           icon={call}

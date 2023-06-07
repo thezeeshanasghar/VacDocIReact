@@ -27,7 +27,7 @@ const AddPatient: React.FC = () => {
   const [fatherName, setFatherName] = useState("");
   const [guardian, setGuardian] = useState("");
   const [cnic, setCnic] = useState("");
-  const [gender, setGender] = useState("Boy");
+  const [gender, setGender] = useState("boy");
   const [scheduleType, setScheduleType] = useState("special");
   const [dob, setDob] = useState("");
   const [email, setEmail] = useState("");
@@ -68,7 +68,7 @@ const AddPatient: React.FC = () => {
       doctorId: selectedDoctor,
     };
 
-    fetch("https://myapi.fernflowers.com/api/Child", {
+    fetch("http://localhost:5041/api/Child", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -202,13 +202,13 @@ const AddPatient: React.FC = () => {
                   <IonCol>
                     <IonItem>
                       <IonLabel>Boy</IonLabel>
-                      <IonRadio slot="start" value="Boy" />
+                      <IonRadio slot="start" value="boy" />
                     </IonItem>
                   </IonCol>
                   <IonCol>
                     <IonItem>
                       <IonLabel>Girl</IonLabel>
-                      <IonRadio slot="start" value="Girl" />
+                      <IonRadio slot="start" value="girl" />
                     </IonItem>
                   </IonCol>
                 </IonRow>
