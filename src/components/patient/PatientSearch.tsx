@@ -1,10 +1,17 @@
 import { IonButton, IonIcon, IonInput, IonItem } from "@ionic/react";
 import React, { FormEvent, useState } from "react";
 import { closeCircleOutline } from "ionicons/icons";
-
-const PatientSearch: React.FC<any> = ({ data = [] }) => {
+import { IPatientData } from "../../pages/patient/PatientCardList";
+import { format } from "date-fns";
+import PatientFemaleCard from "./PatientFemaleCard";
+import PatientMaleCard from "./PatientMaleCard";
+interface ISearchData {
+  data: IPatientData[];
+  hideCards: React.Dispatch<React.SetStateAction<boolean>>;
+}
+const PatientSearch: React.FC<ISearchData> = ({ data, hideCards }) => {
   const [searchText, setSearchText] = useState("");
-  const [searchResults, setSearchResults] = useState(data);
+  const [searchResults, setSearchResults] = useState<IPatientData[]>([]);
 
   const handleInputChange = (e: CustomEvent) => {
     setSearchText(e.detail.value);
@@ -12,12 +19,20 @@ const PatientSearch: React.FC<any> = ({ data = [] }) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Perform search logic and update searchResults state
+    // Performing search logic and update searchResults state here
+    const filteredData = data.filter((item: IPatientData) =>
+      item.Name.toLowerCase().includes(searchText.toLowerCase())
+    );
+    if (filteredData.length > 0) {
+      setSearchResults(filteredData);
+      hideCards(true);
+    }
   };
 
   const handleClear = () => {
     setSearchText("");
     setSearchResults([]);
+    hideCards(false);
   };
 
   return (
@@ -31,7 +46,7 @@ const PatientSearch: React.FC<any> = ({ data = [] }) => {
             placeholder="Search"
             required
             type="text"
-            color="primary" // Add color prop to set the line color
+            color="primary" 
           ></IonInput>
           <IonButton type="submit" className="ion-margin-start">
             Search
@@ -45,9 +60,27 @@ const PatientSearch: React.FC<any> = ({ data = [] }) => {
       </form>
 
       {/* rendering results card here */}
-      {/* {searchResults.map((result, index) => (
-          <IonItem key={index}></IonItem>
-        ))} */}
+      {searchResults &&
+        searchResults.map((item, index) => {
+          if (item.Gender.includes("boy" || "male")) {
+            return (
+              <PatientMaleCard
+                key={index * 3 * 2}
+                Name={item.Name}
+                Guardian={item.Guardian}
+                DOB={format(new Date(item.DOB), "dd MMMM yyyy")}
+              />
+            );
+          }
+          return (
+            <PatientFemaleCard
+              key={index * 3}
+              Name={item.Name}
+              Guardian={item.Guardian}
+              DOB={format(new Date(item.DOB), "dd MMMM yyyy")}
+            />
+          );
+        })}
     </>
   );
 };

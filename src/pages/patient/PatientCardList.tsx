@@ -26,6 +26,7 @@ export interface IPatientData {
 
 const PatientCardList: React.FC = () => {
   const [patientData, setPatientData] = useState<IPatientData[]>([]);
+  const [hideCards, setHideCards] = useState(false);
   const fetchPatientData = () => {
     fetch("http://localhost:5041/patients?doctorId=1")
       .then((response) => response.json())
@@ -43,10 +44,10 @@ const PatientCardList: React.FC = () => {
       <Header pageName="Patients" />
       <IonContent className="ion-padding">
         {/* patient component to render patient data */}
-        {/* <PatientSearch data={[]} /> */}
+        <PatientSearch data={patientData} hideCards={setHideCards} />
 
         {/* list of patient cards to be rendered. */}
-        {patientData &&
+        {patientData && !hideCards  &&
           patientData.map((item, index) => {
             if (item.Gender.includes("boy" || "male")) {
               return (

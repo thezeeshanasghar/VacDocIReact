@@ -8,6 +8,7 @@ import {
   IonList,
   IonMenu,
   IonMenuToggle,
+  IonPage,
   IonSplitPane,
   IonTitle,
   IonToolbar,
@@ -50,11 +51,6 @@ const appPages: AppPage[] = [
     url: "/members/doctor/edit-profile",
     mdIcon: create,
   },
-  {
-    title: "Archived",
-    url: "/page/Archived",
-    mdIcon: archiveSharp,
-  },
 ];
 
 const Menu: React.FC = () => {
@@ -62,71 +58,75 @@ const Menu: React.FC = () => {
 
   return (
     <>
-      <IonSplitPane contentId="main-content" style={{ width: "100vw" }}>
-        <IonMenu contentId="main-content" type="overlay">
-          <IonHeader>
-            <IonToolbar color="primary">
-              <IonTitle>Menu Content</IonTitle>
-            </IonToolbar>
-          </IonHeader>
-          <IonContent>
-            <IonList id="inbox-list">
-              {appPages.map((appPage, index) => {
-                if (index === 3) {
+      <IonPage>
+        <IonSplitPane contentId="main-content" style={{ width: "100vw" }}>
+          <IonMenu contentId="main-content" type="overlay">
+            <IonHeader>
+              <IonToolbar color="primary">
+                <IonTitle>Menu</IonTitle>
+              </IonToolbar>
+            </IonHeader>
+            <IonContent>
+              <IonList id="inbox-list"  style={{borderBottom: 'none'}}>
+                {appPages.map((appPage, index) => {
                   return (
-                    <React.Fragment key={index * 22}>
-                      <IonItem>
-                        <IonLabel color={"primary"} style={{ fontWeight: 500 }}>
-                          doctor
-                        </IonLabel>
+                    <IonMenuToggle key={index} autoHide={false}>
+                      <IonItem
+                        className={
+                          location.pathname === appPage.url ? "selected" : ""
+                        }
+                        routerLink={appPage.url}
+                        routerDirection="none"
+                      >
+                        <IonIcon
+                          color="primary"
+                          aria-hidden="true"
+                          slot="start"
+                          md={appPage.mdIcon}
+                        />
+                        <IonLabel>{appPage.title}</IonLabel>
                       </IonItem>
-                    </React.Fragment>
+                      {index === 1 && (
+                        <IonItem style={{marginTop: '3px'}}>
+                          <IonLabel
+                            color={"primary"}
+                            style={{ fontWeight: 500, marginBottom: '0' }}
+                          >
+                            Doctor
+                          </IonLabel>
+                        </IonItem>
+                      )}
+                    </IonMenuToggle>
                   );
-                }
-                return (
-                  <IonMenuToggle key={index} autoHide={false}>
-                    <IonItem
-                      className={
-                        location.pathname === appPage.url ? "selected" : ""
-                      }
-                      routerLink={appPage.url}
-                      routerDirection="none"
-                    >
-                      <IonIcon
-                        color="primary"
-                        aria-hidden="true"
-                        slot="start"
-                        md={appPage.mdIcon}
-                      />
-                      <IonLabel>{appPage.title}</IonLabel>
-                    </IonItem>
-                  </IonMenuToggle>
-                );
-              })}
-            </IonList>
-          </IonContent>
-          &nbsp;&nbsp;<IonLabel style={{margin: ".5rem 1rem"}}color="primary">Child</IonLabel>
-          <IonFooter>
-            <IonMenuToggle autoHide={false}>
-              <IonItem routerLink="/members/child" routerDirection="back">
-                <IonIcon icon={man} slot="start" color="primary" />
-                Patients
+                })}
+              </IonList>
+            </IonContent>
+            &nbsp;&nbsp;
+            <IonLabel style={{ margin: ".5rem 1rem" }} color="primary">
+              Child
+            </IonLabel>
+            <IonFooter>
+              <IonMenuToggle autoHide={false}>
+                <IonItem routerLink="/members/child" routerDirection="back">
+                  <IonIcon icon={man} slot="start" color="primary" />
+                  Patients
+                </IonItem>
+              </IonMenuToggle>
+              <IonMenuToggle autoHide={false}>
+                <IonItem routerLink="/members/child/add" routerDirection="back">
+                  <IonIcon icon={personAdd} slot="start" color="primary" />
+                  Add
+                </IonItem>
+              </IonMenuToggle>
+              <IonItem routerLink="/" routerDirection="back">
+                <IonIcon icon={powerSharp} slot="start" color="primary" />
+                Logout
               </IonItem>
-            </IonMenuToggle>
-            <IonMenuToggle autoHide={false}>
-              <IonItem routerLink="/members/child/add" routerDirection="back">
-                <IonIcon icon={personAdd} slot="start" color="primary" />
-                Add
-              </IonItem>
-            </IonMenuToggle>
-            <IonItem routerLink="/" routerDirection="back">
-              <IonIcon icon={powerSharp} slot="start" color="primary" />
-              Logout
-            </IonItem>
-          </IonFooter>
-        </IonMenu>
-        <Routes />
-      </IonSplitPane>
+            </IonFooter>
+          </IonMenu>
+          <Routes />
+        </IonSplitPane>
+      </IonPage>
     </>
   );
 };
