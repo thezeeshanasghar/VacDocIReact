@@ -16,14 +16,13 @@ import {
 
 import { useLocation } from "react-router-dom";
 import {
-  archiveSharp,
   home,
   alertOutline,
-  mail,
   powerSharp,
   personAdd,
   man,
   create,
+  moon,
 } from "ionicons/icons";
 import "./Menu.css";
 import Routes from "../../routes/Routes";
@@ -50,6 +49,11 @@ const appPages: AppPage[] = [
     title: "Edit Profile",
     url: "/members/doctor/edit-profile",
     mdIcon: create,
+  },
+  {
+    title: "Clinic",
+    url: "/members/doctor/clinic",
+    mdIcon: moon,
   },
 ];
 

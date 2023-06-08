@@ -28,7 +28,9 @@ const Header: React.FC<IHeaderProps> = ({ pageName }) => {
             slot="start"
             className="buttons-first-slot sc-IonButtons-md-h sc-IonButtons-md-s md hydrated"
           ></IonButtons>
-          <IonTitle slot="start" className="md title-default hydrated">{pageName}</IonTitle>
+          <IonTitle slot="start" className="md title-default hydrated">
+            {pageName}
+          </IonTitle>
           <IonTitle
             slot="end"
             className="ng-star-inserted md title-default hydrated"
@@ -96,6 +98,7 @@ const Header: React.FC<IHeaderProps> = ({ pageName }) => {
               role="img"
               className="md icon-large hydrated"
               aria-label="medkit"
+              onClick={() => router.push("/members/doctor/clinic", "root")}
             ></IonIcon>
             <IonMenuButton
               style={{ marginLeft: "10%" }}
