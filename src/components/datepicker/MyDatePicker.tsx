@@ -1,39 +1,13 @@
-import React, { useState } from "react";
-import {
-  IonPopover,
-  IonButton,
-  IonList,
-  IonItem,
-  IonLabel,
-  IonDatetime,
-  IonPage,
-  IonContent,
-  IonIcon,
-} from "@ionic/react";
+import { IonIcon, IonPopover, IonList, IonItem, IonLabel, IonDatetime } from "@ionic/react";
 import { calendar } from "ionicons/icons";
-import { format } from "date-fns";
-
-const Test: React.FC = () => {
-  const [selectedDate, setSelectedDate] = useState<string>("");
-  console.log(selectedDate);
-  return (
-    <IonPage>
-      <IonContent>
-        <DatePicker
-          selectedDate={selectedDate}
-          onDateSelected={setSelectedDate}
-        />
-      </IonContent>
-    </IonPage>
-  );
-};
+import { useState } from "react";
 
 interface DatePickerProps {
   selectedDate: string;
   onDateSelected: (date: string) => void;
 }
 
-const DatePicker: React.FC<DatePickerProps> = ({
+const MyDatePicker: React.FC<DatePickerProps> = ({
   selectedDate,
   onDateSelected,
 }) => {
@@ -69,6 +43,4 @@ const DatePicker: React.FC<DatePickerProps> = ({
   );
 };
 
-export default Test;
-
-//DateTimePicker
+export default MyDatePicker;

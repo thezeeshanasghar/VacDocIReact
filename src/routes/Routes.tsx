@@ -11,6 +11,7 @@ import UpdatePatient from "../pages/patient/update/UpdatePatient";
 import VaccinationCard from "../pages/patient/vaccination/VaccinationCard";
 import ClinicCardList from "../pages/clinic/ClinicCardList";
 import AddClinic from "../pages/clinic/AddClinic";
+import DoctorScheduleCardList from "../pages/doctor-schedule/DoctorScheduleCardList";
 
 const Routes: React.FC = () => {
   return (
@@ -24,7 +25,8 @@ const Routes: React.FC = () => {
 
         <Route exact path="/members/doctor/clinic" component={ClinicCardList} />
         <Route exact path="/members/doctor/clinic/add" component={AddClinic} />
-
+        <Route exact path="/members/doctor/schedule" component={DoctorScheduleCardList} />
+        
         <Route
           exact
           path="/members/child/vaccine/:Id"
