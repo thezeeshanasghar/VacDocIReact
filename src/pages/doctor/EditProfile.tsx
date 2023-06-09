@@ -37,7 +37,6 @@ const EditProfile: React.FC = () => {
   const [mobileNumber, setMobileNumber] = useState("");
   const [pmdc, setPmdc] = useState("");
   const [doctorType, setDoctorType] = useState("");
-  const [validUpto, setValidUpto] = useState("");
   const [isEnabled, setIsEnabled] = useState(false);
 
   const [success, setSuccess] = useState<boolean>(false);
@@ -79,7 +78,6 @@ const EditProfile: React.FC = () => {
     setMobileNumber("");
     setPmdc("");
     setDoctorType("");
-    setValidUpto("");
     setIsEnabled(false);
   };
   const fetchInitialDocData = () => {

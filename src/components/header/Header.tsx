@@ -35,8 +35,9 @@ const Header: React.FC<IHeaderProps> = ({ pageName }) => {
             slot="end"
             className="ng-star-inserted md title-default hydrated"
           >
-            {" "}
-            Baby Medics{" "}
+            {location.pathname === "/members/doctor/clinic/add"
+              ? ""
+              : "Baby Medics"}
           </IonTitle>
           {location.pathname === "/members/doctor/clinic" && (
             <IonItem

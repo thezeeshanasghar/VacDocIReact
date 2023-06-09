@@ -1,22 +1,21 @@
 import {
   IonButton,
   IonContent,
-  IonHeader,
   IonInput,
   IonItem,
   IonLabel,
   IonPage,
   IonTextarea,
-  IonTitle,
-  IonToolbar,
 } from "@ionic/react";
 import React from "react";
-import WeekDaysCard from "../clinic/WeekDaysCard";
+import WeekDaysCard from "./WeekDaysCard";
+import Header from "../../components/header/Header";
 
-const Test: React.FC = () => {
+const AddClinic: React.FC = () => {
   return (
     <IonPage>
       <IonContent>
+        <Header pageName="Add Clinic" />
         <form noValidate className="ion-padding">
           <IonItem>
             <IonLabel position="floating" color="primary">
@@ -73,4 +72,4 @@ const Test: React.FC = () => {
   );
 };
 
-export default Test;
+export default AddClinic;

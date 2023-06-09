@@ -93,8 +93,8 @@ const AddPatient: React.FC = () => {
     setEmail("");
     setMobileNumber("");
     setpreferredSchedule("");
-    setSelectedDoctor("");
-    setSelectedClinic("");
+    setSelectedDoctor(0);
+    setSelectedClinic(0);
     setCity("");
     setIsEPIDone(false);
     setIsVerified(false);

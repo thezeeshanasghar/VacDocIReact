@@ -13,8 +13,8 @@ import {
 import { create, trash, mail, call, person, calendar } from "ionicons/icons";
 import maleThumbmail from "../../assets/male.png";
 import { IPatientData } from "../../pages/patient/PatientCardList";
-type PatientMaleType = Pick<IPatientData, "Name" | "Guardian" | "DOB">
-const PatientMaleCard : React.FC<PatientMaleType> = ({Name, Guardian, DOB}) => {
+type PatientMaleType = Pick<IPatientData, "Name" | "Guardian" | "DOB"| 'Id'>
+const PatientMaleCard : React.FC<PatientMaleType> = ({Name, Guardian, DOB, Id}) => {
   const router = useIonRouter();
   return (
     <IonCard style={{ border: "2px solid blue" }}>
@@ -29,11 +29,10 @@ const PatientMaleCard : React.FC<PatientMaleType> = ({Name, Guardian, DOB}) => {
           className="iconchild"
           color="primary"
           icon={create}
-          onClick={() => router.push(`/members/child/edit/${1}`, "forward")}
+          onClick={() => router.push(`/members/child/edit/${Id}`, "forward")}
           slot="start"
           tabIndex={0}
           aria-label="create"
-          style={{ marginRight: "50px" }}
         ></IonIcon>
         <IonIcon
           className="iconchild"
@@ -42,9 +41,8 @@ const PatientMaleCard : React.FC<PatientMaleType> = ({Name, Guardian, DOB}) => {
           slot="start"
           role="img"
           aria-label="trash"
-          style={{ marginRight: "50px" }}
         ></IonIcon>
-        <IonIcon
+        {/* <IonIcon
           className="iconchild"
           color="primary"
           icon={mail}
@@ -60,10 +58,10 @@ const PatientMaleCard : React.FC<PatientMaleType> = ({Name, Guardian, DOB}) => {
           slot="start"
           role="img"
           aria-label="call"
-        ></IonIcon>
+        ></IonIcon> */}
       </IonItem>
       <IonCardContent>
-        <IonIcon
+        {/* <IonIcon
           color="primary"
           icon={person}
           role="img"
@@ -87,7 +85,7 @@ const PatientMaleCard : React.FC<PatientMaleType> = ({Name, Guardian, DOB}) => {
           aria-label="call"
         ></IonIcon>
         &nbsp;3335408191 &nbsp;
-        <br />
+        <br /> */}
         <IonButton
           color="tertiary"
           fill="outline"

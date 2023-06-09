@@ -47,7 +47,8 @@ const PatientCardList: React.FC = () => {
         <PatientSearch data={patientData} hideCards={setHideCards} />
 
         {/* list of patient cards to be rendered. */}
-        {patientData && !hideCards  &&
+        {patientData &&
+          !hideCards &&
           patientData.map((item, index) => {
             if (item.Gender.includes("boy" || "male")) {
               return (
@@ -56,6 +57,7 @@ const PatientCardList: React.FC = () => {
                   Name={item.Name}
                   Guardian={item.Guardian}
                   DOB={format(new Date(item.DOB), "dd MMMM yyyy")}
+                  Id={item.Id}
                 />
               );
             }
@@ -65,6 +67,7 @@ const PatientCardList: React.FC = () => {
                 Name={item.Name}
                 Guardian={item.Guardian}
                 DOB={format(new Date(item.DOB), "dd MMMM yyyy")}
+                Id={item.Id}
               />
             );
           })}

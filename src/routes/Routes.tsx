@@ -10,6 +10,7 @@ import EditProfile from "../pages/doctor/EditProfile";
 import UpdatePatient from "../pages/patient/update/UpdatePatient";
 import VaccinationCard from "../pages/patient/vaccination/VaccinationCard";
 import ClinicCardList from "../pages/clinic/ClinicCardList";
+import AddClinic from "../pages/clinic/AddClinic";
 
 const Routes: React.FC = () => {
   return (
@@ -22,6 +23,7 @@ const Routes: React.FC = () => {
         <Route exact path="/members/child/edit/:Id" component={UpdatePatient} />
 
         <Route exact path="/members/doctor/clinic" component={ClinicCardList} />
+        <Route exact path="/members/doctor/clinic/add" component={AddClinic} />
 
         <Route
           exact
