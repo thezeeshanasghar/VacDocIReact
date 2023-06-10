@@ -25,7 +25,7 @@ const DoctorScheduleCardList: React.FC = () => {
   const [scheduleData, setScheduleData] = useState<IDoctorSchedule[]>();
   const [groupedData, setGroupedData] = useState<
     Record<string, IDoctorSchedule[]>
-  >([]);
+  >({});
   const Id = 1;
   const fetchScheduleData = () => {
     fetch(`http://localhost:5041/api/DoctorSchedule/doctor_schedule/${Id}`)
@@ -46,6 +46,11 @@ const DoctorScheduleCardList: React.FC = () => {
       setGroupedData(groupedD);
     }
   }, [scheduleData]);
+
+  const forceRender = () => {
+    fetchScheduleData();
+  };
+  console.log(groupedData);
   return (
     <>
       {scheduleData && (
@@ -54,7 +59,12 @@ const DoctorScheduleCardList: React.FC = () => {
           <IonContent className="ion-padding">
             <>
               {Object.entries(groupedData).map(([date, data]) => (
-                <DoctorScheduleCard key={date} date={date} data={data} />
+                <DoctorScheduleCard
+                  key={date}
+                  date={date}
+                  data={data}
+                  forceRender={forceRender}
+                />
               ))}
             </>
           </IonContent>
