@@ -66,7 +66,7 @@ const DoctorScheduleCard: React.FC<ScheduleCardProps> = ({
         value: user_selected_date.split("T")[0],
       },
     ];
-    console.log("data_to_update: ", data_to_update);
+    
     fetch(
       `http://localhost:5041/api/DoctorSchedule/doctor_bulk_updateDate/${date}`,
       {

@@ -50,7 +50,7 @@ const DoctorScheduleCardList: React.FC = () => {
   const forceRender = () => {
     fetchScheduleData();
   };
-  console.log(groupedData);
+
   return (
     <>
       {scheduleData && (
