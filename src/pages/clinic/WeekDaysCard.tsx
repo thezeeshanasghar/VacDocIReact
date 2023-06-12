@@ -1,3 +1,4 @@
+import { IonInputCustomEvent } from "@ionic/core";
 import {
   IonCard,
   IonCardTitle,
@@ -9,42 +10,108 @@ import {
   IonCol,
   IonInput,
   IonCardHeader,
+  InputChangeEventDetail,
 } from "@ionic/react";
 import React, { useState } from "react";
 type WeekDayCard = { name: string };
+interface ISession {
+  Day: string;
+  Session: string;
+  StartTime: string;
+  EndTime: string;
+}
 const WeekDaysCard: React.FC<WeekDayCard> = ({ name }) => {
-  const [showSession1, setShowSession1] = useState(true);
-  const [showSession2, setShowSession2] = useState(true);
+  const [showSession1, setShowSession1] = useState(false);
+  const [showSession2, setShowSession2] = useState(false);
   const [showCard, setShowCard] = useState(false);
-  const [mstart, setMStart] = useState("10:00");
-  const [mend, setMEnd] = useState("12:00");
-  const [mstart2, setMStart2] = useState("14:00");
-  const [mend2, setMEnd2] = useState("16:00");
-
-  const handleToggleSession1 = (e) => {
+  const [mstart, setMStart] = useState("");
+  const [mend, setMEnd] = useState("");
+  const [mstart2, setMStart2] = useState("");
+  const [mend2, setMEnd2] = useState("");
+  const [dayData, setDayData] = useState<ISession[]>([]);
+  const handleToggleSession1 = (e: {
+    detail: { checked: boolean | ((prevState: boolean) => boolean) };
+  }) => {
     setShowSession1(e.detail.checked);
   };
 
-  const handleToggleSession2 = (e) => {
+  const handleToggleSession2 = (e: {
+    detail: { checked: boolean | ((prevState: boolean) => boolean) };
+  }) => {
     setShowSession2(e.detail.checked);
   };
-  const handleToggleCard = (e) => {
+  const handleToggleCard = (e: {
+    detail: { checked: boolean | ((prevState: boolean) => boolean) };
+  }) => {
     setShowCard(e.detail.checked);
   };
 
-  const handleTimeChange = (e, input) => {
+  const handleTimeChange = (
+    e: IonInputCustomEvent<InputChangeEventDetail>,
+    input: string
+  ) => {
     const { value } = e.target;
     if (input === "start") {
+      //@ts-ignore
       setMStart(value);
     } else if (input === "end") {
+      //@ts-ignore
       setMEnd(value);
     } else if (input === "start2") {
+      //@ts-ignore
       setMStart2(value);
     } else if (input === "end2") {
+      //@ts-ignore
       setMEnd2(value);
     }
   };
+  if (showCard && showSession1) {
+    if (mstart !== "" && mend !== "") {
+      // if index already exists
+      const existingIndex = dayData.findIndex(
+        (entry) => entry.Day === name && entry.Session === "Session1"
+      );
 
+      // If the entry exists, update the existing object
+      if (existingIndex !== -1) {
+        dayData[existingIndex].StartTime = mstart;
+        dayData[existingIndex].EndTime = mend;
+      } else {
+        // If the entry doesn't exist, push a new object to the array
+        dayData.push({
+          Day: name,
+          Session: "Session1",
+          StartTime: mstart,
+          EndTime: mend,
+        });
+      }
+    }
+  }
+ if (showCard && showSession2) {
+    if (mstart2 !== "" && mend2 !== "") {
+
+      const existingIndex = dayData.findIndex(
+        (entry) => entry.Day === name && entry.Session === "Session2"
+      );
+  
+  
+      if (existingIndex !== -1) {
+        dayData[existingIndex].StartTime = mstart2;
+        dayData[existingIndex].EndTime = mend2;
+      } else {
+      
+        dayData.push({
+          Day: name,
+          Session: "Session2",
+          StartTime: mstart2,
+          EndTime: mend2,
+        });
+      }
+    }
+  }
+  
+
+  console.log(dayData);
   return (
     <IonCard>
       <IonCardHeader>

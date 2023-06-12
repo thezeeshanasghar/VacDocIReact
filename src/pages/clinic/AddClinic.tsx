@@ -35,15 +35,6 @@ const AddClinic: React.FC = () => {
             </IonLabel>
             <IonTextarea required></IonTextarea>
           </IonItem>
-          <IonItem>
-            <IonLabel position="floating" color="primary">
-              Consultation Fee
-            </IonLabel>
-            <IonInput type="number" min="0" required />
-          </IonItem>
-          <IonItem>
-            <IonButton slot="end">Upload Monogram</IonButton>
-          </IonItem>
           <WeekDaysCard name="Monday" />
           <WeekDaysCard name="Tuesday" />
           <WeekDaysCard name="Wednesday" />

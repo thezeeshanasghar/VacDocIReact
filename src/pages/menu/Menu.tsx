@@ -58,6 +58,11 @@ const appPages: AppPage[] = [
     mdIcon: moon,
   },
   {
+    title: "Schedule",
+    url: "/members/doctor/schedule",
+    mdIcon: recording,
+  },
+  {
     title: "Vacation",
     url: "/members/doctor/vacation",
     mdIcon: locate,
