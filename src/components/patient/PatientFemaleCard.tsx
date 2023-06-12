@@ -39,7 +39,7 @@ const PatientFemaleCard: React.FC<IFemalePatient> = ({
         <IonThumbnail slot="start" className="avatar">
           <IonImg className="avatar-image" src={femaleThumbmail}></IonImg>
         </IonThumbnail>
-        <IonLabel className="name">{Name}</IonLabel>
+        <IonLabel style={{fontSize : "18px"}} className="name">{Name}</IonLabel>
       </IonItem>
       <IonItem className="ion-justify-content-center">
         <IonIcon

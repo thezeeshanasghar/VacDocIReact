@@ -174,7 +174,7 @@ const UpdatePatient: React.FC<UpdateType> = ({
         path: "IsEPIDone",
         op: "replace",
         from: "",
-        value: isEPIDone,
+        value: isEPIDone ? 1 : 0,
       });
     }
 
@@ -183,7 +183,7 @@ const UpdatePatient: React.FC<UpdateType> = ({
         path: "IsVerified",
         op: "replace",
         from: "",
-        value: isVerified,
+        value: isVerified ? 1 : 0,
       });
     }
 
@@ -192,7 +192,7 @@ const UpdatePatient: React.FC<UpdateType> = ({
         path: "IsInactive",
         op: "replace",
         from: "",
-        value: isInactive,
+        value: isInactive ? 1 : 0,
       });
     }
 
@@ -268,17 +268,34 @@ const UpdatePatient: React.FC<UpdateType> = ({
     //fetching childData with id to pre-populate form
     preFetchPatientData();
   }, [Id]);
-  const preFetchPatientData = () => {
-    fetch(`http://localhost:5041/api/Child/${Id}`)
-      .then((res) => res.json())
-      .then((data: IPatientData) => setPatientData(data))
-      .catch((err) => console.error(err));
+  const preFetchPatientData = async () => {
+    try {
+      const res = await fetch(`http://localhost:5041/api/Child/${Id}`);
+      const PatientData: IPatientData = await res.json();
+
+      if (res.ok) {
+        const response = await fetch(
+          `http://localhost:5041/api/Doctor/${PatientData.DoctorId}`
+        );
+        const singleDoctorData = await response.json();
+        setSingleDoctorData(singleDoctorData);
+
+        const anotherResponse = await fetch(
+          `http://localhost:5041/api/Clinic/${PatientData.ClinicId}`
+        );
+        const singleClinicData = await anotherResponse.json();
+        setSignleClinicData(singleClinicData);
+
+        setPatientData(PatientData);
+      }
+    } catch (err) {
+      console.error(err);
+    }
   };
   const preFetchPatientDoctorList = () => {
     fetch("http://localhost:5041/api/Doctor")
       .then((res) => res.json())
       .then((data: DoctorClinicType[]) => {
-        setSingleDoctorData(data.find((item) => item.Id === patientData?.Id));
         setDoctorData(data);
       })
       .catch((err) => console.error(err));
@@ -286,10 +303,7 @@ const UpdatePatient: React.FC<UpdateType> = ({
   const preFetchPatientClinicList = () => {
     fetch("http://localhost:5041/api/Clinic")
       .then((res) => res.json())
-      .then((data: DoctorClinicType[]) => {
-        setSignleClinicData(data.find((item) => item.Id === patientData?.Id));
-        setClinicData(data);
-      })
+      .then((data: DoctorClinicType[]) => setClinicData(data))
       .catch((err) => console.error(err));
   };
 
