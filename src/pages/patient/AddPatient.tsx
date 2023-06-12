@@ -102,12 +102,12 @@ const AddPatient: React.FC = () => {
 
   // getting doctors list for dropdown and clinic;
   useEffect(() => {
-    fetch("https://myapi.fernflowers.com/api/Doctor")
+    fetch("http://localhost:5041/api/Doctor")
       .then((res) => res.json())
       .then((data) => setDoctorData(data))
       .catch((err) => console.error(err));
 
-    fetch("https://myapi.fernflowers.com/api/Clinic")
+    fetch("http://localhost:5041/api/Clinic")
       .then((res) => res.json())
       .then((data) => setClinicData(data))
       .catch((err) => console.error(err));

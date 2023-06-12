@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   IonCard,
   IonCardContent,
@@ -13,16 +13,33 @@ import {
 import { create, trash, mail, call, person, calendar } from "ionicons/icons";
 import maleThumbmail from "../../assets/male.png";
 import { IPatientData } from "../../pages/patient/PatientCardList";
-type PatientMaleType = Pick<IPatientData, "Name" | "Guardian" | "DOB"| 'Id'>
-const PatientMaleCard : React.FC<PatientMaleType> = ({Name, Guardian, DOB, Id}) => {
+import Delete from "../delete/Delete";
+interface IMalePatient {
+  Id : number;
+  Name: string;
+  renderList : () => void;
+}
+const PatientMaleCard: React.FC<IMalePatient> = ({
+  Name,
+  Id,
+  renderList
+}) => {
   const router = useIonRouter();
+  const [deletePatient, setDeletePatient] = useState(false);
   return (
     <IonCard style={{ border: "2px solid blue" }}>
+      <Delete
+        url={`http://localhost:5041/api/Child/${Id}`}
+        confirmAlertOpen={deletePatient}
+        setConfirmAlertOpen={setDeletePatient}
+        title="Patient"
+        renderList={renderList}
+      />
       <IonItem className="item">
         <IonThumbnail slot="start" className="avatar">
           <IonImg className="avatar-image" src={maleThumbmail}></IonImg>
         </IonThumbnail>
-        <IonLabel className="name">{Name}</IonLabel>
+        <IonLabel style={{fontSize : "18px"}} className="name">{Name}</IonLabel>
       </IonItem>
       <IonItem className="ion-justify-content-center">
         <IonIcon
@@ -41,6 +58,7 @@ const PatientMaleCard : React.FC<PatientMaleType> = ({Name, Guardian, DOB, Id}) 
           slot="start"
           role="img"
           aria-label="trash"
+          onClick={() => setDeletePatient(true)}
         ></IonIcon>
         {/* <IonIcon
           className="iconchild"
