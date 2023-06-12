@@ -57,6 +57,21 @@ const appPages: AppPage[] = [
     url: "/members/doctor/clinic",
     mdIcon: moon,
   },
+  {
+    title: "Vacation",
+    url: "/members/doctor/vacation",
+    mdIcon: locate,
+  },
+  {
+    title: "Brand Inventory",
+    url: "/members/doctor/brandinventory",
+    mdIcon: locate,
+  },
+  {
+    title: "Brand Amount",
+    url: "/members/doctor/brandamount",
+    mdIcon: locate,
+  },
 ];
 
 const Menu: React.FC = () => {

@@ -30,6 +30,11 @@ const Routes: React.FC = () => {
 
         <Route exact path="/members/doctor/clinic" component={ClinicCardList} />
         <Route exact path="/members/doctor/clinic/add" component={AddClinic} />
+        <Route exact path="/members/doctor/vacation" component={Vacation} />
+        <Route exact path="/members/doctor/brandinventory" component={BrandInventory} />
+        <Route exact path="/members/doctor/brandinventory/add" component={AddBrandInventory} />
+        <Route exact path="/members/doctor/brandamount" component={BrandAmount} />
+        <Route exact path="/members/doctor/brandamount/add" component={AddBrandAmount} />
 
         <Route
           exact
