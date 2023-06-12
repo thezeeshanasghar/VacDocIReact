@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   IonCard,
   IonCardContent,
@@ -13,11 +13,28 @@ import {
 import { IPatientData } from "../../pages/patient/PatientCardList";
 import { create, trash, mail, call, person, calendar } from "ionicons/icons";
 import femaleThumbmail from "../../assets/female.png";
-type PatientFemaleType = Pick<IPatientData, 'Name' | 'Guardian' | 'DOB' | 'Id'>;
-const PatientFemaleCard : React.FC<PatientFemaleType> = ({Name, DOB,Guardian, Id}) => {
+import Delete from "../delete/Delete";
+interface IFemalePatient {
+  Id: number;
+  Name: string;
+  renderList: () => void;
+}
+const PatientFemaleCard: React.FC<IFemalePatient> = ({
+  Name,
+  Id,
+  renderList,
+}) => {
   const router = useIonRouter();
+  const [deletePatient, setDeletePatient] = useState(false);
   return (
     <IonCard style={{ border: "2px solid #f50ca7" }}>
+      <Delete
+        url={`http://localhost:5041/api/Child/${Id}`}
+        confirmAlertOpen={deletePatient}
+        setConfirmAlertOpen={setDeletePatient}
+        title="Patient"
+        renderList={renderList}
+      />
       <IonItem className="item">
         <IonThumbnail slot="start" className="avatar">
           <IonImg className="avatar-image" src={femaleThumbmail}></IonImg>
@@ -41,6 +58,7 @@ const PatientFemaleCard : React.FC<PatientFemaleType> = ({Name, DOB,Guardian, Id
           slot="start"
           role="img"
           aria-label="trash"
+          onClick={() => setDeletePatient(true)}
         ></IonIcon>
         {/* <IonIcon
           className="iconchild"

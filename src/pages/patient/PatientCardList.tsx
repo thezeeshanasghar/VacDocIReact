@@ -55,9 +55,8 @@ const PatientCardList: React.FC = () => {
                 <PatientMaleCard
                   key={index * 3 * 2}
                   Name={item.Name}
-                  Guardian={item.Guardian}
-                  DOB={format(new Date(item.DOB), "dd MMMM yyyy")}
                   Id={item.Id}
+                  renderList={fetchPatientData}
                 />
               );
             }
@@ -65,9 +64,10 @@ const PatientCardList: React.FC = () => {
               <PatientFemaleCard
                 key={index * 3}
                 Name={item.Name}
-                Guardian={item.Guardian}
-                DOB={format(new Date(item.DOB), "dd MMMM yyyy")}
+                // Guardian={item.Guardian}
+                // DOB={format(new Date(item.DOB), "dd MMMM yyyy")}
                 Id={item.Id}
+                renderList={fetchPatientData}
               />
             );
           })}
