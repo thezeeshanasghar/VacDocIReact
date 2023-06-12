@@ -23,6 +23,7 @@ import {
   man,
   create,
   moon,
+  locate,
 } from "ionicons/icons";
 import "./Menu.css";
 import Routes from "../../routes/Routes";
@@ -54,6 +55,21 @@ const appPages: AppPage[] = [
     title: "Clinic",
     url: "/members/doctor/clinic",
     mdIcon: moon,
+  },
+  {
+    title: "Vacation",
+    url: "/members/doctor/vacation",
+    mdIcon: locate,
+  },
+  {
+    title: "Brand Inventory",
+    url: "/members/doctor/brandinventory",
+    mdIcon: locate,
+  },
+  {
+    title: "Brand Amount",
+    url: "/members/doctor/brandamount",
+    mdIcon: locate,
   },
 ];
 

@@ -19,7 +19,7 @@ import {
 import React, { useEffect, useState } from "react";
 import Header from "../../components/header/Header";
 import "./css/addpatient.css";
-import { format } from "date-fns";
+// import { format } from "date-fns";
 import Toast from "../../components/custom-toast/Toast";
 type DoctorClinicType = { Id: number; Name: string };
 const AddPatient: React.FC = () => {

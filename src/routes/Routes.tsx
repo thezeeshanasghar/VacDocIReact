@@ -11,6 +11,11 @@ import UpdatePatient from "../pages/patient/update/UpdatePatient";
 import VaccinationCard from "../pages/patient/vaccination/VaccinationCard";
 import ClinicCardList from "../pages/clinic/ClinicCardList";
 import AddClinic from "../pages/clinic/AddClinic";
+import Vacation from "../pages/Vacation/Vacation";
+import BrandInventory from "../pages/brand_inventory/BrandInventory";
+import BrandAmount from "../pages/brand_amount/BrandAmount";
+import AddBrandInventory from "../pages/brand_inventory/AddBrandInventory";
+import AddBrandAmount from "../pages/brand_amount/AddBrandAmount";
 
 const Routes: React.FC = () => {
   return (
@@ -24,6 +29,11 @@ const Routes: React.FC = () => {
 
         <Route exact path="/members/doctor/clinic" component={ClinicCardList} />
         <Route exact path="/members/doctor/clinic/add" component={AddClinic} />
+        <Route exact path="/members/doctor/vacation" component={Vacation} />
+        <Route exact path="/members/doctor/brandinventory" component={BrandInventory} />
+        <Route exact path="/members/doctor/brandinventory/add" component={AddBrandInventory} />
+        <Route exact path="/members/doctor/brandamount" component={BrandAmount} />
+        <Route exact path="/members/doctor/brandamount/add" component={AddBrandAmount} />
 
         <Route
           exact

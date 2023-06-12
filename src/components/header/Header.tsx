@@ -35,14 +35,53 @@ const Header: React.FC<IHeaderProps> = ({ pageName }) => {
             slot="end"
             className="ng-star-inserted md title-default hydrated"
           >
-            {location.pathname === "/members/doctor/clinic/add"
+
+            {location.pathname === ("/members/doctor/brandinventory/add"||"/members/doctor/clinic/add"||"/members/doctor/brandamount/add")
               ? ""
               : "Baby Medics"}
+
           </IonTitle>
           {location.pathname === "/members/doctor/clinic" && (
             <IonItem
               color="primary"
               routerLink="/members/doctor/clinic/add"
+              routerDirection="root"
+              slot="end"
+              tabIndex={0}
+              className="ion-color ion-color-primary item md ion-activatable ion-focusable hydrated"
+            >
+              <IonIcon
+                color="light"
+                icon={add}
+                slot="end"
+                role="img"
+                className="md ion-color ion-color-light hydrated"
+                aria-label="add"
+              ></IonIcon>
+            </IonItem>
+          )}
+            {location.pathname === "/members/doctor/brandinventory" && (
+            <IonItem
+              color="primary"
+              routerLink="/members/doctor/brandinventory/add"
+              slot="end"
+              tabIndex={0}
+              className="ion-color ion-color-primary item md ion-activatable ion-focusable hydrated"
+            >
+              <IonIcon
+                color="light"
+                icon={add}
+                slot="end"
+                role="img"
+                className="md ion-color ion-color-light hydrated"
+                aria-label="add"
+              ></IonIcon>
+            </IonItem>
+          )}
+           {location.pathname === "/members/doctor/brandamount" && (
+            <IonItem
+              color="primary"
+              routerLink="/members/doctor/brandamount/add"
               slot="end"
               tabIndex={0}
               className="ion-color ion-color-primary item md ion-activatable ion-focusable hydrated"
