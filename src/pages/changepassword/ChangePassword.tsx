@@ -17,6 +17,7 @@ const ChangePassword: React.FC = () => {
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
   const [passwordMatch, setPasswordMatch] = useState(true);
 
+  
   const handelChangePassword = (e: React.FormEvent) => {
     e.preventDefault();
     console.log(newPassword)
@@ -27,7 +28,7 @@ const ChangePassword: React.FC = () => {
             path: "password",
             op: "replace",
             from: oldPassword,
-            value: confirmNewPassword,
+            value: newPassword,
           }];
           console.log(data_to_be_sent);
           fetch("http://localhost:5041/api/Doctor/password/1", {
@@ -49,6 +50,7 @@ const ChangePassword: React.FC = () => {
         // Passwords do not match
         console.log("first")
         setPasswordMatch(false);
+        setError(true)
       }
   };
 
@@ -63,6 +65,7 @@ const ChangePassword: React.FC = () => {
   };
 
   return (
+    <>
     <IonPage>
          <Toast
         isOpen={success}
@@ -114,6 +117,7 @@ const ChangePassword: React.FC = () => {
             </form>
       </IonContent>
     </IonPage>
+    </>
   );
 };
 
