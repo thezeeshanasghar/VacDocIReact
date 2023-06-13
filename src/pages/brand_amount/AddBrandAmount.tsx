@@ -2,7 +2,9 @@ import { IonButton, IonCard, IonCardContent, IonContent, IonHeader, IonInput, Io
 import React,{useState,useEffect} from 'react';
 import Header from '../../components/header/Header';
 import Toast from '../../components/custom-toast/Toast';
+import { useIonRouter } from '@ionic/react';
 // import BrandAmount from './BrandAmount';
+type VaccineDataType = { Id: number; Name: string };
 type BrandInventoryType = { Id: number; Name: string };
 const AddBrandAmount: React.FC = () => {
     const [success, setSuccess] = useState<boolean>(false);
@@ -10,6 +12,12 @@ const AddBrandAmount: React.FC = () => {
     const [brandData, setBrandData] = useState<BrandInventoryType[]>([]);
     const [brandAmount, setBrandAmount] = useState("");
     const [brandName, setBrandName] = useState("");
+    const [vaccineName, setVaccineName]=useState<string>("");
+    const [vaccineData, setVaccineData] = useState<VaccineDataType[]>([]);
+    const data=useIonRouter();
+    const handelList=()=>{
+data.push('/members/doctor/brandamount');
+    }
 
     const handleSubmit = () => {
         // e.preventDefault();
@@ -34,6 +42,7 @@ const AddBrandAmount: React.FC = () => {
           .catch((err) => setError(true))
           .finally(() => {
             setBrandAmount("");
+            setVaccineName("");
             setBrandName("");
           });
       };
@@ -42,16 +51,22 @@ const AddBrandAmount: React.FC = () => {
       //   setBrandName("");
      
       // };
-      useEffect(() => {
-        fetch("http://localhost:5041/BrandName")
+      const handleClickVaccine=()=>{
+        fetch(`http://localhost:5041/api/Brand/brand_name/${vaccineName}`)
           .then((res) => res.json())
           .then((data) => setBrandData(data))
           .catch((err) => console.error(err));
-    
-        // fetch("https://myapi.fernflowers.com/api/Clinic")
-        //   .then((res) => res.json())
-        //   .then((data) => setClinicData(data))
-        //   .catch((err) => console.error(err));
+      }
+      useEffect(() => {
+          fetch("http://localhost:5041/api/Vaccine")
+          .then((res) => res.json())
+          .then((data) => setVaccineData(data))
+          .catch((err) => console.error(err));
+
+          // fetch(`http://localhost:5041/api/Brand/brand_name/1`)
+          // .then((res) => res.json())
+          // .then((data) => setVaccineName(data))
+          // .catch((err) => console.error(err));
       }, []);
 
     return (
@@ -84,9 +99,24 @@ const AddBrandAmount: React.FC = () => {
               />
             </IonItem>
             <IonItem>
-              <IonLabel position="floating">Brand Name</IonLabel>
+            <IonLabel position="floating">Vaccine Name</IonLabel>
+              <IonSelect
+                value={vaccineName}
+                onIonChange={(e) => setVaccineName(e.detail.value!)}
+              >
+                {vaccineData &&
+                  vaccineData.map((item, index) => (
+                    <IonSelectOption key={index} value={item.Id}>
+                      {item.Name}
+                    </IonSelectOption>
+                  ))}
+              </IonSelect>
+            </IonItem>
+            <IonItem>
+            <IonLabel position="floating">Selected Vaccine Brand Name</IonLabel>
               <IonSelect
                 value={brandName}
+                onClick={handleClickVaccine}
                 onIonChange={(e) => setBrandName(e.detail.value!)}
               >
                 {brandData &&
@@ -99,14 +129,15 @@ const AddBrandAmount: React.FC = () => {
             </IonItem>
             <IonButton onClick={handleSubmit}>
               Add Amount
+            </IonButton><br/>
+            <IonButton onClick={handelList}>
+              list
             </IonButton>
-          
         </IonCardContent>
       </IonCard>
               </IonContent>
             </IonPage>
         </>
     );
-                  }
-                  
-                  export default AddBrandAmount;
+ }
+export default AddBrandAmount;
