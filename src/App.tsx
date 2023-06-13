@@ -26,6 +26,7 @@ import "@ionic/react/css/display.css";
 /* Theme variables */
 import "./theme/variables.css";
 import Login from "./pages/login/Login";
+import SignUp from "./pages/doctor-signup/SignUp";
 
 setupIonicReact();
 
@@ -36,6 +37,7 @@ const App: React.FC = () => {
         <IonRouterOutlet>
           <Route exact path="/" component={Login} />
           <Route path="/members" component={Menu} />
+          <Route exact path={"/auth/signup"} component={SignUp} />
           {/* <Route path="*" component={NotFound} /> */}
         </IonRouterOutlet>
       </IonReactRouter>

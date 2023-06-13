@@ -10,6 +10,7 @@ import {
   IonHeader,
   IonToolbar,
   IonTitle,
+  IonText,
 } from "@ionic/react";
 import { mail, lockClosed, logIn } from "ionicons/icons";
 import "./Login.css";
@@ -74,6 +75,7 @@ const Login: React.FC = () => {
                     &nbsp; Login
                   </IonButton>
                 </form>
+                <IonText onClick={() => route.push("/sign")}>Sign up</IonText>
               </div>
             </IonCard>
           </div>

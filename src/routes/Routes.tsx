@@ -17,6 +17,7 @@ import BrandInventory from "../pages/brand_inventory/BrandInventory";
 import BrandAmount from "../pages/brand_amount/BrandAmount";
 import AddBrandInventory from "../pages/brand_inventory/AddBrandInventory";
 import AddBrandAmount from "../pages/brand_amount/AddBrandAmount";
+import SignUp from "../pages/doctor-signup/SignUp";
 
 const Routes: React.FC = () => {
   return (
@@ -72,6 +73,8 @@ const Routes: React.FC = () => {
         <Route exact path="/members">
           <Redirect to="/members/dashboard" />
         </Route>
+
+        <Route exact path={"/auth/signup"} component={SignUp} />
       </IonRouterOutlet>
     </>
   );
