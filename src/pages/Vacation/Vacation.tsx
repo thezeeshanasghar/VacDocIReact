@@ -1,13 +1,21 @@
-import { IonButton, IonContent, IonHeader, IonInput, IonItem, IonLabel, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import React,{useState} from 'react';
+import { IonButton, IonContent, IonHeader, IonInput, IonItem, IonLabel, IonPage, IonTitle, IonToolbar,IonCheckbox } from '@ionic/react';
+import React,{useState,useEffect} from 'react';
 import Header from '../../components/header/Header';
 import Toast from '../../components/custom-toast/Toast';
-
+import './vacation.css';
+type ClinicType = {  Name: string };
 const Vacation: React.FC = () => {
     const [fromDate, setFromDate] = useState("");
     const [toDate, setToDate] = useState("");
     const [success, setSuccess] = useState<boolean>(false);
     const [error, setError] = useState<boolean>(false);
+    const [clinic,setClinic]= useState<ClinicType[]>([])
+    useEffect(() => {
+      fetch("http://localhost:5041/api/Clinic")
+        .then((res) => res.json())
+        .then((data) => setClinic(data))
+        .catch((err) => console.error(err));
+    }, []);
     const handleFormSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         
@@ -61,7 +69,19 @@ const Vacation: React.FC = () => {
                 onIonChange={(e) => setToDate(e.detail.value!)}
               />
             </IonItem>
-            
+            {/* <h2>Clinics</h2>
+            {clinic &&
+        clinic.map((item, index) => (
+          <div key={index}>
+            <IonCheckbox
+              // type="checkbox"
+              // checked={item.selected}
+              // onChange={() => handleCheckboxChange(item.id)}
+            >
+            <span>{item.Name}</span>
+            </IonCheckbox>
+          </div>
+        ))} */}
             <IonButton expand="full" type="submit">Go</IonButton>
            
             </form>
