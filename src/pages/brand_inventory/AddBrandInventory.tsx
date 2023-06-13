@@ -2,7 +2,8 @@ import { IonButton, IonCard, IonCardContent, IonContent, IonHeader, IonInput, Io
 import React,{useState,useEffect} from 'react';
 import Header from '../../components/header/Header';
 import Toast from '../../components/custom-toast/Toast';
-import { isEmpty, parseInt } from 'lodash';
+import { useIonRouter } from '@ionic/react';
+// import { isEmpty, parseInt } from 'lodash';
 type BrandInventoryType = { Id: number; Name: string };
 type VaccineDataType = { Id: number; Name: string };
 const AddBrandInventory: React.FC = () => {
@@ -13,6 +14,11 @@ const AddBrandInventory: React.FC = () => {
     const [vaccineData, setVaccineData] = useState<VaccineDataType[]>([]);
     const [vaccineName, setVaccineName]=useState<string>("");
     const [brandCount, setBrandCount] = useState<string>("");
+    const data=useIonRouter();
+    const handelList=()=>{
+data.push('/members/doctor/brandamount');
+    }
+
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -23,7 +29,7 @@ const AddBrandInventory: React.FC = () => {
         console.log(brandCount)
         console.log("count = " , brandCount)
         const data_to_be_sent = {
-            "count": +brandCount,
+            "count": brandCount,
             "brandId": brandName,
             "doctorId": 1
         };
@@ -38,7 +44,9 @@ const AddBrandInventory: React.FC = () => {
           .then((res) => (res.status === 201 ? setSuccess(true) : setError(true)))
           .catch((err) => setError(true))
           .finally(() => {
-            // clearStateVariables();
+            setBrandName("");
+            setBrandCount("");
+            setVaccineName("");
           });
       };
       // const clearStateVariables = () => {
@@ -140,6 +148,9 @@ const AddBrandInventory: React.FC = () => {
               Add Inventory
             </IonButton>
          </form>
+         <IonButton onClick={handelList}>
+              list
+            </IonButton>
         </IonCardContent>
       </IonCard>
       </IonContent>
