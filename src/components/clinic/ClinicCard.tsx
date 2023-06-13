@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   IonCard,
   IonCardHeader,
@@ -6,88 +6,128 @@ import {
   IonCardTitle,
   IonCardContent,
   IonButton,
-  IonBadge,
   IonIcon,
+  IonItem,
+  IonGrid,
+  IonRow,
+  IonCol,
+  IonItemDivider,
 } from "@ionic/react";
 import { trash, create, createOutline } from "ionicons/icons";
+import { format } from "date-fns";
+interface Session {
+  Id: number;
+  Day: string;
+  Session: string;
+  StartTime: string;
+  EndTime: string;
+  ClinicId: number;
+}
 
 interface ClinicCardProps {
-  initialConsultationFee?: number;
   initialOffDays?: string;
   initialTimings?: string;
-  initialPatientCount?: number;
   initialIsOnline?: boolean;
+  Id: number;
+  Name: string;
+  Address: string;
+  Number: string;
+  DoctorId: number;
 }
 
 const ClinicCard: React.FC<ClinicCardProps> = ({
-  initialConsultationFee = 1500,
   initialOffDays = "Monday, Tuesday",
   initialTimings = "9:00 AM - 5:00 PM",
-  initialPatientCount = 8383,
   initialIsOnline = false,
+  Id,
+  Name,
+  Address,
+  Number,
+  DoctorId,
 }) => {
-  const [consultationFee, setConsultationFee] = useState(
-    initialConsultationFee
-  );
   const [offDays, setOffDays] = useState(initialOffDays);
   const [timings, setTimings] = useState(initialTimings);
-  const [patientCount, setPatientCount] = useState(initialPatientCount);
   const [isOnline, setIsOnline] = useState(initialIsOnline);
-
-  const handleUpdateConsultationFee = (value: number) => {
-    setConsultationFee(value);
+  const [clinicTimings, setclinicTimings] = useState<Session[]>([]);
+  const [sameClinics, setSameClinics] = useState<Session[]>([]);
+  const fetchClinicTimings = async () => {
+    try {
+      const res = await fetch("http://localhost:5041/api/Clinictiming");
+      const data: Session[] = await res.json();
+      setclinicTimings(data);
+      setSameClinics(clinicTimings.filter(item => item.ClinicId === Id));
+    } catch (err) {
+      console.log(err);
+    }
   };
 
-  const handleUpdateOffDays = (value: string) => {
-    setOffDays(value);
-  };
+  useEffect(() => {
+    fetchClinicTimings();
+  }, []);
 
-  const handleUpdateTimings = (value: string) => {
-    setTimings(value);
-  };
+  //time formating
+  function formatedTime(timeString: string) {
+    const time = new Date(`2000-01-01T${timeString}`);
+    const formattedTime = format(time, "h:mm a");
 
-  const handleUpdatePatientCount = (value: number) => {
-    setPatientCount(value);
-  };
-
-  const handleUpdateIsOnline = (value: boolean) => {
-    setIsOnline(value);
-  };
-
+    return formattedTime;
+  }
   return (
-    <IonCard>
-      <IonCardHeader>
-        <IonCardSubtitle>{"lahore"}</IonCardSubtitle>
-        <IonCardTitle style={{display: 'flex', justifyContent: 'space-between'}}>
-          <span>{"Baby Medics"}</span>
-          <div style={{fontSize: '25px'}}>
-            
-              <IonIcon icon={create} color="primary"/>
-              <IonIcon icon={trash} color="primary" />
-             
-          </div>
-        </IonCardTitle>
-      </IonCardHeader>
-      <IonCardContent>
-        <p>Consultation Fee: {consultationFee}</p>
-        <p>Off Days: {offDays}</p>
-        <p>Timings: {timings}</p>
-        <IonButton color="tertiary" fill="outline" size="small">
-          Patients
-          <IonBadge color="primary">{patientCount}</IonBadge>
-        </IonButton>
-        <IonButton
-          color="success"
-          disabled={!isOnline}
-          routerLink="/members/dashboard"
-          size="small"
-        >
-          <IonIcon icon={createOutline} slot="start" />
-          Online
-        </IonButton>
-        <br />
-      </IonCardContent>
-    </IonCard>
+    <>
+      {clinicTimings && (
+        <IonCard>
+          <IonCardHeader>
+            <IonCardSubtitle>{Address}</IonCardSubtitle>
+            <IonCardTitle
+              style={{ display: "flex", justifyContent: "space-between" }}
+            >
+              <span>{Name}</span>
+              <div style={{ fontSize: "25px" }}>
+                <IonIcon icon={create} color="primary" />
+                <IonIcon icon={trash} color="primary" />
+              </div>
+            </IonCardTitle>
+          </IonCardHeader>
+          <IonCardContent>
+            <IonGrid>
+               
+               <IonRow>
+                {clinicTimings
+                  .map((item, index) => {
+                    if (item.ClinicId === Id) {
+                      const count = clinicTimings.filter(i => i.ClinicId === Id);
+                      return (
+                        <>
+                              <IonCol size="6" >
+                                <p><b>On Day : </b> {item.Day}</p>
+                                <p><b>Session :</b> {item.Session}</p>
+                                <p><b>Start Time :</b> {formatedTime(item.StartTime)} | <b>End Time :</b> {formatedTime(item.EndTime)}</p>
+                              </IonCol>
+                              {count.length + 1 % 2 === 0 && <hr/>}
+                        </>
+                      )
+                    }
+                  })
+                }
+                </IonRow>
+             </IonGrid>
+            <IonButton color="tertiary" fill="outline" size="small">
+              Patients
+            </IonButton>
+            <IonButton
+              color="success"
+              disabled={!isOnline}
+              routerLink="/members/dashboard"
+              size="small"
+            >
+              <IonIcon icon={createOutline} slot="start" />
+              Online
+            </IonButton>
+            <br />
+          </IonCardContent>
+        </IonCard>
+      )}
+    </>
   );
 };
 
