@@ -74,8 +74,13 @@ const Login: React.FC = () => {
                     <IonIcon icon={logIn} color="light" />
                     &nbsp; Login
                   </IonButton>
+                  <IonText
+                    style={{ color: "#fff", marginTop: "10px" }}
+                    onClick={() => navigation.push("/auth/reg_doc")}
+                  >
+                    don't have Account? &nbsp; Sign Up
+                  </IonText>
                 </form>
-                <IonText onClick={() => route.push("/sign")}>Sign up</IonText>
               </div>
             </IonCard>
           </div>

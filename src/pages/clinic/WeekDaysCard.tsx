@@ -16,7 +16,6 @@ import React, { useState, useEffect } from "react";
 
 type WeekDayCardProps = {
   name: string;
-  SessionArray: React.Dispatch<React.SetStateAction<ISession[]>>;
 };
 
 export interface ISession {
@@ -26,7 +25,7 @@ export interface ISession {
   EndTime: string;
 }
 
-const WeekDaysCard: React.FC<WeekDayCardProps> = ({ name, SessionArray }) => {
+const WeekDaysCard: React.FC<WeekDayCardProps> = ({ name }) => {
   const [showSession1, setShowSession1] = useState(false);
   const [showSession2, setShowSession2] = useState(false);
   const [showCard, setShowCard] = useState(false);
@@ -87,9 +86,8 @@ const WeekDaysCard: React.FC<WeekDayCardProps> = ({ name, SessionArray }) => {
   }, [showCard, showSession2, mstart2, mend2, name]);
 
   useEffect(() => {
-    SessionArray(dayData);
     localStorage.setItem(name, JSON.stringify(dayData));
-  }, [dayData, SessionArray]);
+  }, [dayData]);
 
   const handleToggleSession1 = (e: {
     detail: { checked: boolean | ((prevState: boolean) => boolean) };
@@ -130,7 +128,7 @@ const WeekDaysCard: React.FC<WeekDayCardProps> = ({ name, SessionArray }) => {
   };
 
   return (
-    <IonCard>
+    <IonCard style={{ width: "100%" }}>
       <IonCardHeader>
         <div
           style={{
@@ -219,7 +217,6 @@ const WeekDaysCard: React.FC<WeekDayCardProps> = ({ name, SessionArray }) => {
 
 export default WeekDaysCard;
 
-// import { IonInputCustomEvent } from "@ionic/core";
 // import {
 //   IonCard,
 //   IonCardTitle,
