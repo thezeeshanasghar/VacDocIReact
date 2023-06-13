@@ -26,8 +26,8 @@ data.push('/members/doctor/brandamount');
         //   new Date(dob),
         //   "yyyy-MM-dd'T'HH:mm:ss.SSSX"
         // );
-        console.log(brandCount)
-        console.log("count = " , brandCount)
+        // console.log(brandCount)
+        // console.log("count = " , brandCount)
         const data_to_be_sent = {
             "count": brandCount,
             "brandId": brandName,
@@ -133,17 +133,6 @@ data.push('/members/doctor/brandamount');
                   ))}
               </IonSelect>
             </IonItem>
-            {/* <IonItem>
-              <IonLabel position="floating">Count</IonLabel>
-              <IonInput
-                 type="number"
-                 value={brandCount}
-                 onClick={handleBrandCount}
-                 onIonChange={(e) => setBrandCount(e.detail.value!)}
-              />
-            </IonItem> */}
-           
-        
             <IonButton type='submit'>
               Add Inventory
             </IonButton>

@@ -18,6 +18,7 @@ import BrandAmount from "../pages/brand_amount/BrandAmount";
 import AddBrandInventory from "../pages/brand_inventory/AddBrandInventory";
 import AddBrandAmount from "../pages/brand_amount/AddBrandAmount";
 import SignUp from "../pages/doctor-signup/SignUp";
+import ChangePassword from "../pages/changepassword/ChangePassword";
 
 const Routes: React.FC = () => {
   return (
@@ -56,6 +57,11 @@ const Routes: React.FC = () => {
           exact
           path="/members/doctor/brandamount/add"
           component={AddBrandAmount}
+        />
+        <Route
+          exact
+          path="/members/doctor/changepassword"
+          component={ChangePassword}
         />
 
         <Route
