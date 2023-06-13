@@ -81,6 +81,9 @@ const appPages: AppPage[] = [
 
 const Menu: React.FC = () => {
   const location = useLocation();
+  const logOut = () => {
+    localStorage.clear();
+  };
 
   return (
     <>
@@ -93,7 +96,7 @@ const Menu: React.FC = () => {
               </IonToolbar>
             </IonHeader>
             <IonContent>
-              <IonList id="inbox-list"  style={{borderBottom: 'none'}}>
+              <IonList id="inbox-list" style={{ borderBottom: "none" }}>
                 {appPages.map((appPage, index) => {
                   return (
                     <IonMenuToggle key={index} autoHide={false}>
@@ -113,10 +116,10 @@ const Menu: React.FC = () => {
                         <IonLabel>{appPage.title}</IonLabel>
                       </IonItem>
                       {index === 1 && (
-                        <IonItem style={{marginTop: '3px'}}>
+                        <IonItem style={{ marginTop: "3px" }}>
                           <IonLabel
                             color={"primary"}
-                            style={{ fontWeight: 500, marginBottom: '0' }}
+                            style={{ fontWeight: 500, marginBottom: "0" }}
                           >
                             Doctor
                           </IonLabel>
@@ -144,7 +147,7 @@ const Menu: React.FC = () => {
                   Add
                 </IonItem>
               </IonMenuToggle>
-              <IonItem routerLink="/" routerDirection="back">
+              <IonItem routerLink="/" routerDirection="back" onClick={logOut}>
                 <IonIcon icon={powerSharp} slot="start" color="primary" />
                 Logout
               </IonItem>

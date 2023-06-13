@@ -61,15 +61,6 @@ const AddClinic: React.FC = () => {
             ></IonTextarea>
           </IonItem>
 
-          <WeekDaysCard name={"Monday"} SessionArray={setSessions} />
-          <WeekDaysCard name={"Tuesday"} SessionArray={setSessions} />
-          <WeekDaysCard name={"Monday"} SessionArray={setSessions} />
-          <WeekDaysCard name={"Wednesday"} SessionArray={setSessions} />
-          <WeekDaysCard name={"Thursday"} SessionArray={setSessions} />
-          <WeekDaysCard name={"Friday"} SessionArray={setSessions} />
-          <WeekDaysCard name={"Saturday"} SessionArray={setSessions} />
-          <WeekDaysCard name={"Sunday"} SessionArray={setSessions} />
-
           <IonItem style={{ minHeight: "300px" }}>
             <div
               className="map"

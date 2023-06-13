@@ -1,8 +1,4 @@
-import {
-  IonApp,
-  IonRouterOutlet,
-  setupIonicReact,
-} from "@ionic/react";
+import { IonApp, IonRouterOutlet, setupIonicReact } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 import { Redirect, Route } from "react-router-dom";
 import Menu from "./pages/menu/Menu";
@@ -26,7 +22,9 @@ import "@ionic/react/css/display.css";
 /* Theme variables */
 import "./theme/variables.css";
 import Login from "./pages/login/Login";
-import SignUp from "./pages/doctor-signup/SignUp";
+import DoctorSignUp from "./pages/doctor-signup/signup/DoctorSignUp";
+import ClinicRegistration from "./pages/doctor-signup/add-clinic/ClinicRegistration";
+import ClinicSchedule from "./pages/doctor-signup/clinic_schedule/ClinicSchedule";
 
 setupIonicReact();
 
@@ -37,7 +35,17 @@ const App: React.FC = () => {
         <IonRouterOutlet>
           <Route exact path="/" component={Login} />
           <Route path="/members" component={Menu} />
-          <Route exact path={"/auth/signup"} component={SignUp} />
+          <Route exact path={"/auth/reg_doc"} component={DoctorSignUp} />
+          <Route
+            exact
+            path={"/auth/reg_clinic"}
+            component={ClinicRegistration}
+          />
+          <Route
+            exact
+            path={"/auth/clinic_schedule"}
+            component={ClinicSchedule}
+          />
           {/* <Route path="*" component={NotFound} /> */}
         </IonRouterOutlet>
       </IonReactRouter>

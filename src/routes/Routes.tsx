@@ -17,7 +17,7 @@ import BrandInventory from "../pages/brand_inventory/BrandInventory";
 import BrandAmount from "../pages/brand_amount/BrandAmount";
 import AddBrandInventory from "../pages/brand_inventory/AddBrandInventory";
 import AddBrandAmount from "../pages/brand_amount/AddBrandAmount";
-import SignUp from "../pages/doctor-signup/SignUp";
+import SignUp from "../pages/doctor-signup/signup/DoctorSignUp";
 
 const Routes: React.FC = () => {
   return (
