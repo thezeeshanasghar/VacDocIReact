@@ -63,6 +63,11 @@ const appPages: AppPage[] = [
     mdIcon: recording,
   },
   {
+    title: "Change Password",
+    url: "/members/doctor/changepassword",
+    mdIcon: moon,
+  },
+  {
     title: "Vacation",
     url: "/members/doctor/vacation",
     mdIcon: locate,

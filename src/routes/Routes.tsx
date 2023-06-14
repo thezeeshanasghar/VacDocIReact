@@ -21,6 +21,7 @@ import SignUp from "../pages/doctor-signup/signup/DoctorSignUp";
 import VaccinationCardList from "../pages/patient/vaccination/VaccinationCardList";
 import BulkDone from "../pages/patient/vaccination/bulk-done-update/BulkDone";
 import SingleDone from "../pages/test/Test";
+import ChangePassword from "../pages/changepassword/ChangePassword";
 
 const Routes: React.FC = () => {
   return (
@@ -59,6 +60,11 @@ const Routes: React.FC = () => {
           exact
           path="/members/doctor/brandamount/add"
           component={AddBrandAmount}
+        />
+        <Route
+          exact
+          path="/members/doctor/changepassword"
+          component={ChangePassword}
         />
 
         <Route
