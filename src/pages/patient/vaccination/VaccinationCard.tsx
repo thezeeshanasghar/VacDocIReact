@@ -106,9 +106,31 @@ const VaccinationCard: React.FC<IPatientCardProps> = ({
       .then((res) => res.json())
       .then((doses: IDose[]) => setDoses(doses));
   };
-  const PostSkip = () => {
-    
-  }
+  const PostSkip = async (patientSchedule: IPSchedule) => {
+    let skip : boolean;
+    if(patientSchedule.isSkip){skip = true} else { skip = false;}
+    try {
+      const res = await fetch(
+        "http://localhost:5041/api/PatientSchedule/single_update_Skip",
+        {
+          method: "PATCH",
+
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            doseId: patientSchedule.DoseId,
+            doctorId: patientSchedule.DoctorId,
+            childId: patientSchedule.childId,
+            isSkip: skip ? 0 : 1,
+          }),
+        }
+      );
+      if(res.status === 204) forceRender();
+    } catch (error) {
+      console.log(error);
+    }
+  };
   useEffect(() => {
     fetchDoses();
   }, [date, data]);
@@ -133,7 +155,8 @@ const VaccinationCard: React.FC<IPatientCardProps> = ({
           <IonRow className="md hydrated">
             <IonCol style={{ textAlign: "center" }} className="md hydrated">
               {formatedDate(date)}
-              &nbsp;<IonImg
+              &nbsp;
+              <IonImg
                 src={syringImage}
                 onClick={() =>
                   router.push(`/members/child/vaccine/${423}/bulk/${"date"}`)
@@ -144,7 +167,8 @@ const VaccinationCard: React.FC<IPatientCardProps> = ({
                   margin: "0px 10px",
                 }}
                 className="ng-star-inserted md hydrated"
-              />&nbsp;
+              />
+              &nbsp;
               <DatePicker
                 selectedDate={date || BulkDate}
                 onDateSelected={setBulkDate}
@@ -159,58 +183,67 @@ const VaccinationCard: React.FC<IPatientCardProps> = ({
           {doses ? (
             <IonCard className="md hydrated">
               <IonCardContent className="md card-content-md hydrated">
-                {data.map((item, index) => (
-                  <div key={index + date}>
-                    <IonItem
-                      lines="none"
-                      className="item md item-lines-none ion-focusable item-label hydrated"
-                    >
-                      <IonLabel className="sc-ion-label-md-h sc-ion-label-md-s md hydrated">
-                        {filterDoses(item.DoseId)}
-                      </IonLabel>
-                      <div style={{display: 'flex', justifyContent: 'center', alignItems: "center", gap: 15}}>
-                        {!isSkip && (
-                          <>
-                            <p
-                              style={{ color: "rgb(55, 231, 10)" }}
-                              onClick={() => setSinglePatientSchedule(item)}
-                            >
-                              <DatePicker
-                                selectedDate={date || SingleDate}
-                                onDateSelected={setSingleDate}
-                                iconSize="20px"
-                                executeFunc="singleDate"
-                                updateSingleDate={updateSingleDate}
-                              />
-                            </p>
-                            <IonImg
-                              src={syringImage}
-                              onClick={() =>
-                                router.push(
-                                  `/members/child/vaccine/${
-                                    item.childId
-                                  }/fill/${0}`
-                                )
-                              }
-                              style={{ height: "30px" }}
-                              className="ng-star-inserted md hydrated"
-                            />
-                          </>
-                        )}
-                        <IonButton
-                          size="small"
-                          onClick={() => setIsSkip(!isSkip)}
+                {data.map((item, index) => {
+                  return (
+                    <div key={index + date}>
+                      <IonItem
+                        lines="none"
+                        className="item md item-lines-none ion-focusable item-label hydrated"
+                      >
+                        <IonLabel className="sc-ion-label-md-h sc-ion-label-md-s md hydrated">
+                          {filterDoses(item.DoseId)}
+                        </IonLabel>
+                        <div
                           style={{
-                            textTransform: "lowercase",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            gap: 15,
                           }}
-                          color={ isSkip ? "danger" : "primary"}
                         >
-                          {isSkip ? "unSkip" : "skip"}
-                        </IonButton>
-                      </div>
-                    </IonItem>
-                  </div>
-                ))}
+                          {!item.isSkip && (
+                            <>
+                              <p
+                                style={{ color: "rgb(55, 231, 10)" }}
+                                onClick={() => setSinglePatientSchedule(item)}
+                              >
+                                <DatePicker
+                                  selectedDate={date || SingleDate}
+                                  onDateSelected={setSingleDate}
+                                  iconSize="20px"
+                                  executeFunc="singleDate"
+                                  updateSingleDate={updateSingleDate}
+                                />
+                              </p>
+                              <IonImg
+                                src={syringImage}
+                                onClick={() =>
+                                  router.push(
+                                    `/members/child/vaccine/${
+                                      item.childId
+                                    }/fill/${0}`
+                                  )
+                                }
+                                style={{ height: "30px" }}
+                                className="ng-star-inserted md hydrated"
+                              />
+                            </>
+                          )}
+                          <IonButton
+                            size="small"
+                            onClick={() => PostSkip(item)}
+                            style={{
+                              textTransform: "lowercase",
+                            }}
+                            color={item.isSkip ? "danger" : "primary"}
+                          >
+                            {item.isSkip ? "unSkip" : "skip"}
+                          </IonButton>
+                        </div>
+                      </IonItem>
+                    </div>
+                  );
+                })}
               </IonCardContent>
             </IonCard>
           ) : (
@@ -225,36 +258,8 @@ const VaccinationCard: React.FC<IPatientCardProps> = ({
 export default VaccinationCard;
 
 {
-  /* <div >
-  <IonItem
-    lines="none"
-    className="item md item-lines-none ion-focusable item-label hydrated"
-  >
-    <IonLabel className="sc-ion-label-md-h sc-ion-label-md-s md hydrated">
-      Hepatitis B #1
-    </IonLabel>
-    <p
-      style={{ color: "rgb(55, 231, 10)" }}
-      
-    >
-      <IonIcon
-        color={"primary"}
-        icon={calendar}
-        className="md ion-color ion-color-primary hydrated"
-        aria-label="calendar"
-        style={{ fontSize: "20px" }}
-      />
-    </p>
-    <IonImg
-      src={syringImage}
-      style={{ height: "30px" }}
-      className="ng-star-inserted md hydrated"
-    />
-    <IonButton size="small">skip</IonButton>
-  </IonItem>
-</div> */
-}
-{
+ 
+
   /* <div >
   <IonItem
     lines="none"
