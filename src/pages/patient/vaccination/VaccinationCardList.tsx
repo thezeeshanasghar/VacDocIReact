@@ -38,22 +38,24 @@ const VaccinationCardList: React.FC<IParam> = ({
   },
 }) => {
   // extracting doctor id from query param;
-  const [doctorId] = search.substring(1).split("=")[1];
+//   const id = search && search.substring(1).split("=")[1];
+  const [doctorId, setdoctorId] = useState(2)
   const [patientSchedule, setPatientSchedule] = useState<IPSchedule[]>([]);
   const [groupedPatientSchedule, setGroupedPatientSchedule] = useState<
     Record<string, IPSchedule[]>
   >({});
+  const [patientName, setPatientName] = useState<string>();
   // initialize patient schedule
-  const initializePatientSchedule = async () => {
-    try {
-      const response = await axios.post(
-        `http://localhost:5041/api/PatientSchedule/doctor_post_schedule/child?doctorId=${doctorId}&childId=${+childId}`
-      );
-      console.log(response.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+//   const initializePatientSchedule = async () => {
+//     try {
+//       const response = await axios.post(
+//         `http://localhost:5041/api/PatientSchedule/doctor_post_schedule/child?doctorId=${doctorId}&childId=${+childId}`
+//       );
+//       console.log(response.data);
+//     } catch (error) {
+//       console.log(error);
+//     }
+//   };
   const fetchPatientScheduleData = async () => {
     try {
       const res = await axios.get(
@@ -67,12 +69,13 @@ const VaccinationCardList: React.FC<IParam> = ({
   useEffect(() => {
     //exectution in order;
     async function executeOrderly() {
-      await initializePatientSchedule();
+    //   await initializePatientSchedule();
       await fetchPatientScheduleData();
     }
-
-    executeOrderly();
-  }, [childId, doctorId]);
+    
+        executeOrderly();
+  
+  }, [childId,]);
 
   useEffect(() => {
     if (patientSchedule) {
@@ -83,6 +86,10 @@ const VaccinationCardList: React.FC<IParam> = ({
       setGroupedPatientSchedule(groupedD);
     }
   }, [patientSchedule]);
+
+  function setName(name: string) {
+    setPatientName(name);
+  }
   return (
     <>
       {patientSchedule && (
@@ -95,18 +102,26 @@ const VaccinationCardList: React.FC<IParam> = ({
               <IonButton size="small" slot="start">
                 print
               </IonButton>
-              <IonText slot="end">Patient name</IonText>
+              <IonText slot="end">{patientName}</IonText>
             </IonToolbar>
           </IonHeader>
           <IonContent>
-            {Object.entries(groupedPatientSchedule).map(([date, data]) => (
-              <VaccinationCard
-                key={date}
-                date={date}
-                data={data}
-                forceRender={fetchPatientScheduleData}
-              />
-            ))}
+          { patientSchedule.length >= 1 ?
+              <> 
+                {groupedPatientSchedule ? Object.entries(groupedPatientSchedule).map(([date, data]) => {
+                  return (
+                    <VaccinationCard
+                      key={date}
+                      date={date}
+                      data={data}
+                      forceRender={fetchPatientScheduleData}
+                      setName={setName}
+                    />
+                  );
+                }) : <h1>Patient schedule list is loading...</h1>}
+            </>
+            : <h1>patient schedule list could not Load</h1>
+            }
           </IonContent>
         </IonPage>
       )}

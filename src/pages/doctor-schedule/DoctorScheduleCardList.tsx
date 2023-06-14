@@ -53,22 +53,30 @@ const DoctorScheduleCardList: React.FC = () => {
 
   return (
     <>
-      {scheduleData && (
-        <IonPage>
-          <Header pageName="Doctor Schedule" />
-          <IonContent className="ion-padding">
-            <>
-              {Object.entries(groupedData).map(([date, data]) => (
-                <DoctorScheduleCard
-                  key={date}
-                  date={date}
-                  data={data}
-                  forceRender={forceRender}
-                />
-              ))}
-            </>
-          </IonContent>
-        </IonPage>
+      {scheduleData && scheduleData.length >= 1 ? (
+        <>
+          {scheduleData ? (
+            <IonPage>
+              <Header pageName="Doctor Schedule" />
+              <IonContent className="ion-padding">
+                <>
+                  {Object.entries(groupedData).map(([date, data]) => (
+                    <DoctorScheduleCard
+                      key={date}
+                      date={date}
+                      data={data}
+                      forceRender={forceRender}
+                    />
+                  ))}
+                </>
+              </IonContent>
+            </IonPage>
+          ) : (
+            <h1>Doctor Schedule is loading...</h1>
+          )}
+        </>
+      ) : (
+        <h1>an error occurred while getting Doctor schedule</h1>
       )}
     </>
   );

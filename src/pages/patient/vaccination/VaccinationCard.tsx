@@ -19,15 +19,18 @@ import { format } from "date-fns";
 import DatePicker from "./DatePicker";
 import { IDose } from "../../doctor-schedule/DoctorScheduleCard";
 import Toast from "../../../components/custom-toast/Toast";
+import axios from "axios";
 interface IPatientCardProps {
   date: string;
   data: IPSchedule[];
   forceRender: () => void;
+  setName : (name: string) => void;
 }
 const VaccinationCard: React.FC<IPatientCardProps> = ({
   date,
   data,
   forceRender,
+  setName,
 }) => {
   const router = useIonRouter();
   const [BulkDate, setBulkDate] = useState<string>("");
@@ -107,8 +110,13 @@ const VaccinationCard: React.FC<IPatientCardProps> = ({
       .then((doses: IDose[]) => setDoses(doses));
   };
   const PostSkip = async (patientSchedule: IPSchedule) => {
-    let skip : boolean;
-    if(patientSchedule.isSkip){skip = true} else { skip = false;}
+    console.log(patientSchedule)
+    let skip: boolean;
+    if (patientSchedule.isSkip) {
+      skip = true;
+    } else {
+      skip = false;
+    }
     try {
       const res = await fetch(
         "http://localhost:5041/api/PatientSchedule/single_update_Skip",
@@ -126,13 +134,15 @@ const VaccinationCard: React.FC<IPatientCardProps> = ({
           }),
         }
       );
-      if(res.status === 204) forceRender();
+      if (res.status === 204) forceRender();
     } catch (error) {
       console.log(error);
     }
   };
   useEffect(() => {
     fetchDoses();
+    axios.get(`http://localhost:5041/api/Child/${data[0].childId}`)
+    .then(res => res.status === 200 && setName(res.data.Name));
   }, [date, data]);
   // console.log(data);
   const formatedDate = (date: string) => format(new Date(date), "MMM d, yyyy");
@@ -219,9 +229,7 @@ const VaccinationCard: React.FC<IPatientCardProps> = ({
                                 src={syringImage}
                                 onClick={() =>
                                   router.push(
-                                    `/members/child/vaccine/${
-                                      item.childId
-                                    }/fill/${0}`
+                                    `/members/child/vaccine/${item.childId}/fill/${item.DoseId}`
                                   )
                                 }
                                 style={{ height: "30px" }}
@@ -258,8 +266,6 @@ const VaccinationCard: React.FC<IPatientCardProps> = ({
 export default VaccinationCard;
 
 {
- 
-
   /* <div >
   <IonItem
     lines="none"
