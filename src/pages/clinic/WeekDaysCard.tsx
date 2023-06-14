@@ -86,7 +86,7 @@ const WeekDaysCard: React.FC<WeekDayCardProps> = ({ name }) => {
   }, [showCard, showSession2, mstart2, mend2, name]);
 
   useEffect(() => {
-    localStorage.setItem(name, JSON.stringify(dayData));
+    dayData.length >= 1 && localStorage.setItem(name, JSON.stringify(dayData));
   }, [dayData]);
 
   const handleToggleSession1 = (e: {
