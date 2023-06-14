@@ -4,7 +4,7 @@ import Header from "../../components/header/Header";
 import PatientSearch from "../../components/patient/PatientSearch";
 import PatientMaleCard from "../../components/patient/PatientMaleCard";
 import PatientFemaleCard from "../../components/patient/PatientFemaleCard";
-import { format } from "date-fns";
+// import { format } from "date-fns";
 export interface IPatientData {
   Id: number;
   Name: string;

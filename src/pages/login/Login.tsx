@@ -19,9 +19,21 @@ import "./Login.css";
 const Login: React.FC = () => {
   const [showLoading, setShowLoading] = useState(false);
   const navigation = useIonRouter();
+  const [success, setSuccess] = useState<boolean>(false);
+  const [error, setError] = useState<boolean>(false);
+  const [mNo, setMNo] = useState<string>();
+  const [pass, setPass] = useState<string>();
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     // setShowLoading(true);
     event.preventDefault();
+    fetch(`http://localhost:5041/api/Doctor/login?MobileNumber=${mNo}&Password=${pass}`, {
+      method: "POST",
+    })
+      .then((res) => (res.status === 201 ? setSuccess(true) : setError(true)))
+      .catch((err) => setError(true))
+      .finally(() => {
+        
+      });
     navigation.push("/members", "root");
   };
 
@@ -52,6 +64,9 @@ const Login: React.FC = () => {
                       label="&nbsp;&nbsp;&nbsp; Mobile Number"
                       labelPlacement="floating"
                       color="light"
+                      value={mNo}
+                      onIonChange={(e) => setMNo(e.detail.value!)}
+                      required
                     />
                   </div>
                   <div className="input-container">
@@ -63,6 +78,9 @@ const Login: React.FC = () => {
                       label="&nbsp;&nbsp;&nbsp;&nbsp;Password"
                       labelPlacement="floating"
                       color="light"
+                      value={pass}
+                      onIonChange={(e) => setPass(e.detail.value!)}
+                      required
                     />
                   </div>
                   <IonButton
