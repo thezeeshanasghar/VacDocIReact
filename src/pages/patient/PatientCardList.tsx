@@ -40,43 +40,48 @@ const PatientCardList: React.FC = () => {
     fetchPatientData();
   }, []);
   return (
-    <IonPage>
-      <Header pageName="Patients" />
-      <IonContent className="ion-padding">
-        {/* patient component to render patient data */}
-        <PatientSearch data={patientData} hideCards={setHideCards} />
-
-        {/* list of patient cards to be rendered. */}
-        {patientData &&
-          !hideCards &&
-          patientData.map((item, index) => {
-            if (item.Gender.includes("boy" || "male")) {
-              return (
-                <PatientMaleCard
-                  key={index * 3 * 2}
-                  Name={item.Name}
-                  Id={item.Id}
-                  renderList={fetchPatientData}
-                  DoctorId={item.DoctorId}
-                  ClinicId={item.ClinicId}
-                />
-              );
-            }
-            return (
-              <PatientFemaleCard
-                key={index * 3}
-                Name={item.Name}
-                // Guardian={item.Guardian}
-                // DOB={format(new Date(item.DOB), "dd MMMM yyyy")}
-                Id={item.Id}
-                renderList={fetchPatientData}
-                DoctorId={item.DoctorId}
-                ClinicId={item.ClinicId}
-              />
-            );
-          })}
-      </IonContent>
-    </IonPage>
+    <>
+      {patientData ? (
+        <IonPage>
+          <Header pageName="Patients" />
+          <IonContent className="ion-padding">
+            {/* patient component to render patient data */}
+            <PatientSearch data={patientData} hideCards={setHideCards} />
+            {/* list of patient cards to be rendered. */}
+            {patientData &&
+              !hideCards &&
+              patientData.map((item, index) => {
+                if (item.Gender.includes("boy" || "male")) {
+                  return (
+                    <PatientMaleCard
+                      key={index * 3 * 2}
+                      Name={item.Name}
+                      Id={item.Id}
+                      renderList={fetchPatientData}
+                      DoctorId={item.DoctorId}
+                      ClinicId={item.ClinicId}
+                    />
+                  );
+                }
+                return (
+                  <PatientFemaleCard
+                    key={index * 3}
+                    Name={item.Name}
+                    // Guardian={item.Guardian}
+                    // DOB={format(new Date(item.DOB), "dd MMMM yyyy")}
+                    Id={item.Id}
+                    renderList={fetchPatientData}
+                    DoctorId={item.DoctorId}
+                    ClinicId={item.ClinicId}
+                  />
+                );
+              })}
+          </IonContent>
+        </IonPage>
+      ) : (
+        <h1>Patients could not load</h1>
+      )}
+    </>
   );
 };
 
