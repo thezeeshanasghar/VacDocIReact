@@ -106,7 +106,9 @@ const VaccinationCard: React.FC<IPatientCardProps> = ({
       .then((res) => res.json())
       .then((doses: IDose[]) => setDoses(doses));
   };
-
+  const PostSkip = () => {
+    
+  }
   useEffect(() => {
     fetchDoses();
   }, [date, data]);
@@ -131,7 +133,7 @@ const VaccinationCard: React.FC<IPatientCardProps> = ({
           <IonRow className="md hydrated">
             <IonCol style={{ textAlign: "center" }} className="md hydrated">
               {formatedDate(date)}
-              <IonImg
+              &nbsp;<IonImg
                 src={syringImage}
                 onClick={() =>
                   router.push(`/members/child/vaccine/${423}/bulk/${"date"}`)
@@ -142,7 +144,7 @@ const VaccinationCard: React.FC<IPatientCardProps> = ({
                   margin: "0px 10px",
                 }}
                 className="ng-star-inserted md hydrated"
-              />
+              />&nbsp;
               <DatePicker
                 selectedDate={date || BulkDate}
                 onDateSelected={setBulkDate}
@@ -166,44 +168,46 @@ const VaccinationCard: React.FC<IPatientCardProps> = ({
                       <IonLabel className="sc-ion-label-md-h sc-ion-label-md-s md hydrated">
                         {filterDoses(item.DoseId)}
                       </IonLabel>
-                      {!isSkip && (
-                        <>
-                          <p
-                            style={{ color: "rgb(55, 231, 10)" }}
-                            onClick={() => setSinglePatientSchedule(item)}
-                          >
-                            <DatePicker
-                              selectedDate={date || SingleDate}
-                              onDateSelected={setSingleDate}
-                              iconSize="20px"
-                              executeFunc="singleDate"
-                              updateSingleDate={updateSingleDate}
+                      <div style={{display: 'flex', justifyContent: 'center', alignItems: "center", gap: 15}}>
+                        {!isSkip && (
+                          <>
+                            <p
+                              style={{ color: "rgb(55, 231, 10)" }}
+                              onClick={() => setSinglePatientSchedule(item)}
+                            >
+                              <DatePicker
+                                selectedDate={date || SingleDate}
+                                onDateSelected={setSingleDate}
+                                iconSize="20px"
+                                executeFunc="singleDate"
+                                updateSingleDate={updateSingleDate}
+                              />
+                            </p>
+                            <IonImg
+                              src={syringImage}
+                              onClick={() =>
+                                router.push(
+                                  `/members/child/vaccine/${
+                                    item.childId
+                                  }/fill/${0}`
+                                )
+                              }
+                              style={{ height: "30px" }}
+                              className="ng-star-inserted md hydrated"
                             />
-                          </p>
-                          <IonImg
-                            src={syringImage}
-                            onClick={() =>
-                              router.push(
-                                `/members/child/vaccine/${
-                                  item.childId
-                                }/fill/${0}`
-                              )
-                            }
-                            style={{ height: "30px" }}
-                            className="ng-star-inserted md hydrated"
-                          />
-                        </>
-                      )}
-                      <IonButton
-                        size="small"
-                        onClick={() => setIsSkip(!isSkip)}
-                        style={{
-                          textTransform: "lowercase",
-                        }}
-                        color={ isSkip ? "danger" : "primary"}
-                      >
-                        {isSkip ? "unSkip" : "skip"}
-                      </IonButton>
+                          </>
+                        )}
+                        <IonButton
+                          size="small"
+                          onClick={() => setIsSkip(!isSkip)}
+                          style={{
+                            textTransform: "lowercase",
+                          }}
+                          color={ isSkip ? "danger" : "primary"}
+                        >
+                          {isSkip ? "unSkip" : "skip"}
+                        </IonButton>
+                      </div>
                     </IonItem>
                   </div>
                 ))}
