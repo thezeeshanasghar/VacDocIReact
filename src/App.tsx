@@ -24,7 +24,7 @@ import "./theme/variables.css";
 import Login from "./pages/login/Login";
 import DoctorSignUp from "./pages/doctor-signup/signup/DoctorSignUp";
 import ClinicRegistration from "./pages/doctor-signup/add-clinic/ClinicRegistration";
-import ClinicSchedule from "./pages/doctor-signup/clinic_schedule/ClinicSchedule";
+import ClinicSchedule from "./pages/doctor-signup/doc_schedule/ClinicSchedule";
 
 setupIonicReact();
 

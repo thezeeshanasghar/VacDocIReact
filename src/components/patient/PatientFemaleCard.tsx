@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   IonCard,
   IonCardContent,
@@ -18,14 +18,19 @@ interface IFemalePatient {
   Id: number;
   Name: string;
   renderList: () => void;
+  DoctorId: number;
+  ClinicId: number;
 }
 const PatientFemaleCard: React.FC<IFemalePatient> = ({
   Name,
   Id,
-  renderList,
+  renderList, 
+  DoctorId,
+  ClinicId
 }) => {
   const router = useIonRouter();
   const [deletePatient, setDeletePatient] = useState(false);
+
   return (
     <IonCard style={{ border: "2px solid #f50ca7" }}>
       <Delete
@@ -60,57 +65,16 @@ const PatientFemaleCard: React.FC<IFemalePatient> = ({
           aria-label="trash"
           onClick={() => setDeletePatient(true)}
         ></IonIcon>
-        {/* <IonIcon
-          className="iconchild"
-          color="primary"
-          icon={mail}
-          slot="start"
-          tabIndex={0}
-          aria-label="mail"
-          style={{ marginRight: "60px" }}
-        ></IonIcon>
-        <IonIcon
-          className="iconchild"
-          color="primary"
-          icon={call}
-          slot="start"
-          role="img"
-          aria-label="call"
-        ></IonIcon> */}
+        
       </IonItem>
       <IonCardContent>
-        {/* <IonIcon
-          color="primary"
-          icon={person}
-          role="img"
-          className="icon"
-          aria-label="person"
-        ></IonIcon>
-        &nbsp;{Guardian} &nbsp;
-        <IonIcon
-          color="primary"
-          icon={calendar}
-          role="img"
-          className="icon"
-          aria-label="calendar"
-        ></IonIcon>
-        &nbsp;{DOB} &nbsp;
-        <IonIcon
-          color="primary"
-          icon={call}
-          role="img"
-          className="icon"
-          aria-label="call"
-        ></IonIcon>
-        &nbsp;3335408191 &nbsp;
-        <br /> */}
         <IonButton
           color="tertiary"
           fill="outline"
           size="small"
           className="action-button"
-          routerLink="/members/child/vaccine/9011"
-          routerDirection="forward"
+          routerLink={`/members/child/vaccine/${Id}?doctorId=${DoctorId}`}
+          routerDirection="root"
         >
           Vaccine
         </IonButton>

@@ -21,7 +21,7 @@ interface ScheduleCardProps {
   data: IDoctorSchedule[];
   forceRender: () => void;
 }
-interface IDose {
+export interface IDose {
   Id: number;
   Name: string;
   MinAge: number;

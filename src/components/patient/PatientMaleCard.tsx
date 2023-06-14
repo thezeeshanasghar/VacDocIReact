@@ -15,14 +15,18 @@ import maleThumbmail from "../../assets/male.png";
 import { IPatientData } from "../../pages/patient/PatientCardList";
 import Delete from "../delete/Delete";
 interface IMalePatient {
-  Id : number;
+  Id: number;
   Name: string;
-  renderList : () => void;
+  renderList: () => void;
+  DoctorId: number;
+  ClinicId: number;
 }
 const PatientMaleCard: React.FC<IMalePatient> = ({
   Name,
   Id,
-  renderList
+  renderList,
+  DoctorId,
+  ClinicId,
 }) => {
   const router = useIonRouter();
   const [deletePatient, setDeletePatient] = useState(false);
@@ -39,7 +43,9 @@ const PatientMaleCard: React.FC<IMalePatient> = ({
         <IonThumbnail slot="start" className="avatar">
           <IonImg className="avatar-image" src={maleThumbmail}></IonImg>
         </IonThumbnail>
-        <IonLabel style={{fontSize : "18px"}} className="name">{Name}</IonLabel>
+        <IonLabel style={{ fontSize: "18px" }} className="name">
+          {Name}
+        </IonLabel>
       </IonItem>
       <IonItem className="ion-justify-content-center">
         <IonIcon
@@ -109,8 +115,8 @@ const PatientMaleCard: React.FC<IMalePatient> = ({
           fill="outline"
           size="small"
           className="action-button"
-          routerLink="/members/child/vaccine/9011"
-          routerDirection="forward"
+          routerLink={`/members/child/vaccine/${Id}?doctorId=${DoctorId}`}
+          routerDirection="root"
         >
           Vaccine
         </IonButton>

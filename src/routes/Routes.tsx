@@ -18,6 +18,9 @@ import BrandAmount from "../pages/brand_amount/BrandAmount";
 import AddBrandInventory from "../pages/brand_inventory/AddBrandInventory";
 import AddBrandAmount from "../pages/brand_amount/AddBrandAmount";
 import SignUp from "../pages/doctor-signup/signup/DoctorSignUp";
+import VaccinationCardList from "../pages/patient/vaccination/VaccinationCardList";
+import BulkDone from "../pages/patient/vaccination/bulk-done-update/BulkDone";
+import SingleDone from "../pages/test/Test";
 
 const Routes: React.FC = () => {
   return (
@@ -61,8 +64,21 @@ const Routes: React.FC = () => {
         <Route
           exact
           path="/members/child/vaccine/:Id"
-          component={VaccinationCard}
+          component={VaccinationCardList}
         />
+
+        <Route
+          exact
+          path="/members/child/vaccine/:Id/bulk/:Date"
+          component={BulkDone}
+        />
+        <Route
+          exact
+          path="/members/child/vaccine/:Id/fill/:brandId"
+          component={SingleDone}
+        />
+
+        
         <Route
           exact
           path="/members/doctor/edit-profile"
