@@ -18,6 +18,7 @@ import syringImage from "../../../assets/injectionFilled.png";
 import { format } from "date-fns";
 import DatePicker from "./DatePicker";
 import { IDose } from "../../doctor-schedule/DoctorScheduleCard";
+import Toast from "../../../components/custom-toast/Toast";
 interface IPatientCardProps {
   date: string;
   data: IPSchedule[];
@@ -34,13 +35,14 @@ const VaccinationCard: React.FC<IPatientCardProps> = ({
   const [successToast, setSuccessToast] = useState(false);
   const [errorToast, setErrorToast] = useState(false);
   const [doses, setDoses] = useState<IDose[]>([]);
-  const [doseId, setDoseId] = useState<number>();
   const [singlePatientSchedule, setSinglePatientSchedule] =
     useState<IPSchedule>();
-  // const filterDoses = (doseId: number): string | undefined => {
-  //   const filteredDose: IDose | undefined = doses.find((d) => d.Id === doseId);
-  //   return filteredDose?.Name;
-  // };
+
+  const [isSkip, setIsSkip] = useState<boolean>(false);
+  const filterDoses = (doseId: number): string | undefined => {
+    const filteredDose: IDose | undefined = doses.find((d) => d.Id === doseId);
+    return filteredDose?.Name;
+  };
 
   const updateBulkDate = (user_selected_date: string) => {
     const data_to_update = [
@@ -112,66 +114,106 @@ const VaccinationCard: React.FC<IPatientCardProps> = ({
   const formatedDate = (date: string) => format(new Date(date), "MMM d, yyyy");
   return (
     <>
-      <IonGrid className="md hydrated">
-        <IonRow className="md hydrated">
-          <IonCol style={{ textAlign: "center" }} className="md hydrated">
-            {formatedDate(date)}
-            <IonImg
-              src={syringImage}
-              onClick={() =>
-                router.push(`/members/child/vaccine/${423}/bulk/${"date"}`)
-              }
-              style={{
-                height: "15px",
-                display: "inline-block",
-                margin: "0px 10px",
-              }}
-              className="ng-star-inserted md hydrated"
-            />
-            <DatePicker
-              selectedDate={date || BulkDate}
-              onDateSelected={setBulkDate}
-              iconSize="20px"
-              executeFunc="BulkDate"
-            />
-          </IonCol>
-        </IonRow>
-      </IonGrid>
-      <IonCard className="md hydrated">
-        <IonCardContent className="md card-content-md hydrated">
-          <div className="ng-star-inserted">
-            <IonItem
-              lines="none"
-              className="item md item-lines-none ion-focusable item-label hydrated"
-            >
-              <IonLabel className="sc-ion-label-md-h sc-ion-label-md-s md hydrated">
-                BCG
-              </IonLabel>
-              <p
-                style={{ color: "rgb(55, 231, 10)" }}
-                className="ng-star-inserted"
-              >
-                <IonIcon
-                  color={"primary"}
-                  icon={calendar}
-                  className="md ion-color ion-color-primary hydrated"
-                  aria-label="calendar"
-                  style={{ fontSize: "20px" }}
-                />
-              </p>
+      <Toast
+        isOpen={successToast}
+        setOpen={setSuccessToast}
+        color="success"
+        message="Date updated successfully"
+      />
+      <Toast
+        isOpen={errorToast}
+        setOpen={setErrorToast}
+        color="danger"
+        message="an Error occurred while updating date, please try again later"
+      />
+      <div>
+        <IonGrid className="md hydrated">
+          <IonRow className="md hydrated">
+            <IonCol style={{ textAlign: "center" }} className="md hydrated">
+              {formatedDate(date)}
               <IonImg
                 src={syringImage}
                 onClick={() =>
-                  router.push(`/members/child/vaccine/${123}/fill/${3214}`)
+                  router.push(`/members/child/vaccine/${423}/bulk/${"date"}`)
                 }
-                style={{ height: "30px" }}
+                style={{
+                  height: "15px",
+                  display: "inline-block",
+                  margin: "0px 10px",
+                }}
                 className="ng-star-inserted md hydrated"
               />
-              <IonButton size="small">skip</IonButton>
-            </IonItem>
-          </div>
-        </IonCardContent>
-      </IonCard>
+              <DatePicker
+                selectedDate={date || BulkDate}
+                onDateSelected={setBulkDate}
+                iconSize="15px"
+                executeFunc="bulkDate"
+                updateBulkDate={updateBulkDate}
+              />
+            </IonCol>
+          </IonRow>
+        </IonGrid>
+        <div>
+          {doses ? (
+            <IonCard className="md hydrated">
+              <IonCardContent className="md card-content-md hydrated">
+                {data.map((item, index) => (
+                  <div key={index + date}>
+                    <IonItem
+                      lines="none"
+                      className="item md item-lines-none ion-focusable item-label hydrated"
+                    >
+                      <IonLabel className="sc-ion-label-md-h sc-ion-label-md-s md hydrated">
+                        {filterDoses(item.DoseId)}
+                      </IonLabel>
+                      {!isSkip && (
+                        <>
+                          <p
+                            style={{ color: "rgb(55, 231, 10)" }}
+                            onClick={() => setSinglePatientSchedule(item)}
+                          >
+                            <DatePicker
+                              selectedDate={date || SingleDate}
+                              onDateSelected={setSingleDate}
+                              iconSize="20px"
+                              executeFunc="singleDate"
+                              updateSingleDate={updateSingleDate}
+                            />
+                          </p>
+                          <IonImg
+                            src={syringImage}
+                            onClick={() =>
+                              router.push(
+                                `/members/child/vaccine/${
+                                  item.childId
+                                }/fill/${0}`
+                              )
+                            }
+                            style={{ height: "30px" }}
+                            className="ng-star-inserted md hydrated"
+                          />
+                        </>
+                      )}
+                      <IonButton
+                        size="small"
+                        onClick={() => setIsSkip(!isSkip)}
+                        style={{
+                          textTransform: "lowercase",
+                        }}
+                        color={ isSkip ? "danger" : "primary"}
+                      >
+                        {isSkip ? "unSkip" : "skip"}
+                      </IonButton>
+                    </IonItem>
+                  </div>
+                ))}
+              </IonCardContent>
+            </IonCard>
+          ) : (
+            "dose or does didn't load for this particular schedule"
+          )}
+        </div>
+      </div>
     </>
   );
 };
@@ -179,7 +221,7 @@ const VaccinationCard: React.FC<IPatientCardProps> = ({
 export default VaccinationCard;
 
 {
-  /* <div className="ng-star-inserted">
+  /* <div >
   <IonItem
     lines="none"
     className="item md item-lines-none ion-focusable item-label hydrated"
@@ -189,7 +231,7 @@ export default VaccinationCard;
     </IonLabel>
     <p
       style={{ color: "rgb(55, 231, 10)" }}
-      className="ng-star-inserted"
+      
     >
       <IonIcon
         color={"primary"}
@@ -209,7 +251,7 @@ export default VaccinationCard;
 </div> */
 }
 {
-  /* <div className="ng-star-inserted">
+  /* <div >
   <IonItem
     lines="none"
     className="item md item-lines-none ion-focusable item-label hydrated"
@@ -219,7 +261,7 @@ export default VaccinationCard;
     </IonLabel>
     <p
       style={{ color: "rgb(55, 231, 10)" }}
-      className="ng-star-inserted"
+      
     >
       <IonIcon
         color={"primary"}

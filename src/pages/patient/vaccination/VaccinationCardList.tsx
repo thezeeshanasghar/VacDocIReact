@@ -84,29 +84,33 @@ const VaccinationCardList: React.FC<IParam> = ({
     }
   }, [patientSchedule]);
   return (
-    <IonPage>
-      <IonHeader>
-        <IonToolbar color={"primary"}>
-          <IonTitle>Vaccination</IonTitle>
-        </IonToolbar>
-        <IonToolbar style={{ padding: "0px 10px" }}>
-          <IonButton size="small" slot="start">
-            print
-          </IonButton>
-          <IonText slot="end">Patient name</IonText>
-        </IonToolbar>
-      </IonHeader>
-      <IonContent>
-      {Object.entries(groupedPatientSchedule).map(([date, data]) => (
-                <VaccinationCard
-                  key={date}
-                  date={date}
-                  data={data}
-                  forceRender={fetchPatientScheduleData}
-                />
-              ))}
-      </IonContent>
-    </IonPage>
+    <>
+      {patientSchedule && (
+        <IonPage>
+          <IonHeader>
+            <IonToolbar color={"primary"}>
+              <IonTitle>Vaccination</IonTitle>
+            </IonToolbar>
+            <IonToolbar style={{ padding: "0px 10px" }}>
+              <IonButton size="small" slot="start">
+                print
+              </IonButton>
+              <IonText slot="end">Patient name</IonText>
+            </IonToolbar>
+          </IonHeader>
+          <IonContent>
+            {Object.entries(groupedPatientSchedule).map(([date, data]) => (
+              <VaccinationCard
+                key={date}
+                date={date}
+                data={data}
+                forceRender={fetchPatientScheduleData}
+              />
+            ))}
+          </IonContent>
+        </IonPage>
+      )}
+    </>
   );
 };
 
