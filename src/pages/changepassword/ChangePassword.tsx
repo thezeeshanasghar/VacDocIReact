@@ -12,16 +12,16 @@ import Toast from "../../components/custom-toast/Toast";
 const ChangePassword: React.FC = () => {
   const [success, setSuccess] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
-  const [oldPassword, setOldPassword] = useState("");
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmNewPassword, setConfirmNewPassword] = useState("");
+  const [oldPassword, setOldPassword] = useState<string>();
+  const [newPassword, setNewPassword] = useState<string>();
+  const [confirmNewPassword, setConfirmNewPassword] = useState<string>();
   const [passwordMatch, setPasswordMatch] = useState(true);
 
   
   const handelChangePassword = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(newPassword)
-    console.log(confirmNewPassword)
+    console.log("new pass",newPassword)
+    console.log("con pass",confirmNewPassword)
     if (newPassword === confirmNewPassword) {
         // Passwords match, handle form submission
         const data_to_be_sent = [{
@@ -97,7 +97,7 @@ const ChangePassword: React.FC = () => {
             label="New Password"
             labelPlacement="floating"
             placeholder="Enter New Password"
-            value={newPassword}
+            // value={newPassword}
             onIonChange={(e) => setNewPassword(e.detail.value!)}
           ></IonInput>
         </IonItem>
@@ -107,7 +107,7 @@ const ChangePassword: React.FC = () => {
             label="Confirm Password"
             labelPlacement="floating"
             placeholder="Enter Confirm Password"
-            value={confirmNewPassword}
+            // value={confirmNewPassword}
             onIonChange={(e) => setConfirmNewPassword(e.detail.value!)}
           ></IonInput>
         </IonItem>
