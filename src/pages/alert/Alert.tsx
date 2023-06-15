@@ -1,6 +1,7 @@
 import { IonButton, IonCard, IonCardHeader, IonCardTitle, IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import React,{useState,useEffect} from 'react';
 import Header from '../../components/header/Header';
+import { useIonRouter } from "@ionic/react";
 type PatientDataType = { Id: number; Name: string; ClinicId: number;DoctorId: number};
 const Alert: React.FC = () => {
     const [patientData, setPatientData] = useState<PatientDataType[]>([]);
@@ -12,8 +13,11 @@ const Alert: React.FC = () => {
             console.log(error);
           });
       };
-    const ClickHandler=(ClinicId:number,DoctorId:number,name:string)=>{
-console.log("ClinicId:",ClinicId,"DoctorId:",DoctorId,"name:",name)
+      const data = useIonRouter();
+   
+    const ClickHandler=(DoctorId:number,Id:number)=>{
+console.log("DoctorId:",DoctorId,"childId",Id)
+data.push(`/members/child/vaccine/${Id}?doctorId=${DoctorId}`);
     }
       useEffect(() => {
         fetchPatientData();
@@ -27,10 +31,9 @@ console.log("ClinicId:",ClinicId,"DoctorId:",DoctorId,"name:",name)
               patientData.map((item, index) => {
                 return(
                     <div key={item.Id}>
-                    <IonCard onClick={() => ClickHandler(item.ClinicId, item.DoctorId, item.Name)}>
+                    <IonCard onClick={() => ClickHandler( item.DoctorId, item.Id)}>
                     <IonCardHeader>
                       <IonCardTitle>{item.Name}</IonCardTitle>
-                      {/* <IonCardSubtitle>Card Subtitle</IonCardSubtitle> */}
                     </IonCardHeader>
                     </IonCard>
                     </div>
