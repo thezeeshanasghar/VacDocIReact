@@ -32,7 +32,7 @@ const Login: React.FC = () => {
     //   .then((res) => (res.status === 201 ? setSuccess(true) : setError(true)))
     //   .catch((err) => setError(true))
     //   .finally(() => {
-          
+
     //   });
     navigation.push("/members", "root");
   };
@@ -66,7 +66,7 @@ const Login: React.FC = () => {
                       color="light"
                       value={mobileNumber}
                       onIonChange={(e) => setmobileNumber(e.detail.value!)}
-                      required
+                      // required
                     />
                   </div>
                   <div className="input-container">
@@ -80,7 +80,7 @@ const Login: React.FC = () => {
                       color="light"
                       value={password}
                       onIonChange={(e) => setpassword(e.detail.value!)}
-                      required
+                      // required
                     />
                   </div>
                   <IonButton
