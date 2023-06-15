@@ -12,19 +12,15 @@ type DoctorDataType = { Password: string; Name: string };
 const ChangePassword: React.FC = () => {
   const [success, setSuccess] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
-  const [oldPassword, setOldPassword] = useState<string>();
+  const [oldPassword, setOldPassword] = useState<string>("");
   const [fetchOldPassword, setFetchOldPassword] = useState<string>();
   const [doctorData, setDoctorData] = useState<DoctorDataType[]>([]);
-  const [newPassword, setNewPassword] = useState<string>();
-  const [confirmNewPassword, setConfirmNewPassword] = useState<string>();
+  const [newPassword, setNewPassword] = useState<string>("");
+  const [confirmNewPassword, setConfirmNewPassword] = useState<string>("");
   const [passwordMatch, setPasswordMatch] = useState(true);
   const [msg, setMsg] = useState("");
 
-  const handelChangePassword = (
- 
-    newPassword: string,
-    confirmNewPassword: string
-  ) => {
+  const handelChangePassword = () => {
     console.log("old pass", oldPassword);
     console.log("new pass", newPassword);
     console.log("con pass", confirmNewPassword);
@@ -92,11 +88,27 @@ const ChangePassword: React.FC = () => {
   //   setConfirmNewPassword(e.target.value);
   //   setPasswordMatch(true);
   // };
-  const handlePasswordChange = (e:any) => {
-   
+  const handlePasswordChange = (e: any) => {
+    console.log(e.target.value);
     setOldPassword(e.target.value);
-  
   };
+
+  const canSubmit =
+    oldPassword.length > 0 &&
+    newPassword.length > 0 &&
+    confirmNewPassword.length > 0;
+
+  useEffect(() => {
+    console.log("oldPassword", oldPassword);
+  }, [oldPassword]);
+
+  useEffect(() => {
+    console.log("newPassword", newPassword);
+  }, [newPassword]);
+  
+  useEffect(() => {
+    console.log("confirmNewPassword", confirmNewPassword);
+  }, [confirmNewPassword]);
 
   return (
     <>
@@ -143,9 +155,10 @@ const ChangePassword: React.FC = () => {
 
           <IonButton
             type="submit"
-            onClick={() =>
-              handelChangePassword(  confirmNewPassword ?? "", newPassword ?? "")
-            }
+            disabled={!canSubmit}
+            onClick={() => {
+              handelChangePassword();
+            }}
           >
             Change Password
           </IonButton>
