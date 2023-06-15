@@ -4,7 +4,6 @@ import Header from "../../components/header/Header";
 import PatientSearch from "../../components/patient/PatientSearch";
 import PatientMaleCard from "../../components/patient/PatientMaleCard";
 import PatientFemaleCard from "../../components/patient/PatientFemaleCard";
-// import { format } from "date-fns";
 export interface IPatientData {
   Id: number;
   Name: string;
@@ -28,7 +27,7 @@ const PatientCardList: React.FC = () => {
   const [patientData, setPatientData] = useState<IPatientData[]>([]);
   const [hideCards, setHideCards] = useState(false);
   const fetchPatientData = () => {
-    fetch("http://localhost:5041/patients?doctorId=1")
+    fetch(`http://localhost:5041/patients?doctorId=${2}`)
       .then((response) => response.json())
       .then((data: IPatientData[]) => setPatientData(data))
       .catch((error) => {
@@ -41,7 +40,7 @@ const PatientCardList: React.FC = () => {
   }, []);
   return (
     <>
-      {patientData ? (
+      {patientData.length >= 1 ? (
         <IonPage>
           <Header pageName="Patients" />
           <IonContent className="ion-padding">
@@ -67,8 +66,6 @@ const PatientCardList: React.FC = () => {
                   <PatientFemaleCard
                     key={index * 3}
                     Name={item.Name}
-                    // Guardian={item.Guardian}
-                    // DOB={format(new Date(item.DOB), "dd MMMM yyyy")}
                     Id={item.Id}
                     renderList={fetchPatientData}
                     DoctorId={item.DoctorId}
@@ -79,7 +76,7 @@ const PatientCardList: React.FC = () => {
           </IonContent>
         </IonPage>
       ) : (
-        <h1>Patients could not load</h1>
+        <h1>Patients list could not load</h1>
       )}
     </>
   );

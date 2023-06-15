@@ -11,23 +11,33 @@ import {
   IonIcon,
   IonButton,
   useIonRouter,
+  IonText,
 } from "@ionic/react";
 import { calendar } from "ionicons/icons";
 import { IPSchedule } from "./VaccinationCardList";
 import syringImage from "../../../assets/injectionFilled.png";
+import emptySyringImage from "../../../assets/injectionEmpty.png";
 import { format } from "date-fns";
 import DatePicker from "./DatePicker";
 import { IDose } from "../../doctor-schedule/DoctorScheduleCard";
 import Toast from "../../../components/custom-toast/Toast";
+import axios from "axios";
+interface IBrand {
+  Id: number;
+  Name: string;
+  VaccineId: number;
+}
 interface IPatientCardProps {
   date: string;
   data: IPSchedule[];
   forceRender: () => void;
+  setName: (name: string) => void;
 }
 const VaccinationCard: React.FC<IPatientCardProps> = ({
   date,
   data,
   forceRender,
+  setName,
 }) => {
   const router = useIonRouter();
   const [BulkDate, setBulkDate] = useState<string>("");
@@ -35,6 +45,7 @@ const VaccinationCard: React.FC<IPatientCardProps> = ({
   const [successToast, setSuccessToast] = useState(false);
   const [errorToast, setErrorToast] = useState(false);
   const [doses, setDoses] = useState<IDose[]>([]);
+  const [brands, setBrands] = useState<IBrand[]>([]);
   const [singlePatientSchedule, setSinglePatientSchedule] =
     useState<IPSchedule>();
 
@@ -43,7 +54,12 @@ const VaccinationCard: React.FC<IPatientCardProps> = ({
     const filteredDose: IDose | undefined = doses.find((d) => d.Id === doseId);
     return filteredDose?.Name;
   };
-
+  const filterBrand = (brandId: number): string | undefined => {
+    const filteredBrand: IBrand | undefined = brands.find(
+      (b) => b.Id === brandId
+    );
+    return filteredBrand?.Name;
+  };
   const updateBulkDate = (user_selected_date: string) => {
     const data_to_update = [
       {
@@ -106,9 +122,19 @@ const VaccinationCard: React.FC<IPatientCardProps> = ({
       .then((res) => res.json())
       .then((doses: IDose[]) => setDoses(doses));
   };
+  const fetchBrands = () => {
+    fetch("http://localhost:5041/BrandName")
+      .then((res) => res.json())
+      .then((brands: IBrand[]) => setBrands(brands));
+  };
   const PostSkip = async (patientSchedule: IPSchedule) => {
-    let skip : boolean;
-    if(patientSchedule.isSkip){skip = true} else { skip = false;}
+    console.log(patientSchedule);
+    let skip: boolean;
+    if (patientSchedule.isSkip) {
+      skip = true;
+    } else {
+      skip = false;
+    }
     try {
       const res = await fetch(
         "http://localhost:5041/api/PatientSchedule/single_update_Skip",
@@ -126,13 +152,43 @@ const VaccinationCard: React.FC<IPatientCardProps> = ({
           }),
         }
       );
-      if(res.status === 204) forceRender();
+      if (res.status === 204) forceRender();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const PostSingleDone = async (patientSchedule: IPSchedule) => {
+    const isDone = patientSchedule.isDone ? 0 : 1;
+    try {
+      const res = await fetch(
+        "http://localhost:5041/api/PatientSchedule/single_updateDone",
+        {
+          method: "PATCH",
+
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            Date: format(new Date(), "yyyy-MM-dd"),
+            doseId: patientSchedule.DoseId,
+            doctorId: patientSchedule.DoctorId,
+            childId: patientSchedule.childId,
+            isDone,
+          }),
+        }
+      );
+      if (res.status === 204) forceRender();
     } catch (error) {
       console.log(error);
     }
   };
   useEffect(() => {
     fetchDoses();
+    fetchBrands();
+    axios
+      .get(`http://localhost:5041/api/Child/${data[0].childId}`)
+      .then((res) => res.status === 200 && setName(res.data.Name));
   }, [date, data]);
   // console.log(data);
   const formatedDate = (date: string) => format(new Date(date), "MMM d, yyyy");
@@ -198,49 +254,72 @@ const VaccinationCard: React.FC<IPatientCardProps> = ({
                             display: "flex",
                             justifyContent: "center",
                             alignItems: "center",
-                            gap: 15,
+                            gap: 5,
                           }}
                         >
-                          {!item.isSkip && (
+                          {item.isDone ? (
                             <>
-                              <p
-                                style={{ color: "rgb(55, 231, 10)" }}
-                                onClick={() => setSinglePatientSchedule(item)}
-                              >
-                                <DatePicker
-                                  selectedDate={date || SingleDate}
-                                  onDateSelected={setSingleDate}
-                                  iconSize="20px"
-                                  executeFunc="singleDate"
-                                  updateSingleDate={updateSingleDate}
-                                />
-                              </p>
+                              <IonText color={"success"}>
+                                {formatedDate(date)}
+                              </IonText>
                               <IonImg
                                 src={syringImage}
-                                onClick={() =>
-                                  router.push(
-                                    `/members/child/vaccine/${
-                                      item.childId
-                                    }/fill/${0}`
-                                  )
-                                }
+                                // onClick={() =>
+                                //   router.push(
+                                //     `/members/child/vaccine/${item.childId}/fill/${item.Id}?isDone=${item.isDone}`
+                                //   )
+                                // }
+                                onClick={() => PostSingleDone(item)}
                                 style={{ height: "30px" }}
                                 className="ng-star-inserted md hydrated"
                               />
                             </>
+                          ) : (
+                            <>
+                              {!item.isSkip && (
+                                <>
+                                  <p
+                                    style={{ color: "rgb(55, 231, 10)" }}
+                                    onClick={() =>
+                                      setSinglePatientSchedule(item)
+                                    }
+                                  >
+                                    <DatePicker
+                                      selectedDate={date || SingleDate}
+                                      onDateSelected={setSingleDate}
+                                      iconSize="20px"
+                                      executeFunc="singleDate"
+                                      updateSingleDate={updateSingleDate}
+                                    />
+                                  </p>
+                                  <IonImg
+                                    src={emptySyringImage}
+                                    // onClick={() =>
+                                    //   router.push(
+                                    //     `/members/child/vaccine/${item.childId}/fill/${item.Id}`
+                                    //   )
+                                    // }
+                                    onClick={() => PostSingleDone(item)}
+                                    style={{ height: "30px", color: "orange" }}
+                                    className="ng-star-inserted md hydrated"
+                                  />
+                                </>
+                              )}
+                              <IonButton
+                                size="small"
+                                onClick={() => PostSkip(item)}
+                                style={{
+                                  textTransform: "lowercase",
+                                }}
+                                color={item.isSkip ? "danger" : "primary"}
+                              >
+                                {item.isSkip ? "unSkip" : "skip"}
+                              </IonButton>
+                            </>
                           )}
-                          <IonButton
-                            size="small"
-                            onClick={() => PostSkip(item)}
-                            style={{
-                              textTransform: "lowercase",
-                            }}
-                            color={item.isSkip ? "danger" : "primary"}
-                          >
-                            {item.isSkip ? "unSkip" : "skip"}
-                          </IonButton>
                         </div>
                       </IonItem>
+                      {item.isDone ? <p style={{textAlign: "center"}}>Brand:{filterBrand(item.Id)}</p> : null}
                     </div>
                   );
                 })}
@@ -258,8 +337,6 @@ const VaccinationCard: React.FC<IPatientCardProps> = ({
 export default VaccinationCard;
 
 {
- 
-
   /* <div >
   <IonItem
     lines="none"

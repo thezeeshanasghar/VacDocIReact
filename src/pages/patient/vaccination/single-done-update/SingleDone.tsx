@@ -13,10 +13,11 @@ import {
   IonToolbar,
 } from "@ionic/react";
 
-const SingleDone: React.FC = () => {
-  const [weight, setWeight] = useState<number>();
-  const [height, setHeight] = useState<number>();
-  const [OFC, setOFC] = useState<number>();
+const SingleDone: React.FC = (props) => {
+  console.log(props)
+  // const [weight, setWeight] = useState<number>();
+  // const [height, setHeight] = useState<number>();
+  // const [OFC, setOFC] = useState<number>();
   const [brand, setBrand] = useState<string>();
   const [scheduleDate, setScheduleDate] = useState<string>();
   const [givenDate, setGivenDate] = useState<string>();
@@ -24,9 +25,9 @@ const SingleDone: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Handle form submission logic here
-    console.log("Weight:", weight);
-    console.log("Height:", height);
-    console.log("OFC:", OFC);
+    // console.log("Weight:", weight);
+    // console.log("Height:", height);
+    // console.log("OFC:", OFC);
     console.log("Brand:", brand);
     console.log("Schedule Date:", scheduleDate);
     console.log("Given Date:", givenDate);
@@ -41,38 +42,7 @@ const SingleDone: React.FC = () => {
           </IonToolbar>
         </IonHeader>
         <form noValidate onSubmit={handleSubmit}>
-          <IonItem>
-            <IonLabel position="floating" color="primary">
-              Weight
-            </IonLabel>
-            <IonInput
-              type="number"
-              value={weight}
-              onIonChange={(e) => setWeight(parseFloat(e.detail.value!))}
-            ></IonInput>
-          </IonItem>
-
-          <IonItem>
-            <IonLabel position="floating" color="primary">
-              Height
-            </IonLabel>
-            <IonInput
-              type="number"
-              value={height}
-              onIonChange={(e) => setHeight(parseFloat(e.detail.value!))}
-            ></IonInput>
-          </IonItem>
-
-          <IonItem>
-            <IonLabel position="floating" color="primary">
-              OFC
-            </IonLabel>
-            <IonInput
-              type="number"
-              value={OFC}
-              onIonChange={(e) => setOFC(parseFloat(e.detail.value!))}
-            ></IonInput>
-          </IonItem>
+          
 
           <IonItem>
             <IonLabel color="primary">Brands</IonLabel>
@@ -114,3 +84,36 @@ const SingleDone: React.FC = () => {
 };
 
 export default SingleDone;
+
+{/* <IonItem>
+            <IonLabel position="floating" color="primary">
+              Weight
+            </IonLabel>
+            <IonInput
+              type="number"
+              value={weight}
+              onIonChange={(e) => setWeight(parseFloat(e.detail.value!))}
+            ></IonInput>
+          </IonItem>
+
+          <IonItem>
+            <IonLabel position="floating" color="primary">
+              Height
+            </IonLabel>
+            <IonInput
+              type="number"
+              value={height}
+              onIonChange={(e) => setHeight(parseFloat(e.detail.value!))}
+            ></IonInput>
+          </IonItem>
+
+          <IonItem>
+            <IonLabel position="floating" color="primary">
+              OFC
+            </IonLabel>
+            <IonInput
+              type="number"
+              value={OFC}
+              onIonChange={(e) => setOFC(parseFloat(e.detail.value!))}
+            ></IonInput>
+          </IonItem> */}

@@ -21,19 +21,19 @@ const Login: React.FC = () => {
   const navigation = useIonRouter();
   const [success, setSuccess] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
-  const [mNo, setMNo] = useState<string>();
-  const [pass, setPass] = useState<string>();
+  const [mobileNumber, setmobileNumber] = useState<string>();
+  const [password, setpassword] = useState<string>();
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     // setShowLoading(true);
     event.preventDefault();
-    fetch(`http://localhost:5041/api/Doctor/login?MobileNumber=${mNo}&Password=${pass}`, {
-      method: "POST",
-    })
-      .then((res) => (res.status === 201 ? setSuccess(true) : setError(true)))
-      .catch((err) => setError(true))
-      .finally(() => {
+    // fetch(`http://localhost:5041/api/Doctor/login?MobileNumber=${mobileNumber}&password=${password}`, {
+    //   method: "POST",
+    // })
+    //   .then((res) => (res.status === 201 ? setSuccess(true) : setError(true)))
+    //   .catch((err) => setError(true))
+    //   .finally(() => {
         
-      });
+    //   });
     navigation.push("/members", "root");
   };
 
@@ -64,8 +64,8 @@ const Login: React.FC = () => {
                       label="&nbsp;&nbsp;&nbsp; Mobile Number"
                       labelPlacement="floating"
                       color="light"
-                      value={mNo}
-                      onIonChange={(e) => setMNo(e.detail.value!)}
+                      value={mobileNumber}
+                      onIonChange={(e) => setmobileNumber(e.detail.value!)}
                       required
                     />
                   </div>
@@ -75,11 +75,11 @@ const Login: React.FC = () => {
                       type="password"
                       placeholder=" "
                       className="animated-input"
-                      label="&nbsp;&nbsp;&nbsp;&nbsp;Password"
+                      label="&nbsp;&nbsp;&nbsp;&nbsp;password"
                       labelPlacement="floating"
                       color="light"
-                      value={pass}
-                      onIonChange={(e) => setPass(e.detail.value!)}
+                      value={password}
+                      onIonChange={(e) => setpassword(e.detail.value!)}
                       required
                     />
                   </div>

@@ -14,6 +14,7 @@ import { create, trash, mail, call, person, calendar } from "ionicons/icons";
 import maleThumbmail from "../../assets/male.png";
 import { IPatientData } from "../../pages/patient/PatientCardList";
 import Delete from "../delete/Delete";
+import { useHistory } from "react-router";
 interface IMalePatient {
   Id: number;
   Name: string;
@@ -29,7 +30,14 @@ const PatientMaleCard: React.FC<IMalePatient> = ({
   ClinicId,
 }) => {
   const router = useIonRouter();
+  const history = useHistory();
   const [deletePatient, setDeletePatient] = useState(false);
+
+  const handleClick = () => {
+    history.push(`/members/child/vaccine/${Id}?doctorId=${DoctorId}`, {
+      state: { childId: Id, doctorId: DoctorId },
+    });
+  };
   return (
     <IonCard style={{ border: "2px solid blue" }}>
       <Delete
@@ -66,57 +74,14 @@ const PatientMaleCard: React.FC<IMalePatient> = ({
           aria-label="trash"
           onClick={() => setDeletePatient(true)}
         ></IonIcon>
-        {/* <IonIcon
-          className="iconchild"
-          color="primary"
-          icon={mail}
-          slot="start"
-          tabIndex={0}
-          aria-label="mail"
-          style={{ marginRight: "60px" }}
-        ></IonIcon>
-        <IonIcon
-          className="iconchild"
-          color="primary"
-          icon={call}
-          slot="start"
-          role="img"
-          aria-label="call"
-        ></IonIcon> */}
       </IonItem>
       <IonCardContent>
-        {/* <IonIcon
-          color="primary"
-          icon={person}
-          role="img"
-          className="icon"
-          aria-label="person"
-        ></IonIcon>
-        &nbsp;{Guardian} &nbsp;
-        <IonIcon
-          color="primary"
-          icon={calendar}
-          role="img"
-          className="icon"
-          aria-label="calendar"
-        ></IonIcon>
-        &nbsp;{DOB} &nbsp;
-        <IonIcon
-          color="primary"
-          icon={call}
-          role="img"
-          className="icon"
-          aria-label="call"
-        ></IonIcon>
-        &nbsp;3335408191 &nbsp;
-        <br /> */}
         <IonButton
           color="tertiary"
           fill="outline"
           size="small"
           className="action-button"
-          routerLink={`/members/child/vaccine/${Id}?doctorId=${DoctorId}`}
-          routerDirection="root"
+          onClick={handleClick}
         >
           Vaccine
         </IonButton>
