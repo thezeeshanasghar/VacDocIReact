@@ -81,7 +81,7 @@ const Routes: React.FC = () => {
         />
         <Route
           exact
-          path="/members/child/vaccine/:Id/fill/:brandId"
+          path="/members/child/vaccine/:childId/fill/:brandId"
           component={SingleDone}
         />
 

@@ -14,6 +14,7 @@ import { IPatientData } from "../../pages/patient/PatientCardList";
 import { create, trash, mail, call, person, calendar } from "ionicons/icons";
 import femaleThumbmail from "../../assets/female.png";
 import Delete from "../delete/Delete";
+import { useHistory } from "react-router";
 interface IFemalePatient {
   Id: number;
   Name: string;
@@ -29,8 +30,15 @@ const PatientFemaleCard: React.FC<IFemalePatient> = ({
   ClinicId
 }) => {
   const router = useIonRouter();
+  const history = useHistory();
   const [deletePatient, setDeletePatient] = useState(false);
 
+
+  const handleClick = () => {
+    history.push(`/members/child/vaccine/${Id}?doctorId=${DoctorId}`, {
+      state: { childId: Id, doctorId: DoctorId },
+    });
+  };
   return (
     <IonCard style={{ border: "2px solid #f50ca7" }}>
       <Delete
@@ -73,8 +81,7 @@ const PatientFemaleCard: React.FC<IFemalePatient> = ({
           fill="outline"
           size="small"
           className="action-button"
-          routerLink={`/members/child/vaccine/${Id}?doctorId=${DoctorId}`}
-          routerDirection="root"
+          onClick={handleClick}
         >
           Vaccine
         </IonButton>
