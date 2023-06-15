@@ -26,13 +26,13 @@ const Login: React.FC = () => {
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     // setShowLoading(true);
     event.preventDefault();
-    // fetch(`http://localhost:5041/api/Doctor/login?MobileNumber=${mobileNumber}&password=${password}`, {
+    // fetch(`${import.meta.env.VITE_API_URL}api/Doctor/login?MobileNumber=${mobileNumber}&password=${password}`, {
     //   method: "POST",
     // })
     //   .then((res) => (res.status === 201 ? setSuccess(true) : setError(true)))
     //   .catch((err) => setError(true))
     //   .finally(() => {
-        
+          
     //   });
     navigation.push("/members", "root");
   };

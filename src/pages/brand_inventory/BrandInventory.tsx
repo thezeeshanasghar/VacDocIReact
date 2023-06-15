@@ -12,16 +12,20 @@ type BrandInventoryType = { Count: number; VaccineName: string; Brand: string };
 const BrandInventory: React.FC = () => {
   const [brandData, setBrandData] = useState<BrandInventoryType[]>([]);
   useEffect(() => {
-  fetchInventoryData();
+    fetchInventoryData();
   }, []);
 
   const fetchInventoryData = async () => {
     try {
-      const response = await fetch("http://localhost:5041/api/BrandInventory/doctor-vaccine-Count/1"); // Replace 'API_ENDPOINT' with the actual API endpoint URL
+      const response = await fetch(
+        `${
+          import.meta.env.VITE_API_URL
+        }api/BrandInventory/doctor-vaccine-Count/1`
+      ); // Replace 'API_ENDPOINT' with the actual API endpoint URL
       const data = await response.json();
       setBrandData(data);
     } catch (error) {
-      console.error('Error fetching brand data:', error);
+      console.error("Error fetching brand data:", error);
     }
   };
 

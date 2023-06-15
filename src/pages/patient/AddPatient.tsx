@@ -68,7 +68,7 @@ const AddPatient: React.FC = () => {
       doctorId: selectedDoctor,
     };
 
-    fetch("http://localhost:5041/api/Child", {
+    fetch(`${import.meta.env.VITE_API_URL}api/Child`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -102,12 +102,12 @@ const AddPatient: React.FC = () => {
 
   // getting doctors list for dropdown and clinic;
   useEffect(() => {
-    fetch("http://localhost:5041/api/Doctor")
+    fetch(`${import.meta.env.VITE_API_URL}api/Doctor`)
       .then((res) => res.json())
       .then((data) => setDoctorData(data))
       .catch((err) => console.error(err));
 
-    fetch("http://localhost:5041/api/Clinic")
+    fetch(`${import.meta.env.VITE_API_URL}api/Clinic`)
       .then((res) => res.json())
       .then((data) => setClinicData(data))
       .catch((err) => console.error(err));

@@ -54,7 +54,7 @@ const EditProfile: React.FC = () => {
       doctorType: doctorType ? doctorType : data?.DoctorType,
       pmdc: pmdc ? pmdc : data?.PMDC,
     };
-    fetch(`http://localhost:5041/api/Doctor/doctors/${1}`, {
+    fetch(`${import.meta.env.VITE_API_URL}api/Doctor/doctors/${1}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -81,7 +81,7 @@ const EditProfile: React.FC = () => {
     setIsEnabled(false);
   };
   const fetchInitialDocData = () => {
-    fetch(`http://localhost:5041/api/Doctor/${1}`)
+    fetch(`${import.meta.env.VITE_API_URL}api/Doctor/${1}`)
       .then((response) => response.json())
       .then((data: DoctorData) => setData(data))
       .catch((error) => console.log(error));

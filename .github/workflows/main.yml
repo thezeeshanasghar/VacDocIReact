@@ -1,0 +1,29 @@
+name: Build Ionic App and Deploy on FTP
+
+on: [push]
+
+jobs:
+  build:
+    name: Build & Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@master
+
+      - name: Install Ionic
+        run: npm install -g @ionic/cli      
+          
+      - name: Install Dependencies
+        run: npm install
+        
+      - name: Build
+        run: ionic build
+
+      - name: 📂 Sync files
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: 198.54.114.231
+          username: up@ndoc.ewarenet.com	
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: dist/
+
