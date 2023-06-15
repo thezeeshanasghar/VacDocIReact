@@ -71,7 +71,9 @@ const VaccinationCard: React.FC<IPatientCardProps> = ({
     ];
 
     fetch(
-      `http://localhost:5041/api/PatientSchedule/patient_bulk_updateDate/${date}`,
+      `${
+        import.meta.env.VITE_API_URL
+      }api/PatientSchedule/patient_bulk_updateDate/${date}`,
       {
         method: "PATCH",
         headers: {
@@ -99,7 +101,7 @@ const VaccinationCard: React.FC<IPatientCardProps> = ({
       doctorId: singlePatientSchedule?.DoctorId,
       childId: singlePatientSchedule?.childId,
     };
-    fetch(`http://localhost:5041/api/PatientSchedule/single_updateDate`, {
+    fetch(`${import.meta.env.VITE_API_URL}api/PatientSchedule/single_updateDate`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -118,26 +120,19 @@ const VaccinationCard: React.FC<IPatientCardProps> = ({
   };
 
   const fetchDoses = () => {
-    fetch("http://localhost:5041/alldoses")
+    fetch(`${import.meta.env.VITE_API_URL}alldoses`)
       .then((res) => res.json())
       .then((doses: IDose[]) => setDoses(doses));
   };
   const fetchBrands = () => {
-    fetch("http://localhost:5041/BrandName")
+    fetch(`${import.meta.env.VITE_API_URL}BrandName`)
       .then((res) => res.json())
       .then((brands: IBrand[]) => setBrands(brands));
   };
   const PostSkip = async (patientSchedule: IPSchedule) => {
-    console.log(patientSchedule);
-    let skip: boolean;
-    if (patientSchedule.isSkip) {
-      skip = true;
-    } else {
-      skip = false;
-    }
     try {
       const res = await fetch(
-        "http://localhost:5041/api/PatientSchedule/single_update_Skip",
+        `${import.meta.env.VITE_API_URL}api/PatientSchedule/single_update_Skip`,
         {
           method: "PATCH",
 
@@ -148,10 +143,16 @@ const VaccinationCard: React.FC<IPatientCardProps> = ({
             doseId: patientSchedule.DoseId,
             doctorId: patientSchedule.DoctorId,
             childId: patientSchedule.childId,
-            isSkip: skip ? 0 : 1,
+            isSkip: patientSchedule.isSkip ? 0 : 1,
           }),
         }
       );
+      console.log({
+        doseId: patientSchedule.DoseId,
+        doctorId: patientSchedule.DoctorId,
+        childId: patientSchedule.childId,
+        isSkip: patientSchedule.isSkip ? 0 : 1,
+      });
       if (res.status === 204) forceRender();
     } catch (error) {
       console.log(error);
@@ -162,7 +163,7 @@ const VaccinationCard: React.FC<IPatientCardProps> = ({
     const isDone = patientSchedule.isDone ? 0 : 1;
     try {
       const res = await fetch(
-        "http://localhost:5041/api/PatientSchedule/single_updateDone",
+        `${import.meta.env.VITE_API_URL}api/PatientSchedule/single_updateDone`,
         {
           method: "PATCH",
 
@@ -187,7 +188,7 @@ const VaccinationCard: React.FC<IPatientCardProps> = ({
     fetchDoses();
     fetchBrands();
     axios
-      .get(`http://localhost:5041/api/Child/${data[0].childId}`)
+      .get(`${import.meta.env.VITE_API_URL}api/Child/${data[0].childId}`)
       .then((res) => res.status === 200 && setName(res.data.Name));
   }, [date, data]);
   // console.log(data);
@@ -319,7 +320,11 @@ const VaccinationCard: React.FC<IPatientCardProps> = ({
                           )}
                         </div>
                       </IonItem>
-                      {item.isDone ? <p style={{textAlign: "center"}}>Brand:{filterBrand(item.Id)}</p> : null}
+                      {item.isDone ? (
+                        <p style={{ textAlign: "center" }}>
+                          Brand:{filterBrand(item.Id)}
+                        </p>
+                      ) : null}
                     </div>
                   );
                 })}

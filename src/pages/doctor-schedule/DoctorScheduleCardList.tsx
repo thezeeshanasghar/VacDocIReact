@@ -18,7 +18,8 @@ const DoctorScheduleCardList: React.FC = () => {
   const [groupedData, setGroupedData] = useState<
     Record<string, IDoctorSchedule[]>
   >({});
-  const doctorId = 1;
+  const [count, setCount] = useState(1);
+  const [doctorId, setdoctorId] = useState(1);
   const fetchScheduleData = () => {
     fetch(
       `${
@@ -30,15 +31,20 @@ const DoctorScheduleCardList: React.FC = () => {
   };
 
   useEffect(() => {
-    axios
-      .post(
-        `${
-          import.meta.env.VITE_API_URL
-        }api/DoctorSchedule/doctor_post_schedule?doctorId=${doctorId}`
-      )
-      .then((response) => response.status === 200 && fetchScheduleData())
-      .catch((err) => console.log(err));
-  }, [doctorId]);
+    if (count === 1) {
+      axios
+        .post(
+          `${
+            import.meta.env.VITE_API_URL
+          }api/DoctorSchedule/doctor_post_schedule?doctorId=${doctorId}`
+        )
+        .then(res => res.status === 200 && fetchScheduleData())
+        .catch((err) => console.log(err));
+        console.log("use effect : ", count)
+        setCount(2)
+    }
+    // fetchScheduleData();
+  }, []);
 
   useEffect(() => {
     if (scheduleData) {

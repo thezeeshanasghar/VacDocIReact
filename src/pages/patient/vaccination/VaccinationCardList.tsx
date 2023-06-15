@@ -38,45 +38,36 @@ const VaccinationCardList: React.FC<IParam> = ({
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const doctorId = searchParams.get("doctorId");
+  const [count, setCount] = useState(1);
   // const [doctorId, setdoctorId] = useState(2)
   const [patientSchedule, setPatientSchedule] = useState<IPSchedule[]>([]);
   const [groupedPatientSchedule, setGroupedPatientSchedule] = useState<
     Record<string, IPSchedule[]>
   >({});
   const [patientName, setPatientName] = useState<string>();
-  // initialize patient schedule
-  const initializePatientSchedule = async () => {
-    try {
-      const response = await axios.post(
-        `${
-          import.meta.env.VITE_API_URL
-        }api/PatientSchedule/doctor_post_schedule/child?doctorId=${+doctorId}&childId=${+childId}`
-      );
-      console.log(response.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  const fetchPatientScheduleData = async () => {
-    try {
-      const res = await axios.get(
+
+  const fetchPatientScheduleData = () => {
+    axios
+      .get(
         `${
           import.meta.env.VITE_API_URL
         }api/PatientSchedule/patient_schedule/${childId}`
-      );
-      setPatientSchedule(res.data);
-    } catch (error) {
-      console.log("error occurred while getting patient schedule", error);
-    }
+      )
+      .then((res) => setPatientSchedule(res.data))
+      .catch((err) => console.error(err));
   };
   useEffect(() => {
-    //exectution in order;
-    async function executeOrderly() {
-      // await initializePatientSchedule();
-      await fetchPatientScheduleData();
+    if (count === 1) {
+      axios
+        .post(
+          `${
+            import.meta.env.VITE_API_URL
+          }api/PatientSchedule/doctor_post_schedule/child?doctorId=${doctorId}&childId=${childId}`
+        )
+        .then((res) => res.status === 200 && fetchPatientScheduleData())
+        .catch((err) => console.log(err));
+      setCount(2);
     }
-
-    executeOrderly();
   }, [childId, doctorId]);
 
   useEffect(() => {
