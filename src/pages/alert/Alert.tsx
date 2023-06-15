@@ -6,7 +6,7 @@ type PatientDataType = { Id: number; Name: string; ClinicId: number;DoctorId: nu
 const Alert: React.FC = () => {
     const [patientData, setPatientData] = useState<PatientDataType[]>([]);
     const fetchPatientData = () => {
-        fetch("http://localhost:5041/patients?doctorId=1")
+        fetch(`${import.meta.env.VITE_API_URL}patients?doctorId=1`)
           .then((response) => response.json())
           .then((data) => setPatientData(data))
           .catch((error) => {
