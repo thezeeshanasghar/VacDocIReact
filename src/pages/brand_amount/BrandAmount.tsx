@@ -7,6 +7,7 @@ import {
 } from "@ionic/react";
 import React, { useEffect, useState } from "react";
 import Header from "../../components/header/Header";
+// import ReactDOM from "react-dom";
 type BrandAmountType = { Price: number; VaccineName: string; Brand: string };
 const BrandAmount: React.FC = () => {
   const [brandData, setBrandData] = useState<BrandAmountType[]>([]);
@@ -72,3 +73,4 @@ const BrandAmount: React.FC = () => {
 };
 
 export default BrandAmount;
+// ReactDOM.render(<BrandAmount />, document.getElementById('root'));
