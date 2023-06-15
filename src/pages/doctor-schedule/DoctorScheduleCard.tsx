@@ -42,7 +42,7 @@ const DoctorScheduleCard: React.FC<ScheduleCardProps> = ({
   const [errorToast, setErrorToast] = useState(false);
 
   const fetchDoses = () => {
-    fetch("http://localhost:5041/alldoses")
+    fetch(`${import.meta.env.VITE_API_URL}alldoses`)
       .then((res) => res.json())
       .then((doses: IDose[]) => setDoses(doses));
   };
@@ -65,9 +65,11 @@ const DoctorScheduleCard: React.FC<ScheduleCardProps> = ({
         value: user_selected_date.split("T")[0],
       },
     ];
-    
+
     fetch(
-      `http://localhost:5041/api/DoctorSchedule/doctor_bulk_updateDate/${date}`,
+      `${
+        import.meta.env.VITE_API_URL
+      }api/DoctorSchedule/doctor_bulk_updateDate/${date}`,
       {
         method: "PATCH",
         headers: {
@@ -93,13 +95,16 @@ const DoctorScheduleCard: React.FC<ScheduleCardProps> = ({
       ...singleScheduleData,
       Date: user_selected_date.split("T")[0],
     };
-    fetch(`http://localhost:5041/api/DoctorSchedule/single_updateDate`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data_to_be_sent),
-    })
+    fetch(
+      `${import.meta.env.VITE_API_URL}api/DoctorSchedule/single_updateDate`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data_to_be_sent),
+      }
+    )
       .then((res) => {
         if (res.status === 204) {
           forceRender();

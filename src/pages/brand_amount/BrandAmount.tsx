@@ -16,7 +16,7 @@ const BrandAmount: React.FC = () => {
   
   const fetchBrandData = async () => {
     try {
-      const response = await fetch("http://localhost:5041/api/BrandAmount/doctor-vaccine-price/1"); // Replace 'API_ENDPOINT' with the actual API endpoint URL
+      const response = await fetch(`${import.meta.env.VITE_API_URL}api/BrandAmount/doctor-vaccine-price/1`); // Replace 'API_ENDPOINT' with the actual API endpoint URL
       const data = await response.json();
       setBrandData(data);
     } catch (error) {

@@ -41,7 +41,7 @@ const ChangePassword: React.FC = () => {
           },
         ];
         console.log(data_to_be_sent);
-        fetch("http://localhost:5041/api/Doctor/password/1", {
+        fetch(`${import.meta.env.VITE_API_URL}api/Doctor/password/1`, {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
@@ -72,7 +72,7 @@ const ChangePassword: React.FC = () => {
     }
   };
   const pass = () => {
-    fetch("http://localhost:5041/api/Doctor")
+    fetch(`${import.meta.env.VITE_API_URL}api/Doctor`) 
       .then((res) => res.json())
       .then((data) => {
         setDoctorData(data[0].Password);

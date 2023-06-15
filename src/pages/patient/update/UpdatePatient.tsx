@@ -217,7 +217,7 @@ const UpdatePatient: React.FC<UpdateType> = ({
     const requestBody = JSON.stringify(patchOperations);
 
     try {
-      const response = await fetch(`http://localhost:5041/api/Child/${Id}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}api/Child/${Id}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -270,18 +270,18 @@ const UpdatePatient: React.FC<UpdateType> = ({
   }, [Id]);
   const preFetchPatientData = async () => {
     try {
-      const res = await fetch(`http://localhost:5041/api/Child/${Id}`);
+      const res = await fetch(`${import.meta.env.VITE_API_URL}api/Child/${Id}`);
       const PatientData: IPatientData = await res.json();
 
       if (res.ok) {
         const response = await fetch(
-          `http://localhost:5041/api/Doctor/${PatientData.DoctorId}`
+          `${import.meta.env.VITE_API_URL}api/Doctor/${PatientData.DoctorId}`
         );
         const singleDoctorData = await response.json();
         setSingleDoctorData(singleDoctorData);
 
         const anotherResponse = await fetch(
-          `http://localhost:5041/api/Clinic/${PatientData.ClinicId}`
+          `${import.meta.env.VITE_API_URL}api/Clinic/${PatientData.ClinicId}`
         );
         const singleClinicData = await anotherResponse.json();
         setSignleClinicData(singleClinicData);
@@ -293,7 +293,7 @@ const UpdatePatient: React.FC<UpdateType> = ({
     }
   };
   const preFetchPatientDoctorList = () => {
-    fetch("http://localhost:5041/api/Doctor")
+    fetch(`${import.meta.env.VITE_API_URL}api/Doctor`)
       .then((res) => res.json())
       .then((data: DoctorClinicType[]) => {
         setDoctorData(data);
@@ -301,7 +301,7 @@ const UpdatePatient: React.FC<UpdateType> = ({
       .catch((err) => console.error(err));
   };
   const preFetchPatientClinicList = () => {
-    fetch("http://localhost:5041/api/Clinic")
+    fetch(`${import.meta.env.VITE_API_URL}api/Clinic`)
       .then((res) => res.json())
       .then((data: DoctorClinicType[]) => setClinicData(data))
       .catch((err) => console.error(err));

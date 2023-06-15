@@ -1,19 +1,11 @@
-import {
-  IonCard,
-  IonCardHeader,
-  IonContent,
-  IonHeader,
-  IonLabel,
-  IonPage,
-  IonTitle,
-  IonToolbar,
-} from "@ionic/react";
+import { IonContent, IonPage } from "@ionic/react";
 import React, { useEffect, useState } from "react";
 import Header from "../../components/header/Header";
 import { groupBy } from "lodash";
 import MyDatePicker from "../../components/datepicker/MyDatePicker";
 // import { format } from "date-fns";
 import DoctorScheduleCard from "./DoctorScheduleCard";
+import axios from "axios";
 export interface IDoctorSchedule {
   Id: number;
   Date: string;
@@ -26,16 +18,27 @@ const DoctorScheduleCardList: React.FC = () => {
   const [groupedData, setGroupedData] = useState<
     Record<string, IDoctorSchedule[]>
   >({});
-  const Id = 1;
+  const doctorId = 1;
   const fetchScheduleData = () => {
-    fetch(`http://localhost:5041/api/DoctorSchedule/doctor_schedule/${Id}`)
+    fetch(
+      `${
+        import.meta.env.VITE_API_URL
+      }api/DoctorSchedule/doctor_schedule/${doctorId}`
+    )
       .then((res) => res.json())
       .then((data: IDoctorSchedule[]) => setScheduleData(data));
   };
 
   useEffect(() => {
-    fetchScheduleData();
-  }, [Id]);
+    axios
+      .post(
+        `${
+          import.meta.env.VITE_API_URL
+        }api/DoctorSchedule/doctor_post_schedule?doctorId=${doctorId}`
+      )
+      .then((response) => response.status === 200 && fetchScheduleData())
+      .catch((err) => console.log(err));
+  }, [doctorId]);
 
   useEffect(() => {
     if (scheduleData) {

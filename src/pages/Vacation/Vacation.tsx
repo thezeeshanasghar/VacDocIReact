@@ -11,7 +11,7 @@ const Vacation: React.FC = () => {
     const [error, setError] = useState<boolean>(false);
     const [clinic,setClinic]= useState<ClinicType[]>([])
     useEffect(() => {
-      fetch("http://localhost:5041/api/Clinic")
+      fetch(`${import.meta.env.VITE_API_URL}api/Clinic`)
         .then((res) => res.json())
         .then((data) => setClinic(data))
         .catch((err) => console.error(err));
@@ -20,7 +20,7 @@ const Vacation: React.FC = () => {
         e.preventDefault();
         
     
-        fetch(`http://localhost:5041/update_date_for_Vaccations?doctorId=1&fromDate=${fromDate}&toDate=${toDate}`, {
+        fetch(`${import.meta.env.VITE_API_URL}update_date_for_Vaccations?doctorId=1&fromDate=${fromDate}&toDate=${toDate}`, {
           method: "PATCH",
         
         //   body: JSON.stringify(data_to_be_sent),

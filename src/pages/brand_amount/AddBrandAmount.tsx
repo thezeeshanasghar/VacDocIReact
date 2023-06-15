@@ -39,7 +39,7 @@ const AddBrandAmount: React.FC = () => {
       doctorId: 1,
     };
     console.log(data_to_be_sent);
-    fetch("http://localhost:5041/api/BrandAmount", {
+    fetch(`${import.meta.env.VITE_API_URL}api/BrandAmount`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -56,13 +56,13 @@ const AddBrandAmount: React.FC = () => {
   };
 
   const handleClickVaccine = () => {
-    fetch(`http://localhost:5041/api/Brand/brand_name/${vaccineName}`)
+    fetch(`${import.meta.env.VITE_API_URL}api/Brand/brand_name/${vaccineName}`)
       .then((res) => res.json())
       .then((data) => setBrandData(data))
       .catch((err) => console.error(err));
   };
   useEffect(() => {
-    fetch("http://localhost:5041/api/Vaccine")
+    fetch(`${import.meta.env.VITE_API_URL}api/Vaccine`)
       .then((res) => res.json())
       .then((data) => setVaccineData(data))
       .catch((err) => console.error(err));

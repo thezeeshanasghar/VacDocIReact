@@ -48,7 +48,9 @@ const VaccinationCardList: React.FC<IParam> = ({
   const initializePatientSchedule = async () => {
     try {
       const response = await axios.post(
-        `http://localhost:5041/api/PatientSchedule/doctor_post_schedule/child?doctorId=${+doctorId}&childId=${+childId}`
+        `${
+          import.meta.env.VITE_API_URL
+        }api/PatientSchedule/doctor_post_schedule/child?doctorId=${+doctorId}&childId=${+childId}`
       );
       console.log(response.data);
     } catch (error) {
@@ -58,7 +60,9 @@ const VaccinationCardList: React.FC<IParam> = ({
   const fetchPatientScheduleData = async () => {
     try {
       const res = await axios.get(
-        `http://localhost:5041/api/PatientSchedule/patient_schedule/${childId}`
+        `${
+          import.meta.env.VITE_API_URL
+        }api/PatientSchedule/patient_schedule/${childId}`
       );
       setPatientSchedule(res.data);
     } catch (error) {
@@ -68,7 +72,7 @@ const VaccinationCardList: React.FC<IParam> = ({
   useEffect(() => {
     //exectution in order;
     async function executeOrderly() {
-      await initializePatientSchedule();
+      // await initializePatientSchedule();
       await fetchPatientScheduleData();
     }
 
@@ -88,6 +92,8 @@ const VaccinationCardList: React.FC<IParam> = ({
   function setName(name: string) {
     setPatientName(name);
   }
+
+  console.log(childId, doctorId);
   return (
     <>
       {patientSchedule && (

@@ -27,7 +27,7 @@ const PatientCardList: React.FC = () => {
   const [patientData, setPatientData] = useState<IPatientData[]>([]);
   const [hideCards, setHideCards] = useState(false);
   const fetchPatientData = () => {
-    fetch(`http://localhost:5041/patients?doctorId=${2}`)
+    fetch(`${import.meta.env.VITE_API_URL}patients?doctorId=${1}`)
       .then((response) => response.json())
       .then((data: IPatientData[]) => setPatientData(data))
       .catch((error) => {
