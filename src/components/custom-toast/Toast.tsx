@@ -4,16 +4,25 @@ import React from "react";
 interface ToastProps {
   isOpen: boolean;
   setOpen: (isOpen: boolean) => void;
-  message: string;
+  message?: string;
   color: string;
+  errMsg?: string;
+  successMsg?: string;
 }
 
-const Toast: React.FC<ToastProps> = ({ isOpen, setOpen, message, color }) => {
+const Toast: React.FC<ToastProps> = ({
+  isOpen,
+  setOpen,
+  message,
+  color,
+  errMsg,
+  successMsg,
+}) => {
   return (
     <IonToast
       isOpen={isOpen}
       onDidDismiss={() => setOpen(false)}
-      message={message}
+      message={message || errMsg || successMsg}
       duration={2000}
       color={color}
       buttons={[

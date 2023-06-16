@@ -37,7 +37,11 @@ const Routes: React.FC = () => {
 
         <Route exact path="/members/doctor/clinic" component={ClinicCardList} />
         <Route exact path="/members/doctor/clinic/add" component={AddClinic} />
-        <Route exact path="/members/doctor/clinic/update" component={UpdateClinic} />
+        <Route
+          exact
+          path="/members/doctor/clinic/update"
+          component={UpdateClinic}
+        />
         <Route exact path="/members/doctor/vacation" component={Vacation} />
         <Route
           exact

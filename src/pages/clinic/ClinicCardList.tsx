@@ -1,11 +1,11 @@
-import {
-  IonContent,
-  IonPage,
-} from "@ionic/react";
+import { IonContent, IonFab, IonFabButton, IonIcon, IonPage } from "@ionic/react";
 import React, { useEffect, useState } from "react";
 import Header from "../../components/header/Header";
 import ClinicCard from "../../components/clinic/ClinicCard";
 import ErrorComponent from "../Error/ErrorComponent";
+import { useLocation } from "react-router";
+
+import { add } from "ionicons/icons";
 interface Clinic {
   Id: number;
   Name: string;
@@ -14,7 +14,8 @@ interface Clinic {
   DoctorId: number;
 }
 const ClinicCardList: React.FC = () => {
-  const [doctorId, setdocorId] = useState(2);
+  const location = useLocation();
+  const [doctorId, setdocorId] = useState(1);
   const [Clinics, setClinics] = useState<Clinic[]>([]);
   const fetchClinicData = async () => {
     try {
@@ -28,30 +29,40 @@ const ClinicCardList: React.FC = () => {
 
   useEffect(() => {
     fetchClinicData();
-  }, []);
+  }, [location]);
   return (
     <>
       {Clinics && (
         <IonPage>
           <Header pageName="Clinic" />
           <IonContent>
-            {Clinics.length>0?(Clinics.map((item, index) => {
-              if (item.DoctorId === doctorId) {
-                return (
-                  <React.Fragment key={index}>
-                    <ClinicCard
-                      Id={item.Id}
-                      Name={item.Name}
-                      Number={item.Number}
-                      Address={item.Address}
-                      DoctorId={item.DoctorId}
-                    />
-                  </React.Fragment>
-                );
-              }
-            })):(
+            {Clinics.length > 0 ? (
+              Clinics.map((item, index) => {
+                if (item.DoctorId === doctorId) {
+                  return (
+                    <React.Fragment key={index}>
+                      <ClinicCard
+                        Id={item.Id}
+                        Name={item.Name}
+                        Number={item.Number}
+                        Address={item.Address}
+                        DoctorId={item.DoctorId}
+                      />
+                    </React.Fragment>
+                  );
+                }
+              })
+            ) : (
               <ErrorComponent title="Vaccines" />
             )}
+            <IonFab slot="fixed" vertical="bottom" horizontal="end">
+              <IonFabButton
+                routerLink="/members/doctor/clinic/add"
+                routerDirection="forward"
+              >
+                <IonIcon icon={add}></IonIcon>
+              </IonFabButton>
+            </IonFab>
           </IonContent>
         </IonPage>
       )}

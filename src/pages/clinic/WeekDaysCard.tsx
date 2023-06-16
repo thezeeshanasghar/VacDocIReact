@@ -16,7 +16,7 @@ import React, { useState, useEffect } from "react";
 
 type WeekDayCardProps = {
   name: string;
-  setSession: React.Dispatch<React.SetStateAction<ISession[]>>;
+  setSession?: React.Dispatch<React.SetStateAction<ISession[]>>;
 };
 
 export interface ISession {
