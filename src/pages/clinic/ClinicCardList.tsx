@@ -5,6 +5,7 @@ import {
 import React, { useEffect, useState } from "react";
 import Header from "../../components/header/Header";
 import ClinicCard from "../../components/clinic/ClinicCard";
+import ErrorComponent from "../Error/ErrorComponent";
 interface Clinic {
   Id: number;
   Name: string;
@@ -34,7 +35,7 @@ const ClinicCardList: React.FC = () => {
         <IonPage>
           <Header pageName="Clinic" />
           <IonContent>
-            {Clinics.map((item, index) => {
+            {Clinics.length>0?(Clinics.map((item, index) => {
               if (item.DoctorId === doctorId) {
                 return (
                   <React.Fragment key={index}>
@@ -48,7 +49,9 @@ const ClinicCardList: React.FC = () => {
                   </React.Fragment>
                 );
               }
-            })}
+            })):(
+              <ErrorComponent title="Vaccines" />
+            )}
           </IonContent>
         </IonPage>
       )}

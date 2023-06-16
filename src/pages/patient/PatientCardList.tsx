@@ -4,6 +4,7 @@ import Header from "../../components/header/Header";
 import PatientSearch from "../../components/patient/PatientSearch";
 import PatientMaleCard from "../../components/patient/PatientMaleCard";
 import PatientFemaleCard from "../../components/patient/PatientFemaleCard";
+import ErrorComponent from "../Error/ErrorComponent";
 export interface IPatientData {
   Id: number;
   Name: string;
@@ -40,14 +41,14 @@ const PatientCardList: React.FC = () => {
   }, []);
   return (
     <>
-      {patientData.length >= 1 ? (
+      
         <IonPage>
           <Header pageName="Patients" />
           <IonContent className="ion-padding">
             {/* patient component to render patient data */}
             <PatientSearch data={patientData} hideCards={setHideCards} />
             {/* list of patient cards to be rendered. */}
-            {patientData &&
+            {patientData.length>0?(patientData &&
               !hideCards &&
               patientData.map((item, index) => {
                 if (item.Gender.includes("boy" || "male")) {
@@ -72,12 +73,12 @@ const PatientCardList: React.FC = () => {
                     ClinicId={item.ClinicId}
                   />
                 );
-              })}
+              })):(
+                <ErrorComponent title="Patients list" />
+              )}
           </IonContent>
         </IonPage>
-      ) : (
-        <h1>Patients list could not load</h1>
-      )}
+     
     </>
   );
 };

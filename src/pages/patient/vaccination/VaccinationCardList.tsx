@@ -12,6 +12,7 @@ import VaccinationCard from "./VaccinationCard";
 import axios from "axios";
 import { groupBy } from "lodash";
 import { useLocation } from "react-router";
+import ErrorComponent from "../../Error/ErrorComponent";
 export interface IPSchedule {
   Id: number;
   Date: string;
@@ -101,7 +102,7 @@ const VaccinationCardList: React.FC<IParam> = ({
             </IonToolbar>
           </IonHeader>
           <IonContent>
-            {patientSchedule.length >= 1 ? (
+            {patientSchedule.length > 0 ? (
               <>
                 {groupedPatientSchedule ? (
                   Object.entries(groupedPatientSchedule).map(([date, data]) => {
@@ -120,7 +121,7 @@ const VaccinationCardList: React.FC<IParam> = ({
                 )}
               </>
             ) : (
-              <h1>patient schedule list could not Load</h1>
+              <ErrorComponent title="Patients schedule" />
             )}
           </IonContent>
         </IonPage>
