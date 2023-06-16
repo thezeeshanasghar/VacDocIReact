@@ -20,7 +20,19 @@ const AddClinic: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Perform submit logic with clinicName, phoneNumber, address, and sessions data
-    console.log(sessions);
+    const data_to_be_sent = {
+      name: clinicName,
+      address,
+      number: phoneNumber,
+    }
+
+    fetch(`${import.meta.env.VITE_API_URL}api/Clinic`, {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data_to_be_sent),
+    })
   };
 
   return (
@@ -60,7 +72,17 @@ const AddClinic: React.FC = () => {
               onIonChange={(e) => setAddress(e.detail.value!)}
             ></IonTextarea>
           </IonItem>
-
+          {[
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday",
+            "Sunday",
+          ].map((item, index) => (
+            <WeekDaysCard name={item} key={index*3} setSession={setSessions}/>
+          ))}
           <IonItem style={{ minHeight: "300px" }}>
             <div
               className="map"
