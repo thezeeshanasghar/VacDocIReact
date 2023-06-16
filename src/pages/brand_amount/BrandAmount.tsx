@@ -7,6 +7,7 @@ import {
 } from "@ionic/react";
 import React, { useEffect, useState } from "react";
 import Header from "../../components/header/Header";
+import ErrorComponent from "../Error/ErrorComponent";
 // import ReactDOM from "react-dom";
 type BrandAmountType = { Price: number; VaccineName: string; Brand: string };
 const BrandAmount: React.FC = () => {
@@ -50,7 +51,7 @@ const BrandAmount: React.FC = () => {
             </b>
           </IonCardHeader>
         </IonCard>
-        {brandData &&
+        {brandData.length>0?(brandData &&
           brandData.map((item, index) => (
             <IonCard  key={index}>
               <IonCardContent
@@ -66,7 +67,9 @@ const BrandAmount: React.FC = () => {
                 <div>{item.Price}</div>
               </IonCardContent>
             </IonCard>
-          ))}
+          ))):(
+            <ErrorComponent title="Brand Amount" />
+          )}
       </IonContent>
     </IonPage>
   );

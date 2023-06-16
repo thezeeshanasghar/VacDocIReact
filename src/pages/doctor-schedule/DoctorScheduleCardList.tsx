@@ -6,6 +6,7 @@ import MyDatePicker from "../../components/datepicker/MyDatePicker";
 // import { format } from "date-fns";
 import DoctorScheduleCard from "./DoctorScheduleCard";
 import axios from "axios";
+import ErrorComponent from "../Error/ErrorComponent";
 export interface IDoctorSchedule {
   Id: number;
   Date: string;
@@ -69,14 +70,16 @@ const DoctorScheduleCardList: React.FC = () => {
               <Header pageName="Doctor Schedule" />
               <IonContent className="ion-padding">
                 <>
-                  {Object.entries(groupedData).map(([date, data]) => (
+                  {Object.length>0?(Object.entries(groupedData).map(([date, data]) => (
                     <DoctorScheduleCard
                       key={date}
                       date={date}
                       data={data}
                       forceRender={forceRender}
                     />
-                  ))}
+                  ))):(
+                    <ErrorComponent title="Doctor schedule" />
+                  )}
                 </>
               </IonContent>
             </IonPage>
