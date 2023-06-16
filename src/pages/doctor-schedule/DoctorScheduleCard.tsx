@@ -176,9 +176,9 @@ const DoctorScheduleCard: React.FC<ScheduleCardProps> = ({
                             updateSingleDate={updateSingleDate}
                             executeFunc="singleDate"
                           />
-                          <IonText>
+                          {/* <IonText>
                             {format(new Date(item.Date), "dd/MM/yyyy")}
-                          </IonText>
+                          </IonText> */}
                         </p>
                       </IonCol>
                     </IonRow>

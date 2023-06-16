@@ -3,19 +3,26 @@ import {
   IonContent,
   IonHeader,
   IonPage,
+  IonText,
   IonTitle,
   IonToolbar,
+  useIonRouter,
 } from "@ionic/react";
-import React from "react";
+import React, { useState } from "react";
 import WeekDaysCard from "../../clinic/WeekDaysCard";
+import Toast from "../../../components/custom-toast/Toast";
 
 const ClinicSchedule: React.FC = () => {
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState(false);
+  const [canSubmit, setCanSubmit] = useState(false);
+  const [clinicTiming, setClinicTiming] = useState();
   const handleUnSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const Doc_data = localStorage.getItem("drData");
     //@ts-ignore
     const drData = JSON.parse(Doc_data);
-    drData.clinic = {};
+
     const weekdays = [
       "Monday",
       "Tuesday",
@@ -35,11 +42,49 @@ const ClinicSchedule: React.FC = () => {
         )
         .map(([key, value]) => JSON.parse(value))
     );
+    if (newArray.length > 0) {
+      setCanSubmit(false);
+    }
+    drData.clinic["clinicTiming"] = newArray;
+    RegisterDoctor(drData);
+  };
 
-    console.log("New Array:", newArray);
+  const RegisterDoctor = (data_to_be_sent: any) => {
+    fetch(`${import.meta.env.VITE_API_URL}api/Doctor`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data_to_be_sent),
+    })
+      .then((res) => {
+        if (res.status === 201) {
+          setSuccess(true);
+
+          setTimeout(() => {
+            useIonRouter().push("/", "back");
+          }, 1500);
+        } else {
+          setError(false);
+        }
+      })
+      .catch((err) => setError(true));
+    localStorage.clear();
   };
   return (
     <IonPage>
+      <Toast
+        isOpen={error}
+        setOpen={setError}
+        color="danger"
+        errMsg="an error occurred while signing up, try again"
+      />
+      <Toast
+        isOpen={success}
+        setOpen={setSuccess}
+        color="success"
+        errMsg="registration successful, kindly login now!"
+      />
       <IonHeader>
         <IonToolbar color={"primary"}>
           <IonTitle>Clinic Schedule</IonTitle>
@@ -63,7 +108,14 @@ const ClinicSchedule: React.FC = () => {
           <WeekDaysCard name={"Friday"} />
           <WeekDaysCard name={"Saturday"} />
           <WeekDaysCard name={"Sunday"} />
-          <IonButton type="submit"> Submit</IonButton>
+          <IonText color={"danger"}>
+            {canSubmit &&
+              "please select any day's atleast one session to sign up"}
+          </IonText>
+          <IonButton type="submit" disabled={canSubmit}>
+            {" "}
+            Submit
+          </IonButton>
         </form>
       </IonContent>
     </IonPage>
