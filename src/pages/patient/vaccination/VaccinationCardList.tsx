@@ -62,7 +62,7 @@ const VaccinationCardList: React.FC<IParam> = ({
         .post(
           `${
             import.meta.env.VITE_API_URL
-          }api/PatientSchedule/doctor_post_schedule/child?doctorId=${doctorId}&childId=${childId}`
+          }api/PatientSchedule/doctor_post_schedule?doctorId=${doctorId}&childId=${childId}`
         )
         .then((res) => res.status === 200 && fetchPatientScheduleData())
         .catch((err) => console.log(err));
@@ -84,7 +84,6 @@ const VaccinationCardList: React.FC<IParam> = ({
     setPatientName(name);
   }
 
-  console.log(childId, doctorId);
   return (
     <>
       {patientSchedule && (

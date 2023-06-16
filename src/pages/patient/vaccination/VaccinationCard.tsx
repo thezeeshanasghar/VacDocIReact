@@ -55,9 +55,11 @@ const VaccinationCard: React.FC<IPatientCardProps> = ({
     return filteredDose?.Name;
   };
   const filterBrand = (brandId: number): string | undefined => {
+    console.log("brand id", brandId);
     const filteredBrand: IBrand | undefined = brands.find(
       (b) => b.Id === brandId
     );
+    console.log("brands, ", filteredBrand);
     return filteredBrand?.Name;
   };
   const updateBulkDate = (user_selected_date: string) => {
@@ -101,13 +103,16 @@ const VaccinationCard: React.FC<IPatientCardProps> = ({
       doctorId: singlePatientSchedule?.DoctorId,
       childId: singlePatientSchedule?.childId,
     };
-    fetch(`${import.meta.env.VITE_API_URL}api/PatientSchedule/single_updateDate`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data_to_be_sent),
-    })
+    fetch(
+      `${import.meta.env.VITE_API_URL}api/PatientSchedule/single_updateDate`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data_to_be_sent),
+      }
+    )
       .then((res) => {
         if (res.status === 204) {
           forceRender();
@@ -322,7 +327,7 @@ const VaccinationCard: React.FC<IPatientCardProps> = ({
                       </IonItem>
                       {item.isDone ? (
                         <p style={{ textAlign: "center" }}>
-                          Brand:{filterBrand(item.Id)}
+                          Brand:{filterBrand(item.DoseId)}
                         </p>
                       ) : null}
                     </div>
