@@ -15,7 +15,7 @@ import {
 import React, { FormEvent, useEffect, useState } from "react";
 import Header from "../../components/header/Header";
 import useFetch from "../../hook/useFetch";
-import { format } from "date-fns";
+// import { format } from "date-fns";
 import Toast from "../../components/custom-toast/Toast";
 type DoctorData = {
   Id: number;
@@ -117,6 +117,7 @@ const EditProfile: React.FC = () => {
                       type="text"
                       value={name || data.Name}
                       onIonChange={(e) => setName(e.detail.value!)}
+                      required
                     />
                   </IonItem>
                   <IonItem>
@@ -125,6 +126,7 @@ const EditProfile: React.FC = () => {
                       type="email"
                       value={email || data.Email}
                       onIonChange={(e) => setEmail(e.detail.value!)}
+                      required
                     />
                   </IonItem>
                   <IonItem>
@@ -133,6 +135,7 @@ const EditProfile: React.FC = () => {
                       type="tel"
                       value={mobileNumber || data.MobileNumber}
                       onIonChange={(e) => setMobileNumber(e.detail.value!)}
+                      required
                     />
                   </IonItem>
                   <IonItem>
@@ -141,6 +144,7 @@ const EditProfile: React.FC = () => {
                       type="text"
                       value={pmdc || data.PMDC}
                       onIonChange={(e) => setPmdc(e.detail.value!)}
+                      required
                     />
                   </IonItem>
                   <IonItem>
@@ -149,7 +153,7 @@ const EditProfile: React.FC = () => {
                       type="text"
                       value={doctorType || data.DoctorType}
                       onIonChange={(e) => setDoctorType(e.detail.value!)}
-                    />
+                      required/>
                   </IonItem>
                   <IonGrid>
                     <IonRow>
