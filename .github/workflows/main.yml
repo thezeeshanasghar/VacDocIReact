@@ -17,7 +17,7 @@ jobs:
         run: npm install
         
       - name: Build
-        run: ionic build
+        run: npm run build:prod
 
       - name: 📂 Sync files
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
