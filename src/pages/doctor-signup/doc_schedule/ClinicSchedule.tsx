@@ -16,7 +16,6 @@ const ClinicSchedule: React.FC = () => {
     //@ts-ignore
     const drData = JSON.parse(Doc_data);
     drData.clinic = {};
-
     const weekdays = [
       "Monday",
       "Tuesday",
@@ -28,13 +27,17 @@ const ClinicSchedule: React.FC = () => {
     ];
     const newArray = [].concat(
       ...Object.entries(localStorage)
-        .filter(([key, value]) => weekdays.includes(key) && Array.isArray(JSON.parse(value)) && JSON.parse(value).length > 0)
+        .filter(
+          ([key, value]) =>
+            weekdays.includes(key) &&
+            Array.isArray(JSON.parse(value)) &&
+            JSON.parse(value).length > 0
+        )
         .map(([key, value]) => JSON.parse(value))
     );
-    
+
     console.log("New Array:", newArray);
-    
-    console.log("New Array:", newArray);
+  };
   return (
     <IonPage>
       <IonHeader>
