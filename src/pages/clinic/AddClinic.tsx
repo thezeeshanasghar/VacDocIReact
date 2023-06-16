@@ -13,6 +13,7 @@ import WeekDaysCard, { ISession } from "./WeekDaysCard";
 import Header from "../../components/header/Header";
 import Toast from "../../components/custom-toast/Toast";
 
+
 const AddClinic: React.FC = () => {
   const router = useIonRouter();
   const [doctorId, setDoctorId] = useState(1);
@@ -56,7 +57,10 @@ const AddClinic: React.FC = () => {
       .catch((err) => setError(true));
   };
 
-  const canSubmit = clinicName && address && phoneNumber;
+  const canSubmit =
+    clinicName.trim() !== "" &&
+    address.trim() !== "" &&
+    phoneNumber.trim() !== "";
   return (
     <IonPage>
       <Toast

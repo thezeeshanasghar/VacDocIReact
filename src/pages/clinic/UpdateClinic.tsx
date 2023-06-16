@@ -18,74 +18,156 @@ import {
 } from "@ionic/react";
 import React, { useState, useEffect } from "react";
 import Header from "../../components/header/Header";
+import Toast from "../../components/custom-toast/Toast";
+interface IClinic {
+  Id: number;
+  Name: string;
+  Address: string;
+  Number: string;
+  DoctorId: number;
+}
+type ClinicProps = { match: { params: { clinicId: string } } };
+const UpdateClinic: React.FC<ClinicProps> = ({
+  match: {
+    params: { clinicId },
+  },
+}) => {
+  const [clinic, setClinic] = useState<IClinic>();
+  const [clinicName, setClinicName] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [address, setAddress] = useState("");
+  const [sessions, setSessions] = useState<ISession[]>([]);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState(false);
 
-const UpdateClinic : React.FC = () => {
-    const [clinicName, setClinicName] = useState("");
-    const [phoneNumber, setPhoneNumber] = useState("");
-    const [address, setAddress] = useState("");
-    const [sessions, setSessions] = useState<ISession[]>([]);
-  
-    const handleSubmit = (e: React.FormEvent) => {
-      e.preventDefault();
-      // Perform submit logic with clinicName, phoneNumber, address, and sessions data
-      console.log(sessions);
-    };
-  
-    return (
-      <IonPage>
-        <IonContent>
-          <Header pageName="Update Clinic" />
-          <form noValidate className="ion-padding" onSubmit={handleSubmit}>
-            <IonItem>
-              <IonLabel position="floating" color="primary">
-                Name
-              </IonLabel>
-              <IonInput
-                type="text"
-                required
-                value={clinicName}
-                onIonChange={(e) => setClinicName(e.detail.value!)}
-              />
-            </IonItem>
-            <IonItem>
-              <IonLabel position="floating" color="primary">
-                Phone Number
-              </IonLabel>
-              <IonInput
-                type="text"
-                required
-                value={phoneNumber}
-                onIonChange={(e) => setPhoneNumber(e.detail.value!)}
-              />
-            </IonItem>
-            <IonItem>
-              <IonLabel position="floating" color="primary">
-                Address
-              </IonLabel>
-              <IonTextarea
-                required
-                value={address}
-                onIonChange={(e) => setAddress(e.detail.value!)}
-              ></IonTextarea>
-            </IonItem>
-            
-            <IonButton type="submit">Submit</IonButton>
-          </form>
-        </IonContent>
-      </IonPage>
-    );
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Perform submit logic with clinicName, phoneNumber, address, and sessions data
+    console.log(sessions);
+    updateClinic();
   };
 
-
-
-
-
-
-
-
-
-
-
+  const updateClinic = () => {
+    let data_to_to_sent = [];
+    if (clinicName.trim().length > 0) {
+      data_to_to_sent.push({
+        path: "Name",
+        op: "replace",
+        from: "",
+        value: clinicName,
+      });
+    }
+    if (address.trim().length > 0) {
+      data_to_to_sent.push({
+        path: "Address",
+        op: "replace",
+        from: "",
+        value: address,
+      });
+    }
+    if (phoneNumber.trim().length > 0) {
+      data_to_to_sent.push({
+        path: "Number",
+        op: "replace",
+        from: "",
+        value: phoneNumber,
+      });
+    }
+    fetch(`${import.meta.env.VITE_API_URL}api/Clinic/${clinicId}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data_to_to_sent),
+    })
+      .then((res) => {
+        if (res.status === 204) {
+          setSuccess(true);
+        } else {
+          setError(false);
+        }
+      })
+      .catch((err) => setError(true));
+  };
+  useEffect(() => {
+    fetch(`${import.meta.env.VITE_API_URL}api/Clinic/${clinicId}`)
+      .then((response) => response.json())
+      .then((data: IClinic) => {
+        if (Object.keys(data).length !== 0) {
+          setClinicName(data.Name);
+          setPhoneNumber(data.Number);
+          setAddress(data.Address);
+          setClinic(data);
+        }
+      });
+  }, []);
+  const canSubmit =
+    clinicName.trim() !== "" &&
+    address.trim() !== "" &&
+    phoneNumber.trim() !== "";
+  return (
+    <>
+      <Toast
+        isOpen={error}
+        setOpen={setError}
+        color="danger"
+        errMsg="an error occurred while updating clinic, try again"
+      />
+      <Toast
+        isOpen={success}
+        setOpen={setSuccess}
+        color="success"
+        errMsg="clinic updated successfully"
+      />
+      {clinic && Object.keys(clinic).length > 0 ? (
+        <IonPage>
+          <IonContent>
+            <Header pageName="Update Clinic" />
+            <form noValidate className="ion-padding" onSubmit={handleSubmit}>
+              <IonItem>
+                <IonLabel position="floating" color="primary">
+                  Name
+                </IonLabel>
+                <IonInput
+                  type="text"
+                  required
+                  value={clinicName}
+                  onIonChange={(e) => setClinicName(e.detail.value!)}
+                />
+              </IonItem>
+              <IonItem>
+                <IonLabel position="floating" color="primary">
+                  Phone Number
+                </IonLabel>
+                <IonInput
+                  type="text"
+                  required
+                  value={phoneNumber}
+                  onIonChange={(e) => setPhoneNumber(e.detail.value!)}
+                />
+              </IonItem>
+              <IonItem>
+                <IonLabel position="floating" color="primary">
+                  Address
+                </IonLabel>
+                <IonTextarea
+                  required
+                  value={address}
+                  onIonChange={(e) => setAddress(e.detail.value!)}
+                ></IonTextarea>
+              </IonItem>
+              <IonButton type="submit" disabled={!canSubmit}>
+                Submit
+              </IonButton>
+            </form>
+          </IonContent>
+        </IonPage>
+      ) : (
+        <h1>error</h1>
+      )}
+    </>
+  );
+};
 
 type WeekDayCardProps = {
   name: string;
@@ -294,8 +376,5 @@ const UpdateWeekDays: React.FC<WeekDayCardProps> = ({ name }) => {
     </IonCard>
   );
 };
-
-
-
 
 export default UpdateClinic;
