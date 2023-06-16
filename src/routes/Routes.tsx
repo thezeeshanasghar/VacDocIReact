@@ -23,6 +23,7 @@ import BulkDone from "../pages/patient/vaccination/bulk-done-update/BulkDone";
 
 import ChangePassword from "../pages/changepassword/ChangePassword";
 import SingleDone from "../pages/patient/vaccination/single-done-update/SingleDone";
+import UpdateClinic from "../pages/clinic/UpdateClinic";
 
 const Routes: React.FC = () => {
   return (
@@ -36,6 +37,7 @@ const Routes: React.FC = () => {
 
         <Route exact path="/members/doctor/clinic" component={ClinicCardList} />
         <Route exact path="/members/doctor/clinic/add" component={AddClinic} />
+        <Route exact path="/members/doctor/clinic/update" component={UpdateClinic} />
         <Route exact path="/members/doctor/vacation" component={Vacation} />
         <Route
           exact

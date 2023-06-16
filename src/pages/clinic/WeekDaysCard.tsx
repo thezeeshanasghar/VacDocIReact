@@ -217,7 +217,7 @@ const WeekDaysCard: React.FC<WeekDayCardProps> = ({ name }) => {
 
 export default WeekDaysCard;
 
-// import {
+
 //   IonCard,
 //   IonCardTitle,
 //   IonToggle,

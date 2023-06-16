@@ -88,10 +88,10 @@ const ChangePassword: React.FC = () => {
   //   setConfirmNewPassword(e.target.value);
   //   setPasswordMatch(true);
   // };
-  const handlePasswordChange = (e: any) => {
-    console.log(e.target.value);
-    setOldPassword(e.target.value);
-  };
+  // const handlePasswordChange = (e: any) => {
+  //   console.log(e.target.value);
+  //   setOldPassword(e.target.value);
+  // };
 
   const canSubmit =
     oldPassword.length > 0 &&
@@ -105,7 +105,7 @@ const ChangePassword: React.FC = () => {
   useEffect(() => {
     console.log("newPassword", newPassword);
   }, [newPassword]);
-  
+
   useEffect(() => {
     console.log("confirmNewPassword", confirmNewPassword);
   }, [confirmNewPassword]);
@@ -149,7 +149,7 @@ const ChangePassword: React.FC = () => {
               labelPlacement="floating"
               placeholder="Enter Old Password"
               value={oldPassword}
-              onIonChange={handlePasswordChange}
+              onIonChange={(e)=> setOldPassword(e.detail.value!)}
             ></IonInput>
           </IonItem>
 

@@ -15,6 +15,7 @@ import {
 } from "@ionic/react";
 import { trash, create, createOutline } from "ionicons/icons";
 import { format } from "date-fns";
+import { useIonRouter } from "@ionic/react";
 interface Session {
   Id: number;
   Day: string;
@@ -72,6 +73,11 @@ const ClinicCard: React.FC<ClinicCardProps> = ({
 
     return formattedTime;
   }
+  const data = useIonRouter();
+  const ClickHandler=()=>{
+    // console.log("DoctorId:",DoctorId,"childId",Id)
+    data.push(`/members/doctor/clinic/update`);
+        }
   return (
     <>
       {clinicTimings && (
@@ -83,7 +89,7 @@ const ClinicCard: React.FC<ClinicCardProps> = ({
             >
               <span>{Name}</span>
               <div style={{ fontSize: "25px" }}>
-                <IonIcon icon={create} color="primary" />
+                <IonIcon icon={create} color="primary" onClick={() => ClickHandler()} />
                 <IonIcon icon={trash} color="primary" />
               </div>
             </IonCardTitle>
