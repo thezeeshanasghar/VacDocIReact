@@ -41,7 +41,7 @@ const PatientMaleCard: React.FC<IMalePatient> = ({
   return (
     <IonCard style={{ border: "2px solid blue" }}>
       <Delete
-        url={`http://localhost:5041/api/Child/${Id}`}
+        url={`${import.meta.env.VITE_API_URL}api/Child/${Id}`}
         confirmAlertOpen={deletePatient}
         setConfirmAlertOpen={setDeletePatient}
         title="Patient"

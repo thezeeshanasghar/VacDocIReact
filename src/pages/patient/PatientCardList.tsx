@@ -41,31 +41,23 @@ const PatientCardList: React.FC = () => {
   }, []);
   return (
     <>
-      
-        <IonPage>
-          <Header pageName="Patients" />
-          <IonContent className="ion-padding">
-            {/* patient component to render patient data */}
-            <PatientSearch data={patientData} hideCards={setHideCards} />
-            {/* list of patient cards to be rendered. */}
-            {patientData.length>0?(patientData &&
-              !hideCards &&
-              patientData.map((item, index) => {
-                if (item.Gender.includes("boy" || "male")) {
-                  return (
-                    <PatientMaleCard
-                      key={index * 3 * 2}
-                      Name={item.Name}
-                      Id={item.Id}
-                      renderList={fetchPatientData}
-                      DoctorId={item.DoctorId}
-                      ClinicId={item.ClinicId}
-                    />
-                  );
-                }
+      <IonPage>
+        <Header pageName="Patients" />
+        <IonContent className="ion-padding">
+          {/* patient component to render patient data */}
+          <PatientSearch
+            renderList={fetchPatientData}
+            hideCards={setHideCards}
+          />
+          {/* list of patient cards to be rendered. */}
+          {patientData.length > 0 ? (
+            patientData &&
+            !hideCards &&
+            patientData.map((item, index) => {
+              if (item.Gender.includes("boy" || "male")) {
                 return (
-                  <PatientFemaleCard
-                    key={index * 3}
+                  <PatientMaleCard
+                    key={index * 3 * 2}
                     Name={item.Name}
                     Id={item.Id}
                     renderList={fetchPatientData}
@@ -73,12 +65,23 @@ const PatientCardList: React.FC = () => {
                     ClinicId={item.ClinicId}
                   />
                 );
-              })):(
-                <ErrorComponent title="Patients list" />
-              )}
-          </IonContent>
-        </IonPage>
-     
+              }
+              return (
+                <PatientFemaleCard
+                  key={index * 3}
+                  Name={item.Name}
+                  Id={item.Id}
+                  renderList={fetchPatientData}
+                  DoctorId={item.DoctorId}
+                  ClinicId={item.ClinicId}
+                />
+              );
+            })
+          ) : (
+            <ErrorComponent title="Patients list" />
+          )}
+        </IonContent>
+      </IonPage>
     </>
   );
 };
