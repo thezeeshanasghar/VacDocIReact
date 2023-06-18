@@ -57,6 +57,7 @@ const ClinicCardList: React.FC = () => {
             )}
             <IonFab slot="fixed" vertical="bottom" horizontal="end">
               <IonFabButton
+                size="small"
                 routerLink="/members/doctor/clinic/add"
                 routerDirection="forward"
               >

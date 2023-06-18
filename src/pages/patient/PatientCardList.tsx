@@ -1,10 +1,18 @@
-import { IonContent, IonPage } from "@ionic/react";
+import {
+  IonContent,
+  IonFab,
+  IonFabButton,
+  IonIcon,
+  IonPage,
+} from "@ionic/react";
 import React, { useEffect, useState } from "react";
 import Header from "../../components/header/Header";
 import PatientSearch from "../../components/patient/PatientSearch";
 import PatientMaleCard from "../../components/patient/PatientMaleCard";
 import PatientFemaleCard from "../../components/patient/PatientFemaleCard";
 import ErrorComponent from "../Error/ErrorComponent";
+import { useLocation } from "react-router";
+import { add } from "ionicons/icons";
 export interface IPatientData {
   Id: number;
   Name: string;
@@ -25,6 +33,7 @@ export interface IPatientData {
 }
 
 const PatientCardList: React.FC = () => {
+  const location = useLocation();
   const [patientData, setPatientData] = useState<IPatientData[]>([]);
   const [hideCards, setHideCards] = useState(false);
   const fetchPatientData = () => {
@@ -38,7 +47,7 @@ const PatientCardList: React.FC = () => {
 
   useEffect(() => {
     fetchPatientData();
-  }, []);
+  }, [location]);
   return (
     <>
       <IonPage>
@@ -80,6 +89,16 @@ const PatientCardList: React.FC = () => {
           ) : (
             <ErrorComponent title="Patients list" />
           )}
+
+          <IonFab slot="fixed" vertical="bottom" horizontal="end">
+            <IonFabButton
+              size="small"
+              routerLink="/members/child/add"
+              routerDirection="forward"
+            >
+              <IonIcon icon={add}></IonIcon>
+            </IonFabButton>
+          </IonFab>
         </IonContent>
       </IonPage>
     </>

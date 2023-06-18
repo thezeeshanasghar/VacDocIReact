@@ -27,8 +27,8 @@ const AddPatient: React.FC = () => {
   const [fatherName, setFatherName] = useState("");
   const [guardian, setGuardian] = useState("");
   const [cnic, setCnic] = useState("");
-  const [gender, setGender] = useState("boy");
-  const [scheduleType, setScheduleType] = useState("special");
+  const [gender, setGender] = useState("");
+  const [scheduleType, setScheduleType] = useState("");
   const [dob, setDob] = useState("");
   const [email, setEmail] = useState("");
   const [mobileNumber, setMobileNumber] = useState("");
@@ -112,6 +112,21 @@ const AddPatient: React.FC = () => {
       .then((data) => setClinicData(data))
       .catch((err) => console.error(err));
   }, []);
+
+  const canSubmit =
+    name !== "" &&
+    fatherName !== "" &&
+    guardian !== "" &&
+    cnic !== "" &&
+    gender !== "" &&
+    scheduleType !== "" &&
+    dob !== "" &&
+    email !== "" &&
+    mobileNumber !== "" &&
+    preferredSchedule !== "" &&
+    selectedDoctor !== 0 &&
+    selectedClinic !== 0 &&
+    city !== "";
   return (
     <IonPage>
       <Toast
@@ -162,6 +177,7 @@ const AddPatient: React.FC = () => {
                 type="email"
                 value={email}
                 onIonChange={(e) => setEmail(e.detail.value!)}
+                required
               />
             </IonItem>
             <IonItem>
@@ -252,7 +268,7 @@ const AddPatient: React.FC = () => {
               >
                 {doctorData &&
                   doctorData.map((item, index) => (
-                    <IonSelectOption key={index} value={item.Id}>
+                    <IonSelectOption key={index} value={item.Id || 0}>
                       {item.Name}
                     </IonSelectOption>
                   ))}
@@ -267,7 +283,7 @@ const AddPatient: React.FC = () => {
               >
                 {clinicData &&
                   clinicData.map((item, index) => (
-                    <IonSelectOption key={index} value={item.Id}>
+                    <IonSelectOption key={index} value={item.Id || 0}>
                       {item.Name}
                     </IonSelectOption>
                   ))}
@@ -699,7 +715,7 @@ const AddPatient: React.FC = () => {
                 </IonCol>
               </IonRow>
             </IonGrid>
-            <IonButton expand="full" type="submit">
+            <IonButton expand="full" type="submit" disabled={!canSubmit}>
               Add Patient
             </IonButton>
           </form>
