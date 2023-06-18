@@ -16,6 +16,7 @@ import React, { useState, useEffect } from "react";
 
 type WeekDayCardProps = {
   name: string;
+  setSession?: React.Dispatch<React.SetStateAction<ISession[]>>;
 };
 
 export interface ISession {
@@ -25,7 +26,7 @@ export interface ISession {
   EndTime: string;
 }
 
-const WeekDaysCard: React.FC<WeekDayCardProps> = ({ name }) => {
+const WeekDaysCard: React.FC<WeekDayCardProps> = ({ name, setSession }) => {
   const [showSession1, setShowSession1] = useState(false);
   const [showSession2, setShowSession2] = useState(false);
   const [showCard, setShowCard] = useState(false);
@@ -38,7 +39,7 @@ const WeekDaysCard: React.FC<WeekDayCardProps> = ({ name }) => {
   useEffect(() => {
     if (showCard && showSession1 && mstart !== "" && mend !== "") {
       const existingIndex = dayData.findIndex(
-        (entry) => entry.Day === name && entry.Session === "Session1"
+        (entry) => entry.Day === name && entry.Session === "Morning"
       );
 
       if (existingIndex !== -1) {
@@ -51,7 +52,7 @@ const WeekDaysCard: React.FC<WeekDayCardProps> = ({ name }) => {
           ...prevDayData,
           {
             Day: name,
-            Session: "Session1",
+            Session: "Morning",
             StartTime: mstart,
             EndTime: mend,
           },
@@ -63,7 +64,7 @@ const WeekDaysCard: React.FC<WeekDayCardProps> = ({ name }) => {
   useEffect(() => {
     if (showCard && showSession2 && mstart2 !== "" && mend2 !== "") {
       const existingIndex = dayData.findIndex(
-        (entry) => entry.Day === name && entry.Session === "Session2"
+        (entry) => entry.Day === name && entry.Session === "Evening"
       );
 
       if (existingIndex !== -1) {
@@ -76,7 +77,7 @@ const WeekDaysCard: React.FC<WeekDayCardProps> = ({ name }) => {
           ...prevDayData,
           {
             Day: name,
-            Session: "Session2",
+            Session: "Evening",
             StartTime: mstart2,
             EndTime: mend2,
           },
@@ -216,7 +217,6 @@ const WeekDaysCard: React.FC<WeekDayCardProps> = ({ name }) => {
 };
 
 export default WeekDaysCard;
-
 
 //   IonCard,
 //   IonCardTitle,

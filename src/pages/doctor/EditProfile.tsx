@@ -38,21 +38,20 @@ const EditProfile: React.FC = () => {
   const [pmdc, setPmdc] = useState("");
   const [doctorType, setDoctorType] = useState("");
   const [isEnabled, setIsEnabled] = useState(false);
-
   const [success, setSuccess] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
   function handleSubmit(event: FormEvent<HTMLFormElement>): void {
     event.preventDefault();
     //@ts-ignore
     const data_to_be_sent = {
-      id: 1,
-      name: name ? name : data?.Name,
-      mobileNumber: mobileNumber ? mobileNumber : data?.MobileNumber,
-      password: password ? password : data?.Password,
+      id: data?.Id,
+      name,
+      mobileNumber,
+      password,
       isEnabled: isEnabled ? 1 : 0,
-      email: email ? email : data?.Email,
-      doctorType: doctorType ? doctorType : data?.DoctorType,
-      pmdc: pmdc ? pmdc : data?.PMDC,
+      email,
+      doctorType,
+      pmdc,
     };
     fetch(`${import.meta.env.VITE_API_URL}api/Doctor/doctors/${1}`, {
       method: "PATCH",
@@ -83,13 +82,29 @@ const EditProfile: React.FC = () => {
   const fetchInitialDocData = () => {
     fetch(`${import.meta.env.VITE_API_URL}api/Doctor/${1}`)
       .then((response) => response.json())
-      .then((data: DoctorData) => setData(data))
+      .then((data: DoctorData) => {
+        if (Object.keys(data).length !== 0) {
+          setName(data.Name);
+          setEmail(data.Email);
+          setMobileNumber(data.MobileNumber);
+          setPmdc(data.PMDC);
+          setDoctorType(data.DoctorType);
+          setIsEnabled(data.IsEnabled);
+          setData(data);
+        }
+      })
       .catch((error) => console.log(error));
   };
 
   useEffect(() => {
     fetchInitialDocData();
   }, []);
+  const canSubmit =
+    name.trim() !== "" &&
+    email.trim() !== "" &&
+    mobileNumber.trim() !== "" &&
+    pmdc.trim() !== "" &&
+    doctorType.trim() !== "";
   return (
     <>
       {data && (
@@ -115,7 +130,7 @@ const EditProfile: React.FC = () => {
                     <IonLabel position="floating">Name</IonLabel>
                     <IonInput
                       type="text"
-                      value={name || data.Name}
+                      value={name}
                       onIonChange={(e) => setName(e.detail.value!)}
                       required
                     />
@@ -124,7 +139,7 @@ const EditProfile: React.FC = () => {
                     <IonLabel position="floating">Email</IonLabel>
                     <IonInput
                       type="email"
-                      value={email || data.Email}
+                      value={email}
                       onIonChange={(e) => setEmail(e.detail.value!)}
                       required
                     />
@@ -133,7 +148,7 @@ const EditProfile: React.FC = () => {
                     <IonLabel position="floating">Mobile Number</IonLabel>
                     <IonInput
                       type="tel"
-                      value={mobileNumber || data.MobileNumber}
+                      value={mobileNumber}
                       onIonChange={(e) => setMobileNumber(e.detail.value!)}
                       required
                     />
@@ -142,7 +157,7 @@ const EditProfile: React.FC = () => {
                     <IonLabel position="floating">pmdc</IonLabel>
                     <IonInput
                       type="text"
-                      value={pmdc || data.PMDC}
+                      value={pmdc}
                       onIonChange={(e) => setPmdc(e.detail.value!)}
                       required
                     />
@@ -151,7 +166,7 @@ const EditProfile: React.FC = () => {
                     <IonLabel position="floating">Doctor Type</IonLabel>
                     <IonInput
                       type="text"
-                      value={doctorType || data.DoctorType}
+                      value={doctorType}
                       onIonChange={(e) => setDoctorType(e.detail.value!)}
                       required/>
                   </IonItem>
@@ -163,14 +178,14 @@ const EditProfile: React.FC = () => {
                           <IonCheckbox
                             slot="start"
                             name="isEnabled"
-                            checked={isEnabled || data.IsEnabled}
+                            checked={isEnabled}
                             onIonChange={(e) => setIsEnabled(e.detail.checked)}
                           />
                         </IonItem>
                       </IonCol>
                     </IonRow>
                   </IonGrid>
-                  <IonButton type="submit" expand="full">
+                  <IonButton type="submit" disabled={!canSubmit} expand="full">
                     Update
                   </IonButton>
                 </form>

@@ -44,6 +44,7 @@ const DoctorSignUp: React.FC = () => {
         isEnabled: false,
         email,
         doctorType,
+        pmdc,
         validUpto: new Date().toDateString(),
         clinic: "",
       })

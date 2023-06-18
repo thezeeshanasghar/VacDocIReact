@@ -53,10 +53,12 @@ const ClinicCard: React.FC<ClinicCardProps> = ({
   const [sameClinics, setSameClinics] = useState<Session[]>([]);
   const fetchClinicTimings = async () => {
     try {
-      const res = await fetch("http://localhost:5041/api/Clinictiming");
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}api/Clinictiming`
+      );
       const data: Session[] = await res.json();
       setclinicTimings(data);
-      setSameClinics(clinicTimings.filter(item => item.ClinicId === Id));
+      setSameClinics(clinicTimings.filter((item) => item.ClinicId === Id));
     } catch (err) {
       console.log(err);
     }
@@ -74,10 +76,10 @@ const ClinicCard: React.FC<ClinicCardProps> = ({
     return formattedTime;
   }
   const data = useIonRouter();
-  const ClickHandler=()=>{
+  const ClickHandler = () => {
     // console.log("DoctorId:",DoctorId,"childId",Id)
-    data.push(`/members/doctor/clinic/update`);
-        }
+    data.push(`/members/doctor/clinic/update/${Id}`, "forward");
+  };
   return (
     <>
       {clinicTimings && (
@@ -89,34 +91,40 @@ const ClinicCard: React.FC<ClinicCardProps> = ({
             >
               <span>{Name}</span>
               <div style={{ fontSize: "25px" }}>
-                <IonIcon icon={create} color="primary" onClick={() => ClickHandler()} />
+                <IonIcon icon={create} color="primary" onClick={ClickHandler} />
                 <IonIcon icon={trash} color="primary" />
               </div>
             </IonCardTitle>
           </IonCardHeader>
           <IonCardContent>
             <IonGrid>
-               
-               <IonRow>
-                {clinicTimings
-                  .map((item, index) => {
-                    if (item.ClinicId === Id) {
-                      const count = clinicTimings.filter(i => i.ClinicId === Id);
-                      return (
-                        <>
-                              <IonCol size="6" >
-                                <p><b>On Day : </b> {item.Day}</p>
-                                <p><b>Session :</b> {item.Session}</p>
-                                <p><b>Start Time :</b> {formatedTime(item.StartTime)} | <b>End Time :</b> {formatedTime(item.EndTime)}</p>
-                              </IonCol>
-                              {count.length + 1 % 2 === 0 && <hr/>}
-                        </>
-                      )
-                    }
-                  })
-                }
-                </IonRow>
-             </IonGrid>
+              <IonRow>
+                {clinicTimings.map((item, index) => {
+                  if (item.ClinicId === Id) {
+                    const count = clinicTimings.filter(
+                      (i) => i.ClinicId === Id
+                    );
+                    return (
+                      <>
+                        <IonCol size="6">
+                          <p>
+                            <b>On Day : </b> {item.Day}
+                          </p>
+                          <p>
+                            <b>Session :</b> {item.Session}
+                          </p>
+                          <p>
+                            <b>Start Time :</b> {formatedTime(item.StartTime)} |{" "}
+                            <b>End Time :</b> {formatedTime(item.EndTime)}
+                          </p>
+                        </IonCol>
+                        {count.length + (1 % 2) === 0 && <hr />}
+                      </>
+                    );
+                  }
+                })}
+              </IonRow>
+            </IonGrid>
             <IonButton color="tertiary" fill="outline" size="small">
               Patients
             </IonButton>

@@ -1,10 +1,18 @@
-import { IonContent, IonPage } from "@ionic/react";
+import {
+  IonContent,
+  IonFab,
+  IonFabButton,
+  IonIcon,
+  IonPage,
+} from "@ionic/react";
 import React, { useEffect, useState } from "react";
 import Header from "../../components/header/Header";
 import PatientSearch from "../../components/patient/PatientSearch";
 import PatientMaleCard from "../../components/patient/PatientMaleCard";
 import PatientFemaleCard from "../../components/patient/PatientFemaleCard";
 import ErrorComponent from "../Error/ErrorComponent";
+import { useLocation } from "react-router";
+import { add } from "ionicons/icons";
 export interface IPatientData {
   Id: number;
   Name: string;
@@ -25,6 +33,7 @@ export interface IPatientData {
 }
 
 const PatientCardList: React.FC = () => {
+  const location = useLocation();
   const [patientData, setPatientData] = useState<IPatientData[]>([]);
   const [hideCards, setHideCards] = useState(false);
   const fetchPatientData = () => {
@@ -38,34 +47,26 @@ const PatientCardList: React.FC = () => {
 
   useEffect(() => {
     fetchPatientData();
-  }, []);
+  }, [location]);
   return (
     <>
-      
-        <IonPage>
-          <Header pageName="Patients" />
-          <IonContent className="ion-padding">
-            {/* patient component to render patient data */}
-            <PatientSearch data={patientData} hideCards={setHideCards} />
-            {/* list of patient cards to be rendered. */}
-            {patientData.length>0?(patientData &&
-              !hideCards &&
-              patientData.map((item, index) => {
-                if (item.Gender.includes("boy" || "male")) {
-                  return (
-                    <PatientMaleCard
-                      key={index * 3 * 2}
-                      Name={item.Name}
-                      Id={item.Id}
-                      renderList={fetchPatientData}
-                      DoctorId={item.DoctorId}
-                      ClinicId={item.ClinicId}
-                    />
-                  );
-                }
+      <IonPage>
+        <Header pageName="Patients" />
+        <IonContent className="ion-padding">
+          {/* patient component to render patient data */}
+          <PatientSearch
+            renderList={fetchPatientData}
+            hideCards={setHideCards}
+          />
+          {/* list of patient cards to be rendered. */}
+          {patientData.length > 0 ? (
+            patientData &&
+            !hideCards &&
+            patientData.map((item, index) => {
+              if (item.Gender.includes("boy" || "male")) {
                 return (
-                  <PatientFemaleCard
-                    key={index * 3}
+                  <PatientMaleCard
+                    key={index * 3 * 2}
                     Name={item.Name}
                     Id={item.Id}
                     renderList={fetchPatientData}
@@ -73,12 +74,33 @@ const PatientCardList: React.FC = () => {
                     ClinicId={item.ClinicId}
                   />
                 );
-              })):(
-                <ErrorComponent title="Patients list" />
-              )}
-          </IonContent>
-        </IonPage>
-     
+              }
+              return (
+                <PatientFemaleCard
+                  key={index * 3}
+                  Name={item.Name}
+                  Id={item.Id}
+                  renderList={fetchPatientData}
+                  DoctorId={item.DoctorId}
+                  ClinicId={item.ClinicId}
+                />
+              );
+            })
+          ) : (
+            <ErrorComponent title="Patients list" />
+          )}
+
+          <IonFab slot="fixed" vertical="bottom" horizontal="end">
+            <IonFabButton
+              size="small"
+              routerLink="/members/child/add"
+              routerDirection="forward"
+            >
+              <IonIcon icon={add}></IonIcon>
+            </IonFabButton>
+          </IonFab>
+        </IonContent>
+      </IonPage>
     </>
   );
 };

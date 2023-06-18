@@ -1,40 +1,88 @@
-import { IonButton, IonIcon, IonInput, IonItem } from "@ionic/react";
+import {
+  IonButton,
+  IonCard,
+  IonCardHeader,
+  IonCardTitle,
+  IonIcon,
+  IonInput,
+  IonItem,
+} from "@ionic/react";
 import React, { FormEvent, useState } from "react";
 import { closeCircleOutline } from "ionicons/icons";
 import { IPatientData } from "../../pages/patient/PatientCardList";
-import { format } from "date-fns";
 import PatientFemaleCard from "./PatientFemaleCard";
 import PatientMaleCard from "./PatientMaleCard";
+import axios, { AxiosError, AxiosResponse } from "axios";
 interface ISearchData {
-  data: IPatientData[];
   hideCards: React.Dispatch<React.SetStateAction<boolean>>;
+  renderList: () => void;
 }
-const PatientSearch: React.FC<ISearchData> = ({ data, hideCards }) => {
-  const [searchText, setSearchText] = useState("");
-  const [searchResults, setSearchResults] = useState<IPatientData[]>([]);
+interface ISearchPatient {
+  id: number;
+  name: string;
+  guardian: string;
+  fatherName: string;
+  email: string;
+  dob: string;
+  gender: string;
+  type: string;
+  city: string;
+  cnic: string;
+  preferredSchedule: string;
+  isEPIDone: boolean;
+  isVerified: boolean;
+  isInactive: boolean;
+  clinicId: number;
+  doctorId: number;
+}
 
-  const handleInputChange = (e: CustomEvent) => {
-    setSearchText(e.detail.value);
-  };
+const PatientSearch: React.FC<ISearchData> = ({ hideCards, renderList }) => {
+  const [searchData, setSearchData] = useState<IPatientData[]>([]);
+  const [searchText, setSearchText] = useState("");
+  const [errMsg, setErrMsg] = useState("");
+  const [showErrorCard, setShowErrorCard] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Performing search logic and update searchResults state here
-    const filteredData = data.filter((item: IPatientData) =>
-      item.Name.toLowerCase().includes(searchText.toLowerCase())
-    );
-    if (filteredData.length > 0) {
-      setSearchResults(filteredData);
-      hideCards(true);
-    }
+    fetchSearchResults();
   };
 
   const handleClear = () => {
     setSearchText("");
-    setSearchResults([]);
+    setSearchData([]);
+    setShowErrorCard(false);
     hideCards(false);
+    renderList();
   };
-
+  const fetchSearchResults = () => {
+    axios
+      .get<IPatientData[], AxiosResponse<IPatientData[]>>(
+        `${
+          import.meta.env.VITE_API_URL
+        }api/Child/search-by-doctor-name?Name=${searchText}`
+      )
+      .then((res: AxiosResponse<IPatientData[]>) => {
+        if (Object.keys(res.data).length !== 0) {
+          setSearchData(res.data);
+          hideCards(true);
+        }
+      })
+      .catch((err: AxiosError) => {
+        if (err.response) {
+          //@ts-ignore
+          setErrMsg(err.response.data);
+          setShowErrorCard(true);
+          hideCards(true);
+        } else {
+          //@ts-ignore
+          setErrMsg(err.response.data);
+          setShowErrorCard(true);
+          hideCards(true);
+        }
+      });
+  };
+  const canSearch = searchText.trim() === "";
   return (
     <>
       <form noValidate onSubmit={handleSubmit}>
@@ -42,45 +90,69 @@ const PatientSearch: React.FC<ISearchData> = ({ data, hideCards }) => {
           <IonInput
             name="Name"
             value={searchText}
-            onIonChange={handleInputChange}
+            onIonChange={(e) => setSearchText(e.detail.value!)}
             placeholder="Search"
             required
             type="text"
-            color="primary" 
+            color="primary"
           ></IonInput>
-          <IonButton type="submit" className="ion-margin-start">
+          <IonButton
+            type="submit"
+            disabled={canSearch}
+            className="ion-margin-start"
+          >
             Search
           </IonButton>
-          {searchResults.length > 0 && (
+          {searchData.length > 0 || showErrorCard ? (
             <IonButton onClick={handleClear}>
               <IonIcon icon={closeCircleOutline} />
             </IonButton>
-          )}
+          ) : null}
         </IonItem>
       </form>
 
-      {/* rendering results card here */}
-      {searchResults &&
-        searchResults.map((item, index) => {
-          if (item.Gender.includes("boy" || "male")) {
-            return (
-              <PatientMaleCard
-                key={index * 3 * 2}
-                Name={item.Name}
-                Guardian={item.Guardian}
-                DOB={format(new Date(item.DOB), "dd MMMM yyyy")}
-              />
-            );
-          }
-          return (
-            <PatientFemaleCard
-              key={index * 3}
-              Name={item.Name}
-              Guardian={item.Guardian}
-              DOB={format(new Date(item.DOB), "dd MMMM yyyy")}
-            />
-          );
-        })}
+      {searchData.length > 0 ? (
+        <>
+          {/* rendering results card here */}
+          {searchData &&
+            searchData.map((item, index) => {
+              if (item.Gender.toLowerCase().includes("boy" || "male")) {
+                return (
+                  <PatientMaleCard
+                    key={index + item.DOB}
+                    Name={item.Name}
+                    Id={item.Id}
+                    renderList={renderList}
+                    DoctorId={item.DoctorId}
+                    ClinicId={item.ClinicId}
+                  />
+                );
+              }
+              return (
+                <PatientFemaleCard
+                  key={index + item.DOB}
+                  Name={item.Name}
+                  Id={item.Id}
+                  renderList={renderList}
+                  DoctorId={item.DoctorId}
+                  ClinicId={item.ClinicId}
+                />
+              );
+            })}
+        </>
+      ) : (
+        showErrorCard && (
+          <IonCard>
+            <IonCardHeader>
+              <IonCardTitle>
+                {errMsg
+                  ? "Not Found, Please add more details."
+                  : "No data available"}
+              </IonCardTitle>
+            </IonCardHeader>
+          </IonCard>
+        )
+      )}
     </>
   );
 };

@@ -35,32 +35,13 @@ const Header: React.FC<IHeaderProps> = ({ pageName }) => {
             slot="end"
             className="ng-star-inserted md title-default hydrated"
           >
-
-            {location.pathname === ("/members/doctor/brandinventory/add"||"/members/doctor/clinic/add"||"/members/doctor/brandamount/add")
+            {location.pathname ===
+            ("/members/doctor/brandinventory/add" ||
+              "/members/doctor/brandamount/add")
               ? ""
               : "Baby Medics"}
-
           </IonTitle>
-          {location.pathname === "/members/doctor/clinic" && (
-            <IonItem
-              color="primary"
-              routerLink="/members/doctor/clinic/add"
-              routerDirection="root"
-              slot="end"
-              tabIndex={0}
-              className="ion-color ion-color-primary item md ion-activatable ion-focusable hydrated"
-            >
-              <IonIcon
-                color="light"
-                icon={add}
-                slot="end"
-                role="img"
-                className="md ion-color ion-color-light hydrated"
-                aria-label="add"
-              ></IonIcon>
-            </IonItem>
-          )}
-            {location.pathname === "/members/doctor/brandinventory" && (
+          {location.pathname === "/members/doctor/brandinventory" && (
             <IonItem
               color="primary"
               routerLink="/members/doctor/brandinventory/add"
@@ -78,7 +59,7 @@ const Header: React.FC<IHeaderProps> = ({ pageName }) => {
               ></IonIcon>
             </IonItem>
           )}
-           {location.pathname === "/members/doctor/brandamount" && (
+          {location.pathname === "/members/doctor/brandamount" && (
             <IonItem
               color="primary"
               routerLink="/members/doctor/brandamount/add"
@@ -140,11 +121,9 @@ const Header: React.FC<IHeaderProps> = ({ pageName }) => {
               aria-label="medkit"
               onClick={() => router.push("/members/doctor/clinic", "root")}
             ></IonIcon>
-            <IonMenuButton
-              style={{ marginLeft: "10%" }}
-              aria-hidden="true"
-              className="md button menu-button-hidden in-toolbar in-toolbar-color ion-activatable ion-focusable hydrated"
-            ></IonMenuButton>
+          </IonButtons>
+          <IonButtons slot="end">
+            <IonMenuButton />
           </IonButtons>
         </IonToolbar>
       </IonHeader>
