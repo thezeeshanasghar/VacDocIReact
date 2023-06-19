@@ -15,7 +15,7 @@ import {
 import React, { FormEvent, useEffect, useState } from "react";
 import Header from "../../components/header/Header";
 import useFetch from "../../hook/useFetch";
-import { format } from "date-fns";
+// import { format } from "date-fns";
 import Toast from "../../components/custom-toast/Toast";
 type DoctorData = {
   Id: number;
@@ -132,6 +132,7 @@ const EditProfile: React.FC = () => {
                       type="text"
                       value={name}
                       onIonChange={(e) => setName(e.detail.value!)}
+                      required
                     />
                   </IonItem>
                   <IonItem>
@@ -140,6 +141,7 @@ const EditProfile: React.FC = () => {
                       type="email"
                       value={email}
                       onIonChange={(e) => setEmail(e.detail.value!)}
+                      required
                     />
                   </IonItem>
                   <IonItem>
@@ -148,6 +150,7 @@ const EditProfile: React.FC = () => {
                       type="tel"
                       value={mobileNumber}
                       onIonChange={(e) => setMobileNumber(e.detail.value!)}
+                      required
                     />
                   </IonItem>
                   <IonItem>
@@ -156,6 +159,7 @@ const EditProfile: React.FC = () => {
                       type="text"
                       value={pmdc}
                       onIonChange={(e) => setPmdc(e.detail.value!)}
+                      required
                     />
                   </IonItem>
                   <IonItem>
@@ -164,7 +168,7 @@ const EditProfile: React.FC = () => {
                       type="text"
                       value={doctorType}
                       onIonChange={(e) => setDoctorType(e.detail.value!)}
-                    />
+                      required/>
                   </IonItem>
                   <IonGrid>
                     <IonRow>
