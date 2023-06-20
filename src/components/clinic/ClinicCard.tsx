@@ -16,6 +16,10 @@ import {
 import { trash, create, createOutline } from "ionicons/icons";
 import { format } from "date-fns";
 import { useIonRouter } from "@ionic/react";
+import Toast from "../custom-toast/Toast";
+import AlertSuccess from "../Alerts/ALertSuccess";
+import DeletePopup from "../deletepopup/DeletePopup";
+
 interface Session {
   Id: number;
   Day: string;
@@ -34,6 +38,7 @@ interface ClinicCardProps {
   Address: string;
   Number: string;
   DoctorId: number;
+  Renderlist: () => void;
 }
 
 const ClinicCard: React.FC<ClinicCardProps> = ({
@@ -45,12 +50,17 @@ const ClinicCard: React.FC<ClinicCardProps> = ({
   Address,
   Number,
   DoctorId,
+  Renderlist
 }) => {
   const [offDays, setOffDays] = useState(initialOffDays);
   const [timings, setTimings] = useState(initialTimings);
   const [isOnline, setIsOnline] = useState(initialIsOnline);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
   const [clinicTimings, setclinicTimings] = useState<Session[]>([]);
   const [sameClinics, setSameClinics] = useState<Session[]>([]);
+
   const fetchClinicTimings = async () => {
     try {
       const res = await fetch(
@@ -68,20 +78,32 @@ const ClinicCard: React.FC<ClinicCardProps> = ({
     fetchClinicTimings();
   }, []);
 
-  //time formating
-  function formatedTime(timeString: string) {
+  // Time formatting
+  function formattedTime(timeString: string) {
     const time = new Date(`2000-01-01T${timeString}`);
     const formattedTime = format(time, "h:mm a");
 
     return formattedTime;
   }
+
   const data = useIonRouter();
-  const ClickHandler = () => {
-    // console.log("DoctorId:",DoctorId,"childId",Id)
+
+  const handleClick = () => {
     data.push(`/members/doctor/clinic/update/${Id}`, "forward");
   };
+
+
+
   return (
     <>
+      
+      <DeletePopup
+        url={`${import.meta.env.VITE_API_URL}api/Clinic/${Id}`}
+        title="Clinic"
+        confirmAlertOpen={showPopup}
+        setConfirmAlertOpen={setShowPopup}
+        renderList={Renderlist}
+      />
       {clinicTimings && (
         <IonCard>
           <IonCardHeader>
@@ -91,8 +113,8 @@ const ClinicCard: React.FC<ClinicCardProps> = ({
             >
               <span>{Name}</span>
               <div style={{ fontSize: "25px" }}>
-                <IonIcon icon={create} color="primary" onClick={ClickHandler} />
-                <IonIcon icon={trash} color="primary" />
+                <IonIcon icon={create} color="primary" onClick={handleClick} />
+                <IonIcon icon={trash} color="primary" onClick={() => setShowPopup(true)} />
               </div>
             </IonCardTitle>
           </IonCardHeader>
@@ -105,7 +127,7 @@ const ClinicCard: React.FC<ClinicCardProps> = ({
                       (i) => i.ClinicId === Id
                     );
                     return (
-                      <>
+                      <React.Fragment key={index}>
                         <IonCol size="6">
                           <p>
                             <b>On Day : </b> {item.Day}
@@ -114,12 +136,12 @@ const ClinicCard: React.FC<ClinicCardProps> = ({
                             <b>Session :</b> {item.Session}
                           </p>
                           <p>
-                            <b>Start Time :</b> {formatedTime(item.StartTime)} |{" "}
-                            <b>End Time :</b> {formatedTime(item.EndTime)}
+                            <b>Start Time :</b> {formattedTime(item.StartTime)} |{" "}
+                            <b>End Time :</b> {formattedTime(item.EndTime)}
                           </p>
                         </IonCol>
                         {count.length + (1 % 2) === 0 && <hr />}
-                      </>
+                      </React.Fragment>
                     );
                   }
                 })}

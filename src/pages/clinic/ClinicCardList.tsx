@@ -12,6 +12,7 @@ interface Clinic {
   Address: string;
   Number: string;
   DoctorId: number;
+  
 }
 const ClinicCardList: React.FC = () => {
   const location = useLocation();
@@ -47,13 +48,14 @@ const ClinicCardList: React.FC = () => {
                         Number={item.Number}
                         Address={item.Address}
                         DoctorId={item.DoctorId}
+                        Renderlist={fetchClinicData}
                       />
                     </React.Fragment>
                   );
                 }
               })
             ) : (
-              <ErrorComponent title="Vaccines" />
+              <ErrorComponent title="Clinics" />
             )}
             <IonFab slot="fixed" vertical="bottom" horizontal="end">
               <IonFabButton

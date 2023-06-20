@@ -19,6 +19,7 @@ import {
 import React, { useState, useEffect } from "react";
 import Header from "../../components/header/Header";
 import Toast from "../../components/custom-toast/Toast";
+import WeekDaysCard from "./WeekDaysCard";
 interface IClinic {
   Id: number;
   Name: string;
@@ -156,6 +157,13 @@ const UpdateClinic: React.FC<ClinicProps> = ({
                   onIonChange={(e) => setAddress(e.detail.value!)}
                 ></IonTextarea>
               </IonItem>
+              <WeekDaysCard name={"Monday"} />
+              <WeekDaysCard name={"Tuesday"} />
+              <WeekDaysCard name={"Wednesday"} />
+              <WeekDaysCard name={"Thursday"} />
+              <WeekDaysCard name={"Friday"} />
+              <WeekDaysCard name={"Saturday"} />
+              <WeekDaysCard name={"Sunday"} />
               <IonButton type="submit" disabled={!canSubmit}>
                 Submit
               </IonButton>

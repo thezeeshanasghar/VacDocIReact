@@ -13,7 +13,6 @@ import WeekDaysCard, { ISession } from "./WeekDaysCard";
 import Header from "../../components/header/Header";
 import Toast from "../../components/custom-toast/Toast";
 
-
 const AddClinic: React.FC = () => {
   const router = useIonRouter();
   const [doctorId, setDoctorId] = useState(1);
@@ -110,6 +109,13 @@ const AddClinic: React.FC = () => {
               onIonChange={(e) => setAddress(e.detail.value!)}
             ></IonTextarea>
           </IonItem>
+          <WeekDaysCard name={"Monday"} />
+          <WeekDaysCard name={"Tuesday"} />
+          <WeekDaysCard name={"Wednesday"} />
+          <WeekDaysCard name={"Thursday"} />
+          <WeekDaysCard name={"Friday"} />
+          <WeekDaysCard name={"Saturday"} />
+          <WeekDaysCard name={"Sunday"} />
           {/* {[
             "Monday",
             "Tuesday",
