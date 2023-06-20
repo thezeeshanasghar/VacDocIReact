@@ -32,6 +32,7 @@ const AddPatient: React.FC = () => {
   const [dob, setDob] = useState("");
   const [email, setEmail] = useState("");
   const [mobileNumber, setMobileNumber] = useState("");
+  const [toDay, setToDay] = useState("")
   const [preferredSchedule, setpreferredSchedule] = useState<string>("");
   const [selectedDoctor, setSelectedDoctor] = useState<number>();
   const [selectedClinic, setSelectedClinic] = useState<number>();
@@ -111,6 +112,16 @@ const AddPatient: React.FC = () => {
       .then((res) => res.json())
       .then((data) => setClinicData(data))
       .catch((err) => console.error(err));
+
+      const currentDate = new Date();
+      const year = currentDate.getFullYear();
+      const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+      const day = String(currentDate.getDate()).padStart(2, '0');
+      
+      const today = `${year}-${month}-${day}`;
+      
+      console.log(today);
+      setToDay(today)
   }, []);
 
   const canSubmit =
@@ -204,6 +215,7 @@ const AddPatient: React.FC = () => {
               <IonInput
                 slot="end"
                 type="date"
+                max={toDay}
                 value={dob}
                 onIonChange={(e) => setDob(e.detail.value!)}
               />
