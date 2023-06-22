@@ -39,6 +39,7 @@ const VaccinationCard: React.FC<IPatientCardProps> = ({
   forceRender,
   setName,
 }) => {
+  // console.log(data);
   const router = useIonRouter();
   const [BulkDate, setBulkDate] = useState<string>("");
   const [SingleDate, setSingleDate] = useState<string>("");
@@ -101,10 +102,13 @@ const VaccinationCard: React.FC<IPatientCardProps> = ({
       Date: user_selected_date.split("T")[0],
       doseId: singlePatientSchedule?.DoseId,
       doctorId: singlePatientSchedule?.DoctorId,
+      vaccineId: singlePatientSchedule?.VaccineId,
       childId: singlePatientSchedule?.childId,
     };
+    console.log(data_to_be_sent)
+    const ID=singlePatientSchedule?.Id;
     fetch(
-      `${import.meta.env.VITE_API_URL}api/PatientSchedule/single_updateDate`,
+      `${import.meta.env.VITE_API_URL}api/PatientSchedule/single_updateDate?Id=${ID}`,
       {
         method: "PATCH",
         headers: {
@@ -145,10 +149,12 @@ const VaccinationCard: React.FC<IPatientCardProps> = ({
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
+            id: patientSchedule.Id,
             doseId: patientSchedule.DoseId,
             doctorId: patientSchedule.DoctorId,
             childId: patientSchedule.childId,
             isSkip: patientSchedule.isSkip ? 0 : 1,
+            vaccineId: patientSchedule.VaccineId,
           }),
         }
       );
@@ -157,6 +163,7 @@ const VaccinationCard: React.FC<IPatientCardProps> = ({
         doctorId: patientSchedule.DoctorId,
         childId: patientSchedule.childId,
         isSkip: patientSchedule.isSkip ? 0 : 1,
+        vaccineId: patientSchedule.VaccineId,
       });
       if (res.status === 204) forceRender();
     } catch (error) {
@@ -175,15 +182,24 @@ const VaccinationCard: React.FC<IPatientCardProps> = ({
           headers: {
             "Content-Type": "application/json",
           },
+          
           body: JSON.stringify({
-            Date: format(new Date(), "yyyy-MM-dd"),
+            id: patientSchedule.Id,
+            date: format(new Date(), "yyyy-MM-dd"),
             doseId: patientSchedule.DoseId,
             doctorId: patientSchedule.DoctorId,
             childId: patientSchedule.childId,
+            vaccineId: patientSchedule.VaccineId,
             isDone,
           }),
+          
         }
       );
+      console.log({ date: format(new Date(), "yyyy-MM-dd"),
+      doseId: patientSchedule.DoseId,
+      doctorId: patientSchedule.DoctorId,
+      childId: patientSchedule.childId,
+      vaccineId: patientSchedule.VaccineId,})
       if (res.status === 204) forceRender();
     } catch (error) {
       console.log(error);
@@ -221,7 +237,7 @@ const VaccinationCard: React.FC<IPatientCardProps> = ({
               <IonImg
                 src={syringImage}
                 onClick={() =>
-                  router.push(`/members/child/vaccine/${423}/bulk/${"date"}`)
+                  router.push(`/members/child/vaccine/${423}/bulk/${date}`)
                 }
                 style={{
                   height: "15px",

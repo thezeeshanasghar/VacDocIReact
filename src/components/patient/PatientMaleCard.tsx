@@ -21,6 +21,7 @@ interface IMalePatient {
   renderList: () => void;
   DoctorId: number;
   ClinicId: number;
+  DOB: String;
 }
 const PatientMaleCard: React.FC<IMalePatient> = ({
   Name,
@@ -28,13 +29,14 @@ const PatientMaleCard: React.FC<IMalePatient> = ({
   renderList,
   DoctorId,
   ClinicId,
+  DOB
 }) => {
   const router = useIonRouter();
   const history = useHistory();
   const [deletePatient, setDeletePatient] = useState(false);
 
   const handleClick = () => {
-    history.push(`/members/child/vaccine/${Id}?doctorId=${DoctorId}`, {
+    history.push(`/members/child/vaccine/${Id}?DOB=${DOB}&doctorId=${DoctorId}`, {
       state: { childId: Id, doctorId: DoctorId },
     });
   };

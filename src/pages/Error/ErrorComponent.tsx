@@ -20,7 +20,7 @@ const ErrorComponent: React.FC<ErrorComponentProps> = ({ title }) => {
   return (
     <div style={containerStyle}>
       <IonText color="danger" style={titleStyle}>
-        <h3>{title} failed to load. Please try again.</h3>
+        <p>{title} failed to load. Please try again.</p>
       </IonText>
     </div>
   );

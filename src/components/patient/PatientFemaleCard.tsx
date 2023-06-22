@@ -21,12 +21,14 @@ interface IFemalePatient {
   renderList: () => void;
   DoctorId: number;
   ClinicId: number;
+  DOB: string;
 }
 const PatientFemaleCard: React.FC<IFemalePatient> = ({
   Name,
   Id,
   renderList, 
   DoctorId,
+  DOB,
   ClinicId
 }) => {
   const router = useIonRouter();
@@ -35,7 +37,7 @@ const PatientFemaleCard: React.FC<IFemalePatient> = ({
 
 
   const handleClick = () => {
-    history.push(`/members/child/vaccine/${Id}?doctorId=${DoctorId}`, {
+    history.push(`/members/child/vaccine/${Id}?doctorId=${DoctorId}&DOB=${DOB}`, {
       state: { childId: Id, doctorId: DoctorId },
     });
   };

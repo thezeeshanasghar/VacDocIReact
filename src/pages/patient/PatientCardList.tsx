@@ -72,6 +72,7 @@ const PatientCardList: React.FC = () => {
                     renderList={fetchPatientData}
                     DoctorId={item.DoctorId}
                     ClinicId={item.ClinicId}
+                    DOB={item.DOB}
                   />
                 );
               }
@@ -83,6 +84,7 @@ const PatientCardList: React.FC = () => {
                   renderList={fetchPatientData}
                   DoctorId={item.DoctorId}
                   ClinicId={item.ClinicId}
+                  DOB={item.DOB}
                 />
               );
             })

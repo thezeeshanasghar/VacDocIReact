@@ -10,6 +10,7 @@ import {
 import React, { useEffect, useState } from "react";
 import VaccinationCard from "./VaccinationCard";
 import axios from "axios";
+import { saveAs } from 'file-saver';
 import { groupBy } from "lodash";
 import { useLocation } from "react-router";
 import ErrorComponent from "../../Error/ErrorComponent";
@@ -21,6 +22,7 @@ export interface IPSchedule {
   childId: number;
   isSkip: boolean;
   isDone: boolean;
+  VaccineId: number;
 }
 
 interface IParam {
@@ -39,6 +41,15 @@ const VaccinationCardList: React.FC<IParam> = ({
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const doctorId = searchParams.get("doctorId");
+  const dob = searchParams.get("DOB");
+
+  const date = dob && dob.split("T")[0]
+   
+    
+  
+
+  // const [date, time] = dob.split("T");
+ 
   const [count, setCount] = useState(1);
   // const [doctorId, setdoctorId] = useState(2)
   const [patientSchedule, setPatientSchedule] = useState<IPSchedule[]>([]);
@@ -63,7 +74,7 @@ const VaccinationCardList: React.FC<IParam> = ({
         .post(
           `${
             import.meta.env.VITE_API_URL
-          }api/PatientSchedule/doctor_post_schedule?doctorId=${doctorId}&childId=${childId}`
+          }api/PatientSchedule?dob=${date}&doctorId=${doctorId}&childId=${childId}`
         )
         .then((res) => res.status === 200 && fetchPatientScheduleData())
         .catch((err) => console.log(err));
@@ -84,6 +95,21 @@ const VaccinationCardList: React.FC<IParam> = ({
   function setName(name: string) {
     setPatientName(name);
   }
+  const handleDownload = () => {
+    axios({
+      url: `${import.meta.env.VITE_API_URL}api/Child/pdf?childId=${childId}`, // Replace with the URL of your PDF file
+      method: 'GET',
+      responseType: 'blob', // Important! This tells axios to return a Blob object
+    })
+      .then((response) => {
+        const pdfBlob = new Blob([response.data], { type: 'application/pdf' });
+        saveAs(pdfBlob, 'downloaded.pdf'); // Specify the filename for the downloaded file
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+  
 
   return (
     <>
@@ -94,7 +120,7 @@ const VaccinationCardList: React.FC<IParam> = ({
               <IonTitle>Vaccination</IonTitle>
             </IonToolbar>
             <IonToolbar style={{ padding: "0px 10px" }}>
-              <IonButton size="small" slot="start">
+              <IonButton size="small" slot="start" onClick={handleDownload}>
                 print
               </IonButton>
               <IonText slot="end">{patientName}</IonText>
