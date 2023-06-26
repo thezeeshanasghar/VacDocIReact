@@ -13,7 +13,7 @@ import {
   useIonRouter,
   IonText,
 } from "@ionic/react";
-import { calendar } from "ionicons/icons";
+import { calendar, search } from "ionicons/icons";
 import { IPSchedule } from "./VaccinationCardList";
 import syringImage from "../../../assets/injectionFilled.png";
 import emptySyringImage from "../../../assets/injectionEmpty.png";
@@ -97,6 +97,9 @@ const VaccinationCard: React.FC<IPatientCardProps> = ({
       })
       .catch((err) => setErrorToast(true));
   };
+
+  
+  
   const updateSingleDate = (user_selected_date: string) => {
     const data_to_be_sent = {
       Date: user_selected_date.split("T")[0],
@@ -206,6 +209,7 @@ const VaccinationCard: React.FC<IPatientCardProps> = ({
     }
   };
   useEffect(() => {
+   
     fetchDoses();
     fetchBrands();
     axios
@@ -237,7 +241,7 @@ const VaccinationCard: React.FC<IPatientCardProps> = ({
               <IonImg
                 src={syringImage}
                 onClick={() =>
-                  router.push(`/members/child/vaccine/${423}/bulk/${date}`)
+                  router.push(`/members/child/vaccine/${1}/bulk/${date}`)
                 }
                 style={{
                   height: "15px",
