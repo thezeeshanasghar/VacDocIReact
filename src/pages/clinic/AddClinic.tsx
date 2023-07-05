@@ -12,6 +12,7 @@ import React, { useState } from "react";
 import WeekDaysCard, { ISession } from "./WeekDaysCard";
 import Header from "../../components/header/Header";
 import Toast from "../../components/custom-toast/Toast";
+import AddWeekDaysCard from "./AddWeekDaysCard";
 
 const AddClinic: React.FC = () => {
   const router = useIonRouter();
@@ -20,43 +21,225 @@ const AddClinic: React.FC = () => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [address, setAddress] = useState("");
   const [sessions, setSessions] = useState<ISession[]>([]);
+  const [canSubmit, setCanSubmit] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
+  const [cId,setCId] = useState(null)
+  const [data, setData] = useState<any>(null);
+
+  // const handleUnSubmit = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   const weekdays = [
+  //     "Monday",
+  //     "Tuesday",
+  //     "Wednesday",
+  //     "Thursday",
+  //     "Friday",
+  //     "Saturday",
+  //     "Sunday",
+  //   ];
+  //   const newArray = weekdays.filter((day) => {
+  //     const storedData = localStorage.getItem(day);
+  //     return (
+  //       storedData &&
+  //       Array.isArray(JSON.parse(storedData)) &&
+  //       JSON.parse(storedData).length > 0
+  //     );
+  //   });
+
+  //   if (newArray.length > 0) {
+  //     setCanSubmit(false);
+  //   }
+
+  //   const data = newArray.map((day) => {
+  //     const storedData = localStorage.getItem(day);
+  //     console.log(storedData, "this is storedData"); // Retrieve the data from localStorage
+  //     return JSON.parse(storedData);
+  //   });
+
+  //   try {
+  //     const allData = data.map(i => i[0]);
+  //     await registerDoctor(allData);
+  //     setSuccess(true);
+  //     localStorage.clear();
+  //   } catch (error) {
+  //     setError(true);
+  //   }
+  // };
+
+  
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+  
     // Perform submit logic with clinicName, phoneNumber, address, and sessions data
     postClinic();
   };
-  const postClinic = () => {
+  
+  const postClinic = async () => {
     const data_to_be_sent = {
       name: clinicName,
       address,
       number: phoneNumber,
       doctorId,
     };
-
-    fetch(`${import.meta.env.VITE_API_URL}api/Clinic`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data_to_be_sent),
-    })
-      .then((res) => {
-        if (res.status === 201) {
-          setSuccess(true);
-          setTimeout(() => {
-            router.push("/members/doctor/clinic", "back");
-          }, 1000);
-        } else {
-          setError(false);
+  
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}api/Clinic`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data_to_be_sent),
+      });
+  
+      if (response.status === 201) {
+        const data = await response.json();
+        const clinicId = data.Id;
+        console.log(clinicId);
+        postclinictiming(clinicId);
+        setSuccess(true);
+        setTimeout(() => {
+          router.push("/members/doctor/clinic", "back");
+        }, 1000);
+      } else {
+        throw new Error("Failed to create clinic");
+      }
+    } catch (error) {
+      setError(true);
+    }
+  };
+  
+  const postclinictiming = async (cid: string) => {
+    const weekdays = [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+      "Sunday",
+    ];
+    const newArray = weekdays.filter((day) => {
+      const storedData = localStorage.getItem(day);
+      return (
+        storedData &&
+        Array.isArray(JSON.parse(storedData)) &&
+        JSON.parse(storedData).length > 0
+      );
+    });
+  
+    if (newArray.length > 0) {
+      setCanSubmit(false);
+    }
+  
+    const data = newArray.map((day) => {
+      const storedData = localStorage.getItem(day);
+      console.log(storedData, "this is storedData");
+      console.log(storedData.length)
+      try {
+        const parsedData = storedData ? JSON.parse(storedData) : null;
+        return parsedData;
+      } catch (error) {
+        console.error("Error parsing storedData:", error);
+        return null; // Handle the error gracefully by returning null or an appropriate value
+      }
+    });
+  
+    const allData = data.map((i) => i[0]);
+    console.log(cid);
+    registerDoctor(allData, cid);
+    setSuccess(true);
+    localStorage.clear();
+  };
+  
+  const registerDoctor = async (data_to_be_sent: any, cid: string) => {
+    console.log("atta", data_to_be_sent);
+    console.log("clinic id", cid);
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}api/Clinictiming?clinicId=${cid}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data_to_be_sent),
         }
-      })
-      .catch((err) => setError(true));
+      );
+  
+      if (response.status !== 200) {
+        throw new Error("Failed to register doctor");
+      }
+    } catch (error) {
+      throw new Error();
+    }
+  
+  
+   
+  //     const weekdays = [
+  //       "Monday",
+  //       "Tuesday",
+  //       "Wednesday",
+  //       "Thursday",
+  //       "Friday",
+  //       "Saturday",
+  //       "Sunday",
+  //     ];
+  //     const newArray = weekdays.filter((day) => {
+  //       const storedData = localStorage.getItem(day);
+  //       return (
+  //         storedData &&
+  //         Array.isArray(JSON.parse(storedData)) &&
+  //         JSON.parse(storedData).length > 0
+  //       );
+  //     });
+  
+  //     if (newArray.length > 0) {
+  //       setCanSubmit(false);
+  //     }
+  
+  //     const data = newArray.map((day) => {
+  //       const storedData = localStorage.getItem(day);
+  //       console.log(storedData, "this is storedData"); // Retrieve the data from localStorage
+  //       return JSON.parse(storedData);
+  //     });
+  
+  //     try {
+  //       const allData = data.map(i => i[0]);
+  //       console.log(cId)
+  //       await registerDoctor(allData, cId);
+  //       setSuccess(true);
+  //       localStorage.clear();
+  //     } catch (error) {
+  //       setError(true);
+  //     }
+  // };
+
+  // const registerDoctor = async (data_to_be_sent: any,clinicId: string) => {
+  //   console.log("atta", data_to_be_sent);
+  //   console.log("clinic id", clinicId);
+  //   try {
+  //     const response = await fetch(
+  //       `${import.meta.env.VITE_API_URL}api/Clinictiming/${cId}`,
+  //       {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         body: JSON.stringify(data_to_be_sent),
+  //       }
+  //     );
+
+  //     if (response.status !== 200) {
+  //       throw new Error("Failed to register doctor");
+  //     }
+  //   } catch (error) {
+  //     throw new Error(error.message);
+  //   }
   };
 
-  const canSubmit =
+  const anSubmit =
     clinicName.trim() !== "" &&
     address.trim() !== "" &&
     phoneNumber.trim() !== "";
@@ -108,44 +291,24 @@ const AddClinic: React.FC = () => {
               value={address}
               onIonChange={(e) => setAddress(e.detail.value!)}
             ></IonTextarea>
+            {/* <IonButton disabled={!anSubmit} type="submit">
+              Submit
+            </IonButton> */}
           </IonItem>
-          <WeekDaysCard name={"Monday"} />
-          <WeekDaysCard name={"Tuesday"} />
-          <WeekDaysCard name={"Wednesday"} />
-          <WeekDaysCard name={"Thursday"} />
-          <WeekDaysCard name={"Friday"} />
-          <WeekDaysCard name={"Saturday"} />
-          <WeekDaysCard name={"Sunday"} />
-          {/* {[
-            "Monday",
-            "Tuesday",
-            "Wednesday",
-            "Thursday",
-            "Friday",
-            "Saturday",
-            "Sunday",
-          ].map((item, index) => (
-            <WeekDaysCard
-              name={item}
-              key={index * 3}
-              setSession={setSessions}
-            />
-          ))} */}
-          {/* <IonItem style={{ minHeight: "300px" }}>
-            <div
-              className="map"
-              style={{
-                minHeight: "300px",
-                position: "relative",
-                overflow: "hidden",
-              }}
-            >
-              {/* Google Maps component or placeholder */}
-          {/* </div>
-          </IonItem> */}
-          <IonButton disabled={!canSubmit} type="submit">
-            Submit
-          </IonButton>
+        </form>
+        <form noValidate className="ion-padding" onSubmit={handleSubmit}>
+          <AddWeekDaysCard name={"Monday"} />
+          <AddWeekDaysCard name={"Tuesday"}/>
+          <AddWeekDaysCard name={"Wednesday"}/>
+          <AddWeekDaysCard name={"Thursday"}/>
+          <AddWeekDaysCard name={"Friday"}/>
+          <AddWeekDaysCard name={"Saturday"}/>
+          <AddWeekDaysCard name={"Sunday"}/>
+          <IonItem>
+            <IonButton disabled={!anSubmit} type="submit">
+              Submit
+            </IonButton>
+          </IonItem>
         </form>
       </IonContent>
     </IonPage>
@@ -153,3 +316,60 @@ const AddClinic: React.FC = () => {
 };
 
 export default AddClinic;
+
+// const handleUnSubmit = (e: React.FormEvent) => {
+//   e.preventDefault();
+//   const weekdays = [
+//     "Monday",
+//     "Tuesday",
+//     "Wednesday",
+//     "Thursday",
+//     "Friday",
+//     "Saturday",
+//     "Sunday",
+//   ];
+//   const newArray = weekdays.filter((day) => {
+//     const storedData = localStorage.getItem(day);
+//     // console.log(storedData);
+//     return (
+//       storedData &&
+//       Array.isArray(JSON.parse(storedData)) &&
+//       JSON.parse(storedData).length > 0
+//     );
+//   });
+
+//   newArray.forEach((day) => {
+//     const storedData = localStorage.getItem(day);
+//     console.log(storedData); // Retrieve the data from localStorage
+
+//     if (storedData) {
+//       const parsedData = JSON.parse(storedData);
+//       // console.log(`Data for ${day}:`, parsedData);
+//       setData(parsedData)
+//       // Perform actions with the retrieved data as needed
+//       console.log(data)
+//     }
+//   });
+
+// Call the API endpoint with the updated data
+// fetch(`${import.meta.env.VITE_API_URL}api/Clinictiming?clinicId=1`, {
+//   method: "POST",
+//   headers: {
+//     "Content-Type": "application/json",
+//   },
+//   body: JSON.stringify(""), // Pass the updated data to the API
+// })
+//   .then((res) => {
+//     if (res.status === 200) {
+//       setSuccess(true);
+//       // setTimeout(() => {
+//       //   router.push("/", "back");
+//       // }, 1500);
+//     } else {
+//       setError(false);
+//     }
+//   })
+//   .catch((err) => setError(true));
+
+//   localStorage.clear(); // Clear the localStorage
+// };

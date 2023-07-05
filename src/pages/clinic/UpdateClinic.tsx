@@ -27,6 +27,14 @@ interface IClinic {
   Number: string;
   DoctorId: number;
 }
+interface CData {
+  Id: number,
+    Day: string,
+    Session: string,
+    StartTime: string,
+    EndTime: string,
+    ClinicId: number
+}
 type ClinicProps = { match: { params: { clinicId: string } } };
 const UpdateClinic: React.FC<ClinicProps> = ({
   match: {
@@ -39,8 +47,76 @@ const UpdateClinic: React.FC<ClinicProps> = ({
   const [address, setAddress] = useState("");
   const [sessions, setSessions] = useState<ISession[]>([]);
   const [success, setSuccess] = useState(false);
+  const [canSubmit, setCanSubmit] = useState(false);
   const [error, setError] = useState(false);
+  const handleUnSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const weekdays = [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+      "Sunday",
+    ];
+    const newArray = weekdays.filter((day) => {
+      const storedData = localStorage.getItem(day);
+      return (
+        storedData &&
+        Array.isArray(JSON.parse(storedData)) &&
+        JSON.parse(storedData).length > 0
+      );
+    });
 
+    if (newArray.length > 0) {
+      setCanSubmit(false);
+    }
+
+    const data = newArray.map((day) => {
+      const storedData = localStorage.getItem(day);
+      console.log(storedData, "this is storedData"); // Retrieve the data from localStorage
+      try {
+        const parsedData = storedData ? JSON.parse(storedData) : null;
+        return parsedData;
+      } catch (error) {
+        console.error("Error parsing storedData:", error);
+        return null; // Handle the error gracefully by returning null or an appropriate value
+      }
+    });
+
+    try {
+      const allData = data.map(i => i[0]);
+   registerDoctor(allData);
+      setSuccess(true);
+      localStorage.clear();
+    } catch (error) {
+      setError(true);
+    }
+  };
+
+  const registerDoctor = async (data_to_be_sent: any) => {
+    console.log("atta", data_to_be_sent);
+    console.log(clinicId)
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}api/Clinictiming/api/clintimings/AddorUpdate/${clinicId}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data_to_be_sent),
+        }
+      );
+
+      if (response.status !== 200) {
+        throw new Error("Failed to register doctor");
+      }
+    } catch (error) {
+      throw new Error();
+    }
+  };
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Perform submit logic with clinicName, phoneNumber, address, and sessions data
@@ -90,6 +166,7 @@ const UpdateClinic: React.FC<ClinicProps> = ({
       })
       .catch((err) => setError(true));
   };
+  
   useEffect(() => {
     fetch(`${import.meta.env.VITE_API_URL}api/Clinic/${clinicId}`)
       .then((response) => response.json())
@@ -101,8 +178,19 @@ const UpdateClinic: React.FC<ClinicProps> = ({
           setClinic(data);
         }
       });
+      fetch(`${import.meta.env.VITE_API_URL}api/Clinictiming?clinicId=${clinicId}`)
+      .then((response) => response.json())
+      .then((data: CData) => {
+        if (Object.keys(data).length !== 0) {
+          // setClinicName(data.Name);
+          // setPhoneNumber(data.Number);
+          // setAddress(data.Address);
+          // setClinic(data);
+        }
+        console.log(data)
+      });
   }, []);
-  const canSubmit =
+  const anSubmit =
     clinicName.trim() !== "" &&
     address.trim() !== "" &&
     phoneNumber.trim() !== "";
@@ -156,7 +244,13 @@ const UpdateClinic: React.FC<ClinicProps> = ({
                   value={address}
                   onIonChange={(e) => setAddress(e.detail.value!)}
                 ></IonTextarea>
+                <IonButton disabled={!anSubmit} type="submit">
+              Submit
+            </IonButton>
+            
               </IonItem>
+            </form>
+            <form noValidate className="ion-padding" onSubmit={handleUnSubmit}>
               <WeekDaysCard name={"Monday"} />
               <WeekDaysCard name={"Tuesday"} />
               <WeekDaysCard name={"Wednesday"} />
@@ -164,7 +258,7 @@ const UpdateClinic: React.FC<ClinicProps> = ({
               <WeekDaysCard name={"Friday"} />
               <WeekDaysCard name={"Saturday"} />
               <WeekDaysCard name={"Sunday"} />
-              <IonButton type="submit" disabled={!canSubmit}>
+              <IonButton type="submit" disabled={canSubmit}>
                 Submit
               </IonButton>
             </form>
@@ -206,6 +300,8 @@ const UpdateWeekDays: React.FC<WeekDayCardProps> = ({ name }) => {
   const [dayData, setDayData] = useState<ISession[]>([]);
 
   useEffect(() => {
+
+
     if (showCard && showSession1 && mstart !== "" && mend !== "") {
       const existingIndex = dayData.findIndex(
         (entry) => entry.Day === name && entry.Session === "Session1"

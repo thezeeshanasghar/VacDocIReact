@@ -14,7 +14,8 @@ interface Clinic {
   DoctorId: number;
   
 }
-const ClinicCardList: React.FC = () => {
+
+const ClinicCardList: React.FC = ( DoctorId, Id) => {
   const location = useLocation();
   const [doctorId, setdocorId] = useState(1);
   const [Clinics, setClinics] = useState<Clinic[]>([]);
@@ -60,7 +61,7 @@ const ClinicCardList: React.FC = () => {
             <IonFab slot="fixed" vertical="bottom" horizontal="end">
               <IonFabButton
                 size="small"
-                routerLink="/members/doctor/clinic/add"
+                routerLink={`/members/doctor/clinic/add?doctorId=${doctorId}`}
                 routerDirection="forward"
               >
                 <IonIcon icon={add}></IonIcon>

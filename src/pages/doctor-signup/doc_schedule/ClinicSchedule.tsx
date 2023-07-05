@@ -60,7 +60,6 @@ const ClinicSchedule: React.FC = () => {
       .then((res) => {
         if (res.status === 201) {
           setSuccess(true);
-
           setTimeout(() => {
             router.push("/", "back");
           }, 1500);

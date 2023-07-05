@@ -64,7 +64,7 @@ const ClinicCard: React.FC<ClinicCardProps> = ({
   const fetchClinicTimings = async () => {
     try {
       const res = await fetch(
-        `${import.meta.env.VITE_API_URL}api/Clinictiming`
+        `${import.meta.env.VITE_API_URL}api/Clinictiming?clinicId=${Id}`
       );
       const data: Session[] = await res.json();
       setclinicTimings(data);
@@ -96,7 +96,6 @@ const ClinicCard: React.FC<ClinicCardProps> = ({
 
   return (
     <>
-      
       <DeletePopup
         url={`${import.meta.env.VITE_API_URL}api/Clinic/${Id}`}
         title="Clinic"
