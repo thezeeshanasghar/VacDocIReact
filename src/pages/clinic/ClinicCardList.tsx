@@ -18,12 +18,14 @@ interface Clinic {
 const ClinicCardList: React.FC = ( DoctorId, Id) => {
   const location = useLocation();
   const [doctorId, setdocorId] = useState(1);
+  const [rerender, setRerender] = useState(false);
   const [Clinics, setClinics] = useState<Clinic[]>([]);
   const fetchClinicData = async () => {
     try {
       const res = await fetch(`${import.meta.env.VITE_API_URL}api/Clinic`);
       const data: Clinic[] = await res.json();
       setClinics(data);
+      setRerender(!rerender);
     } catch (err) {
       console.log(err);
     }
@@ -31,7 +33,7 @@ const ClinicCardList: React.FC = ( DoctorId, Id) => {
 
   useEffect(() => {
     fetchClinicData();
-  }, [location]);
+  }, [location, rerender]);
   return (
     <>
       {Clinics && (

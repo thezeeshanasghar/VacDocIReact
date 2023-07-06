@@ -17,7 +17,7 @@ import React, { useState, useEffect } from "react";
 type UpdateWeekDayCardProps = {
   name: string;
   session: ISession[];
-  clinicId:number;
+  clinicId: string;
   setSession?: React.Dispatch<React.SetStateAction<ISession[]>>;
 };
 
@@ -107,15 +107,22 @@ console.log(clinicId)
     dayData.length >= 1 && localStorage.setItem(name, JSON.stringify(dayData));
   },[dayData]);
   useEffect(() => {
+    setShowCard(false);
+    setShowSession1(false);
+    setShowSession2(false);
+    setMStart("");
+    setMEnd("");
+    setMStart2("");
+    setMEnd2("");
     fetch(`${import.meta.env.VITE_API_URL}api/Clinictiming?clinicId=${clinicId}`)
       .then((response) => response.json())
       .then((data) => {
         if (data.length > 0) {
           const morningData = data.find(
-            (entry) => entry.Session === "Morning" && entry.Day === name
+            (entry: { Session: string; Day: string; }) => entry.Session === "Morning" && entry.Day === name
           );
           const eveningData = data.find(
-            (entry) => entry.Session === "Evening" && entry.Day === name
+            (entry: { Session: string; Day: string; }) => entry.Session === "Evening" && entry.Day === name
           );
   
           setShowCard(!!morningData || !!eveningData);
@@ -125,15 +132,7 @@ console.log(clinicId)
           setMEnd(morningData ? morningData.EndTime : null);
           setMStart2(eveningData ? eveningData.StartTime : null);
           setMEnd2(eveningData ? eveningData.EndTime : null);
-        } else {
-          setShowCard(false);
-          setShowSession1(false);
-          setShowSession2(false);
-          setMStart(null);
-          setMEnd(null);
-          setMStart2(null);
-          setMEnd2(null);
-        }
+        } 
       })
       .catch((error) => {
         console.error("Error fetching clinic timing:", error);

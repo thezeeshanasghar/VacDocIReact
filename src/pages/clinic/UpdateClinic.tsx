@@ -21,7 +21,7 @@ import React, { useState, useEffect } from "react";
 import Header from "../../components/header/Header";
 import Toast from "../../components/custom-toast/Toast";
 import WeekDaysCard from "./WeekDaysCard";
-import DaysCard from "./updateWeekDaysCArd"
+import DaysCard from "./UpdateWeekDaysCard"
 interface IClinic {
   Id: number;
   Name: string;
