@@ -118,17 +118,21 @@ console.log(clinicId)
             (entry) => entry.Session === "Evening" && entry.Day === name
           );
   
-          if (morningData) {
-            setShowCard(true);
-            setShowSession1(true);
-            setMStart(morningData.StartTime);
-            setMEnd(morningData.EndTime);
-          } else if (eveningData) {
-            setShowCard(true);
-            setShowSession2(true);
-            setMStart2(eveningData.StartTime);
-            setMEnd2(eveningData.EndTime);
-          }
+          setShowCard(!!morningData || !!eveningData);
+          setShowSession1(!!morningData);
+          setShowSession2(!!eveningData);
+          setMStart(morningData ? morningData.StartTime : null);
+          setMEnd(morningData ? morningData.EndTime : null);
+          setMStart2(eveningData ? eveningData.StartTime : null);
+          setMEnd2(eveningData ? eveningData.EndTime : null);
+        } else {
+          setShowCard(false);
+          setShowSession1(false);
+          setShowSession2(false);
+          setMStart(null);
+          setMEnd(null);
+          setMStart2(null);
+          setMEnd2(null);
         }
       })
       .catch((error) => {

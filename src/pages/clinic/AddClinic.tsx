@@ -137,7 +137,7 @@ const AddClinic: React.FC = () => {
       const storedData = localStorage.getItem(day);
       console.log(storedData, "this is storedData");
       // console.log(storedData.length)
-      try {
+      
         const parsedData = storedData ? JSON.parse(storedData) : null;
         console.log(parsedData)
         const response = await fetch(
@@ -149,19 +149,21 @@ const AddClinic: React.FC = () => {
             },
             body: JSON.stringify(parsedData),
           }
-        );
-    
-        if (response.status !== 200) {
-          throw new Error("Failed to register doctor");
-          
-        }
+        )
+        .then((res) => {
+          if (res.status === 200) {
+            localStorage.clear()
+          } else {
+            setError(false);
+            localStorage.clear()
+          }
+        })
+        .catch((err) => setError(true));
+       
         localStorage.clear()
         // return parsedData;
-      } catch (error) {
-        console.error("Error parsing storedData:", error);
-        return null; // Handle the error gracefully by returning null or an appropriate value
-      }
-      localStorage.clear()
+      
+      // localStorage.clear()
     });
   
     // const allData = data.map((i) => i[0]);

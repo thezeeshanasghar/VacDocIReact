@@ -15,6 +15,7 @@ import {
   IonContent,
   IonTextarea,
   IonButton,
+  useIonRouter,
 } from "@ionic/react";
 import React, { useState, useEffect } from "react";
 import Header from "../../components/header/Header";
@@ -42,6 +43,7 @@ const UpdateClinic: React.FC<ClinicProps> = ({
     params: { clinicId },
   },
 }) => {
+  const router = useIonRouter();
   const [clinic, setClinic] = useState<IClinic>();
   const [clinicName, setClinicName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -79,7 +81,7 @@ const UpdateClinic: React.FC<ClinicProps> = ({
     const data = newArray.map(async (day) => {
       const storedData = localStorage.getItem(day);
       console.log(storedData, "this is storedData"); // Retrieve the data from localStorage
-      try {
+    
         const parsedData = storedData ? JSON.parse(storedData) : null;
         // return parsedData;
         const response = await fetch(
@@ -93,15 +95,21 @@ const UpdateClinic: React.FC<ClinicProps> = ({
             },
             body: JSON.stringify(parsedData),
           }
-        );
+        ).then((res) => {
+          if (res.status === 200) {
+            setSuccess(true);
+            localStorage.clear()
+            setTimeout(() => {
+              router.push("/members/doctor/clinic", "back");
+            }, 1000);
+          } else {
+            setError(false);
+          }
+        })
+        .catch((err) => setError(true));
 
-        if (response.status !== 200) {
-          throw new Error("Failed to register doctor");
-        }
-      } catch (error) {
-        console.error("Error parsing storedData:", error);
-        return null; // Handle the error gracefully by returning null or an appropriate value
-      }
+      
+      
     });
   };
 
@@ -148,6 +156,9 @@ const UpdateClinic: React.FC<ClinicProps> = ({
       .then((res) => {
         if (res.status === 204) {
           setSuccess(true);
+          setTimeout(() => {
+            router.push("/members/doctor/clinic", "back");
+          }, 1000);
         } else {
           setError(false);
         }
