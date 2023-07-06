@@ -20,6 +20,7 @@ import React, { useState, useEffect } from "react";
 import Header from "../../components/header/Header";
 import Toast from "../../components/custom-toast/Toast";
 import WeekDaysCard from "./WeekDaysCard";
+import DaysCard from "./updateWeekDaysCArd"
 interface IClinic {
   Id: number;
   Name: string;
@@ -28,12 +29,12 @@ interface IClinic {
   DoctorId: number;
 }
 interface CData {
-  Id: number,
-    Day: string,
-    Session: string,
-    StartTime: string,
-    EndTime: string,
-    ClinicId: number
+  Id: number;
+  Day: string;
+  Session: string;
+  StartTime: string;
+  EndTime: string;
+  ClinicId: number;
 }
 type ClinicProps = { match: { params: { clinicId: string } } };
 const UpdateClinic: React.FC<ClinicProps> = ({
@@ -49,6 +50,8 @@ const UpdateClinic: React.FC<ClinicProps> = ({
   const [success, setSuccess] = useState(false);
   const [canSubmit, setCanSubmit] = useState(false);
   const [error, setError] = useState(false);
+  const [clinicArray, setClinicArray] = useState<any>([]);
+
   const handleUnSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const weekdays = [
@@ -73,50 +76,35 @@ const UpdateClinic: React.FC<ClinicProps> = ({
       setCanSubmit(false);
     }
 
-    const data = newArray.map((day) => {
+    const data = newArray.map(async (day) => {
       const storedData = localStorage.getItem(day);
       console.log(storedData, "this is storedData"); // Retrieve the data from localStorage
       try {
         const parsedData = storedData ? JSON.parse(storedData) : null;
-        return parsedData;
+        // return parsedData;
+        const response = await fetch(
+          `${
+            import.meta.env.VITE_API_URL
+          }api/Clinictiming/api/clintimings/AddorUpdate/${clinicId}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(parsedData),
+          }
+        );
+
+        if (response.status !== 200) {
+          throw new Error("Failed to register doctor");
+        }
       } catch (error) {
         console.error("Error parsing storedData:", error);
         return null; // Handle the error gracefully by returning null or an appropriate value
       }
     });
-
-    try {
-      const allData = data.map(i => i[0]);
-   registerDoctor(allData);
-      setSuccess(true);
-      localStorage.clear();
-    } catch (error) {
-      setError(true);
-    }
   };
 
-  const registerDoctor = async (data_to_be_sent: any) => {
-    console.log("atta", data_to_be_sent);
-    console.log(clinicId)
-    try {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}api/Clinictiming/api/clintimings/AddorUpdate/${clinicId}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data_to_be_sent),
-        }
-      );
-
-      if (response.status !== 200) {
-        throw new Error("Failed to register doctor");
-      }
-    } catch (error) {
-      throw new Error();
-    }
-  };
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Perform submit logic with clinicName, phoneNumber, address, and sessions data
@@ -166,7 +154,7 @@ const UpdateClinic: React.FC<ClinicProps> = ({
       })
       .catch((err) => setError(true));
   };
-  
+
   useEffect(() => {
     fetch(`${import.meta.env.VITE_API_URL}api/Clinic/${clinicId}`)
       .then((response) => response.json())
@@ -177,8 +165,11 @@ const UpdateClinic: React.FC<ClinicProps> = ({
           setAddress(data.Address);
           setClinic(data);
         }
+        console.log(data);
       });
-      fetch(`${import.meta.env.VITE_API_URL}api/Clinictiming?clinicId=${clinicId}`)
+    fetch(
+      `${import.meta.env.VITE_API_URL}api/Clinictiming?clinicId=${clinicId}`
+    )
       .then((response) => response.json())
       .then((data: CData) => {
         if (Object.keys(data).length !== 0) {
@@ -187,7 +178,8 @@ const UpdateClinic: React.FC<ClinicProps> = ({
           // setAddress(data.Address);
           // setClinic(data);
         }
-        console.log(data)
+        setClinicArray(data);
+        console.log("session data",data)
       });
   }, []);
   const anSubmit =
@@ -245,19 +237,19 @@ const UpdateClinic: React.FC<ClinicProps> = ({
                   onIonChange={(e) => setAddress(e.detail.value!)}
                 ></IonTextarea>
                 <IonButton disabled={!anSubmit} type="submit">
-              Submit
-            </IonButton>
-            
+                  Submit
+                </IonButton>
               </IonItem>
             </form>
             <form noValidate className="ion-padding" onSubmit={handleUnSubmit}>
-              <WeekDaysCard name={"Monday"} />
-              <WeekDaysCard name={"Tuesday"} />
-              <WeekDaysCard name={"Wednesday"} />
-              <WeekDaysCard name={"Thursday"} />
-              <WeekDaysCard name={"Friday"} />
-              <WeekDaysCard name={"Saturday"} />
-              <WeekDaysCard name={"Sunday"} />
+             
+              <DaysCard name={"Monday"} session={clinicArray} clinicId={clinicId}/>
+              <DaysCard name={"Tuesday"} session={clinicArray} clinicId={clinicId}/>
+              <DaysCard name={"Wednesday"} session={clinicArray} clinicId={clinicId}/>
+              <DaysCard name={"Thursday"} session={clinicArray} clinicId={clinicId}/>
+              <DaysCard name={"Friday"} session={clinicArray} clinicId={clinicId}/>
+              <DaysCard name={"Saturday"} session={clinicArray} clinicId={clinicId}/>
+              <DaysCard name={"Sunday"} session={clinicArray} clinicId={clinicId}/>
               <IonButton type="submit" disabled={canSubmit}>
                 Submit
               </IonButton>
@@ -300,8 +292,6 @@ const UpdateWeekDays: React.FC<WeekDayCardProps> = ({ name }) => {
   const [dayData, setDayData] = useState<ISession[]>([]);
 
   useEffect(() => {
-
-
     if (showCard && showSession1 && mstart !== "" && mend !== "") {
       const existingIndex = dayData.findIndex(
         (entry) => entry.Day === name && entry.Session === "Session1"

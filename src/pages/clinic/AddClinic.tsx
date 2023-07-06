@@ -133,47 +133,65 @@ const AddClinic: React.FC = () => {
       setCanSubmit(false);
     }
   
-    const data = newArray.map((day) => {
+    const data = newArray.map(async (day) => {
       const storedData = localStorage.getItem(day);
       console.log(storedData, "this is storedData");
-      console.log(storedData.length)
+      // console.log(storedData.length)
       try {
         const parsedData = storedData ? JSON.parse(storedData) : null;
-        return parsedData;
+        console.log(parsedData)
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}api/Clinictiming?clinicId=${cid}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(parsedData),
+          }
+        );
+    
+        if (response.status !== 200) {
+          throw new Error("Failed to register doctor");
+          
+        }
+        localStorage.clear()
+        // return parsedData;
       } catch (error) {
         console.error("Error parsing storedData:", error);
         return null; // Handle the error gracefully by returning null or an appropriate value
       }
+      localStorage.clear()
     });
   
-    const allData = data.map((i) => i[0]);
-    console.log(cid);
-    registerDoctor(allData, cid);
-    setSuccess(true);
+    // const allData = data.map((i) => i[0]);
+    // console.log(cid);
+    // registerDoctor(allData, cid);
+    // setSuccess(true);
     localStorage.clear();
   };
   
-  const registerDoctor = async (data_to_be_sent: any, cid: string) => {
-    console.log("atta", data_to_be_sent);
-    console.log("clinic id", cid);
-    try {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}api/Clinictiming?clinicId=${cid}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data_to_be_sent),
-        }
-      );
+  // const registerDoctor = async (data_to_be_sent: any, cid: string) => {
+  //   console.log("atta", data_to_be_sent);
+  //   console.log("clinic id", cid);
+  //   try {
+  //     const response = await fetch(
+  //       `${import.meta.env.VITE_API_URL}api/Clinictiming?clinicId=${cid}`,
+  //       {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         body: JSON.stringify(data_to_be_sent),
+  //       }
+  //     );
   
-      if (response.status !== 200) {
-        throw new Error("Failed to register doctor");
-      }
-    } catch (error) {
-      throw new Error();
-    }
+  //     if (response.status !== 200) {
+  //       throw new Error("Failed to register doctor");
+  //     }
+  //   } catch (error) {
+  //     throw new Error();
+  //   }
   
   
    
@@ -237,7 +255,7 @@ const AddClinic: React.FC = () => {
   //   } catch (error) {
   //     throw new Error(error.message);
   //   }
-  };
+ 
 
   const anSubmit =
     clinicName.trim() !== "" &&

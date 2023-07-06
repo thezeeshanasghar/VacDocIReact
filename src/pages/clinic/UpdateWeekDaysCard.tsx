@@ -14,9 +14,10 @@ import {
 } from "@ionic/react";
 import React, { useState, useEffect } from "react";
 
-type AddWeekDayCardProps = {
+type UpdateWeekDayCardProps = {
   name: string;
-  
+  session: ISession[];
+  clinicId:number;
   setSession?: React.Dispatch<React.SetStateAction<ISession[]>>;
 };
 
@@ -27,17 +28,29 @@ export interface ISession {
   endTime: string;
   
 }
+interface CData {
+    Id: number;
+    Day: string;
+    Session: string;
+    StartTime: string;
+    EndTime: string;
+    ClinicId: number;
+  }
 
-const AddWeekDaysCard: React.FC<AddWeekDayCardProps> = ({ name, setSession}) => {
+const UpdateWeekDaysCard: React.FC<UpdateWeekDayCardProps> = ({ name, setSession,session ,clinicId}) => {
   const [showSession1, setShowSession1] = useState(false);
   const [showSession2, setShowSession2] = useState(false);
+  const [clinicSession, setClinicSession] = useState("")
   const [showCard, setShowCard] = useState(false);
   const [mstart, setMStart] = useState("");
   const [mend, setMEnd] = useState("");
   const [mstart2, setMStart2] = useState("");
   const [mend2, setMEnd2] = useState("");
   const [dayData, setDayData] = useState<ISession[]>([]);
-
+  const [clinicArray,setClinicArray]= useState([]);
+console.log("session data",session)
+// const {Id, Day} = session && session[0];
+console.log(clinicId)
   useEffect(() => {
     if (showCard && showSession1 && mstart !== "" && mend !== "") {
       const existingIndex = dayData.findIndex(
@@ -62,14 +75,14 @@ const AddWeekDaysCard: React.FC<AddWeekDayCardProps> = ({ name, setSession}) => 
         ]);
       }
     }
-  }, [showCard, showSession1, mstart, mend, name, ]);
+  },[showCard, showSession1, mstart, mend, name, ]);
 
   useEffect(() => {
     if (showCard && showSession2 && mstart2 !== "" && mend2 !== "") {
       const existingIndex = dayData.findIndex(
         (entry) => entry.day === name && entry.session === "Evening"
       );
-
+  
       if (existingIndex !== -1) {
         const updatedDayData = [...dayData];
         updatedDayData[existingIndex].startTime = mstart2;
@@ -83,16 +96,46 @@ const AddWeekDaysCard: React.FC<AddWeekDayCardProps> = ({ name, setSession}) => 
             session: "Evening",
             startTime: mstart2,
             endTime: mend2,
-            
           },
         ]);
       }
     }
-  }, [showCard, showSession2, mstart2, mend2, name, ]);
+  },[showCard, showSession2, mstart2, mend2, name]);
+  
 
   useEffect(() => {
     dayData.length >= 1 && localStorage.setItem(name, JSON.stringify(dayData));
-  }, [dayData]);
+  },[dayData]);
+  useEffect(() => {
+    fetch(`${import.meta.env.VITE_API_URL}api/Clinictiming?clinicId=${clinicId}`)
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.length > 0) {
+          const morningData = data.find(
+            (entry) => entry.Session === "Morning" && entry.Day === name
+          );
+          const eveningData = data.find(
+            (entry) => entry.Session === "Evening" && entry.Day === name
+          );
+  
+          if (morningData) {
+            setShowCard(true);
+            setShowSession1(true);
+            setMStart(morningData.StartTime);
+            setMEnd(morningData.EndTime);
+          } else if (eveningData) {
+            setShowCard(true);
+            setShowSession2(true);
+            setMStart2(eveningData.StartTime);
+            setMEnd2(eveningData.EndTime);
+          }
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching clinic timing:", error);
+      });
+  }, []);
+  
 
   const handleToggleSession1 = (e: {
     detail: { checked: boolean | ((prevState: boolean) => boolean) };
@@ -131,8 +174,9 @@ const AddWeekDaysCard: React.FC<AddWeekDayCardProps> = ({ name, setSession}) => 
       setMEnd2(value);
     }
   };
-
+console.log(showCard,showSession1,showSession2)
   return (
+    
     <IonCard style={{ width: "100%" }}>
       <IonCardHeader>
         <div
@@ -142,13 +186,17 @@ const AddWeekDaysCard: React.FC<AddWeekDayCardProps> = ({ name, setSession}) => 
             width: "100%",
           }}
         >
-          {}
+            
           <IonCardTitle>{name}</IonCardTitle>
-          <IonToggle checked={showCard} onIonChange={handleToggleCard} />
+          <IonToggle 
+          checked={showCard} 
+          onIonChange={handleToggleCard}
+          />
         </div>
       </IonCardHeader>
-
+      
       {showCard && (
+        
         <IonCardContent>
           <IonItem lines="none">
             <IonLabel>Session: 1</IonLabel>
@@ -159,6 +207,7 @@ const AddWeekDaysCard: React.FC<AddWeekDayCardProps> = ({ name, setSession}) => 
           </IonItem>
 
           {showSession1 && (
+            
             <IonRow>
               <IonCol>
                 <IonItem>
@@ -221,4 +270,4 @@ const AddWeekDaysCard: React.FC<AddWeekDayCardProps> = ({ name, setSession}) => 
   );
 };
 
-export default AddWeekDaysCard;
+export default UpdateWeekDaysCard;
