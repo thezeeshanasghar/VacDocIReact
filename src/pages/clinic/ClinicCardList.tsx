@@ -4,6 +4,7 @@ import Header from "../../components/header/Header";
 import ClinicCard from "../../components/clinic/ClinicCard";
 import ErrorComponent from "../Error/ErrorComponent";
 import { useLocation } from "react-router";
+// import { useIonViewWillEnter } from "@ionic/react";
 
 import { add } from "ionicons/icons";
 interface Clinic {
@@ -16,6 +17,7 @@ interface Clinic {
 }
 
 const ClinicCardList: React.FC = ( DoctorId, Id) => {
+
   const location = useLocation();
   const [doctorId, setdocorId] = useState(1);
   const [rerender, setRerender] = useState(false);
@@ -26,14 +28,28 @@ const ClinicCardList: React.FC = ( DoctorId, Id) => {
       const data: Clinic[] = await res.json();
       setClinics(data);
       setRerender(!rerender);
+     
     } catch (err) {
       console.log(err);
     }
   };
+  // useEffect(() => {
+  //   // Code to run once
 
+  //   // Cleanup code (if necessary)
+  //   return () => {
+  //     // Cleanup logic
+  //     window.location.reload();
+  //   };
+  // }, []);
   useEffect(() => {
     fetchClinicData();
   }, [location, rerender]);
+  // useIonViewWillEnter(() => {
+  //   // Fetch clinics data when the view will enter (navigated back to the component)
+  //   fetchClinicData();
+  // });
+
   return (
     <>
       {Clinics && (
