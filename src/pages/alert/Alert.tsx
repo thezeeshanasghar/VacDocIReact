@@ -31,10 +31,12 @@ type PatientDataType = {
   DoctorId: number;
 };
 const Alert: React.FC = () => {
+  const storedValue = JSON.parse(sessionStorage.getItem("docData"));
+  console.log(storedValue);
   const [patientData, setPatientData] = useState<PatientDataType[]>([]);
   const location = useLocation();
   const fetchPatientData = () => {
-    fetch(`${import.meta.env.VITE_API_URL}patients?doctorId=1`)
+    fetch(`${import.meta.env.VITE_API_URL}patients?doctorId=${storedValue.Id}`)
       .then((response) => response.json())
       .then((data: PatientDataType[]) => setPatientData(data))
       .catch((error) => {

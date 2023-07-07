@@ -33,11 +33,13 @@ export interface IPatientData {
 }
 
 const PatientCardList: React.FC = () => {
+  const storedValue = JSON.parse(sessionStorage.getItem("docData"));
+    console.log(storedValue);
   const location = useLocation();
   const [patientData, setPatientData] = useState<IPatientData[]>([]);
   const [hideCards, setHideCards] = useState(false);
   const fetchPatientData = () => {
-    fetch(`${import.meta.env.VITE_API_URL}patients?doctorId=${1}`)
+    fetch(`${import.meta.env.VITE_API_URL}patients?doctorId=${storedValue.Id}`)
       .then((response) => response.json())
       .then((data: IPatientData[]) => setPatientData(data))
       .catch((error) => {

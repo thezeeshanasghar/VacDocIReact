@@ -15,8 +15,10 @@ import Toast from "../../components/custom-toast/Toast";
 import AddWeekDaysCard from "./AddWeekDaysCard";
 
 const AddClinic: React.FC = () => {
+  const storedValue = JSON.parse(sessionStorage.getItem("docData"));
+  console.log(storedValue);
   const router = useIonRouter();
-  const [doctorId, setDoctorId] = useState(1);
+  const [doctorId, setDoctorId] = useState(storedValue.Id);
   const [clinicName, setClinicName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [address, setAddress] = useState("");

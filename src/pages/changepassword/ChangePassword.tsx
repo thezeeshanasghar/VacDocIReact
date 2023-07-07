@@ -19,7 +19,8 @@ const ChangePassword: React.FC = () => {
   const [confirmNewPassword, setConfirmNewPassword] = useState<string>("");
   const [passwordMatch, setPasswordMatch] = useState(true);
   const [msg, setMsg] = useState("");
-
+  const storedValue = JSON.parse(sessionStorage.getItem("docData"));
+  console.log(storedValue);
   const handelChangePassword = () => {
     console.log("old pass", oldPassword);
     console.log("new pass", newPassword);
@@ -37,7 +38,7 @@ const ChangePassword: React.FC = () => {
           },
         ];
         console.log(data_to_be_sent);
-        fetch(`${import.meta.env.VITE_API_URL}api/Doctor/password/1`, {
+        fetch(`${import.meta.env.VITE_API_URL}api/Doctor/password/${storedValue.Id}`, {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
@@ -68,12 +69,16 @@ const ChangePassword: React.FC = () => {
     }
   };
   const pass = () => {
-    fetch(`${import.meta.env.VITE_API_URL}api/Doctor`) 
+    setOldPassword("");
+            setNewPassword("");
+            setConfirmNewPassword("");
+    fetch(`${import.meta.env.VITE_API_URL}api/Doctor/${storedValue.Id}`) 
       .then((res) => res.json())
       .then((data) => {
-        setDoctorData(data[0].Password);
-        console.log(data[0].Password);
-        setFetchOldPassword(data[0].Password);
+        console.log(data)
+        setDoctorData(data.Password);
+        console.log(data.Password);
+        setFetchOldPassword(data.Password);
       });
   };
   useEffect(() => {

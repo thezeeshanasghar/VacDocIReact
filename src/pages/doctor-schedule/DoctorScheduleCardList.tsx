@@ -15,6 +15,8 @@ export interface IDoctorSchedule {
 }
 
 const DoctorScheduleCardList: React.FC = () => {
+  const storedValue = JSON.parse(sessionStorage.getItem("docData"));
+  console.log(storedValue);
   const [scheduleData, setScheduleData] = useState<IDoctorSchedule[]>();
   const [groupedData, setGroupedData] = useState<
     Record<string, IDoctorSchedule[]>
@@ -25,7 +27,7 @@ const DoctorScheduleCardList: React.FC = () => {
     fetch(
       `${
         import.meta.env.VITE_API_URL
-      }api/DoctorSchedule/doctor_schedule/${doctorId}`
+      }api/DoctorSchedule/doctor_schedule/${storedValue.Id}`
     )
       .then((res) => res.json())
       .then((data: IDoctorSchedule[]) => setScheduleData(data));
@@ -37,7 +39,7 @@ const DoctorScheduleCardList: React.FC = () => {
         .post(
           `${
             import.meta.env.VITE_API_URL
-          }api/DoctorSchedule/doctor_post_schedule?doctorId=${doctorId}`
+          }api/DoctorSchedule/doctor_post_schedule?doctorId=${storedValue.Id}`
         )
         .then(res => res.status === 200 && fetchScheduleData())
         .catch((err) => console.log(err));

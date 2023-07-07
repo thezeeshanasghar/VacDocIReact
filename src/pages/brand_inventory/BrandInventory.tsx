@@ -11,6 +11,8 @@ import ErrorComponent from "../Error/ErrorComponent";
 type BrandInventoryType = { Count: number; VaccineName: string; Brand: string };
 
 const BrandInventory: React.FC = () => {
+  const storedValue = JSON.parse(sessionStorage.getItem("docData"));
+  console.log(storedValue);
   const [brandData, setBrandData] = useState<BrandInventoryType[]>([]);
   useEffect(() => {
     fetchInventoryData();
@@ -21,7 +23,7 @@ const BrandInventory: React.FC = () => {
       const response = await fetch(
         `${
           import.meta.env.VITE_API_URL
-        }api/BrandInventory/doctor-vaccine-Count/1`
+        }api/BrandInventory/doctor-vaccine-Count/${storedValue.Id}`
       ); // Replace 'API_ENDPOINT' with the actual API endpoint URL
       const data = await response.json();
       setBrandData(data);

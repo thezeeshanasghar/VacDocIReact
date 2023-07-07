@@ -18,16 +18,20 @@ interface Clinic {
 
 const ClinicCardList: React.FC = ( DoctorId, Id) => {
 
+  const storedValue = JSON.parse(sessionStorage.getItem("docData"));
+  console.log(storedValue);
   const location = useLocation();
-  const [doctorId, setdocorId] = useState(1);
+  const [id,setId] = useState("")
+  const [doctorId, setdocorId] = useState(storedValue.Id);
   const [rerender, setRerender] = useState(false);
   const [Clinics, setClinics] = useState<Clinic[]>([]);
   const fetchClinicData = async () => {
     try {
+      
       const res = await fetch(`${import.meta.env.VITE_API_URL}api/Clinic`);
       const data: Clinic[] = await res.json();
       setClinics(data);
-      setRerender(!rerender);
+      setRerender(true);
      
     } catch (err) {
       console.log(err);
@@ -44,7 +48,8 @@ const ClinicCardList: React.FC = ( DoctorId, Id) => {
   // }, []);
   useEffect(() => {
     fetchClinicData();
-  }, [location, rerender]);
+    console.log('fetching clinic data')
+  }, [rerender]);
   // useIonViewWillEnter(() => {
   //   // Fetch clinics data when the view will enter (navigated back to the component)
   //   fetchClinicData();

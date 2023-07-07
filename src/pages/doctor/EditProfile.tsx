@@ -40,6 +40,15 @@ const EditProfile: React.FC = () => {
   const [isEnabled, setIsEnabled] = useState(false);
   const [success, setSuccess] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
+  const [doctorId, setDoctorId] = useState<string>("")
+
+  // useEffect(() => {
+  //   const storedValue = JSON.parse(sessionStorage.getItem("docData"));
+  //   console.log(storedValue);
+  //   console.log(storedValue.Id);
+  //   setDoctorId(storedValue.Id);
+  // }, []);
+
   function handleSubmit(event: FormEvent<HTMLFormElement>): void {
     event.preventDefault();
     //@ts-ignore
@@ -53,7 +62,8 @@ const EditProfile: React.FC = () => {
       doctorType,
       pmdc,
     };
-    fetch(`${import.meta.env.VITE_API_URL}api/Doctor/doctors/${1}`, {
+    console.log("in submit",doctorId)
+    fetch(`${import.meta.env.VITE_API_URL}api/Doctor/doctors/${doctorId}`, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
@@ -80,7 +90,13 @@ const EditProfile: React.FC = () => {
     setIsEnabled(false);
   };
   const fetchInitialDocData = () => {
-    fetch(`${import.meta.env.VITE_API_URL}api/Doctor/${1}`)
+    const storedValue = JSON.parse(sessionStorage.getItem("docData"));
+    console.log(storedValue);
+    console.log(storedValue.Id);
+    const data=storedValue.Id
+    setDoctorId(storedValue.Id);
+    console.log(doctorId)
+    fetch(`${import.meta.env.VITE_API_URL}api/Doctor/${data}`)
       .then((response) => response.json())
       .then((data: DoctorData) => {
         if (Object.keys(data).length !== 0) {

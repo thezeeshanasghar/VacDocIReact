@@ -7,11 +7,15 @@ import {
   IonImg,
   IonPage,
 } from "@ionic/react";
-import React from "react";
+import React, { useEffect } from "react";
 import Header from "../../components/header/Header";
 import dashboardImage from "../../assets/vaccinepk.png";
 import "./dashboard.css";
 const Dashboard: React.FC = () => {
+  useEffect(() => {
+    const storedValue = JSON.parse(sessionStorage.getItem("docData"));
+    console.log(storedValue);
+  }, []);
   return (
     <IonPage>
       <Header pageName="Dashboard" />

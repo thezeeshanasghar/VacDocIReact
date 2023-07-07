@@ -11,6 +11,8 @@ import ErrorComponent from "../Error/ErrorComponent";
 // import ReactDOM from "react-dom";
 type BrandAmountType = { Price: number; VaccineName: string; Brand: string };
 const BrandAmount: React.FC = () => {
+  const storedValue = JSON.parse(sessionStorage.getItem("docData"));
+  console.log(storedValue);
   const [brandData, setBrandData] = useState<BrandAmountType[]>([]);
   useEffect(() => {
     fetchBrandData();
@@ -18,7 +20,7 @@ const BrandAmount: React.FC = () => {
   
   const fetchBrandData = async () => {
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}api/BrandAmount/doctor-vaccine-price/1`); // Replace 'API_ENDPOINT' with the actual API endpoint URL
+      const response = await fetch(`${import.meta.env.VITE_API_URL}api/BrandAmount/doctor-vaccine-price/${storedValue.Id}`); // Replace 'API_ENDPOINT' with the actual API endpoint URL
       const data = await response.json();
       setBrandData(data);
     } catch (error) {

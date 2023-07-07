@@ -17,6 +17,8 @@ import "./vacation.css";
 import { today } from "ionicons/icons";
 type ClinicType = { Name: string };
 const Vacation: React.FC = () => {
+  const storedValue = JSON.parse(sessionStorage.getItem("docData"));
+  console.log(storedValue);
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
   const [toDay, setToDay] = useState("")
@@ -45,7 +47,7 @@ setToDay(today)
     fetch(
       `${
         import.meta.env.VITE_API_URL
-      }update_date_for_Vaccations?doctorId=1&fromDate=${fromDate}&toDate=${toDate}`,
+      }update_date_for_Vaccations?doctorId=${storedValue.Id}&fromDate=${fromDate}&toDate=${toDate}`,
       {
         method: "PATCH",
 

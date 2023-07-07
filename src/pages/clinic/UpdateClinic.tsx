@@ -21,7 +21,7 @@ import React, { useState, useEffect } from "react";
 import Header from "../../components/header/Header";
 import Toast from "../../components/custom-toast/Toast";
 import WeekDaysCard from "./WeekDaysCard";
-import DaysCard, { ISession } from "./UpdateWeekDaysCard"
+import DaysCard, { ISession } from "./UpdateWeekDaysCard";
 interface IClinic {
   Id: number;
   Name: string;
@@ -54,9 +54,14 @@ const UpdateClinic: React.FC<ClinicProps> = ({
   const [error, setError] = useState(false);
   const [clinicArray, setClinicArray] = useState<any>([]);
 
+  useEffect(() => {
+    const storedValue = JSON.parse(sessionStorage.getItem("docData"));
+    console.log(storedValue);
+  }, []);
+
   const handleUnSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-     let data_to_to_sent = [];
+    let data_to_to_sent = [];
     if (clinicName.trim().length > 0) {
       data_to_to_sent.push({
         path: "Name",
@@ -124,27 +129,26 @@ const UpdateClinic: React.FC<ClinicProps> = ({
     const data = newArray.map(async (day) => {
       const storedData = localStorage.getItem(day);
       console.log(storedData, "this is storedData"); // Retrieve the data from localStorage
-    
-        const parsedData = storedData ? JSON.parse(storedData) : null;
-        // return parsedData;
-        const response = await fetch(
-          `${
-            import.meta.env.VITE_API_URL
-          }api/Clinictiming/api/clintimings/AddorUpdate/${clinicId}`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(parsedData),
-          }
-        ).then((res) => {
+
+      const parsedData = storedData ? JSON.parse(storedData) : null;
+      // return parsedData;
+      const response = await fetch(
+        `${
+          import.meta.env.VITE_API_URL
+        }api/Clinictiming/api/clintimings/AddorUpdate/${clinicId}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(parsedData),
+        }
+      )
+        .then((res) => {
           if (res.status === 200) {
             setSuccess(true);
-            localStorage.clear()
-            setTimeout(() => {
-              router.push("/members/doctor/clinic", "back");
-            }, 1000);
+            localStorage.clear();
+            router.push("/members/doctor/clinic", "root");
           } else {
             setError(false);
           }
@@ -230,7 +234,7 @@ const UpdateClinic: React.FC<ClinicProps> = ({
           // setClinic(data);
         }
         setClinicArray(data);
-        console.log("session data",data)
+        console.log("session data", data);
       });
   }, []);
   const anSubmit =
@@ -287,19 +291,45 @@ const UpdateClinic: React.FC<ClinicProps> = ({
                   value={address}
                   onIonChange={(e) => setAddress(e.detail.value!)}
                 ></IonTextarea>
-               
               </IonItem>
-            
-             
-              <DaysCard name={"Monday"} session={clinicArray} clinicId={clinicId}/>
-              <DaysCard name={"Tuesday"} session={clinicArray} clinicId={clinicId}/>
-              <DaysCard name={"Wednesday"} session={clinicArray} clinicId={clinicId}/>
-              <DaysCard name={"Thursday"} session={clinicArray} clinicId={clinicId}/>
-              <DaysCard name={"Friday"} session={clinicArray} clinicId={clinicId}/>
-              <DaysCard name={"Saturday"} session={clinicArray} clinicId={clinicId}/>
-              <DaysCard name={"Sunday"} session={clinicArray} clinicId={clinicId}/>
+
+              <DaysCard
+                name={"Monday"}
+                session={clinicArray}
+                clinicId={clinicId}
+              />
+              <DaysCard
+                name={"Tuesday"}
+                session={clinicArray}
+                clinicId={clinicId}
+              />
+              <DaysCard
+                name={"Wednesday"}
+                session={clinicArray}
+                clinicId={clinicId}
+              />
+              <DaysCard
+                name={"Thursday"}
+                session={clinicArray}
+                clinicId={clinicId}
+              />
+              <DaysCard
+                name={"Friday"}
+                session={clinicArray}
+                clinicId={clinicId}
+              />
+              <DaysCard
+                name={"Saturday"}
+                session={clinicArray}
+                clinicId={clinicId}
+              />
+              <DaysCard
+                name={"Sunday"}
+                session={clinicArray}
+                clinicId={clinicId}
+              />
               <IonButton type="submit" disabled={!anSubmit}>
-                Submit
+                Update
               </IonButton>
             </form>
           </IonContent>

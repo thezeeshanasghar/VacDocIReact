@@ -48,9 +48,9 @@ const UpdateWeekDaysCard: React.FC<UpdateWeekDayCardProps> = ({ name, setSession
   const [mend2, setMEnd2] = useState("");
   const [dayData, setDayData] = useState<ISession[]>([]);
   const [clinicArray,setClinicArray]= useState([]);
-console.log("session data",session)
+// console.log("session data",session)
 // const {Id, Day} = session && session[0];
-console.log(clinicId)
+// console.log(clinicId)
   useEffect(() => {
     if (showCard && showSession1 && mstart !== "" && mend !== "") {
       const existingIndex = dayData.findIndex(
@@ -177,7 +177,7 @@ console.log(clinicId)
       setMEnd2(value);
     }
   };
-console.log(showCard,showSession1,showSession2)
+// console.log(showCard,showSession1,showSession2)
   return (
     
     <IonCard style={{ width: "100%" }}>
