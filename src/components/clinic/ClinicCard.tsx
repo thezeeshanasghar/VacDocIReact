@@ -56,6 +56,7 @@ const ClinicCard: React.FC<ClinicCardProps> = ({
   const [timings, setTimings] = useState(initialTimings);
   const [isOnline, setIsOnline] = useState(initialIsOnline);
   const [success, setSuccess] = useState(false);
+  
   const [error, setError] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
   const [clinicTimings, setclinicTimings] = useState<Session[]>([]);

@@ -13,8 +13,9 @@ import WeekDaysCard, { ISession } from "./WeekDaysCard";
 import Header from "../../components/header/Header";
 import Toast from "../../components/custom-toast/Toast";
 import AddWeekDaysCard from "./AddWeekDaysCard";
-
+import { useHistory } from "react-router-dom";
 const AddClinic: React.FC = () => {
+  const history = useHistory();
   const storedValue = JSON.parse(sessionStorage.getItem("docData"));
   console.log(storedValue);
   const router = useIonRouter();
@@ -101,9 +102,8 @@ const AddClinic: React.FC = () => {
         console.log(clinicId);
         postclinictiming(clinicId);
         setSuccess(true);
-        setTimeout(() => {
-          router.push("/members/doctor/clinic", "back");
-        }, 1000);
+        history.push("/members/doctor/clinic", "back");
+        window.location.reload();
       } else {
         throw new Error("Failed to create clinic");
       }

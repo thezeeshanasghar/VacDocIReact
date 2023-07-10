@@ -21,6 +21,7 @@ import React, { useState, useEffect } from "react";
 import Header from "../../components/header/Header";
 import Toast from "../../components/custom-toast/Toast";
 import WeekDaysCard from "./WeekDaysCard";
+import { useHistory } from "react-router-dom";
 import DaysCard, { ISession } from "./UpdateWeekDaysCard";
 interface IClinic {
   Id: number;
@@ -43,6 +44,7 @@ const UpdateClinic: React.FC<ClinicProps> = ({
     params: { clinicId },
   },
 }) => {
+  const history = useHistory();
   const router = useIonRouter();
   const [clinic, setClinic] = useState<IClinic>();
   const [clinicName, setClinicName] = useState("");
@@ -96,9 +98,8 @@ const UpdateClinic: React.FC<ClinicProps> = ({
       .then((res) => {
         if (res.status === 204) {
           setSuccess(true);
-          setTimeout(() => {
-            router.push("/members/doctor/clinic", "back");
-          }, 1000);
+          history.push("/members/doctor/clinic", "back");
+          window.location.reload();
         } else {
           setError(false);
         }

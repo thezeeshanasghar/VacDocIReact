@@ -17,9 +17,13 @@ import React, { useState, useEffect } from "react";
 import Header from "../../components/header/Header";
 import Toast from "../../components/custom-toast/Toast";
 import { useIonRouter } from "@ionic/react";
+import { useHistory } from "react-router-dom";
 type VaccineDataType = { Id: number; Name: string };
 type BrandInventoryType = { Id: number; Name: string };
 const AddBrandAmount: React.FC = () => {
+  const history = useHistory();
+  const storedValue = JSON.parse(sessionStorage.getItem("docData"));
+  console.log(storedValue);storedValue.Id
   const [success, setSuccess] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
   const [brandData, setBrandData] = useState<BrandInventoryType[]>([]);
@@ -28,15 +32,15 @@ const AddBrandAmount: React.FC = () => {
   const [vaccineName, setVaccineName] = useState<string>("");
   const [vaccineData, setVaccineData] = useState<VaccineDataType[]>([]);
   const data = useIonRouter();
-  const handelList = () => {
-    data.push("/members/doctor/brandamount");
-  };
+  // const handelList = () => {
+  //   data.push("/members/doctor/brandamount");
+  // };
 
   const handleSubmit = () => {
     const data_to_be_sent = {
       Amount: brandAmount,
       brandId: brandName,
-      doctorId: 1,
+      doctorId: storedValue.Id,
     };
     console.log(data_to_be_sent);
     fetch(`${import.meta.env.VITE_API_URL}api/BrandAmount`, {
@@ -46,7 +50,15 @@ const AddBrandAmount: React.FC = () => {
       },
       body: JSON.stringify(data_to_be_sent),
     })
-      .then((res) => (res.status === 201 ? setSuccess(true) : setError(true)))
+      .then((res) => {
+        if (res.status === 201) {
+          setSuccess(true);
+          history.push("/members/doctor/brandamount", "back");
+          window.location.reload();
+        } else {
+          setError(true);
+        }
+      })
       .catch((err) => setError(true))
       .finally(() => {
         setBrandAmount("");
@@ -54,6 +66,7 @@ const AddBrandAmount: React.FC = () => {
         setBrandName("");
       });
   };
+  
 
   const handleClickVaccine = () => {
     fetch(`${import.meta.env.VITE_API_URL}api/Brand/brand_name/${vaccineName}`)
@@ -129,7 +142,7 @@ const AddBrandAmount: React.FC = () => {
               </IonItem>
               <IonButton onClick={handleSubmit}>Add Amount</IonButton>
               <br />
-              <IonButton onClick={handelList}>list</IonButton>
+              {/* <IonButton onClick={handelList}>list</IonButton> */}
             </IonCardContent>
           </IonCard>
         </IonContent>

@@ -14,10 +14,11 @@ import React, { useState, useEffect } from "react";
 import Header from "../../components/header/Header";
 import Toast from "../../components/custom-toast/Toast";
 import { useIonRouter } from "@ionic/react";
-
+import { useHistory } from "react-router-dom";
 type BrandInventoryType = { Id: number; Name: string };
 type VaccineDataType = { Id: number; Name: string };
 const AddBrandInventory: React.FC = () => {
+  const history = useHistory();
   const [success, setSuccess] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
   const [brandData, setBrandData] = useState<BrandInventoryType[]>([]);
@@ -26,17 +27,18 @@ const AddBrandInventory: React.FC = () => {
   const [vaccineName, setVaccineName] = useState<string>("");
   const [brandCount, setBrandCount] = useState<string>("");
   const data = useIonRouter();
-  const handelList = () => {
-    data.push("/members/doctor/brandamount");
-  };
-
+  // const handelList = () => {
+  //   data.push("/members/doctor/brandamount");
+  // };
+  const storedValue = JSON.parse(sessionStorage.getItem("docData"));
+  console.log(storedValue);
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
     const data_to_be_sent = {
       count: brandCount,
       brandId: brandName,
-      doctorId: 1,
+      doctorId: storedValue.Id,
     };
     console.log(data_to_be_sent);
     fetch(`${import.meta.env.VITE_API_URL}api/BrandInventory`, {
@@ -46,7 +48,15 @@ const AddBrandInventory: React.FC = () => {
       },
       body: JSON.stringify(data_to_be_sent),
     })
-      .then((res) => (res.status === 201 ? setSuccess(true) : setError(true)))
+    .then((res) => {
+      if (res.status === 201) {
+        setSuccess(true);
+        history.push("/members/doctor/brandinventory", "back");
+        window.location.reload();
+      } else {
+        setError(true);
+      }
+    })
       .catch((err) => setError(true))
       .finally(() => {
         setBrandName("");
@@ -133,7 +143,7 @@ const AddBrandInventory: React.FC = () => {
                 </IonItem>
                 <IonButton type="submit">Add Inventory</IonButton>
               </form>
-              <IonButton onClick={handelList}>list</IonButton>
+              {/* <IonButton onClick={handelList}>list</IonButton> */}
             </IonCardContent>
           </IonCard>
         </IonContent>

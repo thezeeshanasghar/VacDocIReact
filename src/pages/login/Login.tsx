@@ -15,7 +15,6 @@ import {
 import { mail, lockClosed, logIn } from "ionicons/icons";
 import "./Login.css";
 import Toast from "../../components/custom-toast/Toast";
-// import LoadingSpinner from "../../components/loading-spinner/LoadingSpinner";
 
 const Login: React.FC = () => {
   const [showLoading, setShowLoading] = useState(false);
@@ -24,63 +23,59 @@ const Login: React.FC = () => {
   const [error, setError] = useState<boolean>(false);
   const [mobileNumber, setmobileNumber] = useState<string>("");
   const [password, setpassword] = useState<string>("");
+
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    // setShowLoading(true);
     event.preventDefault();
-    fetch(`${import.meta.env.VITE_API_URL}api/Doctor/login?MobileNumber=${mobileNumber}&Password=${password}`, {
-      method: "GET",
-    })
-      .then((res) => {
-        if(res.status === 200) {
-        setSuccess(true)
-        navigation.push("/members", "root");
-        console.log(res)
-        // sessionStorage.setItem('myValue', res);
-        return res.json(); 
-       }
-       else {
-        setError(false);
-       }
-      })
-      .then((data) => {
-        // if (Object.keys(data).length !== 0) {
-          
-        // }
-        console.log(data);
-        sessionStorage.setItem('docData', JSON.stringify(data));
-      })
-      .catch((err) => {
-        setError(true)
-      })
-      .finally(() => {
-        setmobileNumber("")
-        setpassword("")
-      });
-   
+    try {
+      fetch(
+        `${import.meta.env.VITE_API_URL}api/Doctor/login?MobileNumber=${mobileNumber}&Password=${password}`,
+        {
+          method: "GET",
+        }
+      )
+        .then((res) => {
+          if (res.status === 200) {
+            setSuccess(true);
+            navigation.push("/members", "root");
+            return res.json();
+          } else {
+            setError(true);
+            throw new Error("An error occurred while logging in.");
+          }
+        })
+        .then((data) => {
+          console.log(data);
+          sessionStorage.setItem("docData", JSON.stringify(data));
+        })
+        .catch((err: any) => {
+          setError(true);
+          console.error(err);
+        })
+        .finally(() => {
+          setmobileNumber("");
+          setpassword("");
+        });
+    } catch (err) {
+      setError(true);
+      console.error(err);
+    }
   };
-  const canSubmit =
-  password.length > 0 &&
-  mobileNumber.length > 0;
- 
+
+  const canSubmit = password.length > 0 && mobileNumber.length > 0;
 
   return (
     <>
-      {/* <LoadingSpinner
-        isOpen={showLoading}
-        setOpen={setShowLoading}
-        time={1000}
-      /> */}
-      <Toast
-        isOpen={error}
-        setOpen={setError}
-        color="danger"
-        errMsg="an error occurred while login, try again"
-      />
       <Toast
         isOpen={success}
         setOpen={setSuccess}
         color="success"
-        errMsg="Docter Login successfully"
+        errMsg="Doctor Login successful"
+      />
+      <Toast
+        isOpen={error}
+        setOpen={setError}
+        color="danger"
+        errMsg="An error occurred while logging in. Please try again."
       />
       <IonPage>
         <IonHeader>
@@ -128,14 +123,18 @@ const Login: React.FC = () => {
                     className="custom-button"
                     disabled={!canSubmit}
                   >
-                    <IonIcon icon={logIn} color="light"  />
+                    <IonIcon icon={logIn} color="light" />
                     &nbsp; Login
                   </IonButton>
                   <IonText
-                    style={{ color: "#fff", marginTop: "10px", cursor: 'pointer'}}
+                    style={{
+                      color: "#fff",
+                      marginTop: "10px",
+                      cursor: "pointer",
+                    }}
                     onClick={() => navigation.push("/auth/reg_doc")}
                   >
-                    don't have Account? &nbsp; Sign Up
+                    Don't have an account? &nbsp; Sign Up
                   </IonText>
                 </form>
               </div>

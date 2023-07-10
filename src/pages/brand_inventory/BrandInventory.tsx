@@ -60,7 +60,7 @@ const BrandInventory: React.FC = () => {
         </IonCard>
         {brandData.length>0?(brandData &&
           brandData.map((item, index) => (
-            <IonCard>
+            <IonCard  key={index}>
               <IonCardContent
                 style={{
                   color: "black",

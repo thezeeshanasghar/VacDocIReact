@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import Header from "../../components/header/Header";
 import ClinicCard from "../../components/clinic/ClinicCard";
 import ErrorComponent from "../Error/ErrorComponent";
+import { useHistory } from "react-router-dom";
 import { useLocation } from "react-router";
 // import { useIonViewWillEnter } from "@ionic/react";
 
@@ -21,9 +22,11 @@ const ClinicCardList: React.FC = ( DoctorId, Id) => {
   const storedValue = JSON.parse(sessionStorage.getItem("docData"));
   console.log(storedValue);
   const location = useLocation();
+  const history = useHistory();
   const [id,setId] = useState("")
   const [doctorId, setdocorId] = useState(storedValue.Id);
   const [rerender, setRerender] = useState(false);
+  
   const [Clinics, setClinics] = useState<Clinic[]>([]);
   const fetchClinicData = async () => {
     try {
