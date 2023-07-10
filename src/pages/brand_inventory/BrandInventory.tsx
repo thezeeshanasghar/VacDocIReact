@@ -4,10 +4,14 @@ import {
   IonCard,
   IonCardContent,
   IonCardHeader,
+  IonFab,
+  IonFabButton,
+  IonIcon,
 } from "@ionic/react";
 import React, { useEffect, useState } from "react";
 import Header from "../../components/header/Header";
 import ErrorComponent from "../Error/ErrorComponent";
+import { add } from "ionicons/icons";
 type BrandInventoryType = { Count: number; VaccineName: string; Brand: string };
 
 const BrandInventory: React.FC = () => {
@@ -77,6 +81,15 @@ const BrandInventory: React.FC = () => {
           ))):(
             <ErrorComponent title="Brand Inventory" />
           )}
+          <IonFab slot="fixed" vertical="bottom" horizontal="end">
+              <IonFabButton
+                size="small"
+                routerLink={`/members/doctor/brandinventory/add`}
+                routerDirection="forward"
+              >
+                <IonIcon icon={add}></IonIcon>
+              </IonFabButton>
+              </IonFab>
       </IonContent>
     </IonPage>
   );

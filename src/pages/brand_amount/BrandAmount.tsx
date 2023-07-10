@@ -4,10 +4,14 @@ import {
   IonCard,
   IonCardContent,
   IonCardHeader,
+  IonFab,
+  IonFabButton,
+  IonIcon,
 } from "@ionic/react";
 import React, { useEffect, useState } from "react";
 import Header from "../../components/header/Header";
 import ErrorComponent from "../Error/ErrorComponent";
+import { add } from "ionicons/icons";
 // import ReactDOM from "react-dom";
 type BrandAmountType = { Price: number; VaccineName: string; Brand: string };
 const BrandAmount: React.FC = () => {
@@ -72,6 +76,15 @@ const BrandAmount: React.FC = () => {
           ))):(
             <ErrorComponent title="Brand Amount" />
           )}
+           <IonFab slot="fixed" vertical="bottom" horizontal="end">
+              <IonFabButton
+                size="small"
+                routerLink={`/members/doctor/brandamount/add`}
+                routerDirection="forward"
+              >
+                <IonIcon icon={add}></IonIcon>
+              </IonFabButton>
+              </IonFab>
       </IonContent>
     </IonPage>
   );

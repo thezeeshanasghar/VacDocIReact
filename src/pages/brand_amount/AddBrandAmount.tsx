@@ -31,6 +31,7 @@ const AddBrandAmount: React.FC = () => {
   const [brandName, setBrandName] = useState("");
   const [vaccineName, setVaccineName] = useState<string>("");
   const [vaccineData, setVaccineData] = useState<VaccineDataType[]>([]);
+  const [isBrandDataAvailable, setIsBrandDataAvailable] = useState(true);
   const data = useIonRouter();
   // const handelList = () => {
   //   data.push("/members/doctor/brandamount");
@@ -51,7 +52,7 @@ const AddBrandAmount: React.FC = () => {
       body: JSON.stringify(data_to_be_sent),
     })
       .then((res) => {
-        if (res.status === 201) {
+        if (res.status === 200) {
           setSuccess(true);
           history.push("/members/doctor/brandamount", "back");
           window.location.reload();
@@ -71,7 +72,9 @@ const AddBrandAmount: React.FC = () => {
   const handleClickVaccine = () => {
     fetch(`${import.meta.env.VITE_API_URL}api/Brand/brand_name/${vaccineName}`)
       .then((res) => res.json())
-      .then((data) => setBrandData(data))
+      .then((data) => {setBrandData(data)
+       
+      })
       .catch((err) => console.error(err));
   };
   useEffect(() => {
@@ -114,6 +117,7 @@ const AddBrandAmount: React.FC = () => {
                 <IonSelect
                   value={vaccineName}
                   onIonChange={(e) => setVaccineName(e.detail.value!)}
+            
                 >
                   {vaccineData &&
                     vaccineData.map((item, index) => (
@@ -131,6 +135,7 @@ const AddBrandAmount: React.FC = () => {
                   value={brandName}
                   onClick={handleClickVaccine}
                   onIonChange={(e) => setBrandName(e.detail.value!)}
+                 
                 >
                   {brandData &&
                     brandData.map((item, index) => (
