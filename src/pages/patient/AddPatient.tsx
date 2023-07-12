@@ -28,12 +28,12 @@ const AddPatient: React.FC = () => {
   const [guardian, setGuardian] = useState("");
   const [cnic, setCnic] = useState("");
   const [gender, setGender] = useState("");
-  const [scheduleType, setScheduleType] = useState("");
+  // const [scheduleType, setScheduleType] = useState("");
   const [dob, setDob] = useState("");
   const [email, setEmail] = useState("");
   const [mobileNumber, setMobileNumber] = useState("");
   const [toDay, setToDay] = useState("")
-  const [preferredSchedule, setpreferredSchedule] = useState<string>("");
+  // const [preferredSchedule, setpreferredSchedule] = useState<string>("");
   const [selectedDoctor, setSelectedDoctor] = useState<number>();
   const [selectedClinic, setSelectedClinic] = useState<number>();
   const [city, setCity] = useState<string>("");
@@ -58,10 +58,10 @@ const AddPatient: React.FC = () => {
       email,
       dob,
       gender,
-      type: scheduleType,
+      // type: scheduleType,
       city,
       cnic,
-      preferredSchedule,
+      // preferredSchedule,
       isEPIDone,
       isVerified,
       isInactive: false,
@@ -89,11 +89,11 @@ const AddPatient: React.FC = () => {
     setGuardian("");
     setCnic("");
     setGender("Boy");
-    setScheduleType("special");
+    // setScheduleType("special");
     setDob("");
     setEmail("");
     setMobileNumber("");
-    setpreferredSchedule("");
+    // setpreferredSchedule("");
     setSelectedDoctor(0);
     setSelectedClinic(0);
     setCity("");
@@ -130,11 +130,9 @@ const AddPatient: React.FC = () => {
     guardian !== "" &&
     cnic !== "" &&
     gender !== "" &&
-    scheduleType !== "" &&
     dob !== "" &&
     email !== "" &&
     mobileNumber !== "" &&
-    preferredSchedule !== "" &&
     selectedDoctor !== 0 &&
     selectedClinic !== 0 &&
     city !== "";
@@ -242,7 +240,7 @@ const AddPatient: React.FC = () => {
                 </IonRow>
               </IonGrid>
             </IonRadioGroup>
-            <IonRadioGroup
+            {/* <IonRadioGroup
               value={scheduleType}
               onIonChange={(e) => setScheduleType(e.detail.value)}
             >
@@ -271,7 +269,7 @@ const AddPatient: React.FC = () => {
                 value={preferredSchedule}
                 onIonChange={(e) => setpreferredSchedule(e.detail.value!)}
               />
-            </IonItem>
+            </IonItem> */}
             <IonItem>
               <IonLabel position="floating">Select Doctor</IonLabel>
               <IonSelect

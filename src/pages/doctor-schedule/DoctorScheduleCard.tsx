@@ -42,7 +42,7 @@ const DoctorScheduleCard: React.FC<ScheduleCardProps> = ({
   const [errorToast, setErrorToast] = useState(false);
 
   const fetchDoses = () => {
-    fetch(`${import.meta.env.VITE_API_URL}alldoses`)
+    fetch(`${import.meta.env.VITE_API_URL}api/Dose/alldoses`)
       .then((res) => res.json())
       .then((doses: IDose[]) => setDoses(doses));
   };

@@ -20,7 +20,7 @@ export interface IPatientData {
   FatherName: string;
   Email: string;
   DOB: string;
-  Gender: string;
+  Gender: number;
   Type: string;
   City: string;
   CNIC: string;
@@ -65,7 +65,7 @@ const PatientCardList: React.FC = () => {
             patientData &&
             !hideCards &&
             patientData.map((item, index) => {
-              if (item.Gender.includes("boy" || "male")) {
+              if (item.Gender == 0) {
                 return (
                   <PatientMaleCard
                     key={index * 3 * 2}
