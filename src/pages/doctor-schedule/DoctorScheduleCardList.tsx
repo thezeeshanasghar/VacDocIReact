@@ -13,6 +13,13 @@ export interface IDoctorSchedule {
   DoseId: number;
   DoctorId: number;
 }
+interface IVaccine {
+  Id: number;
+  Name: string;
+  MinAge: number;
+  VaccineId: number;
+}
+
 
 const DoctorScheduleCardList: React.FC = () => {
   const storedValue = JSON.parse(sessionStorage.getItem("docData"));
@@ -27,10 +34,12 @@ const DoctorScheduleCardList: React.FC = () => {
     fetch(
       `${
         import.meta.env.VITE_API_URL
-      }api/DoctorSchedule/doctor_schedule/${storedValue.Id}`
+      }api/DoctorSchedule/new?doctorId=${storedValue.Id}`
     )
       .then((res) => res.json())
-      .then((data: IDoctorSchedule[]) => setScheduleData(data));
+      .then((data: IDoctorSchedule[]) => {setScheduleData(data)
+      console.log('new data ', data)
+      });
   };
 
   useEffect(() => {
@@ -51,11 +60,11 @@ const DoctorScheduleCardList: React.FC = () => {
 
   useEffect(() => {
     if (scheduleData) {
-      const groupedD: Record<string, IDoctorSchedule[]> = groupBy(
-        scheduleData,
-        (item: IDoctorSchedule) => item.Date.split("T")[0]
-      );
-      setGroupedData(groupedD);
+      // const groupedD: Record<string, IDoctorSchedule[]> = groupBy(
+      //   scheduleData,
+      //   (item: IDoctorSchedule) => item.Date.split("T")[0]
+      // );
+      // setGroupedData(groupedD);
     }
   }, [scheduleData]);
 
@@ -72,7 +81,7 @@ const DoctorScheduleCardList: React.FC = () => {
               <Header pageName="Doctor Schedule" />
               <IonContent className="ion-padding">
                 <>
-                  {Object.length>0?(Object.entries(groupedData).map(([date, data]) => (
+                  {Object.length>0?(Object.entries(scheduleData).map(([date, data]) => (
                     <DoctorScheduleCard
                       key={date}
                       date={date}

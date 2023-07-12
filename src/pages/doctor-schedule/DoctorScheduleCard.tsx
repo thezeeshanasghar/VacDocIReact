@@ -33,6 +33,7 @@ const DoctorScheduleCard: React.FC<ScheduleCardProps> = ({
   data,
   forceRender,
 }) => {
+  console.log('schedule card data and date', date, data)
   const [selectedDate, setSelectedDate] = useState<string>("");
   const [selectedDoseDate, setSelectedDoseDate] = useState<string>("");
   const [doses, setDoses] = useState<IDose[]>([]);

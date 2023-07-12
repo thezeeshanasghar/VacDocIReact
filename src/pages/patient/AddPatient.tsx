@@ -163,14 +163,14 @@ const AddPatient: React.FC = () => {
                 required
               />
             </IonItem>
-            <IonItem>
+            {/* <IonItem>
               <IonLabel position="floating">Guardian's Name</IonLabel>
               <IonInput
                 type="text"
                 value={guardian}
                 onIonChange={(e) => setGuardian(e.detail.value!)}
               />
-            </IonItem>
+            </IonItem> */}
             <IonItem>
               <IonLabel position="floating">Father's Name</IonLabel>
               <IonInput
@@ -199,7 +199,7 @@ const AddPatient: React.FC = () => {
                 required
               />
             </IonItem>
-            <IonItem>
+            {/* <IonItem>
               <IonLabel position="floating">Mobile Number</IonLabel>
               <IonInput
                 type="tel"
@@ -207,7 +207,7 @@ const AddPatient: React.FC = () => {
                 value={mobileNumber}
                 onIonChange={(e) => setMobileNumber(e.detail.value!)}
               />
-            </IonItem>
+            </IonItem> */}
             <IonItem>
               <IonLabel position="floating">Date of Birth</IonLabel>
               <IonInput

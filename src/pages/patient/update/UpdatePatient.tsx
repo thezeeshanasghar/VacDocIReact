@@ -31,7 +31,7 @@ interface IPatientData {
   FatherName: string;
   Email: string;
   DOB: string;
-  Gender: string;
+  Gender: number;
   Type: string;
   City: string;
   CNIC: string;
@@ -341,14 +341,14 @@ const UpdatePatient: React.FC<UpdateType> = ({
                     required
                   />
                 </IonItem>
-                <IonItem>
+                {/* <IonItem>
                   <IonLabel position="floating">Guardian's Name</IonLabel>
                   <IonInput
                     type="text"
-                    value={guardian || patientData.Guardian}
+                    value={guardian || patientData.guardian}
                     onIonChange={(e) => setGuardian(e.detail.value!)}
                   />
-                </IonItem>
+                </IonItem> */}
                 <IonItem>
                   <IonLabel position="floating">Father's Name</IonLabel>
                   <IonInput
@@ -376,7 +376,7 @@ const UpdatePatient: React.FC<UpdateType> = ({
                     required
                   />
                 </IonItem>
-                <IonItem>
+                {/* <IonItem>
                   <IonLabel position="floating">Mobile Number</IonLabel>
                   <IonInput
                     type="tel"
@@ -384,7 +384,7 @@ const UpdatePatient: React.FC<UpdateType> = ({
                     value={mobileNumber}
                     onIonChange={(e) => setMobileNumber(e.detail.value!)}
                   />
-                </IonItem>
+                </IonItem> */}
                 <IonItem>
                   <IonLabel position="floating">Date of Birth</IonLabel>
                   <IonInput
@@ -406,13 +406,13 @@ const UpdatePatient: React.FC<UpdateType> = ({
                       <IonCol>
                         <IonItem>
                           <IonLabel>Boy</IonLabel>
-                          <IonRadio slot="start" value="boy" />
+                          <IonRadio slot="start" value="0" />
                         </IonItem>
                       </IonCol>
                       <IonCol>
                         <IonItem>
                           <IonLabel>Girl</IonLabel>
-                          <IonRadio slot="start" value="girl" />
+                          <IonRadio slot="start" value="1" />
                         </IonItem>
                       </IonCol>
                     </IonRow>
