@@ -116,11 +116,11 @@ const EditProfile: React.FC = () => {
     fetchInitialDocData();
   }, []);
   const canSubmit =
-    name.trim() !== "" &&
-    email.trim() !== "" &&
-    mobileNumber.trim() !== "" &&
-    pmdc.trim() !== "" &&
-    doctorType.trim() !== "";
+    name.length>0 &&
+    email.length>0 &&
+    mobileNumber.length>0 &&
+    pmdc.length>0 &&
+    doctorType.length>0;
   return (
     <>
       {data && (

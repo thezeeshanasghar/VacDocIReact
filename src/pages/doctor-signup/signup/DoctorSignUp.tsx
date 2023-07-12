@@ -24,7 +24,7 @@ const DoctorSignUp: React.FC = () => {
   const [password, setPassword] = useState("");
   const [pmdc, setPMDC] = useState("");
   const [doctorType, setDoctorType] = useState("");
-
+const submit=name.length>0&&email.length>0&&mobile.length>0&&password.length>0&&pmdc.length>0&&doctorType.length>0;
   const handleSignUp = (e: any) => {
     e.preventDefault();
     console.log("Name:", name);
@@ -121,6 +121,7 @@ const DoctorSignUp: React.FC = () => {
               <IonItem>
                 <IonLabel>Doctor Type</IonLabel>
                 <IonSelect
+                
                   value={doctorType}
                   onIonChange={(e) => setDoctorType(e.detail.value)}
                 >
@@ -133,7 +134,7 @@ const DoctorSignUp: React.FC = () => {
                   <IonSelectOption value="Surgeon">Surgeon</IonSelectOption>
                 </IonSelect>
               </IonItem>
-              <IonButton expand="full" type="submit">
+              <IonButton expand="full" type="submit" disabled={!submit}>
                 Next
                 <IonIcon slot="end" icon={arrowForward} />
               </IonButton>

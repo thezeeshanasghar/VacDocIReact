@@ -41,7 +41,7 @@ const ClinicRegistration: React.FC = () => {
     router.push("/auth/clinic_schedule");
 
   };
-
+const submit=name.length>0&&address.length>0&&mobile.length>0;
   return (
     <IonPage>
       <IonContent className="sign-up-content-clinic">
@@ -93,7 +93,7 @@ const ClinicRegistration: React.FC = () => {
                   onIonChange={(e) => setMobile(e.detail.value!)}
                 />
               </IonItem>
-              <IonButton expand="full" type="submit">
+              <IonButton expand="full" type="submit" disabled={!submit}>
                 Next
                 <IonIcon slot="end" icon={arrowForward} />
               </IonButton>
