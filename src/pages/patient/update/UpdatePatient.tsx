@@ -35,7 +35,7 @@ interface IPatientData {
   Type: string;
   City: string;
   CNIC: string;
-  PreferredSchedule: string;
+  // PreferredSchedule: string;
   IsEPIDone: boolean;
   IsVerified: boolean;
   IsInactive: boolean;
@@ -53,11 +53,11 @@ const UpdatePatient: React.FC<UpdateType> = ({
   const [guardian, setGuardian] = useState("");
   const [cnic, setCnic] = useState("");
   const [gender, setGender] = useState("");
-  const [scheduleType, setScheduleType] = useState("");
+  // const [scheduleType, setScheduleType] = useState("");
   const [dob, setDob] = useState("");
   const [email, setEmail] = useState("");
   const [mobileNumber, setMobileNumber] = useState("");
-  const [preferredSchedule, setpreferredSchedule] = useState<string>("");
+  // const [preferredSchedule, setpreferredSchedule] = useState<string>("");
   const [selectedDoctor, setSelectedDoctor] = useState<number>();
   const [selectedClinic, setSelectedClinic] = useState<number>();
   const [city, setCity] = useState<string>("");
@@ -133,14 +133,14 @@ const UpdatePatient: React.FC<UpdateType> = ({
       });
     }
 
-    if (scheduleType) {
-      patchOperations.push({
-        path: "Type",
-        op: "replace",
-        from: "",
-        value: scheduleType,
-      });
-    }
+    // if (scheduleType) {
+    //   patchOperations.push({
+    //     path: "Type",
+    //     op: "replace",
+    //     from: "",
+    //     value: scheduleType,
+    //   });
+    // }
 
     if (city) {
       patchOperations.push({
@@ -160,14 +160,14 @@ const UpdatePatient: React.FC<UpdateType> = ({
       });
     }
 
-    if (preferredSchedule) {
-      patchOperations.push({
-        path: "PreferredSchedule",
-        op: "replace",
-        from: "",
-        value: preferredSchedule,
-      });
-    }
+    // if (preferredSchedule) {
+    //   patchOperations.push({
+    //     path: "PreferredSchedule",
+    //     op: "replace",
+    //     from: "",
+    //     value: preferredSchedule,
+    //   });
+    // }
 
     if (isEPIDone !== null) {
       patchOperations.push({
@@ -245,11 +245,11 @@ const UpdatePatient: React.FC<UpdateType> = ({
     setGuardian("");
     setCnic("");
     setGender("Boy");
-    setScheduleType("special");
+    // setScheduleType("special");
     setDob("");
     setEmail("");
     setMobileNumber("");
-    setpreferredSchedule("");
+    // setpreferredSchedule("");
     setSelectedDoctor(0);
     setSelectedClinic(0);
     setCity("");
@@ -418,7 +418,7 @@ const UpdatePatient: React.FC<UpdateType> = ({
                     </IonRow>
                   </IonGrid>
                 </IonRadioGroup>
-                <IonRadioGroup
+                {/* <IonRadioGroup
                   value={scheduleType || patientData.Type}
                   onIonChange={(e) => setScheduleType(e.detail.value)}
                 >
@@ -439,15 +439,15 @@ const UpdatePatient: React.FC<UpdateType> = ({
                       </IonCol>
                     </IonRow>
                   </IonGrid>
-                </IonRadioGroup>
-                <IonItem>
+                </IonRadioGroup> */}
+                {/* <IonItem>
                   <IonLabel position="floating">Preferred Schedule</IonLabel>
                   <IonInput
                     type="text"
                     value={preferredSchedule || patientData.PreferredSchedule}
                     onIonChange={(e) => setpreferredSchedule(e.detail.value!)}
                   />
-                </IonItem>
+                </IonItem> */}
                 <IonItem lines="full">
                   <IonInput
                     disabled
