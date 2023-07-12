@@ -36,7 +36,7 @@ const EditProfile: React.FC = () => {
   const [email, setEmail] = useState("");
   const [mobileNumber, setMobileNumber] = useState("");
   const [pmdc, setPmdc] = useState("");
-  const [doctorType, setDoctorType] = useState("");
+  // const [doctorType, setDoctorType] = useState("");
   const [isEnabled, setIsEnabled] = useState(false);
   const [success, setSuccess] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
@@ -59,7 +59,7 @@ const EditProfile: React.FC = () => {
       password,
       isEnabled: isEnabled ? 1 : 0,
       email,
-      doctorType,
+      // doctorType,
       pmdc,
     };
     console.log("in submit",doctorId)
@@ -86,7 +86,7 @@ const EditProfile: React.FC = () => {
     setEmail("");
     setMobileNumber("");
     setPmdc("");
-    setDoctorType("");
+    // setDoctorType("");
     setIsEnabled(false);
   };
   const fetchInitialDocData = () => {
@@ -104,7 +104,7 @@ const EditProfile: React.FC = () => {
           setEmail(data.Email);
           setMobileNumber(data.MobileNumber);
           setPmdc(data.PMDC);
-          setDoctorType(data.DoctorType);
+          // setDoctorType(data.DoctorType);
           setIsEnabled(data.IsEnabled);
           setData(data);
         }
@@ -115,12 +115,12 @@ const EditProfile: React.FC = () => {
   useEffect(() => {
     fetchInitialDocData();
   }, []);
-  const canSubmit =
-    name.length>0 &&
-    email.length>0 &&
-    mobileNumber.length>0 &&
-    pmdc.length>0 &&
-    doctorType.length>0;
+  // const canSubmit =
+  //   name.length>0 &&
+  //   email.length>0 &&
+  //   mobileNumber.length>0 &&
+  //   pmdc.length>0 &&
+  //   doctorType.length>0;
   return (
     <>
       {data && (
@@ -178,14 +178,14 @@ const EditProfile: React.FC = () => {
                       required
                     />
                   </IonItem>
-                  <IonItem>
+                  {/* <IonItem>
                     <IonLabel position="floating">Doctor Type</IonLabel>
                     <IonInput
                       type="text"
                       value={doctorType}
                       onIonChange={(e) => setDoctorType(e.detail.value!)}
                       required/>
-                  </IonItem>
+                  </IonItem> */}
                   <IonGrid>
                     <IonRow>
                       <IonCol>
@@ -201,7 +201,7 @@ const EditProfile: React.FC = () => {
                       </IonCol>
                     </IonRow>
                   </IonGrid>
-                  <IonButton type="submit" disabled={!canSubmit} expand="full">
+                  <IonButton type="submit" expand="full">
                     Update
                   </IonButton>
                 </form>

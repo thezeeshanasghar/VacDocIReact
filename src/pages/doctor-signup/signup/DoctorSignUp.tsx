@@ -23,8 +23,8 @@ const DoctorSignUp: React.FC = () => {
   const [mobile, setMobile] = useState("");
   const [password, setPassword] = useState("");
   const [pmdc, setPMDC] = useState("");
-  const [doctorType, setDoctorType] = useState("");
-const submit=name.length>0&&email.length>0&&mobile.length>0&&password.length>0&&pmdc.length>0&&doctorType.length>0;
+  // const [doctorType, setDoctorType] = useState("");
+const submit=name.length>0&&email.length>0&&mobile.length>0&&password.length>0&&pmdc.length>0;
   const handleSignUp = (e: any) => {
     e.preventDefault();
     console.log("Name:", name);
@@ -32,7 +32,7 @@ const submit=name.length>0&&email.length>0&&mobile.length>0&&password.length>0&&
     console.log("Mobile:", mobile);
     console.log("Password:", password);
     console.log("PMDC:", pmdc);
-    console.log("Doctor Type:", doctorType);
+    // console.log("Doctor Type:", doctorType);
 
     localStorage.setItem(
       "drData",
@@ -43,7 +43,7 @@ const submit=name.length>0&&email.length>0&&mobile.length>0&&password.length>0&&
         isApproved: false,
         isEnabled: false,
         email,
-        doctorType,
+        // doctorType,
         pmdc,
         validUpto: new Date().toDateString(),
         clinic: "",
@@ -118,7 +118,7 @@ const submit=name.length>0&&email.length>0&&mobile.length>0&&password.length>0&&
                   onIonChange={(e) => setPMDC(e.detail.value!)}
                 />
               </IonItem>
-              <IonItem>
+              {/* <IonItem>
                 <IonLabel>Doctor Type</IonLabel>
                 <IonSelect
                 
@@ -133,7 +133,7 @@ const submit=name.length>0&&email.length>0&&mobile.length>0&&password.length>0&&
                   </IonSelectOption>
                   <IonSelectOption value="Surgeon">Surgeon</IonSelectOption>
                 </IonSelect>
-              </IonItem>
+              </IonItem> */}
               <IonButton expand="full" type="submit" disabled={!submit}>
                 Next
                 <IonIcon slot="end" icon={arrowForward} />
