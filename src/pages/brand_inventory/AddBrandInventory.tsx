@@ -51,8 +51,10 @@ const AddBrandInventory: React.FC = () => {
     .then((res) => {
       if (res.status === 201) {
         setSuccess(true);
+        setTimeout(() => {
         history.push("/members/doctor/brandinventory", "back");
         window.location.reload();
+      }, 500);
       } else {
         setError(true);
       }

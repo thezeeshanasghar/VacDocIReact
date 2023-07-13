@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import {
   IonDatetime,
   IonIcon,
@@ -12,6 +12,7 @@ import {
 import { calendar } from "ionicons/icons";
 
 import { format } from "date-fns";
+import Toast from "../../components/custom-toast/Toast";
 
 interface IDoseSchedule {
   Id: number;
@@ -39,17 +40,24 @@ const Schedulecard: React.FC<IDoseSchedule> = ({
    
     setSelectedDate(data2);
   };
+  // useEffect(() => {
+  //   const storedValue = JSON.parse(sessionStorage.getItem("docData"));
+  //   console.log(storedValue);
+  // }, []);
   const handleDateChange = async (event: CustomEvent<any>) => {
+    const storedValue = JSON.parse(sessionStorage.getItem("docData"));
+      console.log(storedValue);
     const selectedValue = event.detail.value;
 console.log(selectedValue)
     const dataTobeSent = {
       date: selectedValue,
       doseId: Id,
+      doctorId: storedValue.Id,
     };
 console.log(dataTobeSent)
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}api/AdminSchedule/Admin_single_updateDate`,
+        `${import.meta.env.VITE_API_URL}api/DoctorSchedule/single_updateDate?doseId=${Id}&doctorId=${storedValue.Id}`,
         {
           method: "PATCH",
           headers: {
@@ -59,8 +67,8 @@ console.log(dataTobeSent)
         }
       );
       if (response.ok) {
-        setSuccess(true);
         renderList();
+        setSuccess(true);
         setShowPopover(false);
       } else {
         setError(true);
@@ -79,6 +87,18 @@ console.log(dataTobeSent)
 
   return (
     <>
+     <Toast
+          isOpen={success}
+          setOpen={setSuccess}
+          message="single date of doctor schedule update successfully."
+          color="success"
+        />
+        <Toast
+          isOpen={error}
+          setOpen={setError}
+          message="An error occurred while update doctor schedule. plz try again"
+          color="danger"
+        />
       <IonGrid>
         <IonRow>
           <IonCol>

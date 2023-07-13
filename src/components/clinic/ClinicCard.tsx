@@ -22,8 +22,8 @@ import DeletePopup from "../deletepopup/DeletePopup";
 
 interface Session {
   Id: number;
-  Day: string;
-  Session: string;
+  Day: number;
+  Session: boolean;
   StartTime: string;
   EndTime: string;
   ClinicId: number;
@@ -50,13 +50,13 @@ const ClinicCard: React.FC<ClinicCardProps> = ({
   Address,
   Number,
   DoctorId,
-  Renderlist
+  Renderlist,
 }) => {
   const [offDays, setOffDays] = useState(initialOffDays);
   const [timings, setTimings] = useState(initialTimings);
   const [isOnline, setIsOnline] = useState(initialIsOnline);
   const [success, setSuccess] = useState(false);
-  
+
   const [error, setError] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
   const [clinicTimings, setclinicTimings] = useState<Session[]>([]);
@@ -68,6 +68,7 @@ const ClinicCard: React.FC<ClinicCardProps> = ({
         `${import.meta.env.VITE_API_URL}api/Clinictiming?clinicId=${Id}`
       );
       const data: Session[] = await res.json();
+      console.log(data);
       setclinicTimings(data);
       setSameClinics(clinicTimings.filter((item) => item.ClinicId === Id));
     } catch (err) {
@@ -93,8 +94,6 @@ const ClinicCard: React.FC<ClinicCardProps> = ({
     data.push(`/members/doctor/clinic/update/${Id}`, "forward");
   };
 
-
-
   return (
     <>
       <DeletePopup
@@ -114,7 +113,11 @@ const ClinicCard: React.FC<ClinicCardProps> = ({
               <span>{Name}</span>
               <div style={{ fontSize: "25px" }}>
                 <IonIcon icon={create} color="primary" onClick={handleClick} />
-                <IonIcon icon={trash} color="primary" onClick={() => setShowPopup(true)} />
+                <IonIcon
+                  icon={trash}
+                  color="primary"
+                  onClick={() => setShowPopup(true)}
+                />
               </div>
             </IonCardTitle>
           </IonCardHeader>
@@ -136,8 +139,8 @@ const ClinicCard: React.FC<ClinicCardProps> = ({
                             <b>Session :</b> {item.Session}
                           </p>
                           <p>
-                            <b>Start Time :</b> {formattedTime(item.StartTime)} |{" "}
-                            <b>End Time :</b> {formattedTime(item.EndTime)}
+                            <b>Start Time :</b> {formattedTime(item.StartTime)}{" "}
+                            | <b>End Time :</b> {formattedTime(item.EndTime)}
                           </p>
                         </IonCol>
                         {count.length + (1 % 2) === 0 && <hr />}

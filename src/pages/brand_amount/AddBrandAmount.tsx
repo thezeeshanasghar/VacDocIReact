@@ -39,7 +39,7 @@ const AddBrandAmount: React.FC = () => {
 
   const handleSubmit = () => {
     const data_to_be_sent = {
-      Amount: brandAmount,
+      amount: brandAmount,
       brandId: brandName,
       doctorId: storedValue.Id,
     };
@@ -54,8 +54,10 @@ const AddBrandAmount: React.FC = () => {
       .then((res) => {
         if (res.status === 200) {
           setSuccess(true);
+         
           history.push("/members/doctor/brandamount", "back");
           window.location.reload();
+        
         } else {
           setError(true);
         }

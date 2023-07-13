@@ -17,20 +17,20 @@ import { groupBy } from "lodash";
 import { calendar } from "ionicons/icons";
 import { format } from "date-fns";
 import MyDatePicker from "../../components/datepicker/MyDatePicker";
-import DoctorScheduleCard from './DoctorScheduleCard';
+import DoctorScheduleCard from "./DoctorScheduleCard";
+import Header from "../../components/header/Header";
 interface IVaccine {
-  
   Id: number;
   Name: string;
   MinAge: number;
   VaccineId: number;
- 
 }
 
 interface IVaccineData {
   [date: string]: IVaccine[];
 }
-
+const storedValue = JSON.parse(sessionStorage.getItem("docData"));
+console.log(storedValue);
 
 const ScheduleList1: React.FC = () => {
   const [data, setData] = useState<IVaccine[]>([]);
@@ -56,7 +56,9 @@ const ScheduleList1: React.FC = () => {
   const fetchDoseData = async () => {
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}api/AdminSchedule/new`
+        `${import.meta.env.VITE_API_URL}api/DoctorSchedule/new?doctorId=${
+          storedValue.Id
+        }`
       );
       if (response.ok) {
         const data = await response.json();
@@ -108,7 +110,9 @@ const ScheduleList1: React.FC = () => {
     try {
       setShowLoading(true);
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}api/AdminSchedule/Admin_bulk_updateDate/${value}`,
+        `${
+          import.meta.env.VITE_API_URL
+        }api/AdminSchedule/Admin_bulk_updateDate/${value}`,
         {
           method: "PATCH",
           headers: {
@@ -141,17 +145,21 @@ const ScheduleList1: React.FC = () => {
     setShowPopover(false);
   };
 
- 
   return (
     <>
-    <IonPage>
+      <IonPage>
+      <Header pageName="Doctor Schedule" />
         <IonContent className="ion-padding">
           {Object.keys(data).map((date) => (
             <IonCard key={date}>
               <>
                 <IonItem lines="none" className="centered-item">
                   <IonLabel style={{ textAlign: "center" }}>
-                    <IonItem lines="none" slot="center" style={{ textAlign: "center", padding: 0 }}>
+                    <IonItem
+                      lines="none"
+                      slot="center"
+                      style={{ textAlign: "center", padding: 0 }}
+                    >
                       <IonIcon
                         color="primary"
                         onClick={() => setShowPopover(true)}
@@ -160,28 +168,32 @@ const ScheduleList1: React.FC = () => {
                         onMouseOver={() => handelonmouseover(date)}
                       />
                       <IonText>{format(new Date(date), "yyyy-MM-dd")}</IonText>
-                      <IonPopover isOpen={showPopover} onDidDismiss={closePopover}>
+                      <IonPopover
+                        isOpen={showPopover}
+                        onDidDismiss={closePopover}
+                      >
                         <IonDatetime
                           placeholder="Select Date"
                           value={selectedDate || undefined}
-                          onIonChange={(e) => handleDateChange(e, date, inputValue)}
+                          onIonChange={(e) =>
+                            handleDateChange(e, date, inputValue)
+                          }
                         ></IonDatetime>
                       </IonPopover>
                     </IonItem>
                   </IonLabel>
                 </IonItem>
                 {data[date].map((item: IVaccine) => (
-  <DoctorScheduleCard
-    key={item.Id}
-    date={date}
-    Id={item.Id}
-    Name={item.Name}
-    MinAge={item.MinAge}
-    VaccineId={item.VaccineId}
-    
-    renderList={forceRender}
-  />
-))}
+                  <DoctorScheduleCard
+                    key={item.Id}
+                    date={date}
+                    Id={item.Id}
+                    Name={item.Name}
+                    MinAge={item.MinAge}
+                    VaccineId={item.VaccineId}
+                    renderList={forceRender}
+                  />
+                ))}
               </>
             </IonCard>
           ))}
