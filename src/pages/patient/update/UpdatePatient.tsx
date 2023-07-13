@@ -21,6 +21,7 @@ import React, { useEffect, useState } from "react";
 import Toast from "../../../components/custom-toast/Toast";
 import Header from "../../../components/header/Header";
 import { format } from "date-fns";
+import { useHistory } from "react-router-dom";
 import { checkbox, checkmarkOutline } from "ionicons/icons";
 type DoctorClinicType = { Id: number; Name: string };
 type UpdateType = { match: { params: { Id: number } } };
@@ -64,7 +65,7 @@ const UpdatePatient: React.FC<UpdateType> = ({
   const [isEPIDone, setIsEPIDone] = useState<boolean>();
   const [isVerified, setIsVerified] = useState<boolean>();
   const [isInactive, setIsInactive] = useState<boolean>();
-
+  const history = useHistory();
   const [clinicData, setClinicData] = useState<DoctorClinicType[]>([]);
   const [doctorData, setDoctorData] = useState<DoctorClinicType[]>([]);
 
@@ -228,6 +229,8 @@ const UpdatePatient: React.FC<UpdateType> = ({
       if (response.status === 204) {
         setSuccess(true);
         refetchAfterUpdate();
+        history.push("/members/child", "back");
+        window.location.reload();
       } else {
         setError(true);
       }

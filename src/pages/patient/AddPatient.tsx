@@ -19,6 +19,7 @@ import {
 import React, { useEffect, useState } from "react";
 import Header from "../../components/header/Header";
 import "./css/addpatient.css";
+import { useHistory } from "react-router-dom";
 // import { format } from "date-fns";
 import Toast from "../../components/custom-toast/Toast";
 type DoctorClinicType = { Id: number; Name: string };
@@ -39,7 +40,7 @@ const AddPatient: React.FC = () => {
   const [city, setCity] = useState<string>("");
   const [isEPIDone, setIsEPIDone] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
-
+  const history = useHistory();
   const [clinicData, setClinicData] = useState<DoctorClinicType[]>([]);
   const [doctorData, setDoctorData] = useState<DoctorClinicType[]>([]);
   const [success, setSuccess] = useState<boolean>(false);
@@ -76,9 +77,17 @@ const AddPatient: React.FC = () => {
       },
       body: JSON.stringify(data_to_be_sent),
     })
-      .then((res) => (res.status === 201 ? setSuccess(true) : setError(true)))
-      .catch((err) => setError(true))
-      .finally(() => {
+    .then((res) => {
+      if (res.status === 201) {
+        setSuccess(true);
+         history.push("/members/child", "back");
+        window.location.reload();
+      } else {
+        setError(true);
+      }
+    })
+     .catch((err) => setError(true))
+    .finally(() => {
         clearStateVariables();
       });
   };

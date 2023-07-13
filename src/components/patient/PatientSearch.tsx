@@ -56,16 +56,18 @@ const PatientSearch: React.FC<ISearchData> = ({ hideCards, renderList }) => {
     renderList();
   };
   const fetchSearchResults = () => {
+    console.log(searchText)
     axios
       .get<IPatientData[], AxiosResponse<IPatientData[]>>(
         `${
           import.meta.env.VITE_API_URL
-        }api/Child/search-by-doctor-name?Name=${searchText}`
+        }api/Child/search-by-doctor-name?name=${searchText}`
       )
       .then((res: AxiosResponse<IPatientData[]>) => {
         if (Object.keys(res.data).length !== 0) {
           setSearchData(res.data);
           hideCards(true);
+          console.log(res.data)
         }
       })
       .catch((err: AxiosError) => {
@@ -82,7 +84,7 @@ const PatientSearch: React.FC<ISearchData> = ({ hideCards, renderList }) => {
         }
       });
   };
-  const canSearch = searchText.trim() === "";
+  const canSearch = searchText.length>0;
   return (
     <>
       <form noValidate onSubmit={handleSubmit}>
@@ -98,7 +100,7 @@ const PatientSearch: React.FC<ISearchData> = ({ hideCards, renderList }) => {
           ></IonInput>
           <IonButton
             type="submit"
-            disabled={canSearch}
+            disabled={!canSearch}
             className="ion-margin-start"
           >
             Search
@@ -116,7 +118,7 @@ const PatientSearch: React.FC<ISearchData> = ({ hideCards, renderList }) => {
           {/* rendering results card here */}
           {searchData &&
             searchData.map((item, index) => {
-              if (item.Gender.toLowerCase().includes("boy" || "male")) {
+              if (item.Gender == 0) {
                 return (
                   <PatientMaleCard
                     key={index + item.DOB}
@@ -124,8 +126,7 @@ const PatientSearch: React.FC<ISearchData> = ({ hideCards, renderList }) => {
                     Id={item.Id}
                     renderList={renderList}
                     DoctorId={item.DoctorId}
-                    ClinicId={item.ClinicId}
-                  />
+                    ClinicId={item.ClinicId} DOB={""} />
                 );
               }
               return (
@@ -135,8 +136,7 @@ const PatientSearch: React.FC<ISearchData> = ({ hideCards, renderList }) => {
                   Id={item.Id}
                   renderList={renderList}
                   DoctorId={item.DoctorId}
-                  ClinicId={item.ClinicId}
-                />
+                  ClinicId={item.ClinicId} DOB={""}                />
               );
             })}
         </>

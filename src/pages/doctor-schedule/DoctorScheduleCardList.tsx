@@ -1,108 +1,194 @@
-import { IonContent, IonPage } from "@ionic/react";
 import React, { useEffect, useState } from "react";
-import Header from "../../components/header/Header";
+import {
+  IonCard,
+  IonCol,
+  IonContent,
+  IonDatetime,
+  IonGrid,
+  IonIcon,
+  IonItem,
+  IonLabel,
+  IonPage,
+  IonPopover,
+  IonRow,
+  IonText,
+} from "@ionic/react";
 import { groupBy } from "lodash";
+import { calendar } from "ionicons/icons";
+import { format } from "date-fns";
 import MyDatePicker from "../../components/datepicker/MyDatePicker";
-// import { format } from "date-fns";
-import DoctorScheduleCard from "./DoctorScheduleCard";
-import axios from "axios";
-import ErrorComponent from "../Error/ErrorComponent";
-export interface IDoctorSchedule {
-  Id: number;
-  Date: string;
-  DoseId: number;
-  DoctorId: number;
-}
+import DoctorScheduleCard from './DoctorScheduleCard';
 interface IVaccine {
+  
   Id: number;
   Name: string;
   MinAge: number;
   VaccineId: number;
+ 
+}
+
+interface IVaccineData {
+  [date: string]: IVaccine[];
 }
 
 
-const DoctorScheduleCardList: React.FC = () => {
-  const storedValue = JSON.parse(sessionStorage.getItem("docData"));
-  console.log(storedValue);
-  const [scheduleData, setScheduleData] = useState<IDoctorSchedule[]>();
-  const [groupedData, setGroupedData] = useState<
-    Record<string, IDoctorSchedule[]>
-  >({});
-  const [count, setCount] = useState(1);
-  const [doctorId, setdoctorId] = useState(1);
-  const fetchScheduleData = () => {
-    fetch(
-      `${
-        import.meta.env.VITE_API_URL
-      }api/DoctorSchedule/new?doctorId=${storedValue.Id}`
-    )
-      .then((res) => res.json())
-      .then((data: IDoctorSchedule[]) => {setScheduleData(data)
-      console.log('new data ', data)
-      });
-  };
-
-  useEffect(() => {
-    if (count === 1) {
-      axios
-        .post(
-          `${
-            import.meta.env.VITE_API_URL
-          }api/DoctorSchedule/doctor_post_schedule?doctorId=${storedValue.Id}`
-        )
-        .then(res => res.status === 200 && fetchScheduleData())
-        .catch((err) => console.log(err));
-        console.log("use effect : ", count)
-        setCount(2)
-    }
-    // fetchScheduleData();
-  }, []);
-
-  useEffect(() => {
-    if (scheduleData) {
-      // const groupedD: Record<string, IDoctorSchedule[]> = groupBy(
-      //   scheduleData,
-      //   (item: IDoctorSchedule) => item.Date.split("T")[0]
-      // );
-      // setGroupedData(groupedD);
-    }
-  }, [scheduleData]);
+const ScheduleList1: React.FC = () => {
+  const [data, setData] = useState<IVaccine[]>([]);
+  const [groupedData, setGroupedData] = useState<IVaccineData[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState(false);
+  const [showPopover, setShowPopover] = useState(false);
+  const [renderList, setRenderList] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [inputValue, setInputValue] = useState("");
+  const [value, setValue] = useState("");
+  const [showLoading, setShowLoading] = useState(false);
 
   const forceRender = () => {
-    fetchScheduleData();
+    fetchDoseData();
   };
 
+  useEffect(() => {
+    fetchDoseData();
+  }, []);
+
+  const fetchDoseData = async () => {
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}api/AdminSchedule/new`
+      );
+      if (response.ok) {
+        const data = await response.json();
+
+        setData(data);
+        console.log(data);
+        setIsLoading(false);
+      } else {
+        console.log("Error fetching data");
+        setIsLoading(false);
+      }
+    } catch (error) {
+      console.log("Error:", error);
+      setIsLoading(false);
+    }
+  };
+
+  const handelonmouseover = (inputValue: string) => {
+    const data1 = inputValue.split("T");
+    const data2 = format(new Date(inputValue), "yyyy-MM-dd");
+    setValue(data2);
+    setSelectedDate(data2);
+  };
+
+  const handleDateChange = async (
+    event: CustomEvent,
+    key: string,
+    inputValue: string
+  ) => {
+    console.log(value);
+    closePopover();
+    const data = event.detail.value;
+    const data1 = data.split("T");
+    const data2 = data1[0];
+    console.log(data2);
+
+    console.log(event.detail.value);
+
+    const dataTobeSent = [
+      {
+        path: "Date",
+        op: "replace",
+        from: value,
+        value: data2,
+      },
+    ];
+
+    console.log("object item date : ", dataTobeSent);
+    try {
+      setShowLoading(true);
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}api/AdminSchedule/Admin_bulk_updateDate/${value}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(dataTobeSent),
+        }
+      );
+      if (response.status === 204) {
+        console.log(response.ok);
+        setSuccess(true);
+        setShowLoading(false);
+        forceRender();
+      } else if (!response.ok) {
+        setError(true);
+        setShowLoading(false);
+      }
+    } catch (error) {
+      console.error(error);
+      setError(true);
+      setShowLoading(false);
+    }
+  };
+
+  const openPopover = () => {
+    setShowPopover(true);
+  };
+
+  const closePopover = () => {
+    setShowPopover(false);
+  };
+
+ 
   return (
     <>
-      {scheduleData && scheduleData.length >= 1 ? (
-        <>
-          {scheduleData ? (
-            <IonPage>
-              <Header pageName="Doctor Schedule" />
-              <IonContent className="ion-padding">
-                <>
-                  {Object.length>0?(Object.entries(scheduleData).map(([date, data]) => (
-                    <DoctorScheduleCard
-                      key={date}
-                      date={date}
-                      data={data}
-                      forceRender={forceRender}
-                    />
-                  ))):(
-                    <ErrorComponent title="Doctor schedule" />
-                  )}
-                </>
-              </IonContent>
-            </IonPage>
-          ) : (
-            <h1>Doctor Schedule is loading...</h1>
-          )}
-        </>
-      ) : (
-        <h1>an error occurred while getting Doctor schedule</h1>
-      )}
+    <IonPage>
+        <IonContent className="ion-padding">
+          {Object.keys(data).map((date) => (
+            <IonCard key={date}>
+              <>
+                <IonItem lines="none" className="centered-item">
+                  <IonLabel style={{ textAlign: "center" }}>
+                    <IonItem lines="none" slot="center" style={{ textAlign: "center", padding: 0 }}>
+                      <IonIcon
+                        color="primary"
+                        onClick={() => setShowPopover(true)}
+                        icon={calendar}
+                        style={{ marginRight: "10px", PointerEvent: "cursor" }}
+                        onMouseOver={() => handelonmouseover(date)}
+                      />
+                      <IonText>{format(new Date(date), "yyyy-MM-dd")}</IonText>
+                      <IonPopover isOpen={showPopover} onDidDismiss={closePopover}>
+                        <IonDatetime
+                          placeholder="Select Date"
+                          value={selectedDate || undefined}
+                          onIonChange={(e) => handleDateChange(e, date, inputValue)}
+                        ></IonDatetime>
+                      </IonPopover>
+                    </IonItem>
+                  </IonLabel>
+                </IonItem>
+                {data[date].map((item: IVaccine) => (
+  <DoctorScheduleCard
+    key={item.Id}
+    date={date}
+    Id={item.Id}
+    Name={item.Name}
+    MinAge={item.MinAge}
+    VaccineId={item.VaccineId}
+    
+    renderList={forceRender}
+  />
+))}
+              </>
+            </IonCard>
+          ))}
+        </IonContent>
+      </IonPage>
     </>
   );
 };
 
-export default DoctorScheduleCardList;
+export default ScheduleList1;
