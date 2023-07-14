@@ -22,8 +22,8 @@ import DeletePopup from "../deletepopup/DeletePopup";
 
 interface Session {
   Id: number;
-  Day: number;
-  Session: boolean;
+  Day: string;
+  Session: string;
   StartTime: string;
   EndTime: string;
   ClinicId: number;
@@ -62,25 +62,28 @@ const ClinicCard: React.FC<ClinicCardProps> = ({
   const [clinicTimings, setclinicTimings] = useState<Session[]>([]);
   const [sameClinics, setSameClinics] = useState<Session[]>([]);
 
-  const fetchClinicTimings = async () => {
-    try {
-      const res = await fetch(
-        `${import.meta.env.VITE_API_URL}api/Clinictiming?clinicId=${Id}`
-      );
-      const data: Session[] = await res.json();
-      console.log(data);
-      setclinicTimings(data);
-      setSameClinics(clinicTimings.filter((item) => item.ClinicId === Id));
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  
+  useEffect(() => {
+    const fetchClinicTimings = async () => {
+      try {
+        const res = await fetch(
+          `${import.meta.env.VITE_API_URL}api/ClinicTiming`
+        );
+        const data: Session[] = await res.json();
+        console.log(data);
+        // setSameClinics(clinicTimings.filter((item) => item.ClinicId === Id));
+        setclinicTimings(data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchClinicTimings();
+  }, [Id]);
 
   useEffect(() => {
-    fetchClinicTimings();
-  }, []);
+    setSameClinics(clinicTimings.filter((item) => item.ClinicId === Id));
+  }, [clinicTimings, Id]);  // Time formatting
 
-  // Time formatting
   function formattedTime(timeString: string) {
     const time = new Date(`2000-01-01T${timeString}`);
     const formattedTime = format(time, "h:mm a");
@@ -93,7 +96,7 @@ const ClinicCard: React.FC<ClinicCardProps> = ({
   const handleClick = () => {
     data.push(`/members/doctor/clinic/update/${Id}`, "forward");
   };
-
+  console.log("clinic timing ", clinicTimings);
   return (
     <>
       <DeletePopup
@@ -125,10 +128,12 @@ const ClinicCard: React.FC<ClinicCardProps> = ({
             <IonGrid>
               <IonRow>
                 {clinicTimings.map((item, index) => {
+                  console.log(item.ClinicId)
                   if (item.ClinicId === Id) {
                     const count = clinicTimings.filter(
-                      (i) => i.ClinicId === Id
+                      (i) => i.ClinicId === Id,
                     );
+                    console.log(count)
                     return (
                       <React.Fragment key={index}>
                         <IonCol size="6">

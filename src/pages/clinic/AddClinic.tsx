@@ -143,7 +143,7 @@ const AddClinic: React.FC = () => {
         const parsedData = storedData ? JSON.parse(storedData) : null;
         console.log(parsedData)
         const response = await fetch(
-          `${import.meta.env.VITE_API_URL}api/Clinictiming?clinicId=${cid}`,
+          `${import.meta.env.VITE_API_URL}api/Clinictiming/api/clintimings/AddorUpdate/${cid}`,
           {
             method: "POST",
             headers: {
@@ -328,7 +328,7 @@ const AddClinic: React.FC = () => {
           <AddWeekDaysCard name={"Sunday"}/>
           <IonItem>
             <IonButton disabled={!anSubmit} type="submit">
-              Submit
+              Add
             </IonButton>
           </IonItem>
         </form>
