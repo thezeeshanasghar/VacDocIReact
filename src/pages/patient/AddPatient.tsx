@@ -136,12 +136,12 @@ const AddPatient: React.FC = () => {
   const canSubmit =
     name !== "" &&
     fatherName !== "" &&
-    guardian !== "" &&
+    // guardian !== "" &&
     cnic !== "" &&
     gender !== "" &&
     dob !== "" &&
     email !== "" &&
-    mobileNumber !== "" &&
+    // mobileNumber !== "" &&
     selectedDoctor !== 0 &&
     selectedClinic !== 0 &&
     city !== "";

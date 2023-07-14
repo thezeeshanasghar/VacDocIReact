@@ -47,7 +47,7 @@ setToDay(today)
     fetch(
       `${
         import.meta.env.VITE_API_URL
-      }update_date_for_Vaccations?doctorId=${storedValue.Id}&fromDate=${fromDate}&toDate=${toDate}`,
+      }update_date_for_Vacations?doctorId=${storedValue.Id}&fromDate=${fromDate}&toDate=${toDate}`,
       {
         method: "PATCH",
 
