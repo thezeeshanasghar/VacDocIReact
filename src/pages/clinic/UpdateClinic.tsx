@@ -57,11 +57,13 @@ const UpdateClinic: React.FC<ClinicProps> = ({
   const [clinicArray, setClinicArray] = useState<any>([]);
 
   useEffect(() => {
+    localStorage.clear();
     const storedValue = JSON.parse(sessionStorage.getItem("docData"));
     console.log(storedValue);
   }, []);
 
   const handleUnSubmit = async (e: React.FormEvent) => {
+    
     e.preventDefault();
     let data_to_to_sent = [];
     if (clinicName.trim().length > 0) {

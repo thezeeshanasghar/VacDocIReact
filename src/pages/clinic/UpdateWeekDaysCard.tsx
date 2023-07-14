@@ -114,7 +114,7 @@ const UpdateWeekDaysCard: React.FC<UpdateWeekDayCardProps> = ({ name, setSession
     setMEnd("");
     setMStart2("");
     setMEnd2("");
-    fetch(`${import.meta.env.VITE_API_URL}api/Clinictiming?clinicId=${clinicId}`)
+    fetch(`${import.meta.env.VITE_API_URL}api/ClinicTiming/GET-ClinicTiming/${clinicId}`)
       .then((response) => response.json())
       .then((data) => {
         if (data.length > 0) {
