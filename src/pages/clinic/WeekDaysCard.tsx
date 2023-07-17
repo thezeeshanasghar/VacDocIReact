@@ -20,10 +20,10 @@ type WeekDayCardProps = {
 };
 
 export interface ISession {
-  Day: string;
-  Session: string;
-  StartTime: string;
-  EndTime: string;
+  day: string;
+  session: string;
+  startTime: string;
+  endTime: string;
 }
 
 const WeekDaysCard: React.FC<WeekDayCardProps> = ({ name, setSession }) => {
@@ -39,22 +39,22 @@ const WeekDaysCard: React.FC<WeekDayCardProps> = ({ name, setSession }) => {
   useEffect(() => {
     if (showCard && showSession1 && mstart !== "" && mend !== "") {
       const existingIndex = dayData.findIndex(
-        (entry) => entry.Day === name && entry.Session === "Morning"
+        (entry) => entry.day === name && entry.session === "Morning"
       );
 
       if (existingIndex !== -1) {
         const updatedDayData = [...dayData];
-        updatedDayData[existingIndex].StartTime = mstart;
-        updatedDayData[existingIndex].EndTime = mend;
+        updatedDayData[existingIndex].startTime = mstart;
+        updatedDayData[existingIndex].endTime = mend;
         setDayData(updatedDayData);
       } else {
         setDayData((prevDayData) => [
           ...prevDayData,
           {
-            Day: name,
-            Session: "Morning",
-            StartTime: mstart,
-            EndTime: mend,
+            day: name,
+            session: "Morning",
+            startTime: mstart,
+            endTime: mend,
           },
         ]);
       }
@@ -64,22 +64,22 @@ const WeekDaysCard: React.FC<WeekDayCardProps> = ({ name, setSession }) => {
   useEffect(() => {
     if (showCard && showSession2 && mstart2 !== "" && mend2 !== "") {
       const existingIndex = dayData.findIndex(
-        (entry) => entry.Day === name && entry.Session === "Evening"
+        (entry) => entry.day === name && entry.session === "Evening"
       );
 
       if (existingIndex !== -1) {
         const updatedDayData = [...dayData];
-        updatedDayData[existingIndex].StartTime = mstart2;
-        updatedDayData[existingIndex].EndTime = mend2;
+        updatedDayData[existingIndex].startTime = mstart2;
+        updatedDayData[existingIndex].endTime = mend2;
         setDayData(updatedDayData);
       } else {
         setDayData((prevDayData) => [
           ...prevDayData,
           {
-            Day: name,
-            Session: "Evening",
-            StartTime: mstart2,
-            EndTime: mend2,
+            day: name,
+            session: "Evening",
+            startTime: mstart2,
+            endTime: mend2,
           },
         ]);
       }

@@ -31,17 +31,18 @@ const ClinicRegistration: React.FC = () => {
     const Doc_data = localStorage.getItem("drData");
     //@ts-ignore
     const drData = JSON.parse(Doc_data);
-    drData.clinic = {
-      name,
-      address,
-      number: mobile,
-      clinicTiming: "",
-    };
+    drData.clinics = [
+      {
+        name,
+        address,
+        number: mobile,
+        clinicTimings: "",
+      },
+    ];
     localStorage.setItem("drData", JSON.stringify(drData));
     router.push("/auth/clinic_schedule");
-
   };
-const submit=name.length>0&&address.length>0&&mobile.length>0;
+  const submit = name.length > 0 && address.length > 0 && mobile.length > 0;
   return (
     <IonPage>
       <IonContent className="sign-up-content-clinic">

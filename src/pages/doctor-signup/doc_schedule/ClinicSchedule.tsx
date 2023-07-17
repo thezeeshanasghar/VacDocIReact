@@ -45,7 +45,10 @@ const ClinicSchedule: React.FC = () => {
     if (newArray.length > 0) {
       setCanSubmit(false);
     }
-    drData.clinic["clinicTiming"] = newArray;
+    console.log("clinics timing array,", newArray);
+    console.log("clicnics data ", drData["clinics"]);
+    drData.clinics[0]["clinicTimings"] = newArray;
+
     RegisterDoctor(drData);
   };
 

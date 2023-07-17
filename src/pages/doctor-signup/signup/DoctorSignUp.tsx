@@ -26,6 +26,7 @@ const DoctorSignUp: React.FC = () => {
   // const [doctorType, setDoctorType] = useState("");
 const submit=name.length>0&&email.length>0&&mobile.length>0&&password.length>0&&pmdc.length>0;
   const handleSignUp = (e: any) => {
+    localStorage.clear();
     e.preventDefault();
     console.log("Name:", name);
     console.log("Email:", email);
@@ -46,7 +47,7 @@ const submit=name.length>0&&email.length>0&&mobile.length>0&&password.length>0&&
         // doctorType,
         pmdc,
         validUpto: new Date().toDateString(),
-        clinic: "",
+        clinics: "",
       })
     );
     router.push("/auth/reg_clinic");
