@@ -13,12 +13,14 @@ import {
 import React, { useState, useEffect } from "react";
 import Header from "../../components/header/Header";
 import Toast from "../../components/custom-toast/Toast";
+import { useHistory } from "react-router-dom";
 import "./vacation.css";
 import { today } from "ionicons/icons";
 type ClinicType = { Name: string };
 const Vacation: React.FC = () => {
   const storedValue = JSON.parse(sessionStorage.getItem("docData"));
   console.log(storedValue);
+  const history = useHistory();
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
   const [toDay, setToDay] = useState("")
@@ -54,7 +56,18 @@ setToDay(today)
         //   body: JSON.stringify(data_to_be_sent),
       }
     )
-      .then((res) => (res.status === 200 ? setSuccess(true) : setError(true)))
+      // .then((res) => (res.status === 200 ? setSuccess(true) : setError(true)))
+      .then((res) => {
+        if (res.status === 200) {
+          setSuccess(true);
+          localStorage.clear()
+          history.push("/members/doctor/schedule", "back");
+          window.location.reload();
+        } else {
+          setError(false);
+          localStorage.clear()
+        }
+      })
       .catch((err) => setError(true))
       .finally(() => {
         clearStateVariables();

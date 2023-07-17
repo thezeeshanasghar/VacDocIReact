@@ -41,7 +41,7 @@ const Header: React.FC<IHeaderProps> = ({ pageName }) => {
               ? ""
               : "Baby Medics"}
           </IonTitle>
-          {location.pathname === "/members/doctor/brandinventory" && (
+          {/* {location.pathname === "/members/doctor/brandinventory" && (
             <IonItem
               color="primary"
               routerLink="/members/doctor/brandinventory/add"
@@ -76,7 +76,7 @@ const Header: React.FC<IHeaderProps> = ({ pageName }) => {
                 aria-label="add"
               ></IonIcon>
             </IonItem>
-          )}
+          )} */}
         </IonToolbar>
         <IonToolbar
           color="primary"

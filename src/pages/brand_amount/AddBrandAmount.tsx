@@ -39,9 +39,9 @@ const AddBrandAmount: React.FC = () => {
 
   const handleSubmit = () => {
     const data_to_be_sent = {
-      amount: brandAmount,
-      brandId: brandName,
-      doctorId: storedValue.Id,
+      Amount: brandAmount,
+      BrandId: brandName,
+      DoctorId: storedValue.Id,
     };
     console.log(data_to_be_sent);
     fetch(`${import.meta.env.VITE_API_URL}api/BrandAmount`, {
@@ -52,7 +52,7 @@ const AddBrandAmount: React.FC = () => {
       body: JSON.stringify(data_to_be_sent),
     })
       .then((res) => {
-        if (res.status === 200) {
+        if (res.status === 201) {
           setSuccess(true);
          
           history.push("/members/doctor/brandamount", "back");

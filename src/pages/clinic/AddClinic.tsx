@@ -113,6 +113,7 @@ const AddClinic: React.FC = () => {
   };
   
   const postclinictiming = async (cid: string) => {
+    // localStorage.clear();
     const weekdays = [
       "Monday",
       "Tuesday",
@@ -317,8 +318,7 @@ const AddClinic: React.FC = () => {
               Submit
             </IonButton> */}
           </IonItem>
-        </form>
-        <form noValidate className="ion-padding" onSubmit={handleSubmit}>
+        
           <AddWeekDaysCard name={"Monday"} />
           <AddWeekDaysCard name={"Tuesday"}/>
           <AddWeekDaysCard name={"Wednesday"}/>
@@ -326,11 +326,9 @@ const AddClinic: React.FC = () => {
           <AddWeekDaysCard name={"Friday"}/>
           <AddWeekDaysCard name={"Saturday"}/>
           <AddWeekDaysCard name={"Sunday"}/>
-          <IonItem>
             <IonButton disabled={!anSubmit} type="submit">
               Add
             </IonButton>
-          </IonItem>
         </form>
       </IonContent>
     </IonPage>
