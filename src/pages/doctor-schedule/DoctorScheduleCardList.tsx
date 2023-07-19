@@ -19,6 +19,7 @@ import { format } from "date-fns";
 import MyDatePicker from "../../components/datepicker/MyDatePicker";
 import DoctorScheduleCard from "./DoctorScheduleCard";
 import Header from "../../components/header/Header";
+import Toast from "../../components/custom-toast/Toast";
 interface IVaccine {
   Id: number;
   Name: string;
@@ -113,7 +114,7 @@ const ScheduleList1: React.FC = () => {
       const response = await fetch(
         `${
           import.meta.env.VITE_API_URL
-        }api/AdminSchedule/Admin_bulk_updateDate/${value}`,
+        }api/DoctorSchedule/doctor_bulk_update_Date?DoctorId=${storedValue.Id}&oldDate=${value}&newDate=${data2}`,
         {
           method: "PATCH",
           headers: {
@@ -148,6 +149,18 @@ const ScheduleList1: React.FC = () => {
 
   return (
     <>
+    <Toast
+          isOpen={success}
+          setOpen={setSuccess}
+          message="Bulk date of doctor schedule update successfully."
+          color="success"
+        />
+        <Toast
+          isOpen={error}
+          setOpen={setError}
+          message="An error occurred while update doctor schedule. plz try again"
+          color="danger"
+        />
       <IonPage>
       <Header pageName="Doctor Schedule" />
         <IonContent className="ion-padding">

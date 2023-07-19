@@ -44,7 +44,7 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
   const [isButtonVisible, setButtonVisible] = useState(true);
   const [doses, setDoses] = useState<IDose[]>([]);
   const [brands, setBrands] = useState<IBrand[]>([]);
-  const[brandId,setBrandId] = useState<number>();
+  const[brandsId,setBrandsId] = useState<number>();
 
   const fetchDoses = () => {
     fetch(`${import.meta.env.VITE_API_URL}api/Dose/alldoses`)
@@ -67,7 +67,7 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
     const filteredDose: IDose | undefined = doses.find((d) => d.Name === Name);
     console.log(filteredDose)
     if(filteredDose){
-      setBrandId(filteredDose.VaccineId)
+      setBrandsId(filteredDose.VaccineId)
     }
 
   };
@@ -144,7 +144,7 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
   };
 
   const postSingleDone = async () => {
-    const isDone = !IsDone ? 1 : 0;
+  
     try {
       const res = await fetch(
         `${import.meta.env.VITE_API_URL}api/PatientSchedule/single_updateDone`,
@@ -155,13 +155,16 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
           },
           body: JSON.stringify({
             id: Id,
-            isDone,
+            isDone:!IsDone ? 1 : 0,
           }),
         }
       );
       if (res.status === 204) {
-
+        console.log("first");
+        console.log("isButtonVisible before update:", isButtonVisible);
         setButtonVisible(!isButtonVisible);
+        console.log("isButtonVisible after update:", !isButtonVisible);
+        console.log("IsDone:", IsDone);
         renderList();
       }
     } catch (error) {
@@ -181,16 +184,18 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
     postSingleDone(); // Update the database value of isSkip
   };
   useEffect(() => {
-   
-    fetchDoses();
     filterDoses();
+    fetchDoses();
     fetchBrands();
-   
   }, [date]);
   useEffect(() => {
     // Update the visibility of buttons based on the database value of IsSkip
     setButtonsVisible(!IsSkip);
   }, [IsSkip]);
+
+  useEffect(() => {
+    setButtonVisible(!IsDone);
+  }, [IsDone]);
 
   return (
     <>
@@ -203,7 +208,7 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
       <Toast
         isOpen={error}
         setOpen={setError}
-        message="An error occurred while updating doctor patient schedule. Please try again."
+        message="An error occurred while updating patient schedule. Please try again."
         color="danger"
       />
       <IonGrid>
@@ -220,7 +225,7 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
   icon={calendar}
   style={{
     cursor: "pointer",
-    fontSize: "30px", // Increase the icon size as desired
+    fontSize: "25px", // Increase the icon size as desired
     display: "inline-block",
     margin: "0px 10px"
   }}
@@ -275,46 +280,48 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
               </IonButton>
             </IonCol>
           )}
-       {!isButtonVisible && (<> 
-  <IonCol size="auto" style={{ display: "flex", alignItems: "center" }}>
-    <span
-      style={{
-        color: "#6ebf8b", // Set the color of the date to light green
-        height: "30px",
-        display: "inline-block",
-        margin: "0px 10px"
-      }}
-    >
-      {new Date(date).toLocaleDateString("en-US", {
-        month: "short",
-        day: "numeric",
-        year: "numeric"
-      })}
-    </span>
-    <IonImg
-      // size="small"
-      src={emptySyringImage}
-      onClick={toggleButtonVisibility}
-      style={{
-        textTransform: "lowercase",
-        height: "30px",
-        display: "inline-block",
-        margin: "0px 10px"
-      }}
-      color="danger"
-    >
-      Undo
-    </IonImg>
+       {!isButtonVisible && (
+  <>
+    <IonCol size="auto" style={{ display: "flex", alignItems: "center" }}>
+      <span
+        style={{
+          color: "#6ebf8b", // Set the color of the date to light green
+          height: "30px",
+          display: "inline-block",
+          margin: "0px 10px"
+        }}
+      >
+        {new Date(date).toLocaleDateString("en-US", {
+          month: "short",
+          day: "numeric",
+          year: "numeric"
+        })}
+      </span>
+     
+        <IonImg
+          // size="small"
+          src={emptySyringImage}
+          onClick={toggleButtonVisibility}
+          style={{
+            textTransform: "lowercase",
+            height: "30px",
+            display: "inline-block",
+            margin: "0px 10px"
+          }}
+          color="danger"
+        >
+          Undo
+        </IonImg>
     
-  </IonCol>
-  <IonCol size="12">
-    
+    </IonCol>
+    <IonCol size="12">
       <p style={{ textAlign: "center" }}>
-        Brand: {filterBrand(brandId)}
+        Brand: {filterBrand(brandsId)}
       </p>
-  </IonCol>
+    </IonCol>
   </>
 )}
+
 
 
         </IonRow>

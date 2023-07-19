@@ -29,6 +29,7 @@ import MyDatePicker from "../../../components/datepicker/MyDatePicker";
 import Header from "../../../components/header/Header";
 import syringImage from "../../../assets/injectionFilled.png";
 import VaccinationCard from "./VaccinationCard";
+import Toast from "../../../components/custom-toast/Toast";
 interface IVaccine {
   DoseName: string;
   IsDone: boolean;
@@ -97,7 +98,7 @@ interface IParam {
   const fetchDoseData = async () => {
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}api/PatientSchedule/Patient_DoseSchedule?ChildId=${childId}&DoctorId=${doctorId}`
+        `${import.meta.env.VITE_API_URL}api/PatientSchedule/Patient_DoseSchedule?ChildId=${childId}&DoctorId=${storedValue.Id}`
       );
       if (response.ok) {
         const data = await response.json();
@@ -198,6 +199,18 @@ interface IParam {
       };
   return (
     <>
+    <Toast
+          isOpen={success}
+          setOpen={setSuccess}
+          message="Bulk date of patient schedule update successfully."
+          color="success"
+        />
+        <Toast
+          isOpen={error}
+          setOpen={setError}
+          message="An error occurred while update patient schedule. plz try again"
+          color="danger"
+        />
       <IonPage>
       <Header pageName="Vaccination" />
     
