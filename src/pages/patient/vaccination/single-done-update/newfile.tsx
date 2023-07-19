@@ -244,9 +244,7 @@ const VaccinationCard: React.FC<IPatientCardProps> = ({
               &nbsp;
               <IonImg
                 src={syringImage}
-                onClick={() =>
-                  router.push(`/members/child/vaccine/${1}/bulk/${date}`)
-                }
+                onClick={handleBulkVaccineClick}
                 style={{
                   height: "15px",
                   display: "inline-block",

@@ -183,8 +183,11 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
     setButtonVisible(!isButtonVisible);
     postSingleDone(); // Update the database value of isSkip
   };
-  useEffect(() => {
+  useEffect(()=>{
     filterDoses();
+  })
+  useEffect(() => {
+    
     fetchDoses();
     fetchBrands();
   }, [date]);
