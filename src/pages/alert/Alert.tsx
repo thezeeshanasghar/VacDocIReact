@@ -36,7 +36,11 @@ const Alert: React.FC = () => {
   const [patientData, setPatientData] = useState<PatientDataType[]>([]);
   const location = useLocation();
   const fetchPatientData = () => {
-    fetch(`${import.meta.env.VITE_API_URL}patients?doctorId=${storedValue.Id}`)
+    fetch(
+      `${import.meta.env.VITE_API_URL}patients_get_by_doctor_id?doctorId=${
+        storedValue.Id
+      }`
+    )
       .then((response) => response.json())
       .then((data: PatientDataType[]) => setPatientData(data))
       .catch((error) => {

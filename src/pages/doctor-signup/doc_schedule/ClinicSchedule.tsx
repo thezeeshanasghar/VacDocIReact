@@ -45,9 +45,9 @@ const ClinicSchedule: React.FC = () => {
     if (newArray.length > 0) {
       setCanSubmit(false);
     }
-    console.log("clinics timing array,", newArray);
-    console.log("clicnics data ", drData["clinics"]);
+    // console.log("clinics timing array,", newArray);
     drData.clinics[0]["clinicTimings"] = newArray;
+    console.log("cdr  data ", drData);
 
     RegisterDoctor(drData);
   };
@@ -71,7 +71,7 @@ const ClinicSchedule: React.FC = () => {
         }
       })
       .catch((err) => setError(true));
-    localStorage.clear();
+    // localStorage.clear();
   };
 
   return (
