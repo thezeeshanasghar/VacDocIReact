@@ -44,14 +44,15 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
   const [isButtonVisible, setButtonVisible] = useState(true);
   const [doses, setDoses] = useState<IDose[]>([]);
   const [brands, setBrands] = useState<IBrand[]>([]);
+  const[brandId,setBrandId] = useState<number>();
 
   const fetchDoses = () => {
-    fetch(`${import.meta.env.VITE_API_URL}alldoses`)
+    fetch(`${import.meta.env.VITE_API_URL}api/Dose/alldoses`)
       .then((res) => res.json())
       .then((doses: IDose[]) => setDoses(doses));
   };
   const fetchBrands = () => {
-    fetch(`${import.meta.env.VITE_API_URL}BrandName`)
+    fetch(`${import.meta.env.VITE_API_URL}api/Brand`)
       .then((res) => res.json())
       .then((brands: IBrand[]) => setBrands(brands));
   };
@@ -61,6 +62,14 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
     const data2 = format(new Date(inputValue), "yyyy-MM-dd");
    
     setSelectedDate(data2);
+  };
+  const filterDoses = () => {
+    const filteredDose: IDose | undefined = doses.find((d) => d.Name === Name);
+    console.log(filteredDose)
+    if(filteredDose){
+      setBrandId(filteredDose.VaccineId)
+    }
+
   };
 
   const filterBrand = (brandId: number): string | undefined => {
@@ -171,7 +180,13 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
     setButtonVisible(!isButtonVisible);
     postSingleDone(); // Update the database value of isSkip
   };
-
+  useEffect(() => {
+   
+    fetchDoses();
+    filterDoses();
+    fetchBrands();
+   
+  }, [date]);
   useEffect(() => {
     // Update the visibility of buttons based on the database value of IsSkip
     setButtonsVisible(!IsSkip);
@@ -199,16 +214,18 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
           {isButtonsVisible && isButtonVisible && (
             <>
               <IonCol size="auto">
-                <IonIcon
-                  color="primary"
-                  onClick={() => setShowPopover(true)}
-                  icon={calendar}
-                  style={{ cursor: "pointer",
-                  height: "30px",
-                  display: "inline-block",
-                  margin: "0px 10px" }}
-                  onMouseOver={() => handelonmouseover(date)}
-                />
+              <IonIcon
+  color="primary"
+  onClick={() => setShowPopover(true)}
+  icon={calendar}
+  style={{
+    cursor: "pointer",
+    fontSize: "30px", // Increase the icon size as desired
+    display: "inline-block",
+    margin: "0px 10px"
+  }}
+  onMouseOver={() => handelonmouseover(date)}
+/>
               </IonCol>
               <IonCol size="auto">
                 <IonImg
@@ -239,7 +256,7 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
                   }}
                   color={IsSkip ? "danger" : "primary"}
                 >
-                  {IsSkip ? "unSkip" : "skip"}
+                  {IsSkip ? "UnSkip" : "Skip"}
                 </IonButton>
               </IonCol>
             </>
@@ -254,12 +271,26 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
                 }}
                 color="danger"
               >
-                unSkip
+                UnSkip
               </IonButton>
             </IonCol>
           )}
-        {!isButtonVisible && ( // Show "undo" button when buttons are hidden
-  <IonCol size="auto">
+       {!isButtonVisible && (<> 
+  <IonCol size="auto" style={{ display: "flex", alignItems: "center" }}>
+    <span
+      style={{
+        color: "#6ebf8b", // Set the color of the date to light green
+        height: "30px",
+        display: "inline-block",
+        margin: "0px 10px"
+      }}
+    >
+      {new Date(date).toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric"
+      })}
+    </span>
     <IonImg
       // size="small"
       src={emptySyringImage}
@@ -272,16 +303,20 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
       }}
       color="danger"
     >
-      undo
+      Undo
     </IonImg>
+    
   </IonCol>
+  <IonCol size="12">
+    
+      <p style={{ textAlign: "center" }}>
+        Brand: {filterBrand(brandId)}
+      </p>
+  </IonCol>
+  </>
 )}
 
-{IsDone ? (
-  <p style={{ textAlign: "center" }}>
-    Brand: {filterBrand(Id)}
-  </p>
-) : null}
+
         </IonRow>
       </IonGrid>
       <IonPopover isOpen={showPopover} onDidDismiss={closePopover}>

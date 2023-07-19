@@ -81,56 +81,58 @@ const BulkDone: React.FC<IParam> = ({
         color="danger"
         message="an Error occurred while updating date, please try again later"
       />
-        <IonContent>
-            <IonHeader>
-                <IonToolbar color={"primary"}><IonTitle>Bulk</IonTitle></IonToolbar>
-            </IonHeader>
-            <form noValidate onSubmit={handleSubmit}>
-              <IonItem>
-                <IonLabel position="floating" color="primary">
-                  Weight
-                </IonLabel>
-                <IonInput
-                  type="number"
-                  value={weight}
-                  onIonChange={(e) => setWeight(parseFloat(e.detail.value!))}
-                ></IonInput>
-              </IonItem>
-              <IonItem>
-                <IonLabel position="floating" color="primary">
-                  Height
-                </IonLabel>
-                <IonInput
-                  type="number"
-                  value={height}
-                  onIonChange={(e) => setHeight(parseFloat(e.detail.value!))}
-                ></IonInput>
-              </IonItem>
-              <IonItem>
-                <IonLabel position="floating" color="primary">
-                  OFC
-                </IonLabel>
-                <IonInput
-                  type="number"
-                  value={OFC}
-                  onIonChange={(e) => setOFC(parseFloat(e.detail.value!))}
-                ></IonInput>
-              </IonItem>
-            
+        <IonPage>
+          <IonContent>
+              <IonHeader>
+                  <IonToolbar color={"primary"}><IonTitle>Bulk</IonTitle></IonToolbar>
+              </IonHeader>
+              <form noValidate onSubmit={handleSubmit}>
                 <IonItem>
-                  <IonLabel color="primary">Given Date</IonLabel>
+                  <IonLabel position="floating" color="primary">
+                    Weight
+                  </IonLabel>
                   <IonInput
-                    type="date"
-                    value={Date}
-                    slot="end"
-                    onIonChange={(e) => setGivenDate(e.detail.value!)}
-                    min={Date}/>
+                    type="number"
+                    value={weight}
+                    onIonChange={(e) => setWeight(parseFloat(e.detail.value!))}
+                  ></IonInput>
                 </IonItem>
-              
-              <IonButton type="submit">Submit</IonButton>
-            </form>
-        </IonContent>
-    </>
+                <IonItem>
+                  <IonLabel position="floating" color="primary">
+                    Height
+                  </IonLabel>
+                  <IonInput
+                    type="number"
+                    value={height}
+                    onIonChange={(e) => setHeight(parseFloat(e.detail.value!))}
+                  ></IonInput>
+                </IonItem>
+                <IonItem>
+                  <IonLabel position="floating" color="primary">
+                    OFC
+                  </IonLabel>
+                  <IonInput
+                    type="number"
+                    value={OFC}
+                    onIonChange={(e) => setOFC(parseFloat(e.detail.value!))}
+                  ></IonInput>
+                </IonItem>
+          
+                  <IonItem>
+                    <IonLabel color="primary">Given Date</IonLabel>
+                    <IonInput
+                      type="date"
+                      value={Date}
+                      slot="end"
+                      onIonChange={(e) => setGivenDate(e.detail.value!)}
+                      min={Date}/>
+                  </IonItem>
+          
+                <IonButton type="submit">Submit</IonButton>
+              </form>
+          </IonContent>
+        </IonPage>
+              </>
   );
 };
 

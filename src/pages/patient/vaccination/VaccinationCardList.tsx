@@ -243,7 +243,11 @@ interface IParam {
                         style={{ marginRight: "10px", cursor: "pointer" }}
                         onMouseOver={() => handelonmouseover(date)}
                       />
-                      <IonText>{format(new Date(date), "yyyy-MM-dd")}</IonText>
+                      <IonText>{new Date(date).toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+        year: "numeric"
+      })}</IonText>
                       <IonPopover
                         isOpen={showPopover}
                         onDidDismiss={closePopover}
