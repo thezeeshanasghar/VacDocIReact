@@ -65,7 +65,7 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
   };
   const filterDoses = () => {
     const filteredDose: IDose | undefined = doses.find((d) => d.Name === Name);
-    console.log(filteredDose)
+    // console.log(filteredDose)
     if(filteredDose){
       setBrandsId(filteredDose.VaccineId)
     }

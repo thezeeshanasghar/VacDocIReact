@@ -229,6 +229,7 @@ interface IParam {
         <IonContent className="ion-padding">
           {Object.keys(data).map((date) => (
             <IonCard key={date}>
+              
               <>
                 <IonItem lines="none" className="centered-item">
                   <IonLabel style={{ textAlign: "center" }}>

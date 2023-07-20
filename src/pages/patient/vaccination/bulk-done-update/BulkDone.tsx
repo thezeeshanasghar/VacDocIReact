@@ -69,7 +69,7 @@ const BulkDone: React.FC<IParam> = ({
 
   return (
     <>
-     <Toast 
+     {/* <Toast 
         isOpen={successToast}
         setOpen={setSuccessToast}
         color="success"
@@ -80,7 +80,7 @@ const BulkDone: React.FC<IParam> = ({
         setOpen={setErrorToast}
         color="danger"
         message="an Error occurred while updating date, please try again later"
-      />
+      /> */}
         <IonPage>
           <IonContent>
               <IonHeader>
@@ -117,7 +117,6 @@ const BulkDone: React.FC<IParam> = ({
                     onIonChange={(e) => setOFC(parseFloat(e.detail.value!))}
                   ></IonInput>
                 </IonItem>
-          
                   <IonItem>
                     <IonLabel color="primary">Given Date</IonLabel>
                     <IonInput
