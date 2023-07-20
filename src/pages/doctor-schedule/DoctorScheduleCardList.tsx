@@ -62,6 +62,7 @@ const ScheduleList1: React.FC = () => {
           storedValue.Id
         }`
       );
+      console.log(response)
       if (response.ok) {
         const data = await response.json();
 
@@ -125,9 +126,9 @@ const ScheduleList1: React.FC = () => {
       );
       if (response.status === 204) {
         console.log(response.ok);
+        forceRender();
         setSuccess(true);
         setShowLoading(false);
-        forceRender();
       } else if (!response.ok) {
         setError(true);
         setShowLoading(false);

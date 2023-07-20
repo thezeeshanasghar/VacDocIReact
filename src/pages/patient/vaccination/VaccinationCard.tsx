@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { IonDatetime, IonIcon, IonItem, IonPopover, IonGrid, IonRow, IonCol, IonButton, IonImg } from "@ionic/react";
+import { IonDatetime, IonIcon, IonItem, IonPopover, IonGrid, IonRow, IonCol, IonButton, IonImg , useIonRouter} from "@ionic/react";
 import { calendar } from "ionicons/icons";
 import { format } from "date-fns";
 import Toast from "../../../components/custom-toast/Toast";
@@ -34,7 +34,9 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
   childId,
   IsDone,
   IsSkip,
+  // VaccineId,
 }) => {
+  const router = useIonRouter();
   const [error, setError] = useState(false);
   const [showPopover, setShowPopover] = useState(false);
   const [selectedDate, setSelectedDate] = useState<string | undefined>(date);
@@ -42,6 +44,7 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
   const [isCalendarVisible, setCalendarVisible] = useState(false);
   const [isButtonsVisible, setButtonsVisible] = useState(true);
   const [isButtonVisible, setButtonVisible] = useState(true);
+  const[toDay,setToDay]=useState("")
   const [doses, setDoses] = useState<IDose[]>([]);
   const [brands, setBrands] = useState<IBrand[]>([]);
   const[brandsId,setBrandsId] = useState<number>();
@@ -185,6 +188,15 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
   };
   useEffect(()=>{
     filterDoses();
+    const currentDate = new Date();
+    const year = currentDate.getFullYear();
+    const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+    const day = String(currentDate.getDate()).padStart(2, '0');
+    
+    const today = `${year}-${month}-${day}`;
+    
+    console.log(today);
+    setToDay(today)
   })
   useEffect(() => {
     
@@ -239,7 +251,7 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
                 <IonImg
                   // size="small"
                   src={syringImage}
-                  onClick={() => postSingleDone()}
+                  onClick={() =>  router.push(`/members/child/vaccine/${childId}/fill/${Id}?oldDate=${date.toString()}`)}
                   style={{
                     textTransform: "lowercase",
                     height: "30px",

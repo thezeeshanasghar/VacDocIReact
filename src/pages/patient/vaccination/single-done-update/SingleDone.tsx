@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useParams, useLocation } from "react-router-dom";
 import {
   IonItem,
   IonLabel,
@@ -13,24 +14,92 @@ import {
   IonToolbar,
 } from "@ionic/react";
 
-const SingleDone: React.FC = (props) => {
-  console.log(props)
-  // const [weight, setWeight] = useState<number>();
-  // const [height, setHeight] = useState<number>();
-  // const [OFC, setOFC] = useState<number>();
+interface IBrand {
+  Id: number;
+  Name: string;
+  VaccineId: number;
+}
+
+interface IParam {
+  match: {
+    params: {
+      childId: number;
+      doseId: number;
+    };
+  };
+}
+
+const SingleDone: React.FC<IParam> = () => {
+  const location = useLocation();
+  // Extract the query parameters from the location.search
+  const queryParams = new URLSearchParams(location.search);
+  // Get the value of the "oldDate" parameter from the query parameters
+  const oldDate = queryParams.get("oldDate");
+  console.log(oldDate);
+
+  const { doseId } = useParams<{ doseId: string }>();
   const [brand, setBrand] = useState<string>();
+  const [brandData, setBrandData] = useState<IBrand[]>([]);
   const [scheduleDate, setScheduleDate] = useState<string>();
   const [givenDate, setGivenDate] = useState<string>();
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Handle form submission logic here
-    // console.log("Weight:", weight);
-    // console.log("Height:", height);
-    // console.log("OFC:", OFC);
-    console.log("Brand:", brand);
-    console.log("Schedule Date:", scheduleDate);
-    console.log("Given Date:", givenDate);
+  useEffect(() => {
+    fetch(`${import.meta.env.VITE_API_URL}api/PatientSchedule/get_brands_for_dose/${doseId}`)
+      .then((res) => res.json())
+      .then((data) => {
+        setBrandData(data);
+        console.log(data);
+      })
+      .catch((err) => console.error(err));
+  }, [doseId]);
+
+  const postSingleDone = async () => {
+    console.log(brand)
+    try {
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}api/PatientSchedule/single_updateDone`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            id: doseId,
+            isDone: 1,
+            brandId: brand,
+          }),
+        }
+      );
+      if (res.status === 204) {
+        console.log("first");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+
+    const dataTobeSent = {
+      Id: doseId,
+      date: givenDate,
+    };
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}api/PatientSchedule/single_updateDate?Id=${doseId}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(dataTobeSent),
+        }
+      );
+      if (response.ok) {
+        // Handle success, if needed
+      } else {
+        // Handle error, if needed
+      }
+    } catch (error) {
+      // Handle error, if needed
+    }
   };
 
   return (
@@ -41,38 +110,25 @@ const SingleDone: React.FC = (props) => {
             <IonTitle>Fill Child Vaccine</IonTitle>
           </IonToolbar>
         </IonHeader>
-        <form noValidate onSubmit={handleSubmit}>
-          
-
+        <form noValidate onSubmit={postSingleDone}>
           <IonItem>
             <IonLabel color="primary">Brands</IonLabel>
-            <IonSelect
-              value={brand}
-              onIonChange={(e) => setBrand(e.detail.value)}
-            >
-              <IonSelectOption value="brand1">Brand 1</IonSelectOption>
-              <IonSelectOption value="brand2">Brand 2</IonSelectOption>
-              <IonSelectOption value="brand3">Brand 3</IonSelectOption>
+            <IonSelect value={brand} onIonChange={(e) => setBrand(e.detail.value)}>
+              {brandData.map((brandOption) => (
+                <IonSelectOption key={brandOption.Id} value={brandOption.Id}>
+                  {brandOption.Name}
+                </IonSelectOption>
+              ))}
             </IonSelect>
           </IonItem>
 
           <IonItem>
-            <IonLabel color="primary">Schedule Date</IonLabel>
-            <input
-              type="date"
-              value={scheduleDate}
-              onChange={(e) => setScheduleDate(e.target.value)}
-              max="2023-06-13"
-            />
-          </IonItem>
-
-          <IonItem>
             <IonLabel color="primary">Given Date</IonLabel>
-            <input
+            <IonInput
+              slot="end"
               type="date"
               value={givenDate}
-              onChange={(e) => setGivenDate(e.target.value)}
-              max="2023-06-13"
+              onIonChange={(e) => setGivenDate(e.detail.value)}
             />
           </IonItem>
 
@@ -84,36 +140,3 @@ const SingleDone: React.FC = (props) => {
 };
 
 export default SingleDone;
-
-{/* <IonItem>
-            <IonLabel position="floating" color="primary">
-              Weight
-            </IonLabel>
-            <IonInput
-              type="number"
-              value={weight}
-              onIonChange={(e) => setWeight(parseFloat(e.detail.value!))}
-            ></IonInput>
-          </IonItem>
-
-          <IonItem>
-            <IonLabel position="floating" color="primary">
-              Height
-            </IonLabel>
-            <IonInput
-              type="number"
-              value={height}
-              onIonChange={(e) => setHeight(parseFloat(e.detail.value!))}
-            ></IonInput>
-          </IonItem>
-
-          <IonItem>
-            <IonLabel position="floating" color="primary">
-              OFC
-            </IonLabel>
-            <IonInput
-              type="number"
-              value={OFC}
-              onIonChange={(e) => setOFC(parseFloat(e.detail.value!))}
-            ></IonInput>
-          </IonItem> */}

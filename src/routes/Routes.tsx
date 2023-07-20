@@ -87,7 +87,7 @@ const Routes: React.FC = () => {
         />
         <Route
           exact
-          path="/members/child/vaccine/:childId/fill/:brandId"
+          path="/members/child/vaccine/:childId/fill/:doseId"
           component={SingleDone}
         />
 
@@ -96,6 +96,12 @@ const Routes: React.FC = () => {
           path="/members/doctor/edit-profile"
           component={EditProfile}
         />
+
+<Route
+exact
+path=""
+// component={}
+/>
 
         <Route exact path={"/members/test"} component={Test} />
         <Route exact path="/members">
