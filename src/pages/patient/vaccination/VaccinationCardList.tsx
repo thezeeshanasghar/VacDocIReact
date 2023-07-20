@@ -241,7 +241,7 @@ interface IParam {
                       <IonImg
                 src={syringImage}
                 onClick={() =>
-                  router.push(`/members/child/vaccine/${childId}/bulk/${date}`)
+                  router.push(`/members/child/vaccine/${childId}/bulk?oldDate=${date}`)
                 }
                 style={{
                   height: "15px",

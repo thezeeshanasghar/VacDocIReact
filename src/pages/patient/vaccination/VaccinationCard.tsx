@@ -76,11 +76,11 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
   };
 
   const filterBrand = (brandId: number): string | undefined => {
-        console.log("brand id", brandId);
+        // console.log("brand id", brandId);
         const filteredBrand: IBrand | undefined = brands.find(
           (b) => b.Id === brandId
         );
-        console.log("brands, ", filteredBrand);
+        // console.log("brands, ", filteredBrand);
         return filteredBrand?.Name;
       };
       
@@ -188,15 +188,15 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
   };
   useEffect(()=>{
     filterDoses();
-    const currentDate = new Date();
-    const year = currentDate.getFullYear();
-    const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-    const day = String(currentDate.getDate()).padStart(2, '0');
+    // const currentDate = new Date();
+    // const year = currentDate.getFullYear();
+    // const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+    // const day = String(currentDate.getDate()).padStart(2, '0');
     
-    const today = `${year}-${month}-${day}`;
+    // const today = `${year}-${month}-${day}`;
     
-    console.log(today);
-    setToDay(today)
+    
+    // setToDay(today)
   })
   useEffect(() => {
     
