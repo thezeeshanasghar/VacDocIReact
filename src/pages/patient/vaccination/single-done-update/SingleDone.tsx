@@ -13,6 +13,7 @@ import {
   IonPage,
   IonTitle,
   IonToolbar,
+  useIonRouter
 } from "@ionic/react";
 import Toast from "../../../../components/custom-toast/Toast";
 
@@ -34,20 +35,12 @@ interface IParam {
 const SingleDone: React.FC<IParam> = () => {
   const location = useLocation();
   const history = useHistory();
+  const router = useIonRouter();
   // Extract the query parameters from the location.search
   const queryParams = new URLSearchParams(location.search);
   // Get the value of the "oldDate" parameter from the query parameters
   const oldDate = queryParams.get("oldDate");
-  console.log(oldDate);
-  const formatDate = (dateString) => {
-    const [month, day, year] = dateString.split("/");
-    return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
-  };
-  
-  // Usage example with oldDate
-
-  // const formattedDate = formatDate(oldDate);
-  // console.log(formattedDate); 
+console.log(oldDate);
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
   const { doseId } = useParams<{ doseId: string }>();
@@ -55,10 +48,19 @@ const SingleDone: React.FC<IParam> = () => {
   const [brand, setBrand] = useState<string>();
   const [brandData, setBrandData] = useState<IBrand[]>([]);
   const [scheduleDate, setScheduleDate] = useState<string>();
-  const [givenDate, setGivenDate] = useState<string>();
+  const formatDate = (dateString: string | null) => {
+    if (!dateString) {
+      return null;
+    }
+    const [month, day, year] = dateString.split("/");
+    return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
+  };
+  const formattedOldDate = oldDate ? formatDate(oldDate) : null;
 
+  // Set the initial state of givenDate to formattedOldDate
+  const [givenDate, setGivenDate] = useState<string | null>(formattedOldDate);
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_URL}api/PatientSchedule/get_brands_for_dose/${doseId}`)
+    fetch(`${import.meta.env.VITE_API_URL}api/PatientSchedule/GetBrandForPatientSchedule?Id=${doseId}`)
       .then((res) => res.json())
       .then((data) => {
         setBrandData(data);
@@ -67,8 +69,17 @@ const SingleDone: React.FC<IParam> = () => {
       .catch((err) => console.error(err));
   }, [doseId]);
 
+  const handleDateChange = (e: { target: { value: any; }; }) => {
+    // Get the selected date from the event
+    const selectedDate = e.target.value;
+
+    // Update the givenDate state with the selected date (no need to format it again)
+    setGivenDate(selectedDate);
+  };
+
   const postSingleDone = async () => {
     console.log(brand)
+    console.log(givenDate)
     try {
       const res = await fetch(
         `${import.meta.env.VITE_API_URL}api/PatientSchedule/single_updateDone`,
@@ -87,18 +98,20 @@ const SingleDone: React.FC<IParam> = () => {
       if (res.status === 204) {
         console.log("first");
         setSuccess(true);
-        history.push(`/members/child/vaccine/${childId}`, "back");
+        router.push(`/members/child/vaccine/${childId}`, "back");
         window.location.reload();
       }
     } catch (error) {
       console.log(error);
       setError(true);
     }
-    if (givenDate) {
+  // const dates=formatDate(givenDate);
+  // console.log(dates);
     const dataTobeSent = {
       Id: doseId,
       date: givenDate,
     };
+    console.log(dataTobeSent)
     try {
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}api/PatientSchedule/single_updateDate?Id=${doseId}`,
@@ -113,7 +126,7 @@ const SingleDone: React.FC<IParam> = () => {
       if (response.ok) {
         // Handle success, if needed
         setSuccess(true);
-        history.push(`/members/child/vaccine/${childId}`, "back");
+        router.push(`/members/child/vaccine/${childId}`, "back");
         window.location.reload();
       } else {
         // Handle error, if needed
@@ -123,61 +136,59 @@ const SingleDone: React.FC<IParam> = () => {
       // Handle error, if needed
       setError(true);
     }
-  }
+  
   };
 
   return (
     <>
-    <Toast
-    isOpen={success}
-    setOpen={setSuccess}
-    message="Single date of patient schedule updated successfully."
-    color="success"
-  />
-  <Toast
-    isOpen={error}
-    setOpen={setError}
-    message="An error occurred while updating patient schedule. Please try again."
-    color="danger"
-  />
-    <IonPage>
-      <IonContent>
-        <IonHeader>
-          <IonToolbar color={"primary"}>
-            <IonTitle>Fill Child Vaccine</IonTitle>
-          </IonToolbar>
-        </IonHeader>
-        <form noValidate onSubmit={postSingleDone}>
-          <IonItem>
-            <IonLabel color="primary">Brands</IonLabel>
-            <IonSelect 
-            value={brand} 
-            onIonChange={(e) => setBrand(e.detail.value)}
-            required
-            >
-              {brandData.map((brandOption) => (
-                <IonSelectOption key={brandOption.Id} value={brandOption.Id}>
-                  {brandOption.Name}
-                </IonSelectOption>
-              ))}
-            </IonSelect>
-          </IonItem>
+      <Toast
+        isOpen={success}
+        setOpen={setSuccess}
+        message="Single date of patient schedule updated successfully."
+        color="success"
+      />
+      <Toast
+        isOpen={error}
+        setOpen={setError}
+        message="An error occurred while updating patient schedule. Please try again."
+        color="danger"
+      />
+      <IonPage>
+        <IonContent>
+          <IonHeader>
+            <IonToolbar color={"primary"}>
+              <IonTitle>Single</IonTitle>
+            </IonToolbar>
+          </IonHeader>
+          <form noValidate onSubmit={postSingleDone}>
+            <IonItem>
+              <IonLabel color="primary">Brands</IonLabel>
+              <IonSelect
+                value={brand}
+                onIonChange={(e) => setBrand(e.detail.value)}
+              >
+                {brandData.map((brandOption) => (
+                  <IonSelectOption key={brandOption.Id} value={brandOption.Id}>
+                    {brandOption.Name}
+                  </IonSelectOption>
+                ))}
+              </IonSelect>
+            </IonItem>
 
-          <IonItem>
-            <IonLabel color="primary">Given Date</IonLabel>
-            <IonInput
-              slot="end"
-              type="date"
-              value={formatDate(oldDate)}
-              onIonChange={(e) => setGivenDate(e.detail.value)}
-              required
-            />
-          </IonItem>
+            <IonItem>
+              <IonLabel color="primary">Given Date</IonLabel>
+              <IonInput
+                slot="end"
+                type="date"
+                value={givenDate || ""} // Use the givenDate directly without formatting it again
+                onIonChange={handleDateChange}
+              />
+            </IonItem>
 
-          <IonButton type="submit">Submit</IonButton>
-        </form>
-      </IonContent>
-    </IonPage>
+            <IonButton type="submit">Submit</IonButton>
+          </form>
+        </IonContent>
+      </IonPage>
     </>
   );
 };

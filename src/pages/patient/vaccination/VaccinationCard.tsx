@@ -17,12 +17,14 @@ interface IDose{
     VaccineId: number
 }
 interface IDoseSchedule {
+  // data: string;
   childId: number;
   Id: number;
   date: string;
   Name: string;
   IsDone: boolean;
   IsSkip: boolean;
+  BrandName:string;
   renderList: () => void;
 }
 
@@ -34,6 +36,7 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
   childId,
   IsDone,
   IsSkip,
+  BrandName
   // VaccineId,
 }) => {
   const router = useIonRouter();
@@ -331,7 +334,7 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
     </IonCol>
     <IonCol size="12">
       <p style={{ textAlign: "center" }}>
-        Brand: {filterBrand(brandsId)}
+        Brand: {BrandName}
       </p>
     </IonCol>
   </>

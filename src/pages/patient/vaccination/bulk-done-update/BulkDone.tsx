@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { IonItem, IonLabel, IonInput, IonButton, IonPage, IonContent, IonHeader, IonToolbar, IonTitle } from "@ionic/react";
+import { IonItem, IonLabel, IonInput, IonButton, IonPage, IonContent, IonHeader, IonToolbar, IonTitle, IonSelect, IonSelectOption } from "@ionic/react";
 import Toast from "../../../../components/custom-toast/Toast";
 
 interface IParam {
@@ -9,6 +9,12 @@ interface IParam {
       Id: string;
     };
   };
+}
+
+interface IBrand {
+  Id: number;
+  Name: string;
+  VaccineId: number;
 }
 
 const BulkDone: React.FC<IParam> = ({
@@ -21,10 +27,30 @@ const BulkDone: React.FC<IParam> = ({
   const [successToast, setSuccessToast] = useState(false);
   const [errorToast, setErrorToast] = useState(false);
   const [OFC, setOFC] = useState<number>();
+  const [brand, setBrand] = useState<string>();
+  const [brandData, setBrandData] = useState<IBrand[]>([]);
   const [givenDate, setGivenDate] = useState<string>();
+
+  const queryParams = new URLSearchParams(location.search);
+  // Get the value of the "oldDate" parameter from the query parameters
+  const oldDate = queryParams.get("oldDate");
+  console.log(oldDate);
+  const formatDate = (dateString) => {
+    const [month, day, year] = dateString.split("/");
+    return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
+  };
 
   useEffect(() => {
     console.log('Date', Date, '  ID: ', Id)
+   
+      fetch(`${import.meta.env.VITE_API_URL}api/PatientSchedule/GetBrandForPatientSchedule?Id=${2}`)
+        .then((res) => res.json())
+        .then((data) => {
+          setBrandData(data);
+          console.log(data);
+        })
+        .catch((err) => console.error(err));
+   
   }, []); 
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -67,9 +93,19 @@ const BulkDone: React.FC<IParam> = ({
 
   };
 
+  const [brands, setBrands] = useState(["", "", ""]);
+
+  const handleBrandChange = (index, value) => {
+    setBrands((prevBrands) => {
+      const newBrands = [...prevBrands];
+      newBrands[index] = value;
+      return newBrands;
+    });
+  };
+
   return (
     <>
-     {/* <Toast 
+     <Toast 
         isOpen={successToast}
         setOpen={setSuccessToast}
         color="success"
@@ -80,14 +116,14 @@ const BulkDone: React.FC<IParam> = ({
         setOpen={setErrorToast}
         color="danger"
         message="an Error occurred while updating date, please try again later"
-      /> */}
+      />
         <IonPage>
           <IonContent>
               <IonHeader>
                   <IonToolbar color={"primary"}><IonTitle>Bulk</IonTitle></IonToolbar>
               </IonHeader>
               <form noValidate onSubmit={handleSubmit}>
-                <IonItem>
+                {/* <IonItem>
                   <IonLabel position="floating" color="primary">
                     Weight
                   </IonLabel>
@@ -116,12 +152,42 @@ const BulkDone: React.FC<IParam> = ({
                     value={OFC}
                     onIonChange={(e) => setOFC(parseFloat(e.detail.value!))}
                   ></IonInput>
-                </IonItem>
+                </IonItem> */}
+                {/* <IonItem>
+              <IonLabel color="primary">Brands</IonLabel>
+              <IonSelect
+                value={brand}
+                onIonChange={(e) => setBrand(e.detail.value)}
+              >
+                {brandData.map((brandOption) => (
+                  <IonSelectOption key={brandOption.Id} value={brandOption.Id}>
+                    {brandOption.Name}
+                  </IonSelectOption>
+                ))}
+              </IonSelect>
+            </IonItem> */}
+            <div>
+      {brands.map((brand, index) => (
+        <IonItem key={index}>
+          <IonLabel color="primary">Brands {index + 1}</IonLabel>
+          <IonSelect
+            value={brand}
+            onIonChange={(e) => handleBrandChange(index, e.detail.value)}
+          >
+            {brandData.map((brandOption) => (
+              <IonSelectOption key={brandOption.Id} value={brandOption.Id}>
+                {brandOption.Name}
+              </IonSelectOption>
+            ))}
+          </IonSelect>
+        </IonItem>
+      ))}
+    </div>
                   <IonItem>
                     <IonLabel color="primary">Given Date</IonLabel>
                     <IonInput
                       type="date"
-                      value={Date}
+                      value={formatDate(oldDate)}
                       slot="end"
                       onIonChange={(e) => setGivenDate(e.detail.value!)}
                       min={Date}/>

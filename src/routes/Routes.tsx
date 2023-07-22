@@ -82,7 +82,7 @@ const Routes: React.FC = () => {
 
         <Route
           exact
-          path="/members/child/vaccine/:Id/bulk"
+          path="/members/child/vaccine/:Id/bulk/:doseId"
           component={BulkDone}
         />
         <Route

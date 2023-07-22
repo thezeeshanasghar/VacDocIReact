@@ -35,6 +35,7 @@ interface IVaccine {
   IsDone: boolean;
   IsSkip: boolean;
   ScheduleId: number;
+  BrandName:string;
 }
 
 interface IVaccineData {
@@ -58,7 +59,10 @@ interface IParam {
       match: {
         params: { Id: childId },
       },
-    }) => {
+     
+    },
+    ScheduleId,
+    ) => {
       const router = useIonRouter();
   const [data, setData] = useState<IVaccine[]>([]);
   const [groupedData, setGroupedData] = useState<IVaccineData[]>([]);
@@ -185,7 +189,7 @@ interface IParam {
 
   const handleDownload = () => {
         axios({
-          url: `${import.meta.env.VITE_API_URL}api/Child/pdf?childId=${childId}`, // Replace with the URL of your PDF file
+          url: `${import.meta.env.VITE_API_URL}api/PatientSchedule/pdf?ChildId=${childId}`, // Replace with the URL of your PDF file
           method: 'GET',
           responseType: 'blob', // Important! This tells axios to return a Blob object
         })
@@ -231,60 +235,61 @@ interface IParam {
             <IonCard key={date}>
               
               <>
-                <IonItem lines="none" className="centered-item">
-                  <IonLabel style={{ textAlign: "center" }}>
-                    <IonItem
-                      lines="none"
-                      slot="center"
-                      style={{ textAlign: "center", padding: 0 }}
-                    >
-                      <IonImg
-                src={syringImage}
-                onClick={() =>
-                  router.push(`/members/child/vaccine/${childId}/bulk?oldDate=${date}`)
-                }
-                style={{
-                  height: "15px",
-                  display: "inline-block",
-                  margin: "0px 10px",
-                }}
-                className="ng-star-inserted md hydrated"
-              />
-                      <IonIcon
-                        color="primary"
-                        onClick={() => setShowPopover(true)}
-                        icon={calendar}
-                        style={{ marginRight: "10px", cursor: "pointer" }}
-                        onMouseOver={() => handelonmouseover(date)}
-                      />
-                      <IonText>{new Date(date).toLocaleDateString("en-US", {
-        month: "short",
-        day: "numeric",
-        year: "numeric"
-      })}</IonText>
-                      <IonPopover
-                        isOpen={showPopover}
-                        onDidDismiss={closePopover}
-                      >
-                            
-                        <IonDatetime
-                          placeholder="Select Date"
-                          value={selectedDate || undefined}
-                          onIonChange={(e) =>
-                            handleDateChange(e, date, inputValue)
-                          }
-                        ></IonDatetime>
-                      </IonPopover>
-                    </IonItem>
-                  </IonLabel>
-                </IonItem>
+              <IonItem lines="none" className="centered-item">
+      <IonRow className="ion-align-items-center">
+        <IonCol>
+          <IonText>
+            {new Date(date).toLocaleDateString("en-US", {
+              month: "short",
+              day: "numeric",
+              year: "numeric",
+            })}
+          </IonText>
+        </IonCol>
+        <IonCol>
+          <IonImg
+            src={syringImage}
+            onClick={() =>
+              router.push(
+                `/members/child/vaccine/${childId}/bulk/${1}?oldDate=${date}&No=${data[date].length}`
+              )
+            }
+            style={{
+              height: "15px",
+              display: "inline-block",
+              margin: "0px 10px",
+            }}
+            className="ng-star-inserted md hydrated"
+          />
+        </IonCol>
+        <IonCol>
+          <IonIcon
+            color="primary"
+            onClick={() => setShowPopover(true)}
+            icon={calendar}
+            style={{ marginRight: "10px", cursor: "pointer" }}
+            onMouseOver={() => handelonmouseover(date)}
+          />
+        </IonCol>
+        <IonPopover isOpen={showPopover} onDidDismiss={closePopover}>
+          <IonDatetime
+            placeholder="Select Date"
+            value={selectedDate || undefined}
+            onIonChange={(e) => handleDateChange(e, date, inputValue)}
+          ></IonDatetime>
+        </IonPopover>
+      </IonRow>
+    </IonItem>
+              {/* <IonText>{data[date].length}</IonText>  */}
                 {data[date].map((item: IVaccine) => (
                   <VaccinationCard
+                  // data={data[date].length}
                   childId={childId}
                     key={item.ScheduleId}
                     date={date}
                     Id={item.ScheduleId}
                     Name={item.DoseName}
+                    BrandName={item.BrandName}
                     // MinAge={item.MinAge}
                     IsDone={item.IsDone}
                     IsSkip={item.IsSkip}
