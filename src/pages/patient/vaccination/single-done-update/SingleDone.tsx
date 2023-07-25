@@ -59,6 +59,7 @@ console.log(oldDate);
 
   // Set the initial state of givenDate to formattedOldDate
   const [givenDate, setGivenDate] = useState<string | null>(formattedOldDate);
+  const [newDate, setNewDate] = useState();
   useEffect(() => {
     fetch(`${import.meta.env.VITE_API_URL}api/PatientSchedule/GetBrandForPatientSchedule?Id=${doseId}`)
       .then((res) => res.json())
@@ -69,17 +70,17 @@ console.log(oldDate);
       .catch((err) => console.error(err));
   }, [doseId]);
 
-  const handleDateChange = (e: { target: { value: any; }; }) => {
+  const handleDateChange = (e: { target: { value: any; }; }, value:any) => {
     // Get the selected date from the event
     const selectedDate = e.target.value;
 
     // Update the givenDate state with the selected date (no need to format it again)
-    setGivenDate(selectedDate);
+    setNewDate(selectedDate);
   };
 
   const postSingleDone = async () => {
     console.log(brand)
-    console.log(givenDate)
+    console.log(newDate)
     try {
       const res = await fetch(
         `${import.meta.env.VITE_API_URL}api/PatientSchedule/single_updateDone`,
@@ -91,6 +92,7 @@ console.log(oldDate);
           body: JSON.stringify({
             id: doseId,
             isDone: 1,
+            date:newDate,
             brandId: brand,
           }),
         }
@@ -107,35 +109,35 @@ console.log(oldDate);
     }
   // const dates=formatDate(givenDate);
   // console.log(dates);
-    const dataTobeSent = {
-      Id: doseId,
-      date: givenDate,
-    };
-    console.log(dataTobeSent)
-    try {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}api/PatientSchedule/single_updateDate?Id=${doseId}`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(dataTobeSent),
-        }
-      );
-      if (response.ok) {
-        // Handle success, if needed
-        setSuccess(true);
-        router.push(`/members/child/vaccine/${childId}`, "back");
-        window.location.reload();
-      } else {
-        // Handle error, if needed
-        setError(true);
-      }
-    } catch (error) {
-      // Handle error, if needed
-      setError(true);
-    }
+    // const dataTobeSent = {
+    //   Id: doseId,
+    //   date: newDate,
+    // };
+    // console.log(dataTobeSent)
+    // try {
+    //   const response = await fetch(
+    //     `${import.meta.env.VITE_API_URL}api/PatientSchedule/single_updateDate?Id=${doseId}`,
+    //     {
+    //       method: "PATCH",
+    //       headers: {
+    //         "Content-Type": "application/json",
+    //       },
+    //       body: JSON.stringify(dataTobeSent),
+    //     }
+    //   );
+    //   if (response.ok) {
+    //     // Handle success, if needed
+    //     setSuccess(true);
+    //     router.push(`/members/child/vaccine/${childId}`, "back");
+    //     window.location.reload();
+    //   } else {
+    //     // Handle error, if needed
+    //     setError(true);
+    //   }
+    // } catch (error) {
+    //   // Handle error, if needed
+    //   setError(true);
+    // }
   
   };
 
@@ -181,7 +183,7 @@ console.log(oldDate);
                 slot="end"
                 type="date"
                 value={givenDate || ""} // Use the givenDate directly without formatting it again
-                onIonChange={handleDateChange}
+                onIonChange={(e) => handleDateChange(e, e.detail.value)}
               />
             </IonItem>
 

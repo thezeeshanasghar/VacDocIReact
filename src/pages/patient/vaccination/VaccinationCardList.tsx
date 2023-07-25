@@ -20,7 +20,8 @@ import {
   useIonRouter,
 } from "@ionic/react";
 // import { groupBy } from "lodash";
-import { calendar } from "ionicons/icons";
+import emptySyringImage from "../../../assets/injectionEmpty.png";
+import { calendar, key } from "ionicons/icons";
 import { format } from "date-fns";
 import axios from "axios";
 import { saveAs } from 'file-saver';
@@ -59,7 +60,11 @@ interface IParam {
       match: {
         params: { Id: childId },
       },
-     
+    //  {DoseName,
+    //   IsDone,
+    //   IsSkip,
+    //   ScheduleId,
+    //   BrandName,}
     },
     ScheduleId,
     ) => {
@@ -76,9 +81,23 @@ interface IParam {
   const [value, setValue] = useState("");
   const [showLoading, setShowLoading] = useState(false);
   const [patientName, setPatientName] = useState<string>();
+  const [isButtonsVisible, setButtonsVisible] = useState(true);
+  const [isButtonVisible, setButtonVisible] = useState(true);
+  const [showButton1, setShowButton1] = useState(true);
+const [showButton2, setShowButton2] = useState(false);
+const [skipStates, setSkipStates] = useState<{ [date: string]: boolean }>({});
+
 
   const forceRender = () => {
     fetchDoseData();
+  };
+
+  const formatDate = (dateString: string | null) => {
+    if (!dateString) {
+      return null;
+    }
+    const [month, day, year] = dateString.split("/");
+    return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
   };
 
   useEffect(() => {
@@ -108,6 +127,11 @@ interface IParam {
         const data = await response.json();
 
         setData(data);
+        const initialSkipStates = data.reduce((acc: { [x: string]: any; }, item: { Date: string | number; IsSkip: any; }) => {
+          acc[item.Date] = item.IsSkip;
+          return acc;
+        }, {});
+        setSkipStates(initialSkipStates);
         console.log(data);
         setIsLoading(false);
       } else {
@@ -182,6 +206,77 @@ interface IParam {
     setShowPopover(false);
   };
 
+  const postSkip = async (date: string ,data: boolean) => {
+    const newdate=formatDate(date);
+    try {
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}api/PatientSchedule/patient_bulk_update_IsSkip?childId=${childId}&date=${newdate}&IsSkip=${data}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          // body: JSON.stringify({
+          //   childId,
+          //   date,
+          //   isSkip: !data[date].IsSkip ? 1 : 0,
+          // }),
+        }
+      );
+      console.log(`${import.meta.env.VITE_API_URL}api/PatientSchedule/patient_bulk_update_IsSkip?childId=${childId}&date=${newdate}&IsSkip=${data}`,)
+      console.log(res);
+      if (res.status === 204) {
+        // Toggle the visibility of buttons when skip is clicked
+        setButtonsVisible(!isButtonsVisible);
+        setShowButton1(false); 
+        setShowButton2(true);
+        setSkipStates((prevSkipStates) => ({
+          ...prevSkipStates,
+          [date]: !prevSkipStates[date],
+        }));
+        // renderList();
+        forceRender()
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const postSkip1 = async (date: string) => {
+    const newdate=formatDate(date);
+    try {
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}api/PatientSchedule/patient_bulk_update_IsSkip?childId=${childId}&date=${newdate}&IsSkip=${false}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          // body: JSON.stringify({
+          //   childId,
+          //   date,
+          //   isSkip: !data[date].IsSkip ? 1 : 0,
+          // }),
+        }
+      );
+      console.log(`${import.meta.env.VITE_API_URL}api/PatientSchedule/patient_bulk_update_IsSkip?childId=${childId}&date=${newdate}&IsSkip=${true}`,)
+      console.log(res);
+      if (res.status === 204) {
+        // Toggle the visibility of buttons when skip is clicked
+        setButtonsVisible(!isButtonsVisible);
+        setShowButton1(true);
+        setShowButton2(false);
+        setSkipStates((prevSkipStates) => ({
+          ...prevSkipStates,
+          [date]: !prevSkipStates[date],
+        }));
+        // renderList();
+        forceRender()
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   // function setName(name: string) {
   //       setPatientName(name);
@@ -201,6 +296,15 @@ interface IParam {
             console.log(error);
           });
       };
+
+      const toggleButtonsVisibility = (date: string) => {
+        // Toggle the visibility of all buttons and set isSkip to 0 (false)
+        setButtonsVisible(!isButtonsVisible);
+        postSkip(date,false); // Update the database value of isSkip
+      };
+
+    
+    
   return (
     <>
     <Toast
@@ -232,12 +336,15 @@ interface IParam {
          
         <IonContent className="ion-padding">
           {Object.keys(data).map((date) => (
-            <IonCard key={date}>
+            //  { useEffect(() => {
+            //     // Update the visibility of buttons based on the database value of IsSkip
+            //     setButtonsVisible(!data[date].IsSkip);
+            //   }, [data[date].IsSkip]);}
+            <>
+            {isButtonsVisible && isButtonVisible && (
               
-              <>
               <IonItem lines="none" className="centered-item">
-      <IonRow className="ion-align-items-center">
-        <IonCol>
+      
           <IonText>
             {new Date(date).toLocaleDateString("en-US", {
               month: "short",
@@ -245,8 +352,7 @@ interface IParam {
               year: "numeric",
             })}
           </IonText>
-        </IonCol>
-        <IonCol>
+       
           <IonImg
             src={syringImage}
             onClick={() =>
@@ -255,14 +361,13 @@ interface IParam {
               )
             }
             style={{
-              height: "15px",
+              height: "30px",
               display: "inline-block",
               margin: "0px 10px",
             }}
             className="ng-star-inserted md hydrated"
           />
-        </IonCol>
-        <IonCol>
+        
           <IonIcon
             color="primary"
             onClick={() => setShowPopover(true)}
@@ -270,7 +375,7 @@ interface IParam {
             style={{ marginRight: "10px", cursor: "pointer" }}
             onMouseOver={() => handelonmouseover(date)}
           />
-        </IonCol>
+      
         <IonPopover isOpen={showPopover} onDidDismiss={closePopover}>
           <IonDatetime
             placeholder="Select Date"
@@ -278,8 +383,134 @@ interface IParam {
             onIonChange={(e) => handleDateChange(e, date, inputValue)}
           ></IonDatetime>
         </IonPopover>
-      </IonRow>
+        
+        <IonButton
+                // src={syringImage}
+                  size="small"
+                  onClick={() => postSkip(date,true)}
+                  style={{
+                    textTransform: "lowercase",  
+                    height: "30px",
+                    display: "inline-block",
+                    margin: "0px 10px"  ,
+                    color: "primary"      
+                  }}
+                  color={skipStates[date] ? "danger" : "primary"}
+                >
+             {skipStates[date] ? "UnSkip" : "Skip"}
+                </IonButton>
+               
+                 {/* {showButton2 && (
+                <IonButton
+                size="small"
+                onClick={()=>toggleButtonsVisibility(date)}
+                style={{
+                  textTransform: "lowercase",
+                }}
+                color="danger"
+              >
+                UnSkip
+              </IonButton>
+                 )} */}
     </IonItem>
+    )}
+     {!isButtonsVisible && ( // Show "unSkip" button when buttons are hidden
+            <IonItem lines="none" className="centered-item">
+      
+            <IonText>
+              {new Date(date).toLocaleDateString("en-US", {
+                month: "short",
+                day: "numeric",
+                year: "numeric",
+              })}
+            </IonText>
+         
+            <IonImg
+              src={syringImage}
+              onClick={() =>
+                router.push(
+                  `/members/child/vaccine/${childId}/bulk/${1}?oldDate=${date}&No=${data[date].length}`
+                )
+              }
+              style={{
+                height: "30px",
+                display: "inline-block",
+                margin: "0px 10px",
+              }}
+              className="ng-star-inserted md hydrated"
+            />
+          
+            <IonIcon
+              color="primary"
+              onClick={() => setShowPopover(true)}
+              icon={calendar}
+              style={{ marginRight: "10px", cursor: "pointer" }}
+              onMouseOver={() => handelonmouseover(date)}
+            />
+        
+          <IonPopover isOpen={showPopover} onDidDismiss={closePopover}>
+            <IonDatetime
+              placeholder="Select Date"
+              value={selectedDate || undefined}
+              onIonChange={(e) => handleDateChange(e, date, inputValue)}
+            ></IonDatetime>
+          </IonPopover>
+            <IonCol size="auto">
+              <IonButton
+                size="small"
+                onClick={()=>toggleButtonsVisibility(date)}
+                style={{
+                  textTransform: "lowercase",
+                }}
+                color={skipStates[date] ? "danger" : "primary"}
+              >
+               {skipStates[date] ? "UnSkip" : "Skip"}
+              </IonButton>
+            </IonCol>
+            </IonItem>
+          )}
+       {!isButtonVisible && (
+  <>
+    <IonCol size="auto" style={{ display: "flex", alignItems: "center" }}>
+      <span
+        style={{
+          color: "#6ebf8b", // Set the color of the date to light green
+          height: "30px",
+          display: "inline-block",
+          margin: "0px 10px"
+        }}
+      >
+        {new Date(date).toLocaleDateString("en-US", {
+          month: "short",
+          day: "numeric",
+          year: "numeric"
+        })}
+      </span>
+     
+        {/* <IonImg
+          // size="small"
+          src={emptySyringImage}
+          onClick={toggleButtonVisibility}
+          style={{
+            textTransform: "lowercase",
+            height: "30px",
+            display: "inline-block",
+            margin: "0px 10px"
+          }}
+          color="danger"
+        >
+          Undo
+        </IonImg> */}
+    
+    </IonCol>
+    {/* <IonCol size="12">
+      <p style={{ textAlign: "center" }}>
+        Brand: {BrandName}
+      </p>
+    </IonCol> */}
+  </>
+)}
+<IonCard>
               {/* <IonText>{data[date].length}</IonText>  */}
                 {data[date].map((item: IVaccine) => (
                   <VaccinationCard
@@ -297,9 +528,11 @@ interface IParam {
                     renderList={forceRender}
                   />
                 ))}
+                </IonCard>
               </>
-            </IonCard>
+            
           ))}
+
         </IonContent>
       </IonPage>
     </>

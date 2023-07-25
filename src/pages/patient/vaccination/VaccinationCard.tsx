@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { IonDatetime, IonIcon, IonItem, IonPopover, IonGrid, IonRow, IonCol, IonButton, IonImg , useIonRouter} from "@ionic/react";
+import { IonDatetime, IonIcon, IonItem, IonPopover, IonGrid, IonRow, IonCol, IonButton, IonImg , useIonRouter, IonCard} from "@ionic/react";
 import { calendar } from "ionicons/icons";
 import { format } from "date-fns";
 import Toast from "../../../components/custom-toast/Toast";
@@ -52,16 +52,16 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
   const [brands, setBrands] = useState<IBrand[]>([]);
   const[brandsId,setBrandsId] = useState<number>();
 
-  const fetchDoses = () => {
-    fetch(`${import.meta.env.VITE_API_URL}api/Dose/alldoses`)
-      .then((res) => res.json())
-      .then((doses: IDose[]) => setDoses(doses));
-  };
-  const fetchBrands = () => {
-    fetch(`${import.meta.env.VITE_API_URL}api/Brand`)
-      .then((res) => res.json())
-      .then((brands: IBrand[]) => setBrands(brands));
-  };
+  // const fetchDoses = () => {
+  //   fetch(`${import.meta.env.VITE_API_URL}api/Dose/alldoses`)
+  //     .then((res) => res.json())
+  //     .then((doses: IDose[]) => setDoses(doses));
+  // };
+  // const fetchBrands = () => {
+  //   fetch(`${import.meta.env.VITE_API_URL}api/Brand`)
+  //     .then((res) => res.json())
+  //     .then((brands: IBrand[]) => setBrands(brands));
+  // };
 
   const handelonmouseover = (inputValue: string) => {
     const data1 = inputValue.split("T");
@@ -69,23 +69,23 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
    
     setSelectedDate(data2);
   };
-  const filterDoses = () => {
-    const filteredDose: IDose | undefined = doses.find((d) => d.Name === Name);
-    // console.log(filteredDose)
-    if(filteredDose){
-      setBrandsId(filteredDose.VaccineId)
-    }
+  // const filterDoses = () => {
+  //   const filteredDose: IDose | undefined = doses.find((d) => d.Name === Name);
+  //   // console.log(filteredDose)
+  //   if(filteredDose){
+  //     setBrandsId(filteredDose.VaccineId)
+  //   }
 
-  };
+  // };
 
-  const filterBrand = (brandId: number): string | undefined => {
-        // console.log("brand id", brandId);
-        const filteredBrand: IBrand | undefined = brands.find(
-          (b) => b.Id === brandId
-        );
-        // console.log("brands, ", filteredBrand);
-        return filteredBrand?.Name;
-      };
+  // const filterBrand = (brandId: number): string | undefined => {
+  //       // console.log("brand id", brandId);
+  //       const filteredBrand: IBrand | undefined = brands.find(
+  //         (b) => b.Id === brandId
+  //       );
+  //       // console.log("brands, ", filteredBrand);
+  //       return filteredBrand?.Name;
+  //     };
       
 
   const handleDateChange = async (event: CustomEvent<any>) => {
@@ -149,7 +149,7 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
     }
   };
 
-  const postSingleDone = async () => {
+  const postSingleDone = async (date: String) => {
   
     try {
       const res = await fetch(
@@ -161,7 +161,9 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
           },
           body: JSON.stringify({
             id: Id,
-            isDone:!IsDone ? 1 : 0,
+            isDone:0,
+            date:date,
+            brandId:1,
           }),
         }
       );
@@ -176,6 +178,7 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
     } catch (error) {
       console.log(error);
     }
+    
   };
 
   const toggleButtonsVisibility = () => {
@@ -184,27 +187,27 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
     postSkip(); // Update the database value of isSkip
   };
 
-  const toggleButtonVisibility = () => {
+  const toggleButtonVisibility = (date: String) => {
     // Toggle the visibility of all buttons and set isSkip to 0 (false)
     setButtonVisible(!isButtonVisible);
-    postSingleDone(); // Update the database value of isSkip
+    postSingleDone(date); // Update the database value of isSkip
   };
-  useEffect(()=>{
-    filterDoses();
-    // const currentDate = new Date();
-    // const year = currentDate.getFullYear();
-    // const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-    // const day = String(currentDate.getDate()).padStart(2, '0');
+  // useEffect(()=>{
+  //   // filterDoses();
+  //   // const currentDate = new Date();
+  //   // const year = currentDate.getFullYear();
+  //   // const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+  //   // const day = String(currentDate.getDate()).padStart(2, '0');
     
-    // const today = `${year}-${month}-${day}`;
+  //   // const today = `${year}-${month}-${day}`;
     
     
-    // setToDay(today)
-  })
+  //   // setToDay(today)
+  // })
   useEffect(() => {
     
-    fetchDoses();
-    fetchBrands();
+    // fetchDoses();
+    // fetchBrands();
   }, [date]);
   useEffect(() => {
     // Update the visibility of buttons based on the database value of IsSkip
@@ -229,6 +232,9 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
         message="An error occurred while updating patient schedule. Please try again."
         color="danger"
       />
+
+
+   
       <IonGrid>
         <IonRow>
           <IonCol>
@@ -319,7 +325,7 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
         <IonImg
           // size="small"
           src={emptySyringImage}
-          onClick={toggleButtonVisibility}
+          onClick={()=>toggleButtonVisibility(date)}
           style={{
             textTransform: "lowercase",
             height: "30px",
@@ -351,6 +357,7 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
           onIonChange={handleDateChange}
         ></IonDatetime>
       </IonPopover>
+ 
     </>
   );
 };
