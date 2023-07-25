@@ -62,6 +62,7 @@ const AddPatient: React.FC = () => {
       // type: scheduleType,
       city,
       cnic,
+      mobileNumber,
       // preferredSchedule,
       isEPIDone,
       isVerified,
@@ -141,7 +142,7 @@ const AddPatient: React.FC = () => {
     gender !== "" &&
     dob !== "" &&
     email !== "" &&
-    // mobileNumber !== "" &&
+    mobileNumber !== "" &&
     selectedDoctor !== 0 &&
     selectedClinic !== 0 &&
     city !== "";
@@ -208,7 +209,7 @@ const AddPatient: React.FC = () => {
                 required
               />
             </IonItem>
-            {/* <IonItem>
+            <IonItem>
               <IonLabel position="floating">Mobile Number</IonLabel>
               <IonInput
                 type="tel"
@@ -216,7 +217,7 @@ const AddPatient: React.FC = () => {
                 value={mobileNumber}
                 onIonChange={(e) => setMobileNumber(e.detail.value!)}
               />
-            </IonItem> */}
+            </IonItem>
             <IonItem>
               <IonLabel position="floating">Date of Birth</IonLabel>
               <IonInput

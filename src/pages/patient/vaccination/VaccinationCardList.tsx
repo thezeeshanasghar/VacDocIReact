@@ -53,6 +53,8 @@ interface IParam {
     };
   }
 
+  
+
   const searchParams = new URLSearchParams(location.search);
     const doctorId = searchParams.get("doctorId");
 
@@ -242,41 +244,41 @@ const [skipStates, setSkipStates] = useState<{ [date: string]: boolean }>({});
     }
   };
 
-  const postSkip1 = async (date: string) => {
-    const newdate=formatDate(date);
-    try {
-      const res = await fetch(
-        `${import.meta.env.VITE_API_URL}api/PatientSchedule/patient_bulk_update_IsSkip?childId=${childId}&date=${newdate}&IsSkip=${false}`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          // body: JSON.stringify({
-          //   childId,
-          //   date,
-          //   isSkip: !data[date].IsSkip ? 1 : 0,
-          // }),
-        }
-      );
-      console.log(`${import.meta.env.VITE_API_URL}api/PatientSchedule/patient_bulk_update_IsSkip?childId=${childId}&date=${newdate}&IsSkip=${true}`,)
-      console.log(res);
-      if (res.status === 204) {
-        // Toggle the visibility of buttons when skip is clicked
-        setButtonsVisible(!isButtonsVisible);
-        setShowButton1(true);
-        setShowButton2(false);
-        setSkipStates((prevSkipStates) => ({
-          ...prevSkipStates,
-          [date]: !prevSkipStates[date],
-        }));
-        // renderList();
-        forceRender()
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const postSkip1 = async (date: string) => {
+  //   const newdate=formatDate(date);
+  //   try {
+  //     const res = await fetch(
+  //       `${import.meta.env.VITE_API_URL}api/PatientSchedule/patient_bulk_update_IsSkip?childId=${childId}&date=${newdate}&IsSkip=${false}`,
+  //       {
+  //         method: "PATCH",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         // body: JSON.stringify({
+  //         //   childId,
+  //         //   date,
+  //         //   isSkip: !data[date].IsSkip ? 1 : 0,
+  //         // }),
+  //       }
+  //     );
+  //     console.log(`${import.meta.env.VITE_API_URL}api/PatientSchedule/patient_bulk_update_IsSkip?childId=${childId}&date=${newdate}&IsSkip=${true}`,)
+  //     console.log(res);
+  //     if (res.status === 204) {
+  //       // Toggle the visibility of buttons when skip is clicked
+  //       setButtonsVisible(!isButtonsVisible);
+  //       setShowButton1(true);
+  //       setShowButton2(false);
+  //       setSkipStates((prevSkipStates) => ({
+  //         ...prevSkipStates,
+  //         [date]: !prevSkipStates[date],
+  //       }));
+  //       // renderList();
+  //       forceRender()
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
   // function setName(name: string) {
   //       setPatientName(name);

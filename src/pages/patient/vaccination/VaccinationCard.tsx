@@ -63,6 +63,11 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
   //     .then((brands: IBrand[]) => setBrands(brands));
   // };
 
+  const formatDate = (dateString: string | null) => {
+    const [month, day, year] = dateString.split("/");
+    return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
+  };
+
   const handelonmouseover = (inputValue: string) => {
     const data1 = inputValue.split("T");
     const data2 = format(new Date(inputValue), "yyyy-MM-dd");
@@ -150,7 +155,7 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
   };
 
   const postSingleDone = async (date: String) => {
-  
+  const ndate=formatDate(date)
     try {
       const res = await fetch(
         `${import.meta.env.VITE_API_URL}api/PatientSchedule/single_updateDone`,
@@ -162,7 +167,7 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
           body: JSON.stringify({
             id: Id,
             isDone:0,
-            date:date,
+            date:ndate,
             brandId:1,
           }),
         }
@@ -338,12 +343,14 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
         </IonImg>
     
     </IonCol>
-    <IonCol size="12">
+    {BrandName==null?"":<IonCol size="12">
       <p style={{ textAlign: "center" }}>
         Brand: {BrandName}
       </p>
     </IonCol>
-  </>
+}
+
+</>
 )}
 
 
