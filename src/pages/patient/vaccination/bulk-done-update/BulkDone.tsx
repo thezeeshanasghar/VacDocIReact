@@ -88,15 +88,15 @@ console.log(formatDate(oldDate))
     fetchDataForBrandIds();
   }, [brandId]);
 
-  const handleDateChange = (e: { target: { value: any; }; }, value:any ) => {
-    // Get the selected date from the event
-    const selectedDate = e.target.value;
-console.log(selectedDate)
-console.log(value)
-    // Update the givenDate state with the selected date (no need to format it again)
-    setNewDate(selectedDate);
+//   const handleDateChange = (e: { target: { value: any; }; }, value:any ) => {
+//     // Get the selected date from the event
+//     const selectedDate = e.target.value;
+// console.log(selectedDate)
+// console.log(value)
+//     // Update the givenDate state with the selected date (no need to format it again)
+//     setNewDate(selectedDate);
 
-  };
+//   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -105,6 +105,7 @@ console.log(value)
     // console.log("Height:", height);
     // console.log("OFC:", OFC);
     console.log("Given Date:", givenDate);
+    console.log("Given Date:", newDate);
     const dataToBeSent = [];
 
     for (let i = 0; i < numberOfInputs; i++) {
@@ -179,6 +180,8 @@ console.log(value)
   useEffect(() => {
     console.log("Selected Brand IDs:", selectedBrandIds);
   }, [selectedBrandIds]);
+
+  const selected=newDate!== "";
 
   return (
     <>
@@ -267,17 +270,30 @@ console.log(value)
               </IonSelect>
             )}
           </IonItem>
-        ))}  <IonItem>
+        ))}  
+        <IonItem>
                     <IonLabel color="primary">Given Date</IonLabel>
                     <IonInput
                       type="date"
                       value={givenDate || ""}
+                      disabled
                       slot="end"
-                      onIonChange={(e) => handleDateChange(e, e.detail.value)}
-                      min={Date}/>
+                      // onIonChange={(e) => handleDateChange(e, e.detail.value)}
+                      // min={Date}
+                      />
+                  </IonItem>
+        <IonItem>
+                    <IonLabel color="primary">Given Date</IonLabel>
+                    <IonInput
+                      type="date"
+                      value={newDate || ""}
+                      slot="end"
+                      required
+                      onIonChange={(e) => setNewDate(e.target.value)}
+                     />
                   </IonItem>
           
-                <IonButton type="submit">Submit</IonButton>
+                <IonButton type="submit" disabled={!selected}>Submit</IonButton>
               </form>
           </IonContent>
         </IonPage>

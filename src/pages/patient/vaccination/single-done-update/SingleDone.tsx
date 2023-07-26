@@ -182,11 +182,21 @@ console.log(oldDate);
               <IonInput
                 slot="end"
                 type="date"
+                disabled
                 value={givenDate || ""} // Use the givenDate directly without formatting it again
-                onIonChange={(e) => handleDateChange(e, e.detail.value)}
+                // onIonChange={(e) => handleDateChange(e, e.detail.value)}
               />
             </IonItem>
+            <IonItem>
+              <IonLabel color="primary">Given Date</IonLabel>
+              <IonInput
+                slot="end"
+                type="date"
+                value={newDate || ""} // Use the givenDate directly without formatting it again
+                onIonChange={(e) => setNewDate(e.detail.value)}
 
+              />
+            </IonItem>
             <IonButton type="submit">Submit</IonButton>
           </form>
         </IonContent>
