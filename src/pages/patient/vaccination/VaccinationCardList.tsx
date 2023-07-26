@@ -366,6 +366,7 @@ const [skipStates, setSkipStates] = useState<{ [date: string]: boolean }>({});
               height: "30px",
               display: "inline-block",
               margin: "0px 10px",
+              cursor: "pointer"
             }}
             className="ng-star-inserted md hydrated"
           />
@@ -395,7 +396,8 @@ const [skipStates, setSkipStates] = useState<{ [date: string]: boolean }>({});
                     height: "30px",
                     display: "inline-block",
                     margin: "0px 10px"  ,
-                    color: "primary"      
+                    color: "primary"  , 
+                    cursor: "pointer"   
                   }}
                   color={skipStates[date] ? "danger" : "primary"}
                 >
