@@ -129,7 +129,7 @@ const DoctorSignUp: React.FC = () => {
                   required
                   value={pmdc}
                   onIonChange={(e) => setPMDC(e.detail.value!)}
-                  onIonBlur={handleInputBlur}
+                  // onIonBlur={handleInputBlur}
                 />
               </IonItem>
               {/* <IonItem>
