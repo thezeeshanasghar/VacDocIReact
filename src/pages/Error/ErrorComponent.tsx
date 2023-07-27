@@ -20,7 +20,7 @@ const ErrorComponent: React.FC<ErrorComponentProps> = ({ title }) => {
   return (
     <div style={containerStyle}>
       <IonText color="danger" style={titleStyle}>
-        <p>{title} failed to load. Please try again.</p>
+        <p>{title} array is empty or failed to load. Please try again.</p>
       </IonText>
     </div>
   );
