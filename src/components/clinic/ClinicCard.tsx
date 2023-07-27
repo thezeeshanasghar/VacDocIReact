@@ -13,7 +13,7 @@ import {
   IonCol,
   IonItemDivider,
 } from "@ionic/react";
-import { trash, create, createOutline } from "ionicons/icons";
+import { trash, create, createOutline, body } from "ionicons/icons";
 import { format } from "date-fns";
 import { useIonRouter } from "@ionic/react";
 import Toast from "../custom-toast/Toast";
@@ -155,7 +155,8 @@ const ClinicCard: React.FC<ClinicCardProps> = ({
                 })}
               </IonRow>
             </IonGrid>
-            <IonButton color="tertiary" fill="outline" size="small">
+            <IonButton color="tertiary" fill="outline" size="small" routerLink="/members/child">
+            <IonIcon icon={body} role="img" aria-label="body"></IonIcon>
               Patients
             </IonButton>
             <IonButton
