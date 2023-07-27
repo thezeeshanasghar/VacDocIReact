@@ -24,7 +24,12 @@ const DoctorSignUp: React.FC = () => {
   const [password, setPassword] = useState("");
   const [pmdc, setPMDC] = useState("");
   // const [doctorType, setDoctorType] = useState("");
-const submit=name.length>0&&email.length>0&&mobile.length>0&&password.length>0&&pmdc.length>0;
+
+  const isAnyFieldEmpty = () => {
+    return name.trim() === "" || email.trim() === "" || mobile.trim() === "" || password.trim() === "" || pmdc.trim() === "";
+  };
+
+  const submit = !isAnyFieldEmpty();
   const handleSignUp = (e: any) => {
     localStorage.clear();
     e.preventDefault();
@@ -52,6 +57,13 @@ const submit=name.length>0&&email.length>0&&mobile.length>0&&password.length>0&&
     );
     router.push("/auth/reg_clinic");
   };
+
+  // const handleInputBlur = () => {
+  //   if (pmdc.trim() === "") {
+  //     // If the input is empty, disable the button
+  //     setPMDC(""); // This line is optional, it resets the input to an empty state immediately.
+  //   }
+  // };
 
   return (
     <IonPage>
@@ -117,6 +129,7 @@ const submit=name.length>0&&email.length>0&&mobile.length>0&&password.length>0&&
                   required
                   value={pmdc}
                   onIonChange={(e) => setPMDC(e.detail.value!)}
+                  onIonBlur={handleInputBlur}
                 />
               </IonItem>
               {/* <IonItem>
