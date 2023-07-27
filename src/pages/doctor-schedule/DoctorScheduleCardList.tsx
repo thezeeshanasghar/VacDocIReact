@@ -199,6 +199,7 @@ const ScheduleList1: React.FC = () => {
                   </IonLabel>
                 </IonItem>
                 {data[date].map((item: IVaccine) => (
+                  item !== null ? (
                   <DoctorScheduleCard
                     key={item.Id}
                     date={date}
@@ -208,6 +209,9 @@ const ScheduleList1: React.FC = () => {
                     VaccineId={item.VaccineId}
                     renderList={forceRender}
                   />
+                  ) : (
+                    ""
+                  )
                 ))}
               </>
             </IonCard>
