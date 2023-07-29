@@ -113,7 +113,7 @@ const AddPatient: React.FC = () => {
 
   // getting doctors list for dropdown and clinic;
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_URL}api/Doctor/IsApproved/true`)
+    fetch(`${import.meta.env.VITE_API_URL}api/Doctor`)
       .then((res) => res.json())
       .then((data) => setDoctorData(data))
       .catch((err) => console.error(err));

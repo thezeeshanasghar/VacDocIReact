@@ -39,7 +39,7 @@ const PatientCardList: React.FC = () => {
   const [patientData, setPatientData] = useState<IPatientData[]>([]);
   const [hideCards, setHideCards] = useState(false);
   const fetchPatientData = () => {
-    fetch(`${import.meta.env.VITE_API_URL}patients_get_by_doctor_id?doctorId=${storedValue.Id}`)
+    fetch(`${import.meta.env.VITE_API_URL}api/Child/patients_get_by_doctor_id?doctorId=${storedValue.Id}`)
       .then((response) => response.json())
       .then((data: IPatientData[]) => setPatientData(data))
       .catch((error) => {
