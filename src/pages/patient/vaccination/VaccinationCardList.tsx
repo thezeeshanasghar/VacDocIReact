@@ -147,7 +147,7 @@ const [skipStates, setSkipStates] = useState<{ [date: string]: boolean }>({});
   };
 
   const handelonmouseover = (inputValue: string) => {
-    const data1 = inputValue.split("T");
+    // const data1 = inputValue.split("T");
     const data2 = format(new Date(inputValue), "yyyy-MM-dd");
     setValue(data2);
     setSelectedDate(data2);
@@ -161,9 +161,9 @@ const [skipStates, setSkipStates] = useState<{ [date: string]: boolean }>({});
     console.log(value);
     closePopover();
     const data = event.detail.value;
-    const data1 = data.split("T");
-    const data2 = data1[0];
-    console.log(data2);
+    // const data1 = data.split("T");
+    // const data2 = data1[0];
+    // console.log(data2);
 
     console.log(event.detail.value);
 
@@ -175,7 +175,7 @@ const [skipStates, setSkipStates] = useState<{ [date: string]: boolean }>({});
       const response = await fetch(
         `${
           import.meta.env.VITE_API_URL
-        }api/PatientSchedule/patient_bulk_update_Date?ChildId=${childId}&DoctorId=${storedValue.Id}&oldDate=${value}&newDate=${data2}`,
+        }api/PatientSchedule/patient_bulk_update_Date?ChildId=${childId}&DoctorId=${storedValue.Id}&oldDate=${value}&newDate=${data}`,
         {
           method: "PATCH",
           headers: {
