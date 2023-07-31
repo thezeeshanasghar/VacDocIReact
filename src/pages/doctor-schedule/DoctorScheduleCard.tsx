@@ -17,7 +17,7 @@ import { format } from "date-fns";
 import Toast from "../../components/custom-toast/Toast";
 
 interface IDoseSchedule {
-  key: string;
+  scheduleKey: string;
   date: any;
   data: any;
   renderList: () => void;
@@ -26,7 +26,7 @@ interface IDoseSchedule {
 const DoctorScheduleCard: React.FC<IDoseSchedule> = ({
   // Name,
   // Id,
-  key,
+  scheduleKey,
   date,
   data,
   renderList,
@@ -185,7 +185,7 @@ const DoctorScheduleCard: React.FC<IDoseSchedule> = ({
         message="an Error occurred while updating date, please try again later"
         color="danger"
       />
-      <IonCard key={key}>
+      <IonCard key={scheduleKey}>
         <>
           <IonItem lines="none" className="centered-item">
             <IonLabel style={{ textAlign: "center" }}>
