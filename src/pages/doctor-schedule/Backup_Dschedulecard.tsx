@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+
+import React, { useState,useEffect } from "react";
 import {
   IonDatetime,
   IonIcon,
@@ -7,9 +8,6 @@ import {
   IonGrid,
   IonRow,
   IonCol,
-  IonCard,
-  IonText,
-  IonLabel,
 } from "@ionic/react";
 import { calendar } from "ionicons/icons";
 
@@ -17,103 +15,29 @@ import { format } from "date-fns";
 import Toast from "../../components/custom-toast/Toast";
 
 interface IDoseSchedule {
-  key: string;
-  date: any;
-  data: any;
+  Id: number;
+  date: string;
+  Name: string;
+  MinAge: number;
+  VaccineId: number;
   renderList: () => void;
 }
 
-const DoctorScheduleCard: React.FC<IDoseSchedule> = ({
-  // Name,
-  // Id,
-  key,
+const Schedulecard: React.FC<IDoseSchedule> = ({
+  Name,
+  Id,
   date,
-  data,
   renderList,
 }) => {
-  console.log("date : ", date);
-  console.log("data : ", data);
   const [error, setError] = useState(false);
-  const [value, setValue] = useState("");
   const [showPopover, setShowPopover] = useState(false);
-  const [showPopover2, setShowPopover2] = useState(false);
   const [selectedDate, setSelectedDate] = useState<string | undefined>(date); // Initialize with the `date` prop value
-  const [singleId,setSingleId] = useState('');
 
   const [success, setSuccess] = useState(false);
-
-
-  const storedValue = JSON.parse(sessionStorage.getItem("docData"));
-  const handelonmouseover2 = (inputValue: string) => {
+  const handelonmouseover = (inputValue: string) => {
     // const data1 = inputValue.split("T");
     const data2 = format(new Date(inputValue), "yyyy-MM-dd");
-    console.log(data2)
-    setValue(data2);
-    setSelectedDate(data2);
-  };
-
-  const handleDateChange2 = async (
-    event: CustomEvent,
-    key: string,
-    value: string
-  ) => {
-    console.log(value);
-    closePopover();
-    const data = event.detail.value;
-    // const data1 = data.split("T");
-    // const data2 = data1[0];
-    // console.log(data2);
-
-    console.log(event.detail.value);
-
-    // const dataTobeSent = [
-    //   {
-    //     path: "Date",
-    //     op: "replace",
-    //     from: value,
-    //     value: data,
-    //   },
-    // ];
-
-    // console.log("object item date : ", dataTobeSent);
-    try {
-      // setShowLoading(true);
-      const response = await fetch(
-        `${
-          import.meta.env.VITE_API_URL
-        }api/DoctorSchedule/doctor_bulk_update_Date?DoctorId=${storedValue.Id}&oldDate=${value}&newDate=${data}`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          // body: JSON.stringify(dataTobeSent),
-        }
-      );
-      if (response.status === 204) {
-        console.log(response.ok);
-        renderList();
-        setSuccess(true);
-        // setShowLoading(false);
-      } else if (!response.ok) {
-        setError(true);
-        // setShowLoading(false);
-      }
-    } catch (error) {
-      console.error(error);
-      setError(true);
-      // setShowLoading(false);
-    }
-  };
-
-
-
-  const handelonmouseover = (inputValue: string,Id: string) => {
-    // const data1 = inputValue.split("T");
-    console.log(Id)
-    console.log(inputValue)
-    const data2 = format(new Date(inputValue), "yyyy-MM-dd");
-    setSingleId(Id);
+   
     setSelectedDate(data2);
   };
   // useEffect(() => {
@@ -121,23 +45,19 @@ const DoctorScheduleCard: React.FC<IDoseSchedule> = ({
   //   console.log(storedValue);
   // }, []);
   const handleDateChange = async (event: CustomEvent<any>) => {
-    
-    console.log(storedValue);
+    const storedValue = JSON.parse(sessionStorage.getItem("docData"));
+      console.log(storedValue);
     const selectedValue = event.detail.value;
-    console.log(selectedValue);
+console.log(selectedValue)
     const dataTobeSent = {
       date: selectedValue,
-      doseId: singleId,
+      doseId: Id,
       doctorId: storedValue.Id,
     };
-    console.log(dataTobeSent);
+console.log(dataTobeSent)
     try {
       const response = await fetch(
-        `${
-          import.meta.env.VITE_API_URL
-        }api/DoctorSchedule/single_updateDate?doseId=${singleId}&doctorId=${
-          storedValue.Id
-        }`,
+        `${import.meta.env.VITE_API_URL}api/DoctorSchedule/single_updateDate?doseId=${Id}&doctorId=${storedValue.Id}`,
         {
           method: "PATCH",
           headers: {
@@ -150,7 +70,6 @@ const DoctorScheduleCard: React.FC<IDoseSchedule> = ({
         renderList();
         setSuccess(true);
         setShowPopover(false);
-        setShowPopover2(false);
       } else {
         setError(true);
         renderList();
@@ -159,101 +78,80 @@ const DoctorScheduleCard: React.FC<IDoseSchedule> = ({
       console.error(error);
       setError(true);
       setShowPopover(false);
-      setShowPopover2(false);
-      (false);
     }
   };
 
   const closePopover = () => {
     setShowPopover(false);
   };
-  const closePopover2 = () => {
-    setShowPopover2(false);
-  };
 
   return (
     <>
-      <Toast
-        isOpen={success}
-        setOpen={setSuccess}
-        message="Date updated successfully"
-        color="success"
-      />
-      <Toast
-        isOpen={error}
-        setOpen={setError}
-        message="an Error occurred while updating date, please try again later"
-        color="danger"
-      />
-      <IonCard key={key}>
-        <>
-          <IonItem lines="none" className="centered-item">
-            <IonLabel style={{ textAlign: "center" }}>
-              <IonItem
-                lines="none"
-                slot="center"
-                style={{ textAlign: "center", padding: 0 }}
-              >
-                <IonIcon
-                  color="primary"
-                  onClick={() => setShowPopover2(true)}
-                  icon={calendar}
-                  style={{ marginRight: "10px", PointerEvent: "cursor" }}
-                  onMouseOver={() => handelonmouseover2(date)}
-                />
-                {/* <IonText>{format(new Date(date), "yyyy-MM-dd")}</IonText> */}
-                <IonText>{format(new Date(date), "yyyy-MM-dd")}</IonText>
-                <IonPopover isOpen={showPopover2} onDidDismiss={closePopover2}>
-                  <IonDatetime
-                    placeholder="Select Date"
-                    value={selectedDate || undefined}
-                    onIonChange={(e) =>
-                      handleDateChange2(e, date, value)
-                    }
-                  ></IonDatetime>
-                </IonPopover>
-              </IonItem>
-            </IonLabel>
-          </IonItem>
-          {data.map((item: any) =>
-            item !== null ? (
-              <>
-                <IonGrid>
-                  <IonRow>
-                    <IonCol>
-                      <b>{item.Name}</b>
-                    </IonCol>
-                    <IonCol size="auto">
-                      <>
-                        <IonIcon
-                          color="primary"
-                          onClick={() => setShowPopover(true)}
-                          icon={calendar}
-                          onMouseOver={() => handelonmouseover(date,item.Id)}
-                        />
-                      </>
-                    </IonCol>
-                  </IonRow>
-                </IonGrid>
-                <IonPopover isOpen={showPopover} onDidDismiss={closePopover}>
-                  <IonDatetime
-                    placeholder="Select Date"
-                    value={selectedDate}
-                    onIonChange={handleDateChange}
-                  ></IonDatetime>
-                </IonPopover>
-              </>
-            ) : (
-              ""
-            )
-          )}
-        </>
-      </IonCard>
+     <Toast
+          isOpen={success}
+          setOpen={setSuccess}
+          message="single date of doctor schedule update successfully."
+          color="success"
+        />
+        <Toast
+          isOpen={error}
+          setOpen={setError}
+          message="An error occurred while update doctor schedule. plz try again"
+          color="danger"
+        />
+      <IonGrid>
+        <IonRow>
+          <IonCol>
+            <b>{Name}</b>
+          </IonCol>
+          <IonCol size="auto">
+            <>
+              <IonIcon
+                color="primary"
+                onClick={() => setShowPopover(true)}
+                icon={calendar}
+                onMouseOver={() => handelonmouseover(date)}
+              />
+            </>
+          </IonCol>
+        </IonRow>
+      </IonGrid>
+      <IonPopover isOpen={showPopover} onDidDismiss={closePopover}>
+        <IonDatetime
+          placeholder="Select Date"
+          value={selectedDate}
+          onIonChange={handleDateChange}
+        ></IonDatetime>
+      </IonPopover>
     </>
   );
 };
 
-export default DoctorScheduleCard;
+export default Schedulecard;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // import React, { useEffect, useState } from "react";
 // import {
