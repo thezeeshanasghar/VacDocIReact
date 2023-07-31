@@ -186,7 +186,7 @@ const EditProfile: React.FC = () => {
                       onIonChange={(e) => setDoctorType(e.detail.value!)}
                       required/>
                   </IonItem> */}
-                  <IonGrid>
+                  {/* <IonGrid>
                     <IonRow>
                       <IonCol>
                         <IonItem>
@@ -200,7 +200,7 @@ const EditProfile: React.FC = () => {
                         </IonItem>
                       </IonCol>
                     </IonRow>
-                  </IonGrid>
+                  </IonGrid> */}
                   <IonButton type="submit" expand="full">
                     Update
                   </IonButton>
