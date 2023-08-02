@@ -86,7 +86,7 @@ const DoctorScheduleCardList: React.FC = () => {
         <IonContent className="ion-padding">
           {Object.keys(data).map((date) => (
             <DoctorScheduleCard
-              key={date}
+              scheduleKey={date}
               date={date}
               data={data[date]}
               renderList={forceRender}

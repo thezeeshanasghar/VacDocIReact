@@ -41,7 +41,9 @@ const PatientCardList: React.FC = () => {
   const fetchPatientData = () => {
     fetch(`${import.meta.env.VITE_API_URL}api/Child/patients_get_by_doctor_id?doctorId=${storedValue.Id}`)
       .then((response) => response.json())
-      .then((data: IPatientData[]) => setPatientData(data))
+      .then((data: IPatientData[]) => {setPatientData(data)
+      console.log(data);
+      })
       .catch((error) => {
         console.log(error);
       });

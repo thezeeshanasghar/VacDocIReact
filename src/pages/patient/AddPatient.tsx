@@ -54,7 +54,7 @@ const AddPatient: React.FC = () => {
     // );
     const data_to_be_sent = {
       name,
-      guardian,
+      // guardian,
       fatherName,
       email,
       dob,
@@ -79,7 +79,7 @@ const AddPatient: React.FC = () => {
       body: JSON.stringify(data_to_be_sent),
     })
     .then((res) => {
-      if (res.status === 201) {
+      if (res.status === 204) {
         setSuccess(true);
          history.push("/members/child", "back");
         window.location.reload();

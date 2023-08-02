@@ -87,14 +87,14 @@ const PatientMaleCard: React.FC<IMalePatient> = ({
         >
           Vaccine
         </IonButton>
-        <IonButton
+        {/* <IonButton
           color="tertiary"
           fill="outline"
           size="small"
           className="action-button"
         >
           Follow Up
-        </IonButton>
+        </IonButton> */}
         <IonButton
           color="tertiary"
           disabled
