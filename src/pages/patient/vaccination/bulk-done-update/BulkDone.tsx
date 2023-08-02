@@ -43,17 +43,20 @@ const BulkDone: React.FC<IParam> = ({
   const [brandData, setBrandData] = useState<IBrand[][]>([]); // Changed to specify the type as IBrand[][]
   const [givenDate, setGivenDate] = useState<string | null>(formatDate(oldDate));
   const [loading, setLoading] = useState(true); 
+  const [id,setId]=useState('');
 
   // Get the value of the "oldDate" parameter from the query parameters
 console.log(formatDate(oldDate))
   useEffect(() => {
     // Fetch the initial data
-    fetch(`${import.meta.env.VITE_API_URL}api/PatientSchedule?date=${formatDate(oldDate)}`)
+    fetch(`${import.meta.env.VITE_API_URL}api/PatientSchedule/getData_baseOnDate?date=${formatDate(oldDate)}`)
       .then((res) => res.json())
       .then((data) => {
         const ids = data.map((item: { Id: any; }) => item.Id);
+        // const ids = data.map((item: { Id: any; }) => item.Id);
         setBrandId(ids);
         console.log('Initial Data:', data);
+
       })
       .catch((err) => console.error(err));
   }, []);
@@ -110,7 +113,7 @@ console.log(formatDate(oldDate))
 
     for (let i = 0; i < numberOfInputs; i++) {
       const obj = {
-        childId: Id,
+        id: brandId[i],
         currentDate: formatDate(oldDate),
         isDone: true,
         newDate: newDate,
