@@ -149,7 +149,7 @@ const DoctorScheduleCard: React.FC<IDoseSchedule> = ({
       if (response.ok) {
         renderList();
         setSuccess(true);
-        setShowPopover(false);
+        // setShowPopover(false);
         setShowPopover2(false);
       } else {
         setError(true);
@@ -158,7 +158,7 @@ const DoctorScheduleCard: React.FC<IDoseSchedule> = ({
     } catch (error) {
       console.error(error);
       setError(true);
-      setShowPopover(false);
+      // setShowPopover(false);
       setShowPopover2(false);
       (false);
     }
