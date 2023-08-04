@@ -46,12 +46,12 @@ const DoctorSignUp: React.FC = () => {
         name,
         mobileNumber: mobile,
         password,
-        isApproved: false,
-        isEnabled: false,
+        // isApproved: false,
+        // isEnabled: false,
         email,
         // doctorType,
         pmdc,
-        validUpto: new Date().toDateString(),
+        // validUpto: new Date().toDateString(),
         clinics: "",
       })
     );
