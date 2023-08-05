@@ -58,7 +58,7 @@ const DoctorScheduleCard: React.FC<IDoseSchedule> = ({
     value: string
   ) => {
     console.log(value);
-    closePopover();
+    // closePopover();
     const data = event.detail.value;
     // const data1 = data.split("T");
     // const data2 = data1[0];
@@ -94,6 +94,7 @@ const DoctorScheduleCard: React.FC<IDoseSchedule> = ({
         console.log(response.ok);
         renderList();
         setSuccess(true);
+        setShowPopover2(false);
         // setShowLoading(false);
       } else if (!response.ok) {
         setError(true);
@@ -101,6 +102,7 @@ const DoctorScheduleCard: React.FC<IDoseSchedule> = ({
       }
     } catch (error) {
       console.error(error);
+      setShowPopover2(false);
       setError(true);
       // setShowLoading(false);
     }
@@ -150,7 +152,7 @@ const DoctorScheduleCard: React.FC<IDoseSchedule> = ({
         renderList();
         setSuccess(true);
         // setShowPopover(false);
-        setShowPopover2(false);
+        setShowPopover(false);
       } else {
         setError(true);
         renderList();
@@ -159,7 +161,7 @@ const DoctorScheduleCard: React.FC<IDoseSchedule> = ({
       console.error(error);
       setError(true);
       // setShowPopover(false);
-      setShowPopover2(false);
+      setShowPopover(false);
       (false);
     }
   };
