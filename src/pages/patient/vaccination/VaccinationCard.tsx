@@ -132,7 +132,7 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
   const postSkip = async () => {
     try {
       const res = await fetch(
-        `${import.meta.env.VITE_API_URL}api/PatientSchedule/single_update_Skip`,
+        `${import.meta.env.VITE_API_URL}api/PatientSchedule/single_update_Skip?Id=${Id}`,
         {
           method: "PATCH",
           headers: {
