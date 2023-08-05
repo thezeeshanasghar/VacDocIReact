@@ -37,9 +37,7 @@ const Alert: React.FC = () => {
   const location = useLocation();
   const fetchPatientData = () => {
     fetch(
-      `${import.meta.env.VITE_API_URL}patients_get_by_doctor_id?doctorId=${
-        storedValue.Id
-      }`
+      `${import.meta.env.VITE_API_URL}api/PatientSchedule/today_alert`
     )
       .then((response) => response.json())
       .then((data: PatientDataType[]) => setPatientData(data))
