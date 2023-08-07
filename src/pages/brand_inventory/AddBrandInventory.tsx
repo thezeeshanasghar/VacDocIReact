@@ -130,7 +130,7 @@ const AddBrandInventory: React.FC = () => {
                   <IonLabel position="floating">
                     Selected Vaccine Brand Name
                   </IonLabel>
-                  {vaccineName.length>0? <IonSelect
+                   <IonSelect
                     value={brandName}
                     onClick={handleClickVaccine}
                     onIonChange={(e) => setBrandName(e.detail.value!)}
@@ -141,11 +141,7 @@ const AddBrandInventory: React.FC = () => {
                           {item.Name}
                         </IonSelectOption>
                       ))}
-                  </IonSelect>:<IonSelect>
-                      <IonSelectOption disabled>
-                       no brand available
-                      </IonSelectOption>
-                </IonSelect>}
+                  </IonSelect>
               </IonItem>
                 <IonButton type="submit">Add Inventory</IonButton>
               </form>
