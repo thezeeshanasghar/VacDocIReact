@@ -133,6 +133,7 @@ const Login: React.FC = () => {
                       cursor: "pointer",
                     }}
                     onClick={() => navigation.push("/auth/reg_doc")}
+                    id="sign"
                   >
                     Don't have an account? &nbsp; Sign Up
                   </IonText>

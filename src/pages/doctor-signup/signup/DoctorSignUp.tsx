@@ -91,7 +91,9 @@ const DoctorSignUp: React.FC = () => {
                 <IonInput
                   required
                   type="text"
+                  itemID="name"
                   value={name}
+                  className="data"
                   onIonChange={(e) => setName(e.detail.value!)}
                 />
               </IonItem>
@@ -101,6 +103,7 @@ const DoctorSignUp: React.FC = () => {
                   required
                   type="email"
                   value={email}
+                  id="email"
                   onIonChange={(e) => setEmail(e.detail.value!)}
                 />
               </IonItem>
@@ -110,6 +113,8 @@ const DoctorSignUp: React.FC = () => {
                   required
                   type="number"
                   value={mobile}
+                  id="mobileNumber"
+                  itemID="mobileNumber"
                   onIonChange={(e) => setMobile(e.detail.value!)}
                 />
               </IonItem>
@@ -119,6 +124,7 @@ const DoctorSignUp: React.FC = () => {
                   required
                   type="password"
                   value={password}
+                  id="password"
                   onIonChange={(e) => setPassword(e.detail.value!)}
                 />
               </IonItem>
@@ -128,6 +134,7 @@ const DoctorSignUp: React.FC = () => {
                   type="text"
                   required
                   value={pmdc}
+                  id="pmdc"
                   onIonChange={(e) => setPMDC(e.detail.value!)}
                   // onIonBlur={handleInputBlur}
                 />
@@ -148,7 +155,7 @@ const DoctorSignUp: React.FC = () => {
                   <IonSelectOption value="Surgeon">Surgeon</IonSelectOption>
                 </IonSelect>
               </IonItem> */}
-              <IonButton expand="full" type="submit" disabled={!submit}>
+              <IonButton id="signup" expand="full" type="submit" disabled={!submit}>
                 Next
                 <IonIcon slot="end" icon={arrowForward} />
               </IonButton>
