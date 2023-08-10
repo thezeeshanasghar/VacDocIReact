@@ -100,7 +100,7 @@ const Login: React.FC = () => {
                       value={mobileNumber}
                       onIonChange={(e) => setmobileNumber(e.detail.value!)}
                       required
-                    />
+                    />etertertertrtrte
                   </div>
                   <div className="input-container">
                     <IonIcon icon={lockClosed} id="myicon" />
