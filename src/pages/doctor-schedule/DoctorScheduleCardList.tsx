@@ -83,7 +83,7 @@ const DoctorScheduleCardList: React.FC = () => {
     <>
       <IonPage>
         <Header pageName="Doctor Schedule" />
-        <IonContent className="ion-padding">
+        <IonContent className="ion-padding" >
           {Object.keys(data).map((date) => (
             <DoctorScheduleCard
               scheduleKey={date}

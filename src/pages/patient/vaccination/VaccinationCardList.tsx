@@ -422,11 +422,7 @@ const [skipStates, setSkipStates] = useState<{ [date: string]: boolean }>({});
             <IonItem lines="none" className="centered-item">
       
             <IonText>
-              {new Date(date).toLocaleDateString("en-US", {
-                month: "short",
-                day: "numeric",
-                year: "numeric",
-              })}
+              {date}
             </IonText>
          
             <IonImg
@@ -484,11 +480,7 @@ const [skipStates, setSkipStates] = useState<{ [date: string]: boolean }>({});
           margin: "0px 10px"
         }}
       >
-        {new Date(date).toLocaleDateString("en-US", {
-          month: "short",
-          day: "numeric",
-          year: "numeric"
-        })}
+        {date}
       </span>
      
         {/* <IonImg

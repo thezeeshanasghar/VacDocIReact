@@ -1,20 +1,32 @@
 import React, { useState, useEffect } from "react";
-import { IonDatetime, IonIcon, IonItem, IonPopover, IonGrid, IonRow, IonCol, IonButton, IonImg , useIonRouter, IonCard} from "@ionic/react";
+import {
+  IonDatetime,
+  IonIcon,
+  IonItem,
+  IonPopover,
+  IonGrid,
+  IonRow,
+  IonCol,
+  IonButton,
+  IonImg,
+  useIonRouter,
+  IonCard,
+} from "@ionic/react";
 import { calendar } from "ionicons/icons";
 import { format } from "date-fns";
 import Toast from "../../../components/custom-toast/Toast";
 import syringImage from "../../../assets/injectionFilled.png";
 import emptySyringImage from "../../../assets/injectionEmpty.png";
 interface IBrand {
-    Id: number;
-    Name: string;
-    VaccineId: number;
-  }
-interface IDose{
-  Id: number,
-    Name: string,
-    MinAge: number,
-    VaccineId: number
+  Id: number;
+  Name: string;
+  VaccineId: number;
+}
+interface IDose {
+  Id: number;
+  Name: string;
+  MinAge: number;
+  VaccineId: number;
 }
 interface IDoseSchedule {
   // data: string;
@@ -24,7 +36,7 @@ interface IDoseSchedule {
   Name: string;
   IsDone: boolean;
   IsSkip: boolean;
-  BrandName:string;
+  BrandName: string;
   renderList: () => void;
 }
 
@@ -36,7 +48,7 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
   childId,
   IsDone,
   IsSkip,
-  BrandName
+  BrandName,
   // VaccineId,
 }) => {
   const router = useIonRouter();
@@ -47,10 +59,10 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
   const [isCalendarVisible, setCalendarVisible] = useState(false);
   const [isButtonsVisible, setButtonsVisible] = useState(true);
   const [isButtonVisible, setButtonVisible] = useState(true);
-  const[toDay,setToDay]=useState("")
+  const [toDay, setToDay] = useState("");
   const [doses, setDoses] = useState<IDose[]>([]);
   const [brands, setBrands] = useState<IBrand[]>([]);
-  const[brandsId,setBrandsId] = useState<number>();
+  const [brandsId, setBrandsId] = useState<number>();
 
   // const fetchDoses = () => {
   //   fetch(`${import.meta.env.VITE_API_URL}api/Dose/alldoses`)
@@ -71,7 +83,7 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
   const handelonmouseover = (inputValue: string) => {
     // const data1 = inputValue.split("T");
     const data2 = format(new Date(inputValue), "yyyy-MM-dd");
-   
+
     setSelectedDate(data2);
   };
   // const filterDoses = () => {
@@ -91,7 +103,6 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
   //       // console.log("brands, ", filteredBrand);
   //       return filteredBrand?.Name;
   //     };
-      
 
   const handleDateChange = async (event: CustomEvent<any>) => {
     const selectedValue = event.detail.value;
@@ -101,7 +112,9 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
     };
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_API_URL}api/PatientSchedule/single_updateDate?Id=${Id}`,
+        `${
+          import.meta.env.VITE_API_URL
+        }api/PatientSchedule/single_updateDate?Id=${Id}`,
         {
           method: "PATCH",
           headers: {
@@ -132,7 +145,9 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
   const postSkip = async () => {
     try {
       const res = await fetch(
-        `${import.meta.env.VITE_API_URL}api/PatientSchedule/single_update_Skip?Id=${Id}`,
+        `${
+          import.meta.env.VITE_API_URL
+        }api/PatientSchedule/single_update_Skip?Id=${Id}`,
         {
           method: "PATCH",
           headers: {
@@ -155,7 +170,7 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
   };
 
   const postSingleDone = async (date: String) => {
-  const ndate=formatDate(date)
+    const ndate = formatDate(date);
     try {
       const res = await fetch(
         `${import.meta.env.VITE_API_URL}api/PatientSchedule/single_updateDone`,
@@ -166,9 +181,9 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
           },
           body: JSON.stringify({
             id: Id,
-            isDone:0,
-            date:ndate,
-            brandId:1,
+            isDone: 0,
+            date: ndate,
+            brandId: 1,
           }),
         }
       );
@@ -183,7 +198,6 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
     } catch (error) {
       console.log(error);
     }
-    
   };
 
   const toggleButtonsVisibility = () => {
@@ -203,14 +217,12 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
   //   // const year = currentDate.getFullYear();
   //   // const month = String(currentDate.getMonth() + 1).padStart(2, '0');
   //   // const day = String(currentDate.getDate()).padStart(2, '0');
-    
+
   //   // const today = `${year}-${month}-${day}`;
-    
-    
+
   //   // setToDay(today)
   // })
   useEffect(() => {
-    
     // fetchDoses();
     // fetchBrands();
   }, [date]);
@@ -238,8 +250,6 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
         color="danger"
       />
 
-
-   
       <IonGrid>
         <IonRow>
           <IonCol>
@@ -248,29 +258,33 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
           {isButtonsVisible && isButtonVisible && (
             <>
               <IonCol size="auto">
-              <IonIcon
-  color="primary"
-  onClick={() => setShowPopover(true)}
-  icon={calendar}
-  style={{
-    cursor: "pointer",
-    fontSize: "25px", // Increase the icon size as desired
-    display: "inline-block",
-    margin: "0px 10px"
-  }}
-  onMouseOver={() => handelonmouseover(date)}
-/>
+                <IonIcon
+                  color="primary"
+                  onClick={() => setShowPopover(true)}
+                  icon={calendar}
+                  style={{
+                    cursor: "pointer",
+                    fontSize: "25px", // Increase the icon size as desired
+                    display: "inline-block",
+                    margin: "0px 10px",
+                  }}
+                  onMouseOver={() => handelonmouseover(date)}
+                />
               </IonCol>
               <IonCol size="auto">
                 <IonImg
                   // size="small"
                   src={syringImage}
-                  onClick={() =>  router.push(`/members/child/vaccine/${childId}/fill/${Id}?oldDate=${date.toString()}`)}
+                  onClick={() =>
+                    router.push(
+                      `/members/child/vaccine/${childId}/fill/${Id}?oldDate=${date.toString()}`
+                    )
+                  }
                   style={{
                     textTransform: "lowercase",
                     height: "30px",
                     display: "inline-block",
-                    margin: "0px 10px"
+                    margin: "0px 10px",
                   }}
                   color={IsDone ? "success" : "primary"}
                 >
@@ -279,14 +293,14 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
               </IonCol>
               <IonCol size="auto">
                 <IonButton
-                // src={syringImage}
+                  // src={syringImage}
                   size="small"
                   onClick={() => postSkip()}
                   style={{
-                    textTransform: "lowercase",  
+                    textTransform: "lowercase",
                     height: "30px",
                     display: "inline-block",
-                    margin: "0px 10px"        
+                    margin: "0px 10px",
                   }}
                   color={IsSkip ? "danger" : "primary"}
                 >
@@ -309,52 +323,47 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
               </IonButton>
             </IonCol>
           )}
-       {!isButtonVisible && (
-  <>
-    <IonCol size="auto" style={{ display: "flex", alignItems: "center" }}>
-      <span
-        style={{
-          color: "#6ebf8b", // Set the color of the date to light green
-          height: "30px",
-          display: "inline-block",
-          margin: "0px 10px"
-        }}
-      >
-        {new Date(date).toLocaleDateString("en-US", {
-          month: "short",
-          day: "numeric",
-          year: "numeric"
-        })}
-      </span>
-     
-        <IonImg
-          // size="small"
-          src={emptySyringImage}
-          onClick={()=>toggleButtonVisibility(date)}
-          style={{
-            textTransform: "lowercase",
-            height: "30px",
-            display: "inline-block",
-            margin: "0px 10px"
-          }}
-          color="danger"
-        >
-          Undo
-        </IonImg>
-    
-    </IonCol>
-    {BrandName==null?"":<IonCol size="12">
-      <p style={{ textAlign: "center" }}>
-        Brand: {BrandName}
-      </p>
-    </IonCol>
-}
+          {!isButtonVisible && (
+            <>
+              <IonCol
+                size="auto"
+                style={{ display: "flex", alignItems: "center" }}
+              >
+                <span
+                  style={{
+                    color: "#6ebf8b", // Set the color of the date to light green
+                    height: "30px",
+                    display: "inline-block",
+                    margin: "0px 10px",
+                  }}
+                >
+                  {date}
+                </span>
 
-</>
-)}
-
-
-
+                <IonImg
+                  // size="small"
+                  src={emptySyringImage}
+                  onClick={() => toggleButtonVisibility(date)}
+                  style={{
+                    textTransform: "lowercase",
+                    height: "30px",
+                    display: "inline-block",
+                    margin: "0px 10px",
+                  }}
+                  color="danger"
+                >
+                  Undo
+                </IonImg>
+              </IonCol>
+              {BrandName == null ? (
+                ""
+              ) : (
+                <IonCol size="12">
+                  <p style={{ textAlign: "center" }}>Brand: {BrandName}</p>
+                </IonCol>
+              )}
+            </>
+          )}
         </IonRow>
       </IonGrid>
       <IonPopover isOpen={showPopover} onDidDismiss={closePopover}>
@@ -364,7 +373,6 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
           onIonChange={handleDateChange}
         ></IonDatetime>
       </IonPopover>
- 
     </>
   );
 };
