@@ -204,7 +204,7 @@ const DoctorScheduleCard: React.FC<IDoseSchedule> = ({
                   onMouseOver={() => handelonmouseover2(date)}
                 />
                 {/* <IonText>{format(new Date(date), "yyyy-MM-dd")}</IonText> */}
-                <IonText>{format(new Date(date), "yyyy-MM-dd")}</IonText>
+                <IonText>{date}</IonText>
                 <IonPopover isOpen={showPopover2} onDidDismiss={closePopover2}>
                   <IonDatetime
                     placeholder="Select Date"
