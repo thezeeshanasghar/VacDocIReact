@@ -67,7 +67,7 @@ const DoctorScheduleCardList: React.FC = () => {
         const data = await response.json();
 
         setData(data);
-        console.log(data);
+        // console.log(data);
         setIsLoading(false);
       } else {
         console.log("Error fetching data");
@@ -86,6 +86,7 @@ const DoctorScheduleCardList: React.FC = () => {
         <IonContent className="ion-padding" >
           {Object.keys(data).map((date) => (
             <DoctorScheduleCard
+            key={data[date].Id}
               scheduleKey={date}
               date={date}
               data={data[date]}

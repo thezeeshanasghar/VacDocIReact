@@ -17,6 +17,7 @@ import { format } from "date-fns";
 import Toast from "../../components/custom-toast/Toast";
 
 interface IDoseSchedule {
+  key:string;
   scheduleKey: string;
   date: any;
   data: any;
