@@ -104,18 +104,18 @@ const ClinicSchedule: React.FC = () => {
             padding: "0px 10px",
           }}
         >
-          <WeekDaysCard name={"Monday"} />
-          <WeekDaysCard name={"Tuesday"} />
-          <WeekDaysCard name={"Wednesday"} />
-          <WeekDaysCard name={"Thursday"} />
-          <WeekDaysCard name={"Friday"} />
-          <WeekDaysCard name={"Saturday"} />
-          <WeekDaysCard name={"Sunday"} />
+          <WeekDaysCard name={"Monday"} id="name123" />
+          <WeekDaysCard name={"Tuesday"} id="name122"/>
+          <WeekDaysCard name={"Wednesday"} id="name124" />
+          <WeekDaysCard name={"Thursday"} id="name125" />
+          <WeekDaysCard name={"Friday"} id="name126" />
+          <WeekDaysCard name={"Saturday"} id="name127" />
+          <WeekDaysCard name={"Sunday"} id="name128" />
           <IonText color={"danger"}>
             {canSubmit &&
               "please select any day's atleast one session to sign up"}
           </IonText>
-          <IonButton type="submit" disabled={canSubmit}>
+          <IonButton type="submit" id="submitsch" disabled={canSubmit}>
             {" "}
             Submit
           </IonButton>

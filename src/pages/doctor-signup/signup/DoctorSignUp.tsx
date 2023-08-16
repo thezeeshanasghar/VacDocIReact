@@ -87,11 +87,11 @@ const DoctorSignUp: React.FC = () => {
             </div>
             <form className="form-wrapper-doctor" onSubmit={handleSignUp}>
               <IonItem>
-                <IonLabel position="stacked">Name</IonLabel>
+                <IonLabel position="stacked" id="name">Name</IonLabel>
                 <IonInput
                   required
                   type="text"
-                  itemID="name"
+                  id="name"
                   value={name}
                   className="data"
                   onIonChange={(e) => setName(e.detail.value!)}

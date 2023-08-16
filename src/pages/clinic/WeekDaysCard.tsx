@@ -16,6 +16,7 @@ import React, { useState, useEffect } from "react";
 
 type WeekDayCardProps = {
   name: string;
+  id: string;
   setSession?: React.Dispatch<React.SetStateAction<ISession[]>>;
 };
 
@@ -139,7 +140,7 @@ const WeekDaysCard: React.FC<WeekDayCardProps> = ({ name, setSession }) => {
           }}
         >
           <IonCardTitle>{name}</IonCardTitle>
-          <IonToggle checked={showCard} onIonChange={handleToggleCard} />
+          <IonToggle checked={showCard} onIonChange={handleToggleCard} id="test" />
         </div>
       </IonCardHeader>
 
@@ -150,6 +151,7 @@ const WeekDaysCard: React.FC<WeekDayCardProps> = ({ name, setSession }) => {
             <IonToggle
               checked={showSession1}
               onIonChange={handleToggleSession1}
+              id="test1"
             />
           </IonItem>
 
@@ -162,6 +164,7 @@ const WeekDaysCard: React.FC<WeekDayCardProps> = ({ name, setSession }) => {
                     type="time"
                     value={mstart}
                     onIonChange={(e) => handleTimeChange(e, "start")}
+                    id="test2"
                   />
                 </IonItem>
               </IonCol>
@@ -172,6 +175,7 @@ const WeekDaysCard: React.FC<WeekDayCardProps> = ({ name, setSession }) => {
                     type="time"
                     value={mend}
                     onIonChange={(e) => handleTimeChange(e, "end")}
+                    id="test3"
                   />
                 </IonItem>
               </IonCol>

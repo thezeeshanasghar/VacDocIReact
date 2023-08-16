@@ -74,6 +74,7 @@ const ClinicRegistration: React.FC = () => {
                   type="text"
                   value={name}
                   onIonChange={(e) => setName(e.detail.value!)}
+                  id="names"
                 />
               </IonItem>
               <IonItem>
@@ -83,6 +84,7 @@ const ClinicRegistration: React.FC = () => {
                   type="text"
                   value={address}
                   onIonChange={(e) => setAddress(e.detail.value!)}
+                  id="address"
                 />
               </IonItem>
               <IonItem>
@@ -92,9 +94,10 @@ const ClinicRegistration: React.FC = () => {
                   type="number"
                   value={mobile}
                   onIonChange={(e) => setMobile(e.detail.value!)}
+                  id="mobilenumbers"
                 />
               </IonItem>
-              <IonButton expand="full" type="submit" disabled={!submit}>
+              <IonButton expand="full" type="submit" id="submits" disabled={!submit}>
                 Next
                 <IonIcon slot="end" icon={arrowForward} />
               </IonButton>
