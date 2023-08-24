@@ -149,6 +149,7 @@ const EditProfile: React.FC = () => {
                       value={name}
                       onIonChange={(e) => setName(e.detail.value!)}
                       required
+                      id="name1"
                     />
                   </IonItem>
                   <IonItem>
@@ -158,6 +159,7 @@ const EditProfile: React.FC = () => {
                       value={email}
                       onIonChange={(e) => setEmail(e.detail.value!)}
                       required
+                      id="email"
                     />
                   </IonItem>
                   <IonItem>
@@ -167,6 +169,7 @@ const EditProfile: React.FC = () => {
                       value={mobileNumber}
                       onIonChange={(e) => setMobileNumber(e.detail.value!)}
                       required
+                      id="mob"
                     />
                   </IonItem>
                   <IonItem>
@@ -176,6 +179,7 @@ const EditProfile: React.FC = () => {
                       value={pmdc}
                       onIonChange={(e) => setPmdc(e.detail.value!)}
                       required
+                      id="pmdc"
                     />
                   </IonItem>
                   {/* <IonItem>

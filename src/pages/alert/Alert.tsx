@@ -77,6 +77,7 @@ const Alert: React.FC = () => {
                     <IonItem
                       routerLink={`/members/child/vaccine/${item.Id}?doctorId=${item.DoctorId}`}
                       routerDirection="forward"
+                      id="alert"
                     >
                       <IonLabel>{item.Name}</IonLabel>
                       <IonIcon color="primary" icon={call} slot="end" />
