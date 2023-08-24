@@ -4,7 +4,7 @@ describe('Login Page', () => {
     cy.visit('http://localhost:8100/'); // Adjust the route as needed
 
     // Find the "Sign Up" link by its ID and click it
-    cy.get('#sign').click();
+    
     
     // cy.get('#name').type('John Doe');
     // cy.get('#name', { timeout: 10000 }).should('be.visible').type('John Doe');
@@ -14,13 +14,31 @@ describe('Login Page', () => {
     // });
     
     // cy.get("[data-cy=name]").type("John Doe");
-    cy.get("#name").type("John Doe");
-    cy.get("#email").type("john.doe@example.com");
-    cy.get("#mobileNumber").type("1234567890");
-    cy.get("#password").type("password123");
-    cy.get("#pmdc").type("123456789");
-    cy.wait(3000);
-    cy.get("#signup").click();
+
+// cy.get('#sign').click();
+    // cy.get("#name").type("John Doe");
+    // cy.get("#email").type("john.doe@example.com");
+    // cy.get("#mobileNumber").type("1234567890");
+    // cy.get("#password").type("password123");
+    // cy.get("#pmdc").type("123456789");
+    // cy.get('body').click();
+    // cy.wait(3000);
+    // cy.get("#signup").click();
+    // cy.get("#names").type("hassan clinic");
+    // cy.get("#address").type("b-17 Islamabad");
+    // cy.get("#mobilenumbers").type("123456789");
+    // cy.get('body').click();
+    // cy.get("#submits").click();
+
+   
+    // cy.get("#test").click();
+    // cy.get("#test1").click();
+    // cy.get("#test2").type("12:00");
+    // cy.get("#test3").type("12:45");
+
+
+    // // Click the Submit button
+    // cy.get("#submitsch").click();
     // cy.get("[data-cy=name]").type("ABC Clinic");
     // cy.get("[data-cy=address]").type("123 Main Street");
     // cy.get("[data-cy=mobileNumber]").type("1234567890");
@@ -28,13 +46,6 @@ describe('Login Page', () => {
     // const name = 'My Clinic';
     // const address = '123 Main St, City';
     // const mobileNumber = '1234567890';
-
-   
-    cy.get("#names").type("hassan clinic");
-    cy.get("#address").type("b-17 Islamabad");
-    cy.get("#mobilenumbers").type("123456789");
-
-    cy.get("#submits").click();
 
    
       // cy.visit('/'); // Adjust the route if needed
@@ -46,20 +57,16 @@ describe('Login Page', () => {
       // });
   
       
-      cy.get("#test").click();
-      cy.get("#test1").click();
-      cy.get("#test2").type("12:00");
-      cy.get("#test3").type("12:45");
-      // Click the Submit button
-      cy.get("#submitsch").click();
   
       // Assert any success or error messages after form submission
       // cy.get('Toast[color="success"]').should('be.visible');
-   
+      cy.get("#mobilenumber").type("1234567890");
+      cy.get("#pass").type("password123");
+      cy.get('body').click();
+      cy.get("#login").click();
     // cy.get('IonInput[placeholder="Name"]').should('exist').type(name, { force: true });
     // cy.get('IonInput[placeholder="Address"]').should('exist').type(address, { force: true });
     // cy.get('IonInput[placeholder="Mobile Number"]').should('exist').type(mobileNumber, { force: true });
-
     // cy.get('IonButton[type="submit"]').should('exist').click();
 
     // cy.get("#submit").click();

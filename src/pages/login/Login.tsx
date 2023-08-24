@@ -100,6 +100,7 @@ const Login: React.FC = () => {
                       value={mobileNumber}
                       onIonChange={(e) => setmobileNumber(e.detail.value!)}
                       required
+                      id="mobilenumber"
                     />
                   </div>
                   <div className="input-container">
@@ -114,6 +115,7 @@ const Login: React.FC = () => {
                       value={password}
                       onIonChange={(e) => setpassword(e.detail.value!)}
                       required
+                      id="pass"
                     />
                   </div>
                   <IonButton
@@ -122,6 +124,7 @@ const Login: React.FC = () => {
                     strong
                     className="custom-button"
                     disabled={!canSubmit}
+                    id="login"
                   >
                     <IonIcon icon={logIn} color="light" />
                     &nbsp; Login
