@@ -203,6 +203,7 @@ const DoctorScheduleCard: React.FC<IDoseSchedule> = ({
                   icon={calendar}
                   style={{ marginRight: "10px", PointerEvent: "cursor" }}
                   onMouseOver={() => handelonmouseover2(date)}
+                  id="bulk"
                 />
                 {/* <IonText>{format(new Date(date), "yyyy-MM-dd")}</IonText> */}
                 <IonText>{date}</IonText>
@@ -233,6 +234,7 @@ const DoctorScheduleCard: React.FC<IDoseSchedule> = ({
                           onClick={() => setShowPopover(true)}
                           icon={calendar}
                           onMouseOver={() => handelonmouseover(date,item.Id)}
+                          id="single"
                         />
                       </>
                     </IonCol>

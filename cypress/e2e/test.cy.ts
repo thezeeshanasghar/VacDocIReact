@@ -62,6 +62,7 @@ describe('Login Page', () => {
       cy.get("#pass").type("password123");
       cy.get('body').click();
       cy.get("#login").click();
+      cy.wait(3000)
       // cy.visit('http://localhost:8100/members/alert/vaccine-alert');
       // cy.wait(3000);
       // cy.get("#alert").click();
@@ -113,7 +114,37 @@ describe('Login Page', () => {
       // Verify that the selected date appears in the input field
       // cy.get('#db').should('have.value', targetDate);
       cy.visit('http://localhost:8100/members/doctor/schedule')
-      cy.wait(20000);
+      cy.wait(5000);
+    cy.get('#single').should('be.visible').click();
+
+    // Select a specific date
+    // cy.wait('@element');
+
+    // Get the element.
+  
+
+    // Assert that the button's text is "3".
+    cy.contains('3');
+    
+    // Close the date picker (if needed)
+    cy.get('ion-datetime').click();
+    cy.get('body').click();
+
+    cy.wait(5000);
+    cy.get('#bulk').should('be.visible').click();
+
+    // Select a specific date
+    // cy.wait('@element');
+
+    // Get the element.
+  
+
+    // Assert that the button's text is "3".
+    cy.contains('3');
+    
+    // Close the date picker (if needed)
+    cy.get('ion-datetime').click();
+    cy.get('body').click();
     // cy.get('IonInput[placeholder="Name"]').should('exist').type(name, { force: true });
     // cy.get('IonInput[placeholder="Address"]').should('exist').type(address, { force: true });
     // cy.get('IonInput[placeholder="Mobile Number"]').should('exist').type(mobileNumber, { force: true });
