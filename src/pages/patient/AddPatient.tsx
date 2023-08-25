@@ -171,6 +171,7 @@ const AddPatient: React.FC = () => {
                 value={name}
                 onIonChange={(e) => setName(e.detail.value!)}
                 required
+                id="name"
               />
             </IonItem>
             {/* <IonItem>
@@ -188,6 +189,7 @@ const AddPatient: React.FC = () => {
                 value={fatherName}
                 onIonChange={(e) => setFatherName(e.detail.value!)}
                 required
+                id="fname"
               />
             </IonItem>
             <IonItem>
@@ -197,6 +199,7 @@ const AddPatient: React.FC = () => {
                 value={email}
                 onIonChange={(e) => setEmail(e.detail.value!)}
                 required
+                id="email"
               />
             </IonItem>
             <IonItem>
@@ -207,6 +210,7 @@ const AddPatient: React.FC = () => {
                 value={cnic}
                 onIonChange={(e) => setCnic(e.detail.value!)}
                 required
+                id="cnic"
               />
             </IonItem>
             <IonItem>
@@ -216,6 +220,7 @@ const AddPatient: React.FC = () => {
                 placeholder="3331231231"
                 value={mobileNumber}
                 onIonChange={(e) => setMobileNumber(e.detail.value!)}
+                id="mno"
               />
             </IonItem>
             <IonItem>
@@ -226,6 +231,7 @@ const AddPatient: React.FC = () => {
                 max={toDay}
                 value={dob}
                 onIonChange={(e) => setDob(e.detail.value!)}
+                id="db"
               />
             </IonItem>
             <IonRadioGroup
@@ -285,6 +291,7 @@ const AddPatient: React.FC = () => {
               <IonSelect
                 value={selectedDoctor}
                 onIonChange={(e) => setSelectedDoctor(e.detail.value!)}
+                id="doc"
               >
                 {doctorData &&
                   doctorData.map((item, index) => (
@@ -300,6 +307,7 @@ const AddPatient: React.FC = () => {
               <IonSelect
                 value={selectedClinic}
                 onIonChange={(e) => setSelectedClinic(e.detail.value!)}
+                id="clinic"
               >
                 {clinicData &&
                   clinicData.map((item, index) => (
@@ -315,6 +323,7 @@ const AddPatient: React.FC = () => {
                 value={city}
                 onIonChange={(e) => setCity(e.detail.value!)}
                 labelPlacement="floating"
+                id="city"
               >
                 <IonSelectOption value="">
                   <em> Choose...</em>
@@ -719,6 +728,7 @@ const AddPatient: React.FC = () => {
                       name="isEPIDone"
                       checked={isEPIDone}
                       onIonChange={(e) => setIsEPIDone(e.detail.checked)}
+                      id="epi"
                     />
                   </IonItem>
                 </IonCol>
@@ -730,12 +740,13 @@ const AddPatient: React.FC = () => {
                       name="IsVerified"
                       checked={isVerified}
                       onIonChange={(e) => setIsVerified(e.detail.checked)}
+                      id="verified"
                     />
                   </IonItem>
                 </IonCol>
               </IonRow>
             </IonGrid>
-            <IonButton expand="full" type="submit" disabled={!canSubmit}>
+            <IonButton expand="full" type="submit" id="submit" disabled={!canSubmit}>
               Add Patient
             </IonButton>
           </form>

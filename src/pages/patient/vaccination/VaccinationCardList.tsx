@@ -57,7 +57,7 @@ interface IParam {
 
   const searchParams = new URLSearchParams(location.search);
     const doctorId = searchParams.get("doctorId");
-
+console.log(doctorId);
   const VaccinationCardList: React.FC<IParam> = ({
       match: {
         params: { Id: childId },
@@ -122,10 +122,10 @@ const [skipStates, setSkipStates] = useState<{ [date: string]: boolean }>({});
 
   const fetchDoseData = async () => {
     try {
-      if (!storedValue) {
-        console.log("storedValue is null or undefined");
-        return; // Exit the function if storedValue is not valid
-      }
+      // if (!storedValue) {
+      //   console.log("storedValue is null or undefined");
+      //   return; // Exit the function if storedValue is not valid
+      // }
   
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}api/PatientSchedule/Patient_DoseSchedule?ChildId=${childId}&DoctorId=${storedValue.Id}`

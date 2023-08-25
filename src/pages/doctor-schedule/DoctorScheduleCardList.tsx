@@ -56,7 +56,7 @@ const DoctorScheduleCardList: React.FC = () => {
   }, []);
 
   const fetchDoseData = async () => {
-    try {
+    // try {
       const response = await fetch(
         `${
           import.meta.env.VITE_API_URL
@@ -73,10 +73,10 @@ const DoctorScheduleCardList: React.FC = () => {
         console.log("Error fetching data");
         setIsLoading(false);
       }
-    } catch (error) {
-      console.log("Error:", error);
-      setIsLoading(false);
-    }
+    // } catch (error) {
+    //   console.log("Error:", error);
+    //   setIsLoading(false);
+    // }
   };
 
   return (
