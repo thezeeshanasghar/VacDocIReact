@@ -32,6 +32,7 @@ const AddPatient: React.FC = () => {
   // const [scheduleType, setScheduleType] = useState("");
   const [dob, setDob] = useState("");
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [mobileNumber, setMobileNumber] = useState("");
   const [toDay, setToDay] = useState("")
   // const [preferredSchedule, setpreferredSchedule] = useState<string>("");
@@ -60,6 +61,7 @@ const AddPatient: React.FC = () => {
       dob,
       gender,
       // type: scheduleType,
+      password,
       city,
       cnic,
       mobileNumber,
@@ -102,6 +104,7 @@ const AddPatient: React.FC = () => {
     // setScheduleType("special");
     setDob("");
     setEmail("");
+    setPassword("");
     setMobileNumber("");
     // setpreferredSchedule("");
     setSelectedDoctor(0);
@@ -138,6 +141,7 @@ const AddPatient: React.FC = () => {
     name !== "" &&
     fatherName !== "" &&
     // guardian !== "" &&
+    password !== "" &&
     cnic !== "" &&
     gender !== "" &&
     dob !== "" &&
@@ -232,6 +236,16 @@ const AddPatient: React.FC = () => {
                 value={dob}
                 onIonChange={(e) => setDob(e.detail.value!)}
                 id="db"
+              />
+            </IonItem>
+            <IonItem>
+              <IonLabel position="floating">Password</IonLabel>
+              <IonInput
+                type="password"
+                value={password}
+                onIonChange={(e) => setPassword(e.detail.value!)}
+                required
+                id="pass"
               />
             </IonItem>
             <IonRadioGroup

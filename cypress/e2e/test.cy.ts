@@ -80,34 +80,34 @@ describe('Login Page', () => {
       // cy.get("[type=submit]").click();
 
       
-  //     cy.visit('http://localhost:8100/members/child/add');
-  //     cy.get('#name').type("hassan");
-  //     cy.get('#fname').type("fhassan");
-  //     cy.get('#email').type("hassan@gmail.com");
-  //     cy.get('#cnic').type("62202-1234567-1");
-  //     cy.get('#mno').type("03145530889");
-  //     cy.get('#db').type('1990-01-01');
+      cy.visit('http://localhost:8100/members/child/add');
+      cy.get('#name').type("hassan");
+      cy.get('#fname').type("fhassan");
+      cy.get('#email').type("hassan@gmail.com");
+      cy.get('#cnic').type("62202-1234567-1");
+      cy.get('#mno').type("03145530889");
+      cy.get('#db').type('1990-01-01');
     
-  //     // Select radio button
-  //     cy.get('[value="boy"]').click();
+      cy.get('#pass').type('123');        
+      // Select radio button
+      cy.get('[value="boy"]').click();
   
-  //     // Select dropdown options
-  //     cy.get('#doc').click();
+      // Select dropdown options
+      cy.get('#doc').click();
+      // Select the desired doctor
+      cy.wait(6000); // You can adjust the delay time as needed
 
-  //     // Select the desired doctor
-  //     cy.wait(6000); // You can adjust the delay time as needed
-
-  //     // Select the desired doctor
-  //     // cy.contains('ahmed999', { timeout: 5000 }).should('be.visible');
-  //     cy.get('#clinic').click();
-  //     cy.wait(6000);
-  //     cy.get('#city').click();
-  //     cy.wait(6000);
-  // // Increase timeout as needed
-  // cy.get('#epi').click();
-  // cy.get('#verified').click();
-  // cy.get('#submit').click();
-  // cy.wait(20000);//this is due to seen the patient is add or not
+      // Select the desired doctor
+      // cy.contains('ahmed999', { timeout: 5000 }).should('be.visible');
+      cy.get('#clinic').click();
+      cy.wait(6000);
+      cy.get('#city').click();
+      cy.wait(6000);
+  // Increase timeout as needed
+  cy.get('#epi').click();
+  cy.get('#verified').click();
+  cy.get('#submit').click();
+  cy.wait(20000);//this is due to seen the patient is add or not
 
 
   
