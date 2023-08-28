@@ -168,6 +168,7 @@ console.log(oldDate);
               <IonSelect
                 value={brand}
                 onIonChange={(e) => setBrand(e.detail.value)}
+                id="brand1"
               >
                 {brandData.map((brandOption) => (
                   <IonSelectOption key={brandOption.Id} value={brandOption.Id}>
@@ -183,6 +184,7 @@ console.log(oldDate);
                 slot="end"
                 type="date"
                 disabled
+                
                 value={givenDate || ""} // Use the givenDate directly without formatting it again
                 // onIonChange={(e) => handleDateChange(e, e.detail.value)}
               />
@@ -194,10 +196,10 @@ console.log(oldDate);
                 type="date"
                 value={newDate || ""} // Use the givenDate directly without formatting it again
                 onIonChange={(e) => setNewDate(e.detail.value)}
-
+                id="date12"
               />
             </IonItem>
-            <IonButton type="submit">Submit</IonButton>
+            <IonButton id="submit" type="submit">Submit</IonButton>
           </form>
         </IonContent>
       </IonPage>

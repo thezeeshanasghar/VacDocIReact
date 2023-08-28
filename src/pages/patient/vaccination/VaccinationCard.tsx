@@ -269,6 +269,7 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
                     margin: "0px 10px",
                   }}
                   onMouseOver={() => handelonmouseover(date)}
+                  id="single"
                 />
               </IonCol>
               <IonCol size="auto">
@@ -287,6 +288,7 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
                     margin: "0px 10px",
                   }}
                   color={IsDone ? "success" : "primary"}
+                  id="done1"
                 >
                   {IsDone ? "undo" : "done"}
                 </IonImg>
@@ -303,6 +305,7 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
                     margin: "0px 10px",
                   }}
                   color={IsSkip ? "danger" : "primary"}
+                  id="skip1"
                 >
                   {IsSkip ? "UnSkip" : "Skip"}
                 </IonButton>

@@ -84,6 +84,7 @@ const PatientFemaleCard: React.FC<IFemalePatient> = ({
           size="small"
           className="action-button"
           onClick={handleClick}
+          id="male"
         >
           Vaccine
         </IonButton>

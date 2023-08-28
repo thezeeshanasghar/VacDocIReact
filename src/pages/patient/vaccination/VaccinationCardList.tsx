@@ -370,6 +370,7 @@ const [skipStates, setSkipStates] = useState<{ [date: string]: boolean }>({});
               cursor: "pointer"
             }}
             className="ng-star-inserted md hydrated"
+            id="done"
           />
         
           <IonIcon
@@ -378,6 +379,7 @@ const [skipStates, setSkipStates] = useState<{ [date: string]: boolean }>({});
             icon={calendar}
             style={{ marginRight: "10px", cursor: "pointer" }}
             onMouseOver={() => handelonmouseover(date)}
+            id="bulk"
           />
       
         <IonPopover isOpen={showPopover} onDidDismiss={closePopover}>
@@ -401,6 +403,7 @@ const [skipStates, setSkipStates] = useState<{ [date: string]: boolean }>({});
                     cursor: "pointer"   
                   }}
                   color={skipStates[date] ? "danger" : "primary"}
+                  id="skip"
                 >
              {skipStates[date] ? "UnSkip" : "Skip"}
                 </IonButton>
@@ -451,6 +454,7 @@ const [skipStates, setSkipStates] = useState<{ [date: string]: boolean }>({});
               icon={calendar}
               style={{ marginRight: "10px", cursor: "pointer" }}
               onMouseOver={() => handelonmouseover(date)}
+              id="bulk"
             />
         
           <IonPopover isOpen={showPopover} onDidDismiss={closePopover}>

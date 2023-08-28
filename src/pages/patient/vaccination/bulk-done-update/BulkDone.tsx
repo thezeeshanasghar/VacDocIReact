@@ -260,6 +260,7 @@ console.log(formatDate(oldDate))
               <IonSelect
                 value={selectedBrandIds[index] }
                 onIonChange={(e) => handleBrandChange(index, e.detail.value)}
+                id="brand"
               >
                 {brandData[index].map((brandOption) => (
                   <IonSelectOption key={brandOption.Id} value={brandOption.Id}>
@@ -281,6 +282,7 @@ console.log(formatDate(oldDate))
                       value={givenDate || ""}
                       disabled
                       slot="end"
+                      
                       // onIonChange={(e) => handleDateChange(e, e.detail.value)}
                       // min={Date}
                       />
@@ -293,10 +295,11 @@ console.log(formatDate(oldDate))
                       slot="end"
                       required
                       onIonChange={(e) => setNewDate(e.target.value)}
+                      id="date1"
                      />
                   </IonItem>
           
-                <IonButton type="submit" disabled={!selected}>Submit</IonButton>
+                <IonButton id="submit" type="submit" disabled={!selected}>Submit</IonButton>
               </form>
           </IonContent>
         </IonPage>
