@@ -12,6 +12,7 @@ import {
   useIonRouter,
 } from "@ionic/react";
 import { person, arrowForward } from "ionicons/icons";
+import IconBuilding from "../../../icons/IconBuilding";
 import "./clinicReg.css";
 
 const ClinicRegistration: React.FC = () => {
@@ -19,6 +20,8 @@ const ClinicRegistration: React.FC = () => {
   const [name, setName] = useState("");
   const [address, setAddress] = useState("");
   const [mobile, setMobile] = useState("");
+  const [clinicFee, setClinicFee] = useState("");
+  const [city, setCity] = useState("");
 
   const handleClinicRegistration = (e: any) => {
     e.preventDefault();
@@ -61,14 +64,14 @@ const ClinicRegistration: React.FC = () => {
                 marginBottom: "4px",
               }}
             >
-              <IonIcon icon={person} className="signup-icon-clinic" />
+              <IconBuilding />
             </div>
             <form
               className="form-wrapper-clinic"
               onSubmit={handleClinicRegistration}
             >
               <IonItem>
-                <IonLabel position="floating">Name</IonLabel>
+                <IonLabel position="floating">Clinic Name</IonLabel>
                 <IonInput
                   required
                   type="text"
@@ -78,13 +81,23 @@ const ClinicRegistration: React.FC = () => {
                 />
               </IonItem>
               <IonItem>
-                <IonLabel position="floating">Address</IonLabel>
+                <IonLabel position="floating"> Address</IonLabel>
                 <IonInput
                   required
                   type="text"
                   value={address}
                   onIonChange={(e) => setAddress(e.detail.value!)}
                   id="address"
+                />
+              </IonItem>
+              <IonItem>
+                <IonLabel position="floating">City</IonLabel>
+                <IonInput
+                  required
+                  type="text"
+                  value={city}
+                  onIonChange={(e) => setCity(e.detail.value!)}
+                  id="city"
                 />
               </IonItem>
               <IonItem>
@@ -97,11 +110,27 @@ const ClinicRegistration: React.FC = () => {
                   id="mobilenumbers"
                 />
               </IonItem>
-              <IonButton expand="full" type="submit" id="submits" disabled={!submit}>
+              <IonItem>
+                <IonLabel position="floating">Fee</IonLabel>
+                <IonInput
+                  required
+                  type="number"
+                  value={clinicFee}
+                  onIonChange={(e) => setClinicFee(e.detail.value!)}
+                  id="fee"
+                />
+              </IonItem>
+              <IonButton
+                expand="full"
+                type="submit"
+                id="submits"
+                disabled={!submit}
+              >
                 Next
                 <IonIcon slot="end" icon={arrowForward} />
               </IonButton>
             </form>
+            
           </IonCard>
         </div>
       </IonContent>

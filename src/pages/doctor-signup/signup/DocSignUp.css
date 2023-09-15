@@ -31,3 +31,7 @@
 .form-wrapper-doctor ion-button {
   margin-top: 5px;
 }
+
+.gray-input {
+  color: red !important; /* Change this to your desired gray color */
+}

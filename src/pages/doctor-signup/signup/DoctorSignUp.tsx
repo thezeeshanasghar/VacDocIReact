@@ -56,6 +56,7 @@ const DoctorSignUp: React.FC = () => {
       })
     );
     router.push("/auth/reg_clinic");
+    
   };
 
   // const handleInputBlur = () => {
@@ -83,11 +84,11 @@ const DoctorSignUp: React.FC = () => {
                 marginBottom: "4px",
               }}
             >
-              <IonIcon icon={person} className="signup-icon-doctor" />
+              <IonIcon icon={person} className="signup-icon-doctor" style={{margin: '1rem'}}/>
             </div>
             <form className="form-wrapper-doctor" onSubmit={handleSignUp}>
               <IonItem>
-                <IonLabel position="stacked" id="name">Name</IonLabel>
+                <IonLabel position="stacked" id="name">Doctor Name</IonLabel>
                 <IonInput
                   required
                   type="text"
@@ -115,6 +116,9 @@ const DoctorSignUp: React.FC = () => {
                   value={mobile}
                   id="mobileNumber"
                   itemID="mobileNumber"
+                  style={{
+                    color: mobile.startsWith("0") || mobile.startsWith("+") ? "red" : "initial",
+                  }}
                   onIonChange={(e) => setMobile(e.detail.value!)}
                 />
               </IonItem>
