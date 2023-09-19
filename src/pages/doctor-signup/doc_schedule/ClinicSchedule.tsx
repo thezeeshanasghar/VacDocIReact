@@ -68,7 +68,7 @@ const ClinicSchedule: React.FC = () => {
       body: JSON.stringify(data_to_be_sent),
     })
       .then((res) => {
-        if (res.status === 201) {
+        if (res.status === 200) {
           setSuccess(true);
           setTimeout(() => {
             router.push("/", "back");
@@ -78,7 +78,7 @@ const ClinicSchedule: React.FC = () => {
         }
       })
       .catch((err) => setError(true));
-    // localStorage.clear();
+    localStorage.clear();
   };
 
   return (
