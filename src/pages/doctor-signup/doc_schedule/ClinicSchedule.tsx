@@ -68,7 +68,7 @@ const ClinicSchedule: React.FC = () => {
       body: JSON.stringify(data_to_be_sent),
     })
       .then((res) => {
-        if (res.status === 200) {
+        if (res.status === 200 || 204) {
           setSuccess(true);
           setTimeout(() => {
             router.push("/", "back");
