@@ -26,6 +26,8 @@ import DaysCard, { ISession } from "./UpdateWeekDaysCard";
 interface IClinic {
   Id: number;
   Name: string;
+  City: string;
+  Fees: string;
   Address: string;
   Number: string;
   DoctorId: number;
@@ -58,6 +60,7 @@ const UpdateClinic: React.FC<ClinicProps> = ({
 
   useEffect(() => {
     localStorage.clear();
+    //@ts-ignore
     const storedValue = JSON.parse(sessionStorage.getItem("docData"));
     console.log(storedValue);
   }, []);

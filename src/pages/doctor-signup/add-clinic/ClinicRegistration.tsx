@@ -38,6 +38,8 @@ const ClinicRegistration: React.FC = () => {
       {
         name,
         address,
+        city,
+        fees:clinicFee,
         number: mobile,
         clinicTimings: "",
       },

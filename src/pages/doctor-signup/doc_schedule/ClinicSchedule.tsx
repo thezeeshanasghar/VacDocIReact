@@ -47,6 +47,7 @@ const ClinicSchedule: React.FC = () => {
       setCanSubmit(false);
     }
     // console.log("clinics timing array,", newArray);
+    console.log("new Array ", newArray);
     drData.clinics[0]["clinicTimings"] = newArray;
     console.log("cdr  data ", drData);
 
@@ -61,7 +62,6 @@ const ClinicSchedule: React.FC = () => {
   const RegisterDoctor = (data_to_be_sent: any) => {
     fetch(`${import.meta.env.VITE_API_URL}api/Doctor`, {
       method: "POST",
-      mode: 'cors',
       headers: {
         "Content-Type": "application/json",
       },
@@ -78,7 +78,7 @@ const ClinicSchedule: React.FC = () => {
         }
       })
       .catch((err) => setError(true));
-    localStorage.clear();
+    // localStorage.clear();
   };
 
   return (

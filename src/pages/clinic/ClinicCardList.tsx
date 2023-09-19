@@ -11,6 +11,8 @@ import { add } from "ionicons/icons";
 interface Clinic {
   Id: number;
   Name: string;
+  City: string;
+  Fees: string;
   Address: string;
   Number: string;
   DoctorId: number;
@@ -18,7 +20,7 @@ interface Clinic {
 }
 
 const ClinicCardList: React.FC = ( DoctorId, Id) => {
-
+  //@ts-ignore
   const storedValue = JSON.parse(sessionStorage.getItem("docData"));
   console.log(storedValue);
   const location = useLocation();
