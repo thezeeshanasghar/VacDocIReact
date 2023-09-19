@@ -31,6 +31,9 @@ const DoctorSignUp: React.FC = () => {
 
   const submit = !isAnyFieldEmpty();
   const handleSignUp = (e: any) => {
+    if(!submit){
+      alert('Please fill in all the fields.')
+    }
     localStorage.clear();
     e.preventDefault();
     console.log("Name:", name);
@@ -159,7 +162,7 @@ const DoctorSignUp: React.FC = () => {
                   <IonSelectOption value="Surgeon">Surgeon</IonSelectOption>
                 </IonSelect>
               </IonItem> */}
-              <IonButton id="signup" expand="full" type="submit" disabled={!submit}>
+              <IonButton id="signup" expand="full" type="submit">
                 Next
                 <IonIcon slot="end" icon={arrowForward} />
               </IonButton>

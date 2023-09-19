@@ -23,9 +23,12 @@ const ClinicRegistration: React.FC = () => {
   const [clinicFee, setClinicFee] = useState("");
   const [city, setCity] = useState("");
 
+  const submit = name.length > 0 && address.length > 0 && mobile.length > 0 && city.length > 0 && clinicFee.length > 0;
   const handleClinicRegistration = (e: any) => {
     e.preventDefault();
-
+    if(!submit){
+      alert("Please fill in all the fields.")
+    }
     // Handle sign-up logic here
     console.log("Name:", name);
     console.log("Address:", address);
@@ -47,7 +50,7 @@ const ClinicRegistration: React.FC = () => {
     localStorage.setItem("drData", JSON.stringify(drData));
     router.push("/auth/clinic_schedule");
   };
-  const submit = name.length > 0 && address.length > 0 && mobile.length > 0;
+  
   return (
     <IonPage>
       <IonContent className="sign-up-content-clinic">

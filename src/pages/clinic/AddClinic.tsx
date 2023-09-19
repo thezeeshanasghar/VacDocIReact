@@ -16,6 +16,7 @@ import AddWeekDaysCard from "./AddWeekDaysCard";
 import { useHistory } from "react-router-dom";
 const AddClinic: React.FC = () => {
   const history = useHistory();
+  //@ts-ignore
   const storedValue = JSON.parse(sessionStorage.getItem("docData"));
   console.log(storedValue);
   const router = useIonRouter();
@@ -23,7 +24,8 @@ const AddClinic: React.FC = () => {
   const [clinicName, setClinicName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [address, setAddress] = useState("");
-  const [sessions, setSessions] = useState<ISession[]>([]);
+  const [city, setCity] = useState("");
+  const [fees, setFees] = useState("");
   const [canSubmit, setCanSubmit] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
@@ -176,90 +178,6 @@ const AddClinic: React.FC = () => {
     localStorage.clear();
   };
   
-  // const registerDoctor = async (data_to_be_sent: any, cid: string) => {
-  //   console.log("atta", data_to_be_sent);
-  //   console.log("clinic id", cid);
-  //   try {
-  //     const response = await fetch(
-  //       `${import.meta.env.VITE_API_URL}api/Clinictiming?clinicId=${cid}`,
-  //       {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //         body: JSON.stringify(data_to_be_sent),
-  //       }
-  //     );
-  
-  //     if (response.status !== 200) {
-  //       throw new Error("Failed to register doctor");
-  //     }
-  //   } catch (error) {
-  //     throw new Error();
-  //   }
-  
-  
-   
-  //     const weekdays = [
-  //       "Monday",
-  //       "Tuesday",
-  //       "Wednesday",
-  //       "Thursday",
-  //       "Friday",
-  //       "Saturday",
-  //       "Sunday",
-  //     ];
-  //     const newArray = weekdays.filter((day) => {
-  //       const storedData = localStorage.getItem(day);
-  //       return (
-  //         storedData &&
-  //         Array.isArray(JSON.parse(storedData)) &&
-  //         JSON.parse(storedData).length > 0
-  //       );
-  //     });
-  
-  //     if (newArray.length > 0) {
-  //       setCanSubmit(false);
-  //     }
-  
-  //     const data = newArray.map((day) => {
-  //       const storedData = localStorage.getItem(day);
-  //       console.log(storedData, "this is storedData"); // Retrieve the data from localStorage
-  //       return JSON.parse(storedData);
-  //     });
-  
-  //     try {
-  //       const allData = data.map(i => i[0]);
-  //       console.log(cId)
-  //       await registerDoctor(allData, cId);
-  //       setSuccess(true);
-  //       localStorage.clear();
-  //     } catch (error) {
-  //       setError(true);
-  //     }
-  // };
-
-  // const registerDoctor = async (data_to_be_sent: any,clinicId: string) => {
-  //   console.log("atta", data_to_be_sent);
-  //   console.log("clinic id", clinicId);
-  //   try {
-  //     const response = await fetch(
-  //       `${import.meta.env.VITE_API_URL}api/Clinictiming/${cId}`,
-  //       {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //         body: JSON.stringify(data_to_be_sent),
-  //       }
-  //     );
-
-  //     if (response.status !== 200) {
-  //       throw new Error("Failed to register doctor");
-  //     }
-  //   } catch (error) {
-  //     throw new Error(error.message);
-  //   }
  
 
   const anSubmit =
@@ -318,7 +236,28 @@ const AddClinic: React.FC = () => {
               Submit
             </IonButton> */}
           </IonItem>
-        
+          <IonItem>
+            <IonLabel position="floating" color="primary">
+              CIty
+            </IonLabel>
+            <IonInput
+              type="text"
+              required
+              value={city}
+              onIonChange={(e) => setCity(e.detail.value!)}
+            />
+          </IonItem>
+          <IonItem>
+            <IonLabel position="floating" color="primary">
+              Fee
+            </IonLabel>
+            <IonInput
+              type="number"
+              required
+              value={fees}
+              onIonChange={(e) => setFees(e.detail.value!)}
+            />
+          </IonItem>
           <AddWeekDaysCard name={"Monday"} />
           <AddWeekDaysCard name={"Tuesday"}/>
           <AddWeekDaysCard name={"Wednesday"}/>
@@ -337,59 +276,3 @@ const AddClinic: React.FC = () => {
 
 export default AddClinic;
 
-// const handleUnSubmit = (e: React.FormEvent) => {
-//   e.preventDefault();
-//   const weekdays = [
-//     "Monday",
-//     "Tuesday",
-//     "Wednesday",
-//     "Thursday",
-//     "Friday",
-//     "Saturday",
-//     "Sunday",
-//   ];
-//   const newArray = weekdays.filter((day) => {
-//     const storedData = localStorage.getItem(day);
-//     // console.log(storedData);
-//     return (
-//       storedData &&
-//       Array.isArray(JSON.parse(storedData)) &&
-//       JSON.parse(storedData).length > 0
-//     );
-//   });
-
-//   newArray.forEach((day) => {
-//     const storedData = localStorage.getItem(day);
-//     console.log(storedData); // Retrieve the data from localStorage
-
-//     if (storedData) {
-//       const parsedData = JSON.parse(storedData);
-//       // console.log(`Data for ${day}:`, parsedData);
-//       setData(parsedData)
-//       // Perform actions with the retrieved data as needed
-//       console.log(data)
-//     }
-//   });
-
-// Call the API endpoint with the updated data
-// fetch(`${import.meta.env.VITE_API_URL}api/Clinictiming?clinicId=1`, {
-//   method: "POST",
-//   headers: {
-//     "Content-Type": "application/json",
-//   },
-//   body: JSON.stringify(""), // Pass the updated data to the API
-// })
-//   .then((res) => {
-//     if (res.status === 200) {
-//       setSuccess(true);
-//       // setTimeout(() => {
-//       //   router.push("/", "back");
-//       // }, 1500);
-//     } else {
-//       setError(false);
-//     }
-//   })
-//   .catch((err) => setError(true));
-
-//   localStorage.clear(); // Clear the localStorage
-// };
