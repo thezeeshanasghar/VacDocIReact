@@ -102,12 +102,12 @@ const ClinicRegistration: React.FC = () => {
                   id="address"
                 />
               </IonItem>
-              <IonItem>
+              <IonItem style={{width: "70%"}}>
+              <IonLabel position="floating"> City</IonLabel>
               <IonSelect
-                label="Select City"
                 value={city}
                 onIonChange={(e) => setCity(e.detail.value!)}
-                labelPlacement="floating"
+                style={{width: '100%'}}
                 id="city"
               >
                 <IonSelectOption value="">
