@@ -26,13 +26,19 @@ const DoctorSignUp: React.FC = () => {
   // const [doctorType, setDoctorType] = useState("");
 
   const isAnyFieldEmpty = () => {
-    return name.trim() === "" || email.trim() === "" || mobile.trim() === "" || password.trim() === "" || pmdc.trim() === "";
+    return (
+      name.trim() === "" ||
+      email.trim() === "" ||
+      mobile.trim() === "" ||
+      password.trim() === "" ||
+      pmdc.trim() === ""
+    );
   };
 
   const submit = !isAnyFieldEmpty();
   const handleSignUp = (e: any) => {
-    if(!submit){
-      alert('Please fill in all the fields.')
+    if (!submit) {
+      alert("Please fill in all the fields.");
     }
     localStorage.clear();
     e.preventDefault();
@@ -59,7 +65,14 @@ const DoctorSignUp: React.FC = () => {
       })
     );
     router.push("/auth/reg_clinic");
-    
+    clearForm();
+  };
+  const clearForm = () => {
+    setName("");
+    setEmail("");
+    setMobile("");
+    setPassword("");
+    setPMDC("");
   };
 
   // const handleInputBlur = () => {
@@ -87,11 +100,17 @@ const DoctorSignUp: React.FC = () => {
                 marginBottom: "4px",
               }}
             >
-              <IonIcon icon={person} className="signup-icon-doctor" style={{margin: '1rem'}}/>
+              <IonIcon
+                icon={person}
+                className="signup-icon-doctor"
+                style={{ margin: "1rem" }}
+              />
             </div>
             <form className="form-wrapper-doctor" onSubmit={handleSignUp}>
               <IonItem>
-                <IonLabel position="stacked" id="name">Doctor Name</IonLabel>
+                <IonLabel position="stacked" id="name">
+                  Doctor Name
+                </IonLabel>
                 <IonInput
                   required
                   type="text"
@@ -120,7 +139,10 @@ const DoctorSignUp: React.FC = () => {
                   id="mobileNumber"
                   itemID="mobileNumber"
                   style={{
-                    color: mobile.startsWith("0") || mobile.startsWith("+") ? "red" : "initial",
+                    color:
+                      mobile.startsWith("0") || mobile.startsWith("+")
+                        ? "red"
+                        : "initial",
                   }}
                   onIonChange={(e) => setMobile(e.detail.value!)}
                 />

@@ -26,15 +26,20 @@ const ClinicRegistration: React.FC = () => {
   const [city, setCity] = useState("");
 
   const canSubmit =
-    name.trim().length > 0 &&
-    address.trim().length > 0 &&
-    mobile.trim().length > 0 &&
-    city.trim().length > 0 &&
-    clinicFee.trim().length > 0;
+    name.trim() === "" &&
+    address.trim() === "" &&
+    mobile.trim() === "" &&
+    city.trim() === "" &&
+    clinicFee.trim() === "";
 
   const handleClinicRegistration = (e: any) => {
     e.preventDefault();
-    if (!canSubmit) {
+    if (canSubmit) {
+      console.log("Name:", name);
+      console.log("Address:", address);
+      console.log("Mobile:", mobile);
+      console.log("city ", city);
+      console.log("clinicFee ", clinicFee);
       alert("Please fill in all the fields.");
     } else {
       // Perform the registration logic here
@@ -58,9 +63,16 @@ const ClinicRegistration: React.FC = () => {
       ];
       localStorage.setItem("drData", JSON.stringify(drData));
       router.push("/auth/clinic_schedule");
+      clearClinicForm();
     }
   };
-
+  const clearClinicForm = () => {
+    setName("");
+    setAddress("");
+    setMobile("");
+    setClinicFee("");
+    setCity("");
+  };
   return (
     <IonPage>
       <IonContent className="sign-up-content-clinic">
