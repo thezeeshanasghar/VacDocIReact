@@ -85,7 +85,7 @@ const ClinicRegistration: React.FC = () => {
               className="form-wrapper-clinic"
               onSubmit={handleClinicRegistration}
             >
-              <IonItem>
+              <IonItem style={{ width: "75%" }}>
                 <IonLabel position="floating">Clinic Name</IonLabel>
                 <IonInput
                   required
@@ -95,7 +95,7 @@ const ClinicRegistration: React.FC = () => {
                   id="names"
                 />
               </IonItem>
-              <IonItem>
+              <IonItem style={{ width: "75%" }}>
                 <IonLabel position="floating"> Address</IonLabel>
                 <IonInput
                   required
@@ -105,12 +105,11 @@ const ClinicRegistration: React.FC = () => {
                   id="address"
                 />
               </IonItem>
-              <IonItem style={{ width: "80%" }}>
+              <IonItem style={{ width: "75%" }}>
                 <IonLabel position="floating"> City</IonLabel>
                 <IonSelect
                   value={city}
                   onIonChange={(e) => setCity(e.detail.value!)}
-                  style={{ width: "100%" }}
                   id="city"
                 >
                   <IonSelectOption value="">
@@ -554,7 +553,8 @@ const ClinicRegistration: React.FC = () => {
                   <IonSelectOption value="Other">Other</IonSelectOption>
                 </IonSelect>
               </IonItem>
-              <IonItem>
+
+              <IonItem style={{ width: "75%" }}>
                 <IonLabel position="floating">Mobile Number</IonLabel>
                 <IonInput
                   required
@@ -564,7 +564,7 @@ const ClinicRegistration: React.FC = () => {
                   id="mobilenumbers"
                 />
               </IonItem>
-              <IonItem>
+              <IonItem style={{ width: "75%" }}>
                 <IonLabel position="floating">Fee</IonLabel>
                 <IonInput
                   required
