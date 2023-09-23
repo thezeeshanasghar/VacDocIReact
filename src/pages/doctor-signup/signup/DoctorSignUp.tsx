@@ -142,7 +142,7 @@ const DoctorSignUp: React.FC = () => {
                     color:
                       mobile.startsWith("0") || mobile.startsWith("+")
                         ? "red"
-                        : "initial",
+                        : "",
                   }}
                   onIonChange={(e) => setMobile(e.detail.value!)}
                 />
