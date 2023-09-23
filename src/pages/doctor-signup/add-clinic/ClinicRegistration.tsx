@@ -35,11 +35,6 @@ const ClinicRegistration: React.FC = () => {
   const handleClinicRegistration = (e: any) => {
     e.preventDefault();
     if (canSubmit) {
-      console.log("Name:", name);
-      console.log("Address:", address);
-      console.log("Mobile:", mobile);
-      console.log("city ", city);
-      console.log("clinicFee ", clinicFee);
       alert("Please fill in all the fields.");
     } else {
       // Perform the registration logic here
@@ -573,6 +568,13 @@ const ClinicRegistration: React.FC = () => {
                   type="number"
                   value={mobile}
                   onIonChange={(e) => setMobile(e.detail.value!)}
+                  style={{
+                    color:
+                      mobile.startsWith("0") || mobile.startsWith("+")
+                        ? "red"
+                        : "",
+                  }}
+                  placeholder="3331234567"
                   id="mobilenumbers"
                 />
               </IonItem>

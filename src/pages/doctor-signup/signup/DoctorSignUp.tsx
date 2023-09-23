@@ -25,47 +25,44 @@ const DoctorSignUp: React.FC = () => {
   const [pmdc, setPMDC] = useState("");
   // const [doctorType, setDoctorType] = useState("");
 
-  const isAnyFieldEmpty = () => {
-    return (
-      name.trim() === "" ||
-      email.trim() === "" ||
-      mobile.trim() === "" ||
-      password.trim() === "" ||
-      pmdc.trim() === ""
-    );
-  };
+  const canSubmit =
+    name.trim() === "" &&
+    email.trim() === "" &&
+    mobile.trim() === "" &&
+    password.trim() === "" &&
+    pmdc.trim() === "";
 
-  const submit = !isAnyFieldEmpty();
   const handleSignUp = (e: any) => {
-    if (!submit) {
+    if (canSubmit) {
       alert("Please fill in all the fields.");
-    }
-    localStorage.clear();
-    e.preventDefault();
-    console.log("Name:", name);
-    console.log("Email:", email);
-    console.log("Mobile:", mobile);
-    console.log("Password:", password);
-    console.log("PMDC:", pmdc);
-    // console.log("Doctor Type:", doctorType);
+    } else {
+      localStorage.clear();
+      e.preventDefault();
+      console.log("Name:", name);
+      console.log("Email:", email);
+      console.log("Mobile:", mobile);
+      console.log("Password:", password);
+      console.log("PMDC:", pmdc);
+      // console.log("Doctor Type:", doctorType);
 
-    localStorage.setItem(
-      "drData",
-      JSON.stringify({
-        name,
-        mobileNumber: mobile,
-        password,
-        // isApproved: false,
-        // isEnabled: false,
-        email,
-        // doctorType,
-        pmdc,
-        // validUpto: new Date().toDateString(),
-        clinics: "",
-      })
-    );
-    router.push("/auth/reg_clinic");
-    clearForm();
+      localStorage.setItem(
+        "drData",
+        JSON.stringify({
+          name,
+          mobileNumber: mobile,
+          password,
+          // isApproved: false,
+          // isEnabled: false,
+          email,
+          // doctorType,
+          pmdc,
+          // validUpto: new Date().toDateString(),
+          clinics: "",
+        })
+      );
+      router.push("/auth/reg_clinic");
+      clearForm();
+    }
   };
   const clearForm = () => {
     setName("");
@@ -144,6 +141,7 @@ const DoctorSignUp: React.FC = () => {
                         ? "red"
                         : "",
                   }}
+                  placeholder="3331234567"
                   onIonChange={(e) => setMobile(e.detail.value!)}
                 />
               </IonItem>
