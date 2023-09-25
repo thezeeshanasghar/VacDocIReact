@@ -307,13 +307,12 @@ const VaccinationCardList: React.FC<IParam> = (
                     id="bulk"
                   />
 
-                  <IonPopover isOpen={showPopover} onDidDismiss={closePopover}>
-                    <IonInput
+                  <IonPopover isOpen={showPopover} onDidDismiss={closePopover} showBackdrop={false}>
+                    <IonDatetime
                       placeholder="Select Date"
-                      type="date"
                       value={selectedDate || undefined}
                       onIonChange={(e) => handleDateChange(e, date, inputValue)}
-                    ></IonInput>
+                    ></IonDatetime>
                   </IonPopover>
 
                   <IonButton
