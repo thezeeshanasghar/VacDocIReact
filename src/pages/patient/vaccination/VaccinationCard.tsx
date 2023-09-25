@@ -62,24 +62,9 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
   const [showPopover, setShowPopover] = useState(false);
   const [selectedDate, setSelectedDate] = useState<string | undefined>(date);
   const [success, setSuccess] = useState(false);
-  const [isCalendarVisible, setCalendarVisible] = useState(false);
   const [isButtonsVisible, setButtonsVisible] = useState(true);
   const [isButtonVisible, setButtonVisible] = useState(true);
-  const [toDay, setToDay] = useState("");
-  const [doses, setDoses] = useState<IDose[]>([]);
-  const [brands, setBrands] = useState<IBrand[]>([]);
-  const [brandsId, setBrandsId] = useState<number>();
-
-  // const fetchDoses = () => {
-  //   fetch(`${import.meta.env.VITE_API_URL}api/Dose/alldoses`)
-  //     .then((res) => res.json())
-  //     .then((doses: IDose[]) => setDoses(doses));
-  // };
-  // const fetchBrands = () => {
-  //   fetch(`${import.meta.env.VITE_API_URL}api/Brand`)
-  //     .then((res) => res.json())
-  //     .then((brands: IBrand[]) => setBrands(brands));
-  // };
+ 
 
   const formatDate = (dateString: string | null) => {
     //@ts-ignore
@@ -93,23 +78,6 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
 
     setSelectedDate(data2);
   };
-  // const filterDoses = () => {
-  //   const filteredDose: IDose | undefined = doses.find((d) => d.Name === Name);
-  //   // console.log(filteredDose)
-  //   if(filteredDose){
-  //     setBrandsId(filteredDose.VaccineId)
-  //   }
-
-  // };
-
-  // const filterBrand = (brandId: number): string | undefined => {
-  //       // console.log("brand id", brandId);
-  //       const filteredBrand: IBrand | undefined = brands.find(
-  //         (b) => b.Id === brandId
-  //       );
-  //       // console.log("brands, ", filteredBrand);
-  //       return filteredBrand?.Name;
-  //     };
 
   const handleDateChange = async (event: CustomEvent<any>) => {
     const selectedValue = event.detail.value;
@@ -196,11 +164,8 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
         }
       );
       if (res.status === 204) {
-        console.log("first");
-        console.log("isButtonVisible before update:", isButtonVisible);
         setButtonVisible(!isButtonVisible);
-        console.log("isButtonVisible after update:", !isButtonVisible);
-        console.log("IsDone:", IsDone);
+       
         renderList();
       }
     } catch (error) {
@@ -219,17 +184,7 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
     setButtonVisible(!isButtonVisible);
     postSingleDone(date); // Update the database value of isSkip
   };
-  // useEffect(()=>{
-  //   // filterDoses();
-  //   // const currentDate = new Date();
-  //   // const year = currentDate.getFullYear();
-  //   // const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-  //   // const day = String(currentDate.getDate()).padStart(2, '0');
-
-  //   // const today = `${year}-${month}-${day}`;
-
-  //   // setToDay(today)
-  // })
+ 
 
   useEffect(() => {
     // Update the visibility of buttons based on the database value of IsSkip
@@ -241,7 +196,6 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
   }, [IsDone]);
   useEffect(() => {
     //@ts-ignore
-    console.log("dob", DOB);
     localStorage.setItem(
       "query",
       `?DOB=${DOB?.toString()}&doctorId=${doctorId?.toString()}`

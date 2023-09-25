@@ -5,28 +5,21 @@ import {
   IonCol,
   IonContent,
   IonDatetime,
-  IonGrid,
   IonHeader,
   IonIcon,
   IonImg,
+  IonInput,
   IonItem,
-  IonLabel,
   IonPage,
   IonPopover,
-  IonRow,
   IonText,
-  IonTitle,
   IonToolbar,
   useIonRouter,
 } from "@ionic/react";
-// import { groupBy } from "lodash";
-import emptySyringImage from "../../../assets/injectionEmpty.png";
 import { calendar, key } from "ionicons/icons";
 import { format } from "date-fns";
 import axios from "axios";
 import { saveAs } from "file-saver";
-import MyDatePicker from "../../../components/datepicker/MyDatePicker";
-// import DoctorScheduleCard from "../../doctor-schedule/DoctorScheduleCard";
 import Header from "../../../components/header/Header";
 import syringImage from "../../../assets/injectionFilled.png";
 import VaccinationCard from "./VaccinationCard";
@@ -45,7 +38,6 @@ interface IVaccineData {
 }
 //@ts-ignore
 const storedValue = JSON.parse(sessionStorage.getItem("docData"));
-console.log(storedValue);
 
 interface IParam {
   match: {
@@ -57,29 +49,22 @@ interface IParam {
 
 const searchParams = new URLSearchParams(location.search);
 const doctorId = searchParams.get("doctorId");
-console.log(doctorId);
+
 const VaccinationCardList: React.FC<IParam> = (
   {
     match: {
       params: { Id: childId },
     },
-    //  {DoseName,
-    //   IsDone,
-    //   IsSkip,
-    //   ScheduleId,
-    //   BrandName,}
   },
   ScheduleId
 ) => {
   const router = useIonRouter();
   const location = useLocation();
   const [data, setData] = useState<IVaccine[]>([]);
-  const [groupedData, setGroupedData] = useState<IVaccineData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState(false);
   const [showPopover, setShowPopover] = useState(false);
-  const [renderList, setRenderList] = useState(false);
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [inputValue, setInputValue] = useState("");
   const [value, setValue] = useState("");
@@ -115,7 +100,7 @@ const VaccinationCardList: React.FC<IParam> = (
         `${import.meta.env.VITE_API_URL}api/Child/${childId}`
       ); // Replace 'API_ENDPOINT' with the actual API endpoint URL
       const data = await response.json();
-      console.log(data.Name);
+
       setPatientName(data.Name);
       // setBrandData(data);
     } catch (error) {
@@ -125,11 +110,6 @@ const VaccinationCardList: React.FC<IParam> = (
 
   const fetchDoseData = async () => {
     try {
-      // if (!storedValue) {
-      //   console.log("storedValue is null or undefined");
-      //   return; // Exit the function if storedValue is not valid
-      // }
-
       const response = await fetch(
         `${
           import.meta.env.VITE_API_URL
@@ -152,10 +132,9 @@ const VaccinationCardList: React.FC<IParam> = (
           {}
         );
         setSkipStates(initialSkipStates);
-        console.log(data);
+
         setIsLoading(false);
       } else {
-        console.log("Error fetching data");
         setIsLoading(false);
       }
     } catch (error) {
@@ -165,7 +144,6 @@ const VaccinationCardList: React.FC<IParam> = (
   };
 
   const handelonmouseover = (inputValue: string) => {
-    // const data1 = inputValue.split("T");
     const data2 = format(new Date(inputValue), "yyyy-MM-dd");
     setValue(data2);
     setSelectedDate(data2);
@@ -176,14 +154,8 @@ const VaccinationCardList: React.FC<IParam> = (
     key: string,
     inputValue: string
   ) => {
-    console.log(value);
     closePopover();
     const data = event.detail.value;
-    // const data1 = data.split("T");
-    // const data2 = data1[0];
-    // console.log(data2);
-
-    console.log(event.detail.value);
 
     try {
       setShowLoading(true);
@@ -200,15 +172,10 @@ const VaccinationCardList: React.FC<IParam> = (
           },
         }
       );
-      if (response.status === 204) {
-        console.log(response.ok);
-        setSuccess(true);
-        setShowLoading(false);
-        forceRender();
-      } else if (!response.ok) {
-        setError(true);
-        setShowLoading(false);
-      }
+
+      setSuccess(true);
+      setShowLoading(false);
+      forceRender();
     } catch (error) {
       console.error(error);
       setError(true);
@@ -236,21 +203,10 @@ const VaccinationCardList: React.FC<IParam> = (
           headers: {
             "Content-Type": "application/json",
           },
-          // body: JSON.stringify({
-          //   childId,
-          //   date,
-          //   isSkip: !data[date].IsSkip ? 1 : 0,
-          // }),
         }
       );
-      console.log(
-        `${
-          import.meta.env.VITE_API_URL
-        }api/PatientSchedule/patient_bulk_update_IsSkip?childId=${childId}&date=${newdate}&IsSkip=${data}`
-      );
-      console.log(res);
+
       if (res.status === 204) {
-        // Toggle the visibility of buttons when skip is clicked
         setButtonsVisible(!isButtonsVisible);
         setShowButton1(false);
         setShowButton2(true);
@@ -258,53 +214,13 @@ const VaccinationCardList: React.FC<IParam> = (
           ...prevSkipStates,
           [date]: !prevSkipStates[date],
         }));
-        // renderList();
+
         forceRender();
       }
     } catch (error) {
       console.log(error);
     }
   };
-
-  // const postSkip1 = async (date: string) => {
-  //   const newdate=formatDate(date);
-  //   try {
-  //     const res = await fetch(
-  //       `${import.meta.env.VITE_API_URL}api/PatientSchedule/patient_bulk_update_IsSkip?childId=${childId}&date=${newdate}&IsSkip=${false}`,
-  //       {
-  //         method: "PATCH",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //         // body: JSON.stringify({
-  //         //   childId,
-  //         //   date,
-  //         //   isSkip: !data[date].IsSkip ? 1 : 0,
-  //         // }),
-  //       }
-  //     );
-  //     console.log(`${import.meta.env.VITE_API_URL}api/PatientSchedule/patient_bulk_update_IsSkip?childId=${childId}&date=${newdate}&IsSkip=${true}`,)
-  //     console.log(res);
-  //     if (res.status === 204) {
-  //       // Toggle the visibility of buttons when skip is clicked
-  //       setButtonsVisible(!isButtonsVisible);
-  //       setShowButton1(true);
-  //       setShowButton2(false);
-  //       setSkipStates((prevSkipStates) => ({
-  //         ...prevSkipStates,
-  //         [date]: !prevSkipStates[date],
-  //       }));
-  //       // renderList();
-  //       forceRender()
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
-  // function setName(name: string) {
-  //       setPatientName(name);
-  //     }
 
   const handleDownload = () => {
     axios({
@@ -347,9 +263,6 @@ const VaccinationCardList: React.FC<IParam> = (
         <Header pageName="Vaccination" />
 
         <IonHeader>
-          {/* <IonToolbar color={"primary"}>
-               <IonTitle>Vaccination</IonTitle>
-             </IonToolbar> */}
           <IonToolbar style={{ padding: "0px 10px" }}>
             <IonButton size="small" slot="start" onClick={handleDownload}>
               print
@@ -360,10 +273,6 @@ const VaccinationCardList: React.FC<IParam> = (
 
         <IonContent className="ion-padding">
           {Object.keys(data).map((date) => (
-            //  { useEffect(() => {
-            //     // Update the visibility of buttons based on the database value of IsSkip
-            //     setButtonsVisible(!data[date].IsSkip);
-            //   }, [data[date].IsSkip]);}
             <>
               {isButtonsVisible && isButtonVisible && (
                 <IonItem lines="none" className="centered-item">
@@ -391,7 +300,7 @@ const VaccinationCardList: React.FC<IParam> = (
 
                   <IonIcon
                     color="primary"
-                    onClick={() => setShowPopover(true)}
+                    onClick={openPopover}
                     icon={calendar}
                     style={{ marginRight: "10px", cursor: "pointer" }}
                     onMouseOver={() => handelonmouseover(date)}
@@ -399,11 +308,12 @@ const VaccinationCardList: React.FC<IParam> = (
                   />
 
                   <IonPopover isOpen={showPopover} onDidDismiss={closePopover}>
-                    <IonDatetime
+                    <IonInput
                       placeholder="Select Date"
+                      type="date"
                       value={selectedDate || undefined}
                       onIonChange={(e) => handleDateChange(e, date, inputValue)}
-                    ></IonDatetime>
+                    ></IonInput>
                   </IonPopover>
 
                   <IonButton
@@ -423,19 +333,6 @@ const VaccinationCardList: React.FC<IParam> = (
                   >
                     {skipStates[date] ? "UnSkip" : "Skip"}
                   </IonButton>
-
-                  {/* {showButton2 && (
-                <IonButton
-                size="small"
-                onClick={()=>toggleButtonsVisibility(date)}
-                style={{
-                  textTransform: "lowercase",
-                }}
-                color="danger"
-              >
-                UnSkip
-              </IonButton>
-                 )} */}
                 </IonItem>
               )}
               {!isButtonsVisible && ( // Show "unSkip" button when buttons are hidden
@@ -475,7 +372,11 @@ const VaccinationCardList: React.FC<IParam> = (
                     id="bulk"
                   />
 
-                  <IonPopover isOpen={showPopover} onDidDismiss={closePopover}>
+                  <IonPopover
+                    isOpen={showPopover}
+                    onDidDismiss={closePopover}
+                    showBackdrop={false}
+                  >
                     <IonDatetime
                       placeholder="Select Date"
                       value={selectedDate || undefined}
@@ -512,27 +413,7 @@ const VaccinationCardList: React.FC<IParam> = (
                     >
                       {date}
                     </span>
-
-                    {/* <IonImg
-          // size="small"
-          src={emptySyringImage}
-          onClick={toggleButtonVisibility}
-          style={{
-            textTransform: "lowercase",
-            height: "30px",
-            display: "inline-block",
-            margin: "0px 10px"
-          }}
-          color="danger"
-        >
-          Undo
-        </IonImg> */}
                   </IonCol>
-                  {/* <IonCol size="12">
-      <p style={{ textAlign: "center" }}>
-        Brand: {BrandName}
-      </p>
-    </IonCol> */}
                 </>
               )}
               <IonCard>

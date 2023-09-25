@@ -10,6 +10,12 @@ import {
   IonCard,
   IonText,
   IonLabel,
+  IonModal,
+  IonHeader,
+  IonToolbar,
+  IonContent,
+  IonInput,
+  IonButton,
 } from "@ionic/react";
 import { calendar } from "ionicons/icons";
 
@@ -17,7 +23,7 @@ import { format } from "date-fns";
 import Toast from "../../components/custom-toast/Toast";
 
 interface IDoseSchedule {
-  key:string;
+  key: string;
   scheduleKey: string;
   date: any;
   data: any;
@@ -32,23 +38,21 @@ const DoctorScheduleCard: React.FC<IDoseSchedule> = ({
   data,
   renderList,
 }) => {
-  console.log("date : ", date);
-  console.log("data : ", data);
   const [error, setError] = useState(false);
   const [value, setValue] = useState("");
   const [showPopover, setShowPopover] = useState(false);
   const [showPopover2, setShowPopover2] = useState(false);
   const [selectedDate, setSelectedDate] = useState<string | undefined>(date); // Initialize with the `date` prop value
-  const [singleId,setSingleId] = useState('');
+  const [singleId, setSingleId] = useState("");
 
   const [success, setSuccess] = useState(false);
 
-
+  //@ts-ignore
   const storedValue = JSON.parse(sessionStorage.getItem("docData"));
   const handelonmouseover2 = (inputValue: string) => {
     // const data1 = inputValue.split("T");
     const data2 = format(new Date(inputValue), "yyyy-MM-dd");
-    console.log(data2)
+    console.log(data2);
     setValue(data2);
     setSelectedDate(data2);
   };
@@ -82,7 +86,9 @@ const DoctorScheduleCard: React.FC<IDoseSchedule> = ({
       const response = await fetch(
         `${
           import.meta.env.VITE_API_URL
-        }api/DoctorSchedule/doctor_bulk_update_Date?DoctorId=${storedValue.Id}&oldDate=${value}&newDate=${data}`,
+        }api/DoctorSchedule/doctor_bulk_update_Date?DoctorId=${
+          storedValue.Id
+        }&oldDate=${value}&newDate=${data}`,
         {
           method: "PATCH",
           headers: {
@@ -109,12 +115,10 @@ const DoctorScheduleCard: React.FC<IDoseSchedule> = ({
     }
   };
 
-
-
-  const handelonmouseover = (inputValue: string,Id: string) => {
+  const handelonmouseover = (inputValue: string, Id: string) => {
     // const data1 = inputValue.split("T");
-    console.log(Id)
-    console.log(inputValue)
+    console.log(Id);
+    console.log(inputValue);
     const data2 = format(new Date(inputValue), "yyyy-MM-dd");
     setSingleId(Id);
     setSelectedDate(data2);
@@ -124,7 +128,6 @@ const DoctorScheduleCard: React.FC<IDoseSchedule> = ({
   //   console.log(storedValue);
   // }, []);
   const handleDateChange = async (event: CustomEvent<any>) => {
-    
     console.log(storedValue);
     const selectedValue = event.detail.value;
     console.log(selectedValue);
@@ -163,7 +166,7 @@ const DoctorScheduleCard: React.FC<IDoseSchedule> = ({
       setError(true);
       // setShowPopover(false);
       setShowPopover(false);
-      (false);
+      false;
     }
   };
 
@@ -211,9 +214,7 @@ const DoctorScheduleCard: React.FC<IDoseSchedule> = ({
                   <IonDatetime
                     placeholder="Select Date"
                     value={selectedDate || undefined}
-                    onIonChange={(e) =>
-                      handleDateChange2(e, date, value)
-                    }
+                    onIonChange={(e) => handleDateChange2(e, date, value)}
                   ></IonDatetime>
                 </IonPopover>
               </IonItem>
@@ -233,14 +234,14 @@ const DoctorScheduleCard: React.FC<IDoseSchedule> = ({
                           color="primary"
                           onClick={() => setShowPopover(true)}
                           icon={calendar}
-                          onMouseOver={() => handelonmouseover(date,item.Id)}
+                          onMouseOver={() => handelonmouseover(date, item.Id)}
                           id="single"
                         />
                       </>
                     </IonCol>
                   </IonRow>
                 </IonGrid>
-                <IonPopover isOpen={showPopover} onDidDismiss={closePopover}>
+                <IonPopover isOpen={showPopover} onDidDismiss={closePopover} showBackdrop={false}>
                   <IonDatetime
                     placeholder="Select Date"
                     value={selectedDate}
