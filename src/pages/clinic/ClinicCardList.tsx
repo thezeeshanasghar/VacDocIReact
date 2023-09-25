@@ -22,7 +22,6 @@ interface Clinic {
 const ClinicCardList: React.FC = ( DoctorId, Id) => {
   //@ts-ignore
   const storedValue = JSON.parse(sessionStorage.getItem("docData"));
-  console.log(storedValue);
   const location = useLocation();
   const history = useHistory();
   const [id,setId] = useState("")
@@ -53,7 +52,6 @@ const ClinicCardList: React.FC = ( DoctorId, Id) => {
   // }, []);
   useEffect(() => {
     fetchClinicData();
-    console.log('fetching clinic data')
   }, [rerender]);
   // useIonViewWillEnter(() => {
   //   // Fetch clinics data when the view will enter (navigated back to the component)

@@ -13,9 +13,10 @@ import {
   IonPage,
   IonTitle,
   IonToolbar,
-  useIonRouter
+  useIonRouter,
 } from "@ionic/react";
 import Toast from "../../../../components/custom-toast/Toast";
+import { format, parse } from "date-fns";
 
 interface IBrand {
   Id: number;
@@ -40,37 +41,63 @@ const SingleDone: React.FC<IParam> = () => {
   const queryParams = new URLSearchParams(location.search);
   // Get the value of the "oldDate" parameter from the query parameters
   const oldDate = queryParams.get("oldDate");
-console.log(oldDate);
+  let DOB = queryParams.get("DOB");
+  let doctorId = queryParams.get("doctorId");
+  console.log(oldDate);
   const [error, setError] = useState(false);
   const [success, setSuccess] = useState(false);
-  const { doseId } = useParams<{ doseId: string }>();
+  const { doseId: scheduleId } = useParams<{ doseId: string }>();
   const { childId } = useParams<{ childId: string }>();
   const [brand, setBrand] = useState<string>();
   const [brandData, setBrandData] = useState<IBrand[]>([]);
   const [scheduleDate, setScheduleDate] = useState<string>();
-  const formatDate = (dateString: string | null) => {
-    if (!dateString) {
+
+  const formatDate = (inputDate: string | null) => {
+    let parsedDate;
+
+    // Attempt to parse the input date using various formats
+    try {
+      // Try parsing different date formats
+      //@ts-ignore
+      parsedDate = parse(inputDate, "dd-MMM-yy", new Date());
+      if (isNaN(parsedDate.getTime())) {
+        //@ts-ignore
+        parsedDate = parse(inputDate, "MM/dd/yyyy", new Date());
+      }
+      if (isNaN(parsedDate.getTime())) {
+        // Add more formats here as needed
+        // Example: parsedDate = parse(inputDate, "your-custom-format", new Date());
+      }
+    } catch (error) {
+      console.error("Error parsing date:", error);
       return null;
     }
-    const [month, day, year] = dateString.split("/");
-    return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
+
+    // Format the parsed date to "YYYY-MM-DD"
+    const formattedDate = format(parsedDate, "yyyy-MM-dd");
+    return formattedDate;
   };
+
   const formattedOldDate = oldDate ? formatDate(oldDate) : null;
 
   // Set the initial state of givenDate to formattedOldDate
   const [givenDate, setGivenDate] = useState<string | null>(formattedOldDate);
   const [newDate, setNewDate] = useState();
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_URL}api/PatientSchedule/GetBrandForPatientSchedule?Id=${doseId}`)
+    fetch(
+      `${
+        import.meta.env.VITE_API_URL
+      }api/PatientSchedule/GetBrandForPatientSchedule?Id=${scheduleId}`
+    )
       .then((res) => res.json())
       .then((data) => {
         setBrandData(data);
-        console.log(data);
+        console.log("brand data ", data);
       })
       .catch((err) => console.error(err));
-  }, [doseId]);
+  }, [scheduleId]);
 
-  const handleDateChange = (e: { target: { value: any; }; }, value:any) => {
+  const handleDateChange = (e: { target: { value: any } }, value: any) => {
     // Get the selected date from the event
     const selectedDate = e.target.value;
 
@@ -78,21 +105,24 @@ console.log(oldDate);
     setNewDate(selectedDate);
   };
 
-  const postSingleDone = async () => {
-    console.log(brand)
-    console.log(newDate)
+  const postSingleDone = async (e: any) => {
+    e.preventDefault();
+    console.log(brand);
+    console.log(newDate);
     try {
       const res = await fetch(
-        `${import.meta.env.VITE_API_URL}api/PatientSchedule/single_updateDone`,
+        `${
+          import.meta.env.VITE_API_URL
+        }api/PatientSchedule/single_updateDone?Id=${scheduleId}`,
         {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            id: doseId,
+            id: +scheduleId,
             isDone: 1,
-            date:newDate,
+            date: newDate,
             brandId: brand,
           }),
         }
@@ -100,15 +130,18 @@ console.log(oldDate);
       if (res.status === 204) {
         console.log("first");
         setSuccess(true);
-        router.push(`/members/child/vaccine/${childId}`, "back");
-        window.location.reload();
+        router.push(
+          `/members/child/vaccine/${childId}?DOB=${DOB}&doctorId=${doctorId}`,
+          "back"
+        );
+        // window.location.reload();
       }
     } catch (error) {
       console.log(error);
       setError(true);
     }
-  // const dates=formatDate(givenDate);
-  // console.log(dates);
+    // const dates=formatDate(givenDate);
+    // console.log(dates);
     // const dataTobeSent = {
     //   Id: doseId,
     //   date: newDate,
@@ -138,7 +171,6 @@ console.log(oldDate);
     //   // Handle error, if needed
     //   setError(true);
     // }
-  
   };
 
   return (
@@ -184,8 +216,7 @@ console.log(oldDate);
                 slot="end"
                 type="date"
                 disabled
-                
-                value={givenDate || ""} // Use the givenDate directly without formatting it again
+                value={formattedOldDate} // Use the givenDate directly without formatting it again
                 // onIonChange={(e) => handleDateChange(e, e.detail.value)}
               />
             </IonItem>
@@ -194,12 +225,15 @@ console.log(oldDate);
               <IonInput
                 slot="end"
                 type="date"
-                value={newDate || ""} // Use the givenDate directly without formatting it again
+                value={newDate} // Use the givenDate directly without formatting it again
+                //@ts-ignore
                 onIonChange={(e) => setNewDate(e.detail.value)}
                 id="date12"
               />
             </IonItem>
-            <IonButton id="submit" type="submit">Submit</IonButton>
+            <IonButton id="submit" type="submit">
+              Submit
+            </IonButton>
           </form>
         </IonContent>
       </IonPage>

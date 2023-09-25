@@ -62,7 +62,6 @@ const ClinicCard: React.FC<ClinicCardProps> = ({
   const [clinicTimings, setclinicTimings] = useState<Session[]>([]);
   const [sameClinics, setSameClinics] = useState<Session[]>([]);
 
-  
   useEffect(() => {
     const fetchClinicTimings = async () => {
       try {
@@ -70,7 +69,7 @@ const ClinicCard: React.FC<ClinicCardProps> = ({
           `${import.meta.env.VITE_API_URL}api/ClinicTiming`
         );
         const data: Session[] = await res.json();
-        console.log(data);
+
         // setSameClinics(clinicTimings.filter((item) => item.ClinicId === Id));
         setclinicTimings(data);
       } catch (err) {
@@ -82,7 +81,7 @@ const ClinicCard: React.FC<ClinicCardProps> = ({
 
   useEffect(() => {
     setSameClinics(clinicTimings.filter((item) => item.ClinicId === Id));
-  }, [clinicTimings, Id]);  // Time formatting
+  }, [clinicTimings, Id]); // Time formatting
 
   function formattedTime(timeString: string) {
     const time = new Date(`2000-01-01T${timeString}`);
@@ -96,7 +95,7 @@ const ClinicCard: React.FC<ClinicCardProps> = ({
   const handleClick = () => {
     data.push(`/members/doctor/clinic/update/${Id}`, "forward");
   };
-  console.log("clinic timing ", clinicTimings);
+
   return (
     <>
       <DeletePopup
@@ -128,12 +127,11 @@ const ClinicCard: React.FC<ClinicCardProps> = ({
             <IonGrid>
               <IonRow>
                 {clinicTimings.map((item, index) => {
-                  console.log(item.ClinicId)
                   if (item.ClinicId === Id) {
                     const count = clinicTimings.filter(
-                      (i) => i.ClinicId === Id,
+                      (i) => i.ClinicId === Id
                     );
-                    console.log(count)
+
                     return (
                       <React.Fragment key={index}>
                         <IonCol size="6">
@@ -155,8 +153,13 @@ const ClinicCard: React.FC<ClinicCardProps> = ({
                 })}
               </IonRow>
             </IonGrid>
-            <IonButton color="tertiary" fill="outline" size="small" routerLink="/members/child">
-            <IonIcon icon={body} role="img" aria-label="body"></IonIcon>
+            <IonButton
+              color="tertiary"
+              fill="outline"
+              size="small"
+              routerLink="/members/child"
+            >
+              <IonIcon icon={body} role="img" aria-label="body"></IonIcon>
               Patients
             </IonButton>
             <IonButton

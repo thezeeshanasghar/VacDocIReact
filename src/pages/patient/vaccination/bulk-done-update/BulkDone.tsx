@@ -1,11 +1,26 @@
 import React, { useEffect, useState } from "react";
-import { IonItem, IonLabel, IonInput, IonButton, IonPage, IonContent, IonHeader, IonToolbar, IonTitle, IonSelect, IonSelectOption, useIonRouter } from "@ionic/react";
+import {
+  IonItem,
+  IonLabel,
+  IonInput,
+  IonButton,
+  IonPage,
+  IonContent,
+  IonHeader,
+  IonToolbar,
+  IonTitle,
+  IonSelect,
+  IonSelectOption,
+  useIonRouter,
+} from "@ionic/react";
 import Toast from "../../../../components/custom-toast/Toast";
+import { format, isValid, parse } from "date-fns";
+import { useLocation } from "react-router";
 
 interface IParam {
   match: {
     params: {
-      Date: string;
+      Date1: string;
       Id: string;
     };
   };
@@ -19,44 +34,66 @@ interface IBrand {
 
 const BulkDone: React.FC<IParam> = ({
   match: {
-    params: { Date, Id },
+    params: { Date1, Id },
   },
 }: IParam) => {
+  const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const router = useIonRouter();
   const oldDate = queryParams.get("oldDate");
   const numberOfInputs: string | null = queryParams.get("No");
-  console.log(numberOfInputs)
+  // let DOB = queryParams.get("DOB");
+  // let doctorId = queryParams.get("doctorId");
+  console.log(numberOfInputs);
   console.log(oldDate);
-  const formatDate = (dateString: string | null) => {
-    const [month, day, year] = dateString.split("/");
-    return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
+
+  const formatDate = (inputDate: string | null) => {
+    if (!inputDate) {
+      return null; // Handle null input gracefully
+    }
+  
+    // Define the expected date format
+    const dateFormat = "dd-MMM-yy"; // Replace with your expected format
+  
+    // Attempt to parse the input date using the specified format
+    const parsedDate = parse(inputDate, dateFormat, new Date());
+  
+    // Check if the parsed date is valid
+    if (!isValid(parsedDate)) {
+      console.error("Error parsing date:", inputDate);
+      return null;
+    }
+  
+    // Format the parsed date to "yyyy-MM-dd"
+    const formattedDate = format(parsedDate, "yyyy-MM-dd");
+    return formattedDate;
   };
-  const [weight, setWeight] = useState<number>();
-  const [height, setHeight] = useState<number>();
+
   const [successToast, setSuccessToast] = useState(false);
   const [errorToast, setErrorToast] = useState(false);
-  const [OFC, setOFC] = useState<number>();
-  const [brand, setBrand] = useState<string>();
   const [newDate, setNewDate] = useState();
   const [brandId, setBrandId] = useState<number[]>([]); // Changed to specify the type as number[]
   const [brandData, setBrandData] = useState<IBrand[][]>([]); // Changed to specify the type as IBrand[][]
-  const [givenDate, setGivenDate] = useState<string | null>(formatDate(oldDate));
-  const [loading, setLoading] = useState(true); 
-  const [id,setId]=useState('');
+  const [loading, setLoading] = useState(true);
+  const [query, setQuery] = useState<String>("");
 
   // Get the value of the "oldDate" parameter from the query parameters
-console.log(formatDate(oldDate))
+  console.log(formatDate(oldDate));
   useEffect(() => {
+    let qry = localStorage.getItem("query") as String;
+    setQuery(qry);
     // Fetch the initial data
-    fetch(`${import.meta.env.VITE_API_URL}api/PatientSchedule/getData_baseOnDate?date=${formatDate(oldDate)}`)
+    fetch(
+      `${
+        import.meta.env.VITE_API_URL
+      }api/PatientSchedule/getData_baseOnDate?date=${formatDate(oldDate)}`
+    )
       .then((res) => res.json())
       .then((data) => {
-        const ids = data.map((item: { Id: any; }) => item.Id);
+        const ids = data.map((item: { Id: any }) => item.Id);
         // const ids = data.map((item: { Id: any; }) => item.Id);
         setBrandId(ids);
-        console.log('Initial Data:', data);
-
+        console.log("Initial Data:", data);
       })
       .catch((err) => console.error(err));
   }, []);
@@ -68,10 +105,14 @@ console.log(formatDate(oldDate))
         // Ensure there are some IDs before making the second API call
         if (brandId.length === 0) return;
 
-        const dataPromises = brandId.map(id => {
-          return fetch(`${import.meta.env.VITE_API_URL}api/PatientSchedule/GetBrandForPatientSchedule?Id=${id}`)
-            .then(res => res.json())
-            .catch(err => {
+        const dataPromises = brandId.map((id) => {
+          return fetch(
+            `${
+              import.meta.env.VITE_API_URL
+            }api/PatientSchedule/GetBrandForPatientSchedule?Id=${id}`
+          )
+            .then((res) => res.json())
+            .catch((err) => {
               console.error(err);
               return null;
             });
@@ -81,7 +122,7 @@ console.log(formatDate(oldDate))
         const resultData = await Promise.all(dataPromises);
         setBrandData(resultData);
         setLoading(false); // Set loading to false after data is fetched
-        console.log('Data for Brand IDs:', resultData);
+        console.log("Data for Brand IDs:", resultData);
       } catch (err) {
         console.error(err);
         setLoading(false); // Set loading to false in case of an error
@@ -91,50 +132,36 @@ console.log(formatDate(oldDate))
     fetchDataForBrandIds();
   }, [brandId]);
 
-//   const handleDateChange = (e: { target: { value: any; }; }, value:any ) => {
-//     // Get the selected date from the event
-//     const selectedDate = e.target.value;
-// console.log(selectedDate)
-// console.log(value)
-//     // Update the givenDate state with the selected date (no need to format it again)
-//     setNewDate(selectedDate);
+  //   const handleDateChange = (e: { target: { value: any; }; }, value:any ) => {
+  //     // Get the selected date from the event
+  //     const selectedDate = e.target.value;
+  // console.log(selectedDate)
+  // console.log(value)
+  //     // Update the givenDate state with the selected date (no need to format it again)
+  //     setNewDate(selectedDate);
 
-//   };
+  //   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission logic here
-    // console.log("Weight:", weight);
-    // console.log("Height:", height);
-    // console.log("OFC:", OFC);
-    console.log("Given Date:", givenDate);
-    console.log("Given Date:", newDate);
     const dataToBeSent = [];
-
+    //@ts-ignore
     for (let i = 0; i < numberOfInputs; i++) {
       const obj = {
         id: brandId[i],
         currentDate: formatDate(oldDate),
-        isDone: true,
+        isDone: 1,
         newDate: newDate,
         brandId: selectedBrandIds[i],
       };
-    
+
       dataToBeSent.push(obj);
     }
-    
+
     console.log(dataToBeSent);
-    // const itemsToSend = apiData.map((dataItem) => {
-    //   return {
-    //     childId: dataItem.childId,
-    //     currentDate: formatDate(dataItem.oldDate),
-    //     isDone: true,
-    //     newDate: dataItem.givenDate,
-    //     brandId: dataItem.selectedBrandIds,
-    //   };
-    // });
-    // console.log(dataTobeSent)
-    const url = `${import.meta.env.VITE_API_URL}api/PatientSchedule/patient_bulk_updateDone`;
+    const url = `${
+      import.meta.env.VITE_API_URL
+    }api/PatientSchedule/patient_bulk_updateDone`;
     try {
       const response = await fetch(url, {
         method: "PATCH",
@@ -143,33 +170,30 @@ console.log(formatDate(oldDate))
         },
         body: JSON.stringify(dataToBeSent),
       });
-      if (response.ok) {
-        console.log("add")
+      if (response.status === 204) {
         setSuccessToast(true);
-        router.push(`/members/child/vaccine/${Id}`, "back");
-        window.location.reload();
-      } 
-      else if (!response.ok) setErrorToast(true);
+        router.push(`/members/child/vaccine/${Id}${query}`, "back");
+        // window.location.reload();
+      } else if (!response.ok) setErrorToast(true);
     } catch (err) {
-      console.log("not add")
+      console.log("not add");
       setErrorToast(true);
-    } finally {
-      // setShowLoading(false);
-      // setName("");
     }
-
   };
 
   // const [brands, setBrands] = useState([3]);
 
   // const [brands, setBrands] = useState(Array(numberOfInputs).fill(""));
-
-  const [selectedBrandIds, setSelectedBrandIds] = useState<string[]>(Array(numberOfInputs).fill(""));
+  //@ts-ignore
+  const [selectedBrandIds, setSelectedBrandIds] = useState<string[]>(
+    // @ts-ignore
+    Array(numberOfInputs).fill("")
+  );
 
   // ... (previous code)
 
   // Update selected brand IDs when a brand is selected in the <IonSelect> element
-  const handleBrandChange = (index: number, value: string | null) => {
+  const handleBrandChange = (index: number, value: string) => {
     setSelectedBrandIds((prevSelectedBrandIds) => {
       const newSelectedBrandIds = [...prevSelectedBrandIds];
       newSelectedBrandIds[index] = value || ""; // Ensure a valid value is set or an empty string
@@ -184,11 +208,11 @@ console.log(formatDate(oldDate))
     console.log("Selected Brand IDs:", selectedBrandIds);
   }, [selectedBrandIds]);
 
-  const selected=newDate!== "";
+  const selected = newDate !== "";
 
   return (
     <>
-     <Toast 
+      <Toast
         isOpen={successToast}
         setOpen={setSuccessToast}
         color="success"
@@ -200,13 +224,15 @@ console.log(formatDate(oldDate))
         color="danger"
         message="An Error occurred while bulk update, please try again later"
       />
-        <IonPage>
-          <IonContent>
-              <IonHeader>
-                  <IonToolbar color={"primary"}><IonTitle>Bulk</IonTitle></IonToolbar>
-              </IonHeader>
-              <form noValidate onSubmit={handleSubmit}>
-                {/* <IonItem>
+      <IonPage>
+        <IonContent>
+          <IonHeader>
+            <IonToolbar color={"primary"}>
+              <IonTitle>Bulk</IonTitle>
+            </IonToolbar>
+          </IonHeader>
+          <form noValidate onSubmit={handleSubmit}>
+            {/* <IonItem>
                   <IonLabel position="floating" color="primary">
                     Weight
                   </IonLabel>
@@ -236,7 +262,7 @@ console.log(formatDate(oldDate))
                     onIonChange={(e) => setOFC(parseFloat(e.detail.value!))}
                   ></IonInput>
                 </IonItem> */}
-                {/* <IonItem>
+            {/* <IonItem>
               <IonLabel color="primary">Brands</IonLabel>
               <IonSelect
                 value={brand}
@@ -249,61 +275,70 @@ console.log(formatDate(oldDate))
                 ))}
               </IonSelect>
             </IonItem> */}
-              {Array.from({ length: numberOfInputs }, (_, index) => (
-          <IonItem key={index}>
-            <IonLabel color="primary">Brands {index + 1}</IonLabel>
-            {loading ? ( // Show loading message while fetching brandData
-              <IonSelect disabled>
-                <IonSelectOption>Loading...</IonSelectOption>
-              </IonSelect>
-            ) : brandData[index] && brandData[index].length > 0 ? ( // Show options when brandData is available for this input
-              <IonSelect
-                value={selectedBrandIds[index] }
-                onIonChange={(e) => handleBrandChange(index, e.detail.value)}
-                id="brand"
-              >
-                {brandData[index].map((brandOption) => (
-                  <IonSelectOption key={brandOption.Id} value={brandOption.Id}>
-                    {brandOption.Name}
-                  </IonSelectOption>
-                ))}
-              </IonSelect>
-            ) : ( // Show message if no brands available for this input
-              <IonSelect disabled>
-                <IonSelectOption>No brands available</IonSelectOption>
-              </IonSelect>
-            )}
-          </IonItem>
-        ))}  
-        <IonItem>
-                    <IonLabel color="primary">Given Date</IonLabel>
-                    <IonInput
-                      type="date"
-                      value={givenDate || ""}
-                      disabled
-                      slot="end"
-                      
-                      // onIonChange={(e) => handleDateChange(e, e.detail.value)}
-                      // min={Date}
-                      />
-                  </IonItem>
-        <IonItem>
-                    <IonLabel color="primary">Given Date</IonLabel>
-                    <IonInput
-                      type="date"
-                      value={newDate || ""}
-                      slot="end"
-                      required
-                      onIonChange={(e) => setNewDate(e.target.value)}
-                      id="date1"
-                     />
-                  </IonItem>
-          
-                <IonButton id="submit" type="submit" disabled={!selected}>Submit</IonButton>
-              </form>
-          </IonContent>
-        </IonPage>
-              </>
+            {/* @ts-ignore */}
+            {Array.from({ length: numberOfInputs }, (_, index) => (
+              <IonItem key={index}>
+                <IonLabel color="primary">Brands {index + 1}</IonLabel>
+                {loading ? ( // Show loading message while fetching brandData
+                  <IonSelect disabled>
+                    <IonSelectOption>Loading...</IonSelectOption>
+                  </IonSelect>
+                ) : brandData[index] && brandData[index].length > 0 ? ( // Show options when brandData is available for this input
+                  <IonSelect
+                    value={selectedBrandIds[index]}
+                    onIonChange={(e) =>
+                      handleBrandChange(index, e.detail.value)
+                    }
+                    id="brand"
+                  >
+                    {brandData[index].map((brandOption) => (
+                      <IonSelectOption
+                        key={brandOption.Id}
+                        value={brandOption.Id}
+                      >
+                        {brandOption.Name}
+                      </IonSelectOption>
+                    ))}
+                  </IonSelect>
+                ) : (
+                  // Show message if no brands available for this input
+                  <IonSelect disabled>
+                    <IonSelectOption>No brands available</IonSelectOption>
+                  </IonSelect>
+                )}
+              </IonItem>
+            ))}
+            <IonItem>
+              <IonLabel color="primary">Given Date</IonLabel>
+              <IonInput
+                type="date"
+                value={formatDate(oldDate)}
+                disabled
+                slot="end"
+
+                // onIonChange={(e) => handleDateChange(e, e.detail.value)}
+                // min={Date1}
+              />
+            </IonItem>
+            <IonItem>
+              <IonLabel color="primary">Given Date</IonLabel>
+              <IonInput
+                type="date"
+                value={newDate}
+                slot="end"
+                required //@ts-ignore *
+                onIonChange={(e) => setNewDate(e.target.value)}
+                id="date1"
+              />
+            </IonItem>
+
+            <IonButton id="submit" type="submit" disabled={!selected}>
+              Submit
+            </IonButton>
+          </form>
+        </IonContent>
+      </IonPage>
+    </>
   );
 };
 

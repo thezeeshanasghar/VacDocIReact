@@ -17,6 +17,7 @@ import { format } from "date-fns";
 import Toast from "../../../components/custom-toast/Toast";
 import syringImage from "../../../assets/injectionFilled.png";
 import emptySyringImage from "../../../assets/injectionEmpty.png";
+import { useLocation } from "react-router";
 interface IBrand {
   Id: number;
   Name: string;
@@ -52,6 +53,11 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
   // VaccineId,
 }) => {
   const router = useIonRouter();
+  let location = useLocation();
+  let urlParams = new URLSearchParams(location.search);
+  let DOB = urlParams.get("DOB");
+  let doctorId = urlParams.get("doctorId");
+
   const [error, setError] = useState(false);
   const [showPopover, setShowPopover] = useState(false);
   const [selectedDate, setSelectedDate] = useState<string | undefined>(date);
@@ -76,6 +82,7 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
   // };
 
   const formatDate = (dateString: string | null) => {
+    //@ts-ignore
     const [month, day, year] = dateString.split("/");
     return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
   };
@@ -170,6 +177,7 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
   };
 
   const postSingleDone = async (date: String) => {
+    //@ts-ignore
     const ndate = formatDate(date);
     try {
       const res = await fetch(
@@ -222,10 +230,7 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
 
   //   // setToDay(today)
   // })
-  useEffect(() => {
-    // fetchDoses();
-    // fetchBrands();
-  }, [date]);
+
   useEffect(() => {
     // Update the visibility of buttons based on the database value of IsSkip
     setButtonsVisible(!IsSkip);
@@ -234,7 +239,14 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
   useEffect(() => {
     setButtonVisible(!IsDone);
   }, [IsDone]);
-
+  useEffect(() => {
+    //@ts-ignore
+    console.log("dob", DOB);
+    localStorage.setItem(
+      "query",
+      `?DOB=${DOB?.toString()}&doctorId=${doctorId?.toString()}`
+    );
+  }, []);
   return (
     <>
       <Toast
@@ -278,7 +290,7 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
                   src={syringImage}
                   onClick={() =>
                     router.push(
-                      `/members/child/vaccine/${childId}/fill/${Id}?oldDate=${date.toString()}`
+                      `/members/child/vaccine/${childId}/fill/${Id}?oldDate=${date.toString()}&DOB=${DOB}&doctorId=${doctorId}`
                     )
                   }
                   style={{
