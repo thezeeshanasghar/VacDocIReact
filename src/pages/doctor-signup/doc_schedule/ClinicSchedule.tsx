@@ -55,7 +55,7 @@ const ClinicSchedule: React.FC = () => {
   };
 
   const rerender = () => {
-    window.location.reload();
+    // window.location.reload();
     console.log("yes It worked");
   };
 
