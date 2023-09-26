@@ -84,7 +84,7 @@ const AddPatient: React.FC = () => {
       if (res.status === 204) {
         setSuccess(true);
          history.push("/members/child", "back");
-        window.location.reload();
+        // window.location.reload();
       } else {
         setError(true);
       }
