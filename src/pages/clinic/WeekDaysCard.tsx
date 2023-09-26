@@ -20,6 +20,7 @@ type WeekDayCardProps = {
   name: string;
   id: string;
   renderFunc: () => void;
+  isRendering: boolean;
 };
 
 export interface ISession {
@@ -36,7 +37,7 @@ interface SessionData {
   endTime: string;
 }
 
-const WeekDaysCard: React.FC<WeekDayCardProps> = ({ name, renderFunc }) => {
+const WeekDaysCard: React.FC<WeekDayCardProps> = ({ name, renderFunc, isRendering }) => {
   const [showSession1, setShowSession1] = useState(false);
   const [showSession2, setShowSession2] = useState(false);
   const [showCard, setShowCard] = useState(false);
@@ -85,7 +86,7 @@ const WeekDaysCard: React.FC<WeekDayCardProps> = ({ name, renderFunc }) => {
     } else {
       console.log("No data found in localStorage for", name);
     }
-  }, [name]);
+  }, [isRendering]);
 
   useEffect(() => {
     if (!showCard) {
@@ -188,7 +189,8 @@ const WeekDaysCard: React.FC<WeekDayCardProps> = ({ name, renderFunc }) => {
               let count = JSON.parse(localStorage.getItem("count")) || null;
               if (count === 0 || count === null) {
                 localStorage.setItem("count", JSON.stringify(1));
-                window.location.reload();
+                renderFunc();
+                // window.location.reload();
               }
             }
           });

@@ -111,13 +111,13 @@ const ClinicSchedule: React.FC = () => {
             padding: "0px 10px",
           }}
         >
-          <WeekDaysCard name={"Monday"} renderFunc={rerender} id="name123" />
-          <WeekDaysCard name={"Tuesday"} renderFunc={rerender} id="name122" />
-          <WeekDaysCard name={"Wednesday"} renderFunc={rerender} id="name124" />
-          <WeekDaysCard name={"Thursday"} renderFunc={rerender} id="name125" />
-          <WeekDaysCard name={"Friday"} renderFunc={rerender} id="name126" />
-          <WeekDaysCard name={"Saturday"} renderFunc={rerender} id="name127" />
-          <WeekDaysCard name={"Sunday"} renderFunc={rerender} id="name128" />
+          <WeekDaysCard name={"Monday"} renderFunc={rerender} id="name123" isRendering={render}/>
+          <WeekDaysCard name={"Tuesday"} renderFunc={rerender} id="name122" isRendering={render}/>
+          <WeekDaysCard name={"Wednesday"} renderFunc={rerender} id="name124" isRendering={render}/>
+          <WeekDaysCard name={"Thursday"} renderFunc={rerender} id="name125" isRendering={render}/>
+          <WeekDaysCard name={"Friday"} renderFunc={rerender} id="name126" isRendering={render}/>
+          <WeekDaysCard name={"Saturday"} renderFunc={rerender} id="name127" isRendering={render}/>
+          <WeekDaysCard name={"Sunday"} renderFunc={rerender} id="name128" isRendering={render}/>
           <IonText color={"danger"}>
             {canSubmit &&
               "please select any day's atleast one session to sign up"}
