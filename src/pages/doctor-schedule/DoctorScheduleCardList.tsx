@@ -30,8 +30,6 @@ interface IVaccine {
 interface IVaccineData {
   [date: string]: IVaccine[];
 }
-const storedValue = JSON.parse(sessionStorage.getItem("docData"));
-console.log(storedValue);
 
 const DoctorScheduleCardList: React.FC = () => {
   const [data, setData] = useState<IVaccine[]>([]);
@@ -56,23 +54,25 @@ const DoctorScheduleCardList: React.FC = () => {
   }, []);
 
   const fetchDoseData = async () => {
+    const storedValue = JSON.parse(sessionStorage.getItem("docData"));
+    const DoctorId = storedValue && storedValue.Id;
     // try {
-      const response = await fetch(
-        `${
-          import.meta.env.VITE_API_URL
-        }api/DoctorSchedule/Doctor_DoseSchedule?doctorId=${storedValue.Id}`
-      );
-      console.log(response);
-      if (response.ok) {
-        const data = await response.json();
+    const response = await fetch(
+      `${
+        import.meta.env.VITE_API_URL
+      }api/DoctorSchedule/Doctor_DoseSchedule?doctorId=${DoctorId}`
+    );
+    console.log(response);
+    if (response.ok) {
+      const data = await response.json();
 
-        setData(data);
-        // console.log(data);
-        setIsLoading(false);
-      } else {
-        console.log("Error fetching data");
-        setIsLoading(false);
-      }
+      setData(data);
+      // console.log(data);
+      setIsLoading(false);
+    } else {
+      console.log("Error fetching data");
+      setIsLoading(false);
+    }
     // } catch (error) {
     //   console.log("Error:", error);
     //   setIsLoading(false);
@@ -83,10 +83,10 @@ const DoctorScheduleCardList: React.FC = () => {
     <>
       <IonPage>
         <Header pageName="Doctor Schedule" />
-        <IonContent className="ion-padding" >
+        <IonContent className="ion-padding">
           {Object.keys(data).map((date) => (
             <DoctorScheduleCard
-            key={data[date].Id}
+              key={data[date].Id}
               scheduleKey={date}
               date={date}
               data={data[date]}

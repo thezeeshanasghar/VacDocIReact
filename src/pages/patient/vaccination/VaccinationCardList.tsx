@@ -37,7 +37,7 @@ interface IVaccineData {
   [date: string]: IVaccine[];
 }
 //@ts-ignore
-const storedValue = JSON.parse(sessionStorage.getItem("docData"));
+
 
 interface IParam {
   match: {
@@ -109,12 +109,15 @@ const VaccinationCardList: React.FC<IParam> = (
   };
 
   const fetchDoseData = async () => {
+    //@ts-ignore
+    const storedValue = JSON.parse(sessionStorage.getItem("docData"));
+    const DoctorID = storedValue && storedValue.Id;
     try {
       const response = await fetch(
         `${
           import.meta.env.VITE_API_URL
         }api/PatientSchedule/Patient_DoseSchedule?ChildId=${childId}&DoctorId=${
-          storedValue.Id
+          DoctorID
         }`
       );
       if (response.ok) {
@@ -154,6 +157,9 @@ const VaccinationCardList: React.FC<IParam> = (
     key: string,
     inputValue: string
   ) => {
+    //@ts-ignore
+    const storedValue = JSON.parse(sessionStorage.getItem("docData"));
+    const DoctorID = storedValue && storedValue.Id;
     closePopover();
     const data = event.detail.value;
 
@@ -163,7 +169,7 @@ const VaccinationCardList: React.FC<IParam> = (
         `${
           import.meta.env.VITE_API_URL
         }api/PatientSchedule/patient_bulk_update_Date?ChildId=${childId}&DoctorId=${
-          storedValue.Id
+          DoctorID
         }&oldDate=${value}&newDate=${data}`,
         {
           method: "PATCH",
