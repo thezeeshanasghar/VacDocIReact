@@ -56,7 +56,7 @@ const ClinicSchedule: React.FC = () => {
 
   const rerender = () => {
     // window.location.reload();
-    console.log("yes It worked");
+    setRender(true);
   };
 
   const RegisterDoctor = (data_to_be_sent: any) => {
