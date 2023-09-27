@@ -52,7 +52,7 @@ const ClinicCardList: React.FC = ( DoctorId, Id) => {
   // }, []);
   useEffect(() => {
     fetchClinicData();
-  }, [rerender]);
+  }, [location, rerender]);
   // useIonViewWillEnter(() => {
   //   // Fetch clinics data when the view will enter (navigated back to the component)
   //   fetchClinicData();

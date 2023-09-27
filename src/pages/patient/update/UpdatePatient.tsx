@@ -230,7 +230,7 @@ const UpdatePatient: React.FC<UpdateType> = ({
         setSuccess(true);
         refetchAfterUpdate();
         history.push("/members/child", "back");
-        window.location.reload();
+        // window.location.reload();
       } else {
         setError(true);
       }

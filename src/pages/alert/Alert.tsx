@@ -31,16 +31,24 @@ type PatientDataType = {
   DoctorId: number;
 };
 const Alert: React.FC = () => {
+  //@ts-ignore
   const storedValue = JSON.parse(sessionStorage.getItem("docData"));
   console.log(storedValue);
   const [patientData, setPatientData] = useState<PatientDataType[]>([]);
   const location = useLocation();
   const fetchPatientData = () => {
+    const doctor__ID = storedValue && storedValue.Id;
     fetch(
-      `${import.meta.env.VITE_API_URL}api/PatientSchedule/today_alert`
+      `${import.meta.env.VITE_API_URL}api/PatientSchedule/today_alert_BaseOnDoctor?doctorId=${doctor__ID}`
     )
-      .then((response) => response.json())
-      .then((data: PatientDataType[]) => setPatientData(data))
+      .then((response) => {
+        console.log(response)  
+        return response.json()
+      })
+      .then((data: PatientDataType[]) => {
+        console.log("alert data : ",data) 
+        setPatientData(data)
+      })
       .catch((error) => {
         console.log(error);
       });

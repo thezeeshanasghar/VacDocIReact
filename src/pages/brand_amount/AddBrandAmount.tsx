@@ -22,6 +22,7 @@ type VaccineDataType = { Id: number; Name: string };
 type BrandInventoryType = { Id: number; Name: string };
 const AddBrandAmount: React.FC = () => {
   const history = useHistory();
+  //@ts-ignore
   const storedValue = JSON.parse(sessionStorage.getItem("docData"));
   console.log(storedValue);storedValue.Id
   const [success, setSuccess] = useState<boolean>(false);
@@ -56,7 +57,7 @@ const AddBrandAmount: React.FC = () => {
           setSuccess(true);
          
           history.push("/members/doctor/brandamount", "back");
-          window.location.reload();
+          // window.location.reload();
         
         } else {
           setError(true);

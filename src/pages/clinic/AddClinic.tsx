@@ -133,7 +133,7 @@ const AddClinic: React.FC = () => {
         setSuccess(true);
         localStorage.clear();
         history.push("/members/doctor/clinic", "back");
-        window.location.reload();
+        // window.location.reload();
       } else {
         throw new Error("Failed to create clinic");
       }

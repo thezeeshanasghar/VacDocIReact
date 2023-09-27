@@ -1,23 +1,19 @@
 import {
   IonButton,
   IonContent,
-  IonHeader,
   IonInput,
   IonItem,
   IonLabel,
   IonPage,
-  IonTitle,
-  IonToolbar,
-  IonCheckbox,
 } from "@ionic/react";
 import React, { useState, useEffect } from "react";
 import Header from "../../components/header/Header";
 import Toast from "../../components/custom-toast/Toast";
 import { useHistory } from "react-router-dom";
 import "./vacation.css";
-import { today } from "ionicons/icons";
 type ClinicType = { Name: string };
 const Vacation: React.FC = () => {
+  //@ts-ignore
   const storedValue = JSON.parse(sessionStorage.getItem("docData"));
   console.log(storedValue);
   const history = useHistory();
@@ -62,7 +58,7 @@ setToDay(today)
           setSuccess(true);
           localStorage.clear()
           history.push("/members/doctor/schedule", "back");
-          window.location.reload();
+          // window.location.reload();
         } else {
           setError(false);
           localStorage.clear()

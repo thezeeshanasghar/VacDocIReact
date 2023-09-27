@@ -12,15 +12,18 @@ import React, { useEffect, useState } from "react";
 import Header from "../../components/header/Header";
 import ErrorComponent from "../Error/ErrorComponent";
 import { add } from "ionicons/icons";
+import { useLocation } from "react-router";
 type BrandInventoryType = { Count: number; VaccineName: string; Brand: string };
 
 const BrandInventory: React.FC = () => {
+  const location = useLocation();
+  //@ts-ignore
   const storedValue = JSON.parse(sessionStorage.getItem("docData"));
   console.log(storedValue);
   const [brandData, setBrandData] = useState<BrandInventoryType[]>([]);
   useEffect(() => {
     fetchInventoryData();
-  }, []);
+  }, [location]);
 
   const fetchInventoryData = async () => {
     try {

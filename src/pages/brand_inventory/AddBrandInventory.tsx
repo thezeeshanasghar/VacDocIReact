@@ -30,6 +30,7 @@ const AddBrandInventory: React.FC = () => {
   // const handelList = () => {
   //   data.push("/members/doctor/brandamount");
   // };
+  //@ts-ignore
   const storedValue = JSON.parse(sessionStorage.getItem("docData"));
   console.log(storedValue);
   const handleSubmit = (e: React.FormEvent) => {
@@ -53,7 +54,7 @@ const AddBrandInventory: React.FC = () => {
         setSuccess(true);
         setTimeout(() => {
         history.push("/members/doctor/brandinventory", "back");
-        window.location.reload();
+        // window.location.reload();
       }, 500);
       } else {
         setError(true);

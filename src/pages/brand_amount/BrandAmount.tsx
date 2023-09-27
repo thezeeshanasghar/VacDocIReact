@@ -12,15 +12,18 @@ import React, { useEffect, useState } from "react";
 import Header from "../../components/header/Header";
 import ErrorComponent from "../Error/ErrorComponent";
 import { add } from "ionicons/icons";
+import { useLocation } from "react-router";
 // import ReactDOM from "react-dom";
 type BrandAmountType = { Price: number; VaccineName: string; Brand: string };
 const BrandAmount: React.FC = () => {
+  //@ts-ignore
   const storedValue = JSON.parse(sessionStorage.getItem("docData"));
+  const location = useLocation();
   console.log(storedValue);
   const [brandData, setBrandData] = useState<BrandAmountType[]>([]);
   useEffect(() => {
     fetchBrandData();
-  }, []);
+  }, [location]);
   
   const fetchBrandData = async () => {
     try {
