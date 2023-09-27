@@ -130,7 +130,7 @@ const UpdatePatient: React.FC<UpdateType> = ({
         path: "Gender",
         op: "replace",
         from: "",
-        value: gender,
+        value: +gender,
       });
     }
 
@@ -275,6 +275,8 @@ const UpdatePatient: React.FC<UpdateType> = ({
     try {
       const res = await fetch(`${import.meta.env.VITE_API_URL}api/Child/${Id}`);
       const PatientData: IPatientData = await res.json();
+      //@ts-ignore
+      setGender(patientData?.Gender.toString());
 
       if (res.ok) {
         const response = await fetch(
@@ -409,13 +411,13 @@ const UpdatePatient: React.FC<UpdateType> = ({
                       <IonCol>
                         <IonItem>
                           <IonLabel>Boy</IonLabel>
-                          <IonRadio slot="start" value="0" />
+                          <IonRadio slot="start" value={"0"} />
                         </IonItem>
                       </IonCol>
                       <IonCol>
                         <IonItem>
                           <IonLabel>Girl</IonLabel>
-                          <IonRadio slot="start" value="1" />
+                          <IonRadio slot="start" value={"1"} />
                         </IonItem>
                       </IonCol>
                     </IonRow>

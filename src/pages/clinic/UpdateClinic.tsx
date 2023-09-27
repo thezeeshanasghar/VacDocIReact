@@ -120,7 +120,7 @@ const UpdateClinic: React.FC<ClinicProps> = ({
         if (res.status === 204) {
           setSuccess(true);
           history.push("/members/doctor/clinic", "back");
-          window.location.reload();
+          // window.location.reload();
         } else {
           setError(false);
         }
