@@ -16,7 +16,7 @@ import {
   useIonRouter,
 } from "@ionic/react";
 import Toast from "../../../../components/custom-toast/Toast";
-import { format, parse } from "date-fns";
+import { format, isValid, parse } from "date-fns";
 
 interface IBrand {
   Id: number;
@@ -53,34 +53,41 @@ const SingleDone: React.FC<IParam> = () => {
   const [scheduleDate, setScheduleDate] = useState<string>();
 
   const formatDate = (inputDate: string | null) => {
-    let parsedDate;
-
-    // Attempt to parse the input date using various formats
-    try {
-      // Try parsing different date formats
-      //@ts-ignore
-      parsedDate = parse(inputDate, "dd-MMM-yy", new Date());
-      if (isNaN(parsedDate.getTime())) {
-        //@ts-ignore
-        parsedDate = parse(inputDate, "MM/dd/yyyy", new Date());
-      }
-      if (isNaN(parsedDate.getTime())) {
-        // Add more formats here as needed
-        // Example: parsedDate = parse(inputDate, "your-custom-format", new Date());
-      }
-    } catch (error) {
-      console.error("Error parsing date:", error);
+    if (!inputDate) {
       return null;
     }
 
-    // Format the parsed date to "YYYY-MM-DD"
+    // List of possible date formats to try
+    const possibleFormats = [
+      "dd-MMM-yy",
+      "yyyy-MM-dd",
+      "M/d/yyyy", 
+      "yyyy-M-d",
+    ];
+
+    let parsedDate = null;
+
+    for (const formatString of possibleFormats) {
+      parsedDate = parse(inputDate, formatString, new Date());
+      if (isValid(parsedDate)) {
+        break;
+      }
+    }
+
+    // Check if the parsed date is valid
+    if (!isValid(parsedDate)) {
+      console.error("Error parsing date:", inputDate);
+      return null;
+    }
+
+    // Format the parsed date to "yyyy-MM-dd"
+    //@ts-ignore
     const formattedDate = format(parsedDate, "yyyy-MM-dd");
     return formattedDate;
   };
 
   const formattedOldDate = oldDate ? formatDate(oldDate) : null;
 
-  // Set the initial state of givenDate to formattedOldDate
   const [givenDate, setGivenDate] = useState<string | null>(formattedOldDate);
   const [newDate, setNewDate] = useState();
   useEffect(() => {

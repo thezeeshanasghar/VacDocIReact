@@ -40,7 +40,7 @@ const BulkDone: React.FC<IParam> = ({
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const router = useIonRouter();
-  const oldDate = queryParams.get("oldDate");
+  const oldDate = queryParams && queryParams.get("oldDate");
   const numberOfInputs: string | null = queryParams.get("No");
   // let DOB = queryParams.get("DOB");
   // let doctorId = queryParams.get("doctorId");
@@ -51,20 +51,34 @@ const BulkDone: React.FC<IParam> = ({
     if (!inputDate) {
       return null; // Handle null input gracefully
     }
-  
-    // Define the expected date format
-    const dateFormat = "dd-MMM-yy"; // Replace with your expected format
-  
-    // Attempt to parse the input date using the specified format
-    const parsedDate = parse(inputDate, dateFormat, new Date());
-  
+
+    // List of possible date formats to try
+    const possibleFormats = [
+      "dd-MMM-yy",
+      "yyyy-MM-dd",
+      "M/d/yyyy", // Added format: Month/Day/Year
+      "yyyy-M-d",
+      // Add more formats here as needed
+    ];
+
+    let parsedDate = null;
+
+    // Attempt to parse the input date using various formats
+    for (const formatString of possibleFormats) {
+      parsedDate = parse(inputDate, formatString, new Date());
+      if (isValid(parsedDate)) {
+        break; // Use the first valid format found
+      }
+    }
+
     // Check if the parsed date is valid
     if (!isValid(parsedDate)) {
       console.error("Error parsing date:", inputDate);
       return null;
     }
-  
+
     // Format the parsed date to "yyyy-MM-dd"
+    //@ts-ignore
     const formattedDate = format(parsedDate, "yyyy-MM-dd");
     return formattedDate;
   };
