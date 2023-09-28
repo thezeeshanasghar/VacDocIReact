@@ -27,7 +27,9 @@ cy.get('#sign').click();
     cy.get("#names").type("hassan clinic");
     cy.get("#address").type("b-17 Islamabad");
     cy.get("#mobilenumbers").type("123456789");
+    cy.get("#fee").type("123");
     cy.get('body').click();
+
     cy.get("#submits").click();
     cy.get("#test").click();
     cy.get("#test1").click();
