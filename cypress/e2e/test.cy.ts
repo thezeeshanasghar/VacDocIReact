@@ -35,8 +35,8 @@ cy.get('#sign').click();
     cy.get("#test1").click();
     cy.get("#test2").type("12:00");
     cy.get("#test3").type("12:45");
-
-
+    cy.get("#submitsch").click();
+    cy.wait(6000);
     // Click the Submit button
     // cy.get("#submitsch").click();
     // cy.get("[data-cy=name]").type("ABC Clinic");
