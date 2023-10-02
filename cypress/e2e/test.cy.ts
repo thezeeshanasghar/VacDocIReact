@@ -65,51 +65,51 @@ cy.get('#sign').click();
       cy.get('body').click();
       cy.get("#login").click();
       cy.wait(3000)
-      // cy.visit('http://localhost:8100/members/alert/vaccine-alert');
-      // cy.wait(3000);
-      // cy.get("#alert").click();
-      // cy.wait(3000);
-      // cy.visit('http://localhost:8100/members/doctor/edit-profile');
-      // cy.wait(3000);
-      // cy.get("#name1").type('{selectall}{backspace}');
-      // cy.get("#email").type('{selectall}{backspace}');
-      // cy.get("#mob").type('{selectall}{backspace}');
-      // cy.get("#pmdc").type('{selectall}{backspace}');
-      // cy.get("#name").type('atta');
-      // cy.get("#email").type('atta@gmail.com');
-      // cy.get("#mob").type('03331234567');
-      // cy.get("#pmdc").type('A-1234');
-      // cy.get("[type=submit]").click();
+      cy.visit('http://localhost:8100/members/alert/vaccine-alert');
+      cy.wait(3000);
+      cy.get("#alert").click();
+      cy.wait(3000);
+      cy.visit('http://localhost:8100/members/doctor/edit-profile');
+      cy.wait(3000);
+      cy.get("#name1").type('{selectall}{backspace}');
+      cy.get("#email").type('{selectall}{backspace}');
+      cy.get("#mob").type('{selectall}{backspace}');
+      cy.get("#pmdc").type('{selectall}{backspace}');
+      cy.get("#name").type('atta');
+      cy.get("#email").type('atta@gmail.com');
+      cy.get("#mob").type('03331234567');
+      cy.get("#pmdc").type('A-1234');
+      cy.get("[type=submit]").click();
 
       
-  //     cy.visit('http://localhost:8100/members/child/add');
-  //     cy.get('#name').type("hassan");
-  //     cy.get('#fname').type("fhassan");
-  //     cy.get('#email').type("hassan@gmail.com");
-  //     cy.get('#cnic').type("62202-1234567-1");
-  //     cy.get('#mno').type("03145530889");
-  //     cy.get('#db').type('1990-01-01');
+      cy.visit('http://localhost:8100/members/child/add');
+      cy.get('#name').type("hassan");
+      cy.get('#fname').type("fhassan");
+      cy.get('#email').type("hassan@gmail.com");
+      cy.get('#cnic').type("62202-1234567-1");
+      cy.get('#mno').type("03145530889");
+      cy.get('#db').type('1990-01-01');
     
-  //     cy.get('#pass').type('123');        
-  //     // Select radio button
-  //     cy.get('[value="boy"]').click();
+      cy.get('#pass').type('123');        
+      // Select radio button
+      cy.get('[value="boy"]').click();
   
-  //     // Select dropdown options
-  //     cy.get('#doc').click();
-  //     // Select the desired doctor
-  //     cy.wait(6000); // You can adjust the delay time as needed
+      // Select dropdown options
+      cy.get('#doc').click();
+      // Select the desired doctor
+      cy.wait(6000); // You can adjust the delay time as needed
 
-  //     // Select the desired doctor
-  //     // cy.contains('ahmed999', { timeout: 5000 }).should('be.visible');
-  //     cy.get('#clinic').click();
-  //     cy.wait(6000);
-  //     cy.get('#city').click();
-  //     cy.wait(6000);
-  // // Increase timeout as needed
-  // cy.get('#epi').click();
-  // cy.get('#verified').click();
-  // cy.get('#submit').click();
-  // cy.wait(20000);//this is due to seen the patient is add or not
+      // Select the desired doctor
+      // cy.contains('ahmed999', { timeout: 5000 }).should('be.visible');
+      cy.get('#clinic').click();
+      cy.wait(6000);
+      cy.get('#city').click();
+      cy.wait(6000);
+  // Increase timeout as needed
+  cy.get('#epi').click();
+  cy.get('#verified').click();
+  cy.get('#submit').click();
+  cy.wait(20000);//this is due to seen the patient is add or not
 
 cy.visit('http://localhost:8100/members/child');
 cy.get('#male').click();
