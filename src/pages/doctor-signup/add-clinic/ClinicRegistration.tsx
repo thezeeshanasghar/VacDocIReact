@@ -12,10 +12,12 @@ import {
   useIonRouter,
   IonSelectOption,
   IonSelect,
+  IonText,
 } from "@ionic/react";
 import { person, arrowForward } from "ionicons/icons";
 import IconBuilding from "../../../icons/IconBuilding";
 import "./clinicReg.css";
+import Toast from "../../../components/custom-toast/Toast";
 
 const ClinicRegistration: React.FC = () => {
   const router = useIonRouter();
@@ -24,6 +26,8 @@ const ClinicRegistration: React.FC = () => {
   const [mobile, setMobile] = useState("");
   const [clinicFee, setClinicFee] = useState("");
   const [city, setCity] = useState("");
+  const [error, setError] = useState(false);
+  const isInvalid = mobile.startsWith("0") || mobile.startsWith("+");
 
   const canSubmit =
     name.trim() === "" &&
@@ -70,6 +74,12 @@ const ClinicRegistration: React.FC = () => {
   };
   return (
     <IonPage>
+      <Toast
+        isOpen={error}
+        setOpen={setError}
+        color="danger"
+        errMsg="An error occurred while signing up, try again."
+      />
       <IonContent className="sign-up-content-clinic">
         <IonToolbar color={"primary"}>
           {" "}
@@ -568,16 +578,16 @@ const ClinicRegistration: React.FC = () => {
                   type="number"
                   value={mobile}
                   onIonChange={(e) => setMobile(e.detail.value!)}
-                  style={{
-                    color:
-                      mobile.startsWith("0") || mobile.startsWith("+")
-                        ? "red"
-                        : "",
-                  }}
+                  style={{ color: isInvalid ? "red" : "" }}
                   placeholder="3331234567"
                   id="mobilenumbers"
                 />
               </IonItem>
+              {isInvalid && (
+                <IonText color="danger">
+                  Error: Mobile number cannot start with "0" or "+".
+                </IonText>
+              )}
               <IonItem style={{ width: "75%" }}>
                 <IonLabel position="floating">Fee</IonLabel>
                 <IonInput
@@ -585,7 +595,8 @@ const ClinicRegistration: React.FC = () => {
                   type="number"
                   value={clinicFee}
                   onIonChange={(e) => setClinicFee(e.detail.value!)}
-                  id="fee"
+                  id="Fee"
+                  placeholder="fee must be in dollars or rupees"
                 />
               </IonItem>
               <IonButton expand="full" type="submit" id="submits">
