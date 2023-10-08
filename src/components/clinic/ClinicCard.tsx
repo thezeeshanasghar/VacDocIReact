@@ -111,7 +111,7 @@ console.log(data)
       {clinicTimings && (
         <IonCard>
           <IonCardHeader>
-            <IonCardSubtitle>{Address}</IonCardSubtitle>
+            {/* <IonCardSubtitle>{Address}</IonCardSubtitle> */}
             <IonCardTitle
               style={{ display: "flex", justifyContent: "space-between" }}
             >
