@@ -19,6 +19,7 @@ import { person, arrowForward } from "ionicons/icons";
 import IconBuilding from "../../../icons/IconBuilding";
 import "./clinicReg.css";
 import cities from "../../test/citiesData";
+import Toast from "../../../components/custom-toast/Toast";
 
 const ClinicRegistration: React.FC = () => {
   const router = useIonRouter();
@@ -163,7 +164,6 @@ const ClinicRegistration: React.FC = () => {
                 <IonInput
                   required
                   type="number"
-                  placeholder="PKR"
                   value={clinicFee}
                   onIonChange={(e) => setClinicFee(e.detail.value!)}
                   id="Fee"
