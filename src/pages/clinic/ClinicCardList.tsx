@@ -1,4 +1,10 @@
-import { IonContent, IonFab, IonFabButton, IonIcon, IonPage } from "@ionic/react";
+import {
+  IonContent,
+  IonFab,
+  IonFabButton,
+  IonIcon,
+  IonPage,
+} from "@ionic/react";
 import React, { useEffect, useState } from "react";
 import Header from "../../components/header/Header";
 import ClinicCard from "../../components/clinic/ClinicCard";
@@ -16,31 +22,33 @@ interface Clinic {
   Address: string;
   Number: string;
   DoctorId: number;
-  
+  IsOnline: string;
 }
 
-const ClinicCardList: React.FC = ( DoctorId, Id) => {
+const ClinicCardList: React.FC = (DoctorId, Id) => {
   //@ts-ignore
   const storedValue = JSON.parse(sessionStorage.getItem("docData"));
   const location = useLocation();
   const history = useHistory();
-  const [id,setId] = useState("")
+  const [id, setId] = useState("");
   const [doctorId, setdocorId] = useState(storedValue.Id);
   const [rerender, setRerender] = useState(false);
-  
+
   const [Clinics, setClinics] = useState<Clinic[]>([]);
   const fetchClinicData = async () => {
     try {
-      
       const res = await fetch(`${import.meta.env.VITE_API_URL}api/Clinic`);
       const data: Clinic[] = await res.json();
-      console.log(data)
+      console.log(data);
       setClinics(data);
-      setRerender(true);
-     
+      // setRerender(!rerender);
     } catch (err) {
       console.log(err);
     }
+  };
+
+  const renderList = () => {
+    setRerender((prev) => !prev);
   };
   // useEffect(() => {
   //   // Code to run once
@@ -77,7 +85,8 @@ const ClinicCardList: React.FC = ( DoctorId, Id) => {
                         Address={item.Address}
                         DoctorId={item.DoctorId}
                         Fees={item.Fees}
-                        Renderlist={fetchClinicData}
+                        IsOnline={item.IsOnline}
+                        Renderlist={renderList}
                       />
                     </React.Fragment>
                   );

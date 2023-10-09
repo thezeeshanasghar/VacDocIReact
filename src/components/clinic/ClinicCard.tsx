@@ -39,7 +39,8 @@ interface ClinicCardProps {
   Address: string;
   Number: string;
   DoctorId: number;
-  Fees:string;
+  Fees: string;
+  IsOnline: string;
   Renderlist: () => void;
 }
 
@@ -53,6 +54,7 @@ const ClinicCard: React.FC<ClinicCardProps> = ({
   Number,
   DoctorId,
   Fees,
+  IsOnline,
   Renderlist,
 }) => {
   const [offDays, setOffDays] = useState(initialOffDays);
@@ -72,7 +74,7 @@ const ClinicCard: React.FC<ClinicCardProps> = ({
           `${import.meta.env.VITE_API_URL}api/ClinicTiming`
         );
         const data: Session[] = await res.json();
-console.log(data)
+        console.log(data);
         // setSameClinics(clinicTimings.filter((item) => item.ClinicId === Id));
         setclinicTimings(data);
       } catch (err) {
@@ -94,6 +96,74 @@ console.log(data)
   }
 
   const data = useIonRouter();
+  const onclickOnline = (Id: number) => {
+    const updatedData = [
+      {
+        path: "IsOnline",
+        op: "replace",
+        from: 0,
+        value: 1,
+      },
+    ];
+    fetch(
+      `${
+        import.meta.env.VITE_API_URL
+      }api/Clinic/ClinicIsonline/${DoctorId}/${Id}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          // Add any other headers you may need, such as authentication headers
+        },
+        body: JSON.stringify(updatedData), // Convert your updated data to JSON
+      }
+    )
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        if (response.status === 204) {
+          Renderlist();
+        }
+      })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  };
+  const onclickOffline = (Id: number) => {
+    const updatedData = [
+      {
+        path: "IsOnline",
+        op: "replace",
+        from: 1,
+        value: 0,
+      },
+    ];
+    fetch(
+      `${
+        import.meta.env.VITE_API_URL
+      }api/Clinic/ClinicIsonline/${DoctorId}/${Id}`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          // Add any other headers you may need, such as authentication headers
+        },
+        body: JSON.stringify(updatedData), // Convert your updated data to JSON
+      }
+    )
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      if (response.status === 204) {
+        Renderlist();
+      }
+    })
+      .catch((error) => {
+        console.error("Error:", error);
+      });
+  };
 
   const handleClick = () => {
     data.push(`/members/doctor/clinic/update/${Id}`, "forward");
@@ -130,7 +200,7 @@ console.log(data)
             <IonText>Consultation fee : {Fees}</IonText>
             <IonGrid>
               <IonRow>
-              Timming:- 
+                Timming:-
                 {clinicTimings.map((item, index) => {
                   if (item.ClinicId === Id) {
                     const count = clinicTimings.filter(
@@ -167,15 +237,25 @@ console.log(data)
               <IonIcon icon={body} role="img" aria-label="body"></IonIcon>
               Patients
             </IonButton>
-            <IonButton
-              color="success"
-              disabled={!isOnline}
-              routerLink="/members/dashboard"
-              size="small"
-            >
-              <IonIcon icon={createOutline} slot="start" />
-              Online
-            </IonButton>
+            {IsOnline ? (
+              <IonButton
+                color="success"
+                size="small"
+                onClick={() => onclickOffline(Id)}
+              >
+                <IonIcon icon={createOutline} slot="start" />
+                Online
+              </IonButton>
+            ) : (
+              <IonButton
+                color=""
+                size="small"
+                onClick={() => onclickOnline(Id)}
+              >
+                <IonIcon icon={createOutline} slot="start" />
+                offline
+              </IonButton>
+            )}
             <br />
           </IonCardContent>
         </IonCard>
