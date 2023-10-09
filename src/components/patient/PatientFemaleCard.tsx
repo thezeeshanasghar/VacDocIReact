@@ -9,6 +9,7 @@ import {
   IonLabel,
   IonThumbnail,
   useIonRouter,
+  IonText,
 } from "@ionic/react";
 import { IPatientData } from "../../pages/patient/PatientCardList";
 import { create, trash, mail, call, person, calendar } from "ionicons/icons";
@@ -18,6 +19,8 @@ import { useHistory } from "react-router";
 interface IFemalePatient {
   Id: number;
   Name: string;
+  MobileNumber: string;
+  Email: string;
   renderList: () => void;
   DoctorId: number;
   ClinicId: number;
@@ -26,6 +29,8 @@ interface IFemalePatient {
 const PatientFemaleCard: React.FC<IFemalePatient> = ({
   Name,
   Id,
+  MobileNumber,
+  Email,
   renderList, 
   DoctorId,
   DOB,
@@ -78,6 +83,16 @@ const PatientFemaleCard: React.FC<IFemalePatient> = ({
         
       </IonItem>
       <IonCardContent>
+      <div style={{display:  'flex', marginBottom: "1rem" }}>
+            <div style={{display: 'flex', gap: '.3rem', marginRight: '1rem'}}>
+              <IonIcon icon={call} color="primary" size="small"></IonIcon>
+              <IonText style={{ fontSize: "12px" }}>{MobileNumber}</IonText>
+            </div>
+            <div style={{display: 'flex', gap: '.3rem'}}>
+              <IonIcon icon={mail} color="primary" size="small"></IonIcon>
+              <IonText style={{ fontSize: "12px" }}>{Email}</IonText>
+            </div>
+          </div>
         <IonButton
           color="tertiary"
           fill="outline"

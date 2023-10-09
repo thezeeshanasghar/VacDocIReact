@@ -29,8 +29,8 @@ type UpdateType = { match: { params: { Id: number } } };
 interface IPatientData {
   Id: number;
   Name: string;
-  guardianName: string;
-  FatherName: string;
+  GuardianName: string;
+  // FatherName: string;
   Email: string;
   DOB: string;
   Gender: number;
@@ -51,7 +51,7 @@ const UpdatePatient: React.FC<UpdateType> = ({
 }) => {
   const [patientData, setPatientData] = useState<IPatientData>();
   const [name, setName] = useState("");
-  const [fatherName, setFatherName] = useState("");
+  // const [fatherName, setFatherName] = useState("");
   const [guardian, setGuardian] = useState("");
   const [cnic, setCnic] = useState("");
   const [gender, setGender] = useState("");
@@ -92,21 +92,21 @@ const UpdatePatient: React.FC<UpdateType> = ({
 
     if (guardian) {
       patchOperations.push({
-        path: "guardianName",
+        path: "GuardianName",
         op: "replace",
         from: "",
         value: guardian,
       });
     }
 
-    if (fatherName) {
-      patchOperations.push({
-        path: "FatherName",
-        op: "replace",
-        from: "",
-        value: fatherName,
-      });
-    }
+    // if (fatherName) {
+    //   patchOperations.push({
+    //     path: "FatherName",
+    //     op: "replace",
+    //     from: "",
+    //     value: fatherName,
+    //   });
+    // }
 
     if (email) {
       patchOperations.push({
@@ -219,13 +219,16 @@ const UpdatePatient: React.FC<UpdateType> = ({
     const requestBody = JSON.stringify(patchOperations);
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}api/Child/${Id}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: requestBody,
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}api/Child/${Id}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: requestBody,
+        }
+      );
       console.log(response.status);
       if (response.status === 204) {
         setSuccess(true);
@@ -245,7 +248,7 @@ const UpdatePatient: React.FC<UpdateType> = ({
   // function to clear all state variables
   const clearStateVariables = () => {
     setName("");
-    setFatherName("");
+    // setFatherName("");
     setGuardian("");
     setCnic("");
     setGender("Boy");
@@ -291,7 +294,8 @@ const UpdatePatient: React.FC<UpdateType> = ({
         );
         const singleClinicData = await anotherResponse.json();
         setSignleClinicData(singleClinicData);
-
+        //@ts-ignore
+        setGender(patientData?.Gender);
         setPatientData(PatientData);
       }
     } catch (err) {
@@ -359,7 +363,7 @@ const UpdatePatient: React.FC<UpdateType> = ({
                   <IonLabel position="floating">Guardian's Name</IonLabel>
                   <IonInput
                     type="text"
-                    value={guardian || patientData.guardianName}
+                    value={guardian || patientData.GuardianName}
                     onIonChange={(e) => setGuardian(e.detail.value!)}
                     required
                   />
@@ -412,13 +416,13 @@ const UpdatePatient: React.FC<UpdateType> = ({
                       <IonCol>
                         <IonItem>
                           <IonLabel>Boy</IonLabel>
-                          <IonRadio slot="start" value={"0"} />
+                          <IonRadio slot="start" value={"0"}/>
                         </IonItem>
                       </IonCol>
                       <IonCol>
                         <IonItem>
                           <IonLabel>Girl</IonLabel>
-                          <IonRadio slot="start" value={"1"} />
+                          <IonRadio slot="start" value={"1"}/>
                         </IonItem>
                       </IonCol>
                     </IonRow>
@@ -516,20 +520,29 @@ const UpdatePatient: React.FC<UpdateType> = ({
                     slot="start"
                   />
                   <IonItem slot="end" lines="none">
-                  <input
-                  type="text"
-                  list="cityOptions" 
-                  value={city}
-                  placeholder="Choose City"
-                  className="custom-input-search"
-                  style={{border: 'none', width: '100%', height: '2.8rem', marginTop: '0.3px', paddingLeft: "6px"}}
-                  onChange={(e) => setCity(e.target.value)}
-                />
-                <datalist id="cityOptions" style={{width: '100%', border: 'none'}}>
-                  {cities.map((city, index) => (
-                    <option key={index} value={city} />
-                  ))}
-                </datalist>
+                    <input
+                      type="text"
+                      list="cityOptions"
+                      value={city}
+                      placeholder="Choose City"
+                      className="custom-input-search"
+                      style={{
+                        border: "none",
+                        width: "100%",
+                        height: "2.8rem",
+                        marginTop: "0.3px",
+                        paddingLeft: "6px",
+                      }}
+                      onChange={(e) => setCity(e.target.value)}
+                    />
+                    <datalist
+                      id="cityOptions"
+                      style={{ width: "100%", border: "none" }}
+                    >
+                      {cities.map((city, index) => (
+                        <option key={index} value={city} />
+                      ))}
+                    </datalist>
                   </IonItem>
                 </IonItem>
                 <IonGrid>

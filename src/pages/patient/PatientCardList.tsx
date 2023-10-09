@@ -20,7 +20,7 @@ export interface IPatientData {
   Id: number;
   Name: string;
   Guardian: string;
-  FatherName: string;
+  MobileNumber: string;
   Email: string;
   DOB: string;
   Gender: number;
@@ -110,6 +110,8 @@ const PatientCardList: React.FC = () => {
                     key={item.Id}
                     Name={item.Name}
                     Id={item.Id}
+                    MobileNumber={item.MobileNumber}
+                    Email={item.Email}
                     renderList={fetchPatientData}
                     DoctorId={item.DoctorId}
                     ClinicId={item.ClinicId}
@@ -121,6 +123,8 @@ const PatientCardList: React.FC = () => {
                 <PatientFemaleCard
                   key={index * 3}
                   Name={item.Name}
+                  MobileNumber={item.MobileNumber}
+                  Email={item.Email}
                   Id={item.Id}
                   renderList={fetchPatientData}
                   DoctorId={item.DoctorId}
