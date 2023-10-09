@@ -37,7 +37,11 @@ interface SessionData {
   endTime: string;
 }
 
-const WeekDaysCard: React.FC<WeekDayCardProps> = ({ name, renderFunc, isRendering }) => {
+const WeekDaysCard: React.FC<WeekDayCardProps> = ({
+  name,
+  renderFunc,
+  isRendering,
+}) => {
   const [showSession1, setShowSession1] = useState(false);
   const [showSession2, setShowSession2] = useState(false);
   const [showCard, setShowCard] = useState(false);
@@ -88,10 +92,38 @@ const WeekDaysCard: React.FC<WeekDayCardProps> = ({ name, renderFunc, isRenderin
     }
   }, [isRendering]);
 
-  useEffect(() => {
+  const removeDatabyToggle = () => {
     if (!showCard) {
       localStorage.removeItem(name);
     }
+    if (!showSession1) {
+      setMStart("");
+      setMEnd("");
+    }
+    if (!showSession2) {
+      setMStart2("");
+      setMEnd2("");
+    }
+  };
+
+  const removeAllData = () => {
+    if (!showSession1 || showSession1) {
+      setMStart("");
+      setMEnd("");
+      setShowSession1(false);
+    }
+    if (!showSession2 || showSession2) {
+      setMStart2("");
+      setMEnd2("");
+      setShowSession2(false);
+    }
+    if (!showCard || showCard) {
+      setShowCard(false);
+    }
+  };
+
+  useEffect(() => {
+    removeDatabyToggle();
     if (showCard && showSession1 && mstart !== "" && mend !== "") {
       const existingIndex = dayData.findIndex(
         (entry) => entry.day === name && entry.session === "Morning"
@@ -117,6 +149,7 @@ const WeekDaysCard: React.FC<WeekDayCardProps> = ({ name, renderFunc, isRenderin
   }, [showCard, showSession1, mstart, mend, name]);
 
   useEffect(() => {
+    removeDatabyToggle();
     if (showCard && showSession2 && mstart2 !== "" && mend2 !== "") {
       const existingIndex = dayData.findIndex(
         (entry) => entry.day === name && entry.session === "Evening"
@@ -167,35 +200,54 @@ const WeekDaysCard: React.FC<WeekDayCardProps> = ({ name, renderFunc, isRenderin
     if (name === "Monday") {
       const otherWeekdays = ["Tuesday", "Wednesday", "Thursday", "Friday"];
 
-      const otherWeekdaysNotInLocalStorage = otherWeekdays.every((weekday) => {
-        return localStorage.getItem(weekday) === null;
+      // const otherWeekdaysNotInLocalStorage = otherWeekdays.every((weekday) => {
+      //   return localStorage.getItem(weekday) === null;
+      // });
+
+      // if (otherWeekdaysNotInLocalStorage) {
+      const daysToStore = [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+      ];
+      // dayData.length >= 1 &&
+      daysToStore.forEach((day, index) => {
+        const lastIndex = index === daysToStore.length - 1;
+        localStorage.setItem(day, JSON.stringify(dayData));
+
+        // if (lastIndex) {
+        //   //@ts-ignore
+        //   let count = JSON.parse(localStorage.getItem("count")) || null;
+        //   if (count === 0 || count === null) {
+        //     renderFunc();
+        //     // window.location.reload();
+        //   }
+        // }
       });
-
-      if (otherWeekdaysNotInLocalStorage) {
-        const daysToStore = [
-          "Monday",
-          "Tuesday",
-          "Wednesday",
-          "Thursday",
-          "Friday",
-        ];
-        dayData.length >= 1 &&
-          daysToStore.forEach((day, index) => {
-            const lastIndex = index === daysToStore.length - 1;
-            localStorage.setItem(day, JSON.stringify(dayData));
-
-            if (lastIndex) {
-              //@ts-ignore
-              let count = JSON.parse(localStorage.getItem("count")) || null;
-              if (count === 0 || count === null) {
-                localStorage.setItem("count", JSON.stringify(1));
-                renderFunc();
-                // window.location.reload();
-              }
-            }
-          });
-      }
+      // localStorage.setItem("count", JSON.stringify(0));
+      renderFunc();
+      // }
     }
+  };
+  const resetAppliedTiming = () => {
+    // const otherWeekdays = [
+    //   "Monday",
+    //   "Tuesday",
+    //   "Wednesday",
+    //   "Thursday",
+    //   "Friday",
+    // ];
+
+    // const filteredDays = otherWeekdays.filter((weekday) => {
+    //   return localStorage.getItem(weekday) !== null;
+    // });
+    // filteredDays.forEach((day) => {
+    //   localStorage.removeItem(day);
+    // });
+    removeAllData();
+    renderFunc();
   };
   const handleTimeChange = (
     e: IonInputCustomEvent<InputChangeEventDetail>,

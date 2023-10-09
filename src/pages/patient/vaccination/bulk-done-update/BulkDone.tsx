@@ -104,7 +104,7 @@ const BulkDone: React.FC<IParam> = ({
     )
       .then((res) => res.json())
       .then((data) => {
-        const ids = data.map((item: { Id: any }) => item.Id);
+        const ids = data.map((item: { Id: any, IsSkip: boolean }) => item.IsSkip === false && item.Id);
         // const ids = data.map((item: { Id: any; }) => item.Id);
         setBrandId(ids);
         console.log("Initial Data:", data);
@@ -134,6 +134,7 @@ const BulkDone: React.FC<IParam> = ({
 
         // Wait for all API calls to complete using Promise.all()
         const resultData = await Promise.all(dataPromises);
+        // console.log('brand data', resultData)
         setBrandData(resultData);
         setLoading(false); // Set loading to false after data is fetched
         console.log("Data for Brand IDs:", resultData);
@@ -165,6 +166,7 @@ const BulkDone: React.FC<IParam> = ({
         id: brandId[i],
         currentDate: formatDate(oldDate),
         isDone: 1,
+        isSkip: 0,
         newDate: newDate,
         brandId: selectedBrandIds[i],
       };
@@ -186,12 +188,16 @@ const BulkDone: React.FC<IParam> = ({
       });
       if (response.status === 204) {
         setSuccessToast(true);
+        //@ts-ignore
+        localStorage.setItem("isDone", "true");
         router.push(`/members/child/vaccine/${Id}${query}`, "back");
         // window.location.reload();
       } else if (!response.ok) setErrorToast(true);
     } catch (err) {
       console.log("not add");
       setErrorToast(true);
+      //@ts-ignore
+      localStorage.setItem("isDone", "false");
     }
   };
 
@@ -323,7 +329,7 @@ const BulkDone: React.FC<IParam> = ({
               </IonItem>
             ))}
             <IonItem>
-              <IonLabel color="primary">Given Date</IonLabel>
+              <IonLabel color="primary">Old Date</IonLabel>
               <IonInput
                 type="date"
                 value={formatDate(oldDate)}
@@ -335,7 +341,7 @@ const BulkDone: React.FC<IParam> = ({
               />
             </IonItem>
             <IonItem>
-              <IonLabel color="primary">Given Date</IonLabel>
+              <IonLabel color="primary">Actual Date</IonLabel>
               <IonInput
                 type="date"
                 value={newDate}

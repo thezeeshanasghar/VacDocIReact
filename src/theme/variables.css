@@ -234,3 +234,11 @@ http://ionicframework.com/docs/theming/ */
     --ion-card-background: #1e1e1e;
   }
 }
+
+.custom-input-search:focus{ 
+    outline: none;
+}
+
+.custom-input-search {
+  background: var(--background);
+}

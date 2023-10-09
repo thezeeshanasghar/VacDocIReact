@@ -195,9 +195,7 @@ const DoctorScheduleCard: React.FC<IDoseSchedule> = ({
         <>
           <IonItem lines="none" className="centered-item">
             <IonLabel style={{ textAlign: "center" }}>
-              <IonItem
-                lines="none"
-                slot="center"
+              <div
                 style={{ textAlign: "center", padding: 0 }}
               >
                 <IonIcon
@@ -217,7 +215,7 @@ const DoctorScheduleCard: React.FC<IDoseSchedule> = ({
                     onIonChange={(e) => handleDateChange2(e, date, value)}
                   ></IonDatetime>
                 </IonPopover>
-              </IonItem>
+              </div>
             </IonLabel>
           </IonItem>
           {data.map((item: any) =>

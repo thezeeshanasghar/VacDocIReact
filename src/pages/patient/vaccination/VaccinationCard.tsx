@@ -221,7 +221,7 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
           <IonCol>
             <b>{Name}</b>
           </IonCol>
-          {isButtonsVisible && isButtonVisible && (
+          {!IsSkip && !IsDone && (
             <>
               <IonCol size="auto">
                 <IonIcon
@@ -278,7 +278,7 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
               </IonCol>
             </>
           )}
-          {!isButtonsVisible && ( // Show "unSkip" button when buttons are hidden
+          {IsSkip && !IsDone && ( // Show "unSkip" button when buttons are hidden
             <IonCol size="auto">
               <IonButton
                 size="small"
@@ -292,8 +292,15 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
               </IonButton>
             </IonCol>
           )}
-          {!isButtonVisible && (
+          {IsDone && (
             <>
+            {BrandName == null ? (
+                ""
+              ) : (
+                <IonCol size="">
+                  <p>Brand: {BrandName}</p>
+                </IonCol>
+              )}
               <IonCol
                 size="auto"
                 style={{ display: "flex", alignItems: "center" }}
@@ -309,7 +316,7 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
                   {date}
                 </span>
 
-                <IonImg
+                {/* <IonImg
                   // size="small"
                   src={emptySyringImage}
                   onClick={() => toggleButtonVisibility(date)}
@@ -322,15 +329,9 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
                   color="danger"
                 >
                   Undo
-                </IonImg>
+                </IonImg> */}
               </IonCol>
-              {BrandName == null ? (
-                ""
-              ) : (
-                <IonCol size="12">
-                  <p style={{ textAlign: "center" }}>Brand: {BrandName}</p>
-                </IonCol>
-              )}
+              
             </>
           )}
         </IonRow>

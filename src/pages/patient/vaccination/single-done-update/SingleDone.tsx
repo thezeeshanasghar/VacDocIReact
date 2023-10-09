@@ -218,7 +218,7 @@ const SingleDone: React.FC<IParam> = () => {
             </IonItem>
 
             <IonItem>
-              <IonLabel color="primary">Given Date</IonLabel>
+              <IonLabel color="primary">Old Date</IonLabel>
               <IonInput
                 slot="end"
                 type="date"
@@ -228,7 +228,7 @@ const SingleDone: React.FC<IParam> = () => {
               />
             </IonItem>
             <IonItem>
-              <IonLabel color="primary">Given Date</IonLabel>
+              <IonLabel color="primary">Actual Date</IonLabel>
               <IonInput
                 slot="end"
                 type="date"

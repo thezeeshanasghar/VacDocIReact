@@ -35,19 +35,24 @@ const Alert: React.FC = () => {
   const storedValue = JSON.parse(sessionStorage.getItem("docData"));
   console.log(storedValue);
   const [patientData, setPatientData] = useState<PatientDataType[]>([]);
+  const [noAlertData, setNoAlertData] = useState("");
   const location = useLocation();
   const fetchPatientData = () => {
     const doctor__ID = storedValue && storedValue.Id;
     fetch(
-      `${import.meta.env.VITE_API_URL}api/PatientSchedule/today_alert_BaseOnDoctor?doctorId=${doctor__ID}`
+      `${
+        import.meta.env.VITE_API_URL
+      }api/PatientSchedule/today_alert_BaseOnDoctor?doctorId=${doctor__ID}`
     )
       .then((response) => {
-        console.log(response)  
-        return response.json()
+        if (response.status === 204) {
+          setNoAlertData("There are no Alerts for today.");
+        }
+        return response.json();
       })
       .then((data: PatientDataType[]) => {
-        console.log("alert data : ",data) 
-        setPatientData(data)
+        console.log("alert data : ", data);
+        setPatientData(data);
       })
       .catch((error) => {
         console.log(error);
@@ -97,7 +102,15 @@ const Alert: React.FC = () => {
             );
           })
         ) : (
-          <ErrorComponent title="Alert" />
+          <IonGrid>
+            <IonRow tabIndex={0}>
+              <IonCol>
+                <IonItem id="alert">
+                  <IonLabel style={{textAlign: 'center'}}>{noAlertData}</IonLabel>
+                </IonItem>
+              </IonCol>
+            </IonRow>
+          </IonGrid>
         )}
       </IonContent>
     </IonPage>

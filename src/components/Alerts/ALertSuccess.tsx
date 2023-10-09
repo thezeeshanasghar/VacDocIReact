@@ -15,6 +15,7 @@ const AlertSuccess: React.FC<AlertProps> = ({ isOpen, setOpen, message }) => {
         message={message}
         buttons={["OK"]}
         onDidDismiss={() => setOpen(false)}
+        
       />
     </>
   );

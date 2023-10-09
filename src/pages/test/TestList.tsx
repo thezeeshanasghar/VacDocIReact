@@ -13,12 +13,11 @@ import {
   IonSelectOption,
   IonSelect,
   IonTextarea,
-  IonText,
 } from "@ionic/react";
 import { person, arrowForward } from "ionicons/icons";
-import IconBuilding from "../../../icons/IconBuilding";
-import "./clinicReg.css";
-import cities from "../../test/citiesData";
+import IconBuilding from "../../icons/IconBuilding";
+import "../doctor-signup/add-clinic/clinicReg.css";
+import cities from "./citiesData";
 
 const ClinicRegistration: React.FC = () => {
   const router = useIonRouter();
@@ -27,6 +26,11 @@ const ClinicRegistration: React.FC = () => {
   const [mobile, setMobile] = useState("");
   const [clinicFee, setClinicFee] = useState("");
   const [city, setCity] = useState("");
+  const [searchText, setSearchText] = useState<string>("");
+
+  const filteredCities = cities.filter((cityName) =>
+    cityName.toLowerCase().includes(searchText.toLowerCase())
+  );
 
   const canSubmit =
     name.trim() === "" &&
@@ -115,9 +119,10 @@ const ClinicRegistration: React.FC = () => {
                 />
               </IonItem>
               <IonItem style={{ width: "75%" }}>
-              <input
+                {/* <IonLabel position="floating"> City</IonLabel> */}
+                <input
                   type="text"
-                  list="cityOptions" 
+                  list="cityOptions" // This associates the input with the datalist
                   value={city}
                   placeholder="Choose City"
                   className="custom-input-search"
@@ -149,9 +154,8 @@ const ClinicRegistration: React.FC = () => {
                   onIonChange={(e) => setMobile(e.detail.value!)}
                 />
               </IonItem>
-              <IonText color={'danger'} style={{fontSize: '10px', marginBottom: '11px', display: mobile.startsWith("0") || mobile.startsWith("+") ? "block": "none"}}>Mobile Number Must be In 333-1234567 Format</IonText>
               <IonItem style={{ width: "75%" }}>
-                <IonLabel position="floating">Fee</IonLabel>
+                <IonLabel position="floating">Fee(pkr)</IonLabel>
                 <IonInput
                   required
                   type="number"

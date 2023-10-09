@@ -12,6 +12,7 @@ import {
   IonIcon,
   IonToolbar,
   useIonRouter,
+  IonText,
 } from "@ionic/react";
 import { person, arrowForward } from "ionicons/icons";
 import "./DocSignUp.css";
@@ -145,6 +146,7 @@ const DoctorSignUp: React.FC = () => {
                   onIonChange={(e) => setMobile(e.detail.value!)}
                 />
               </IonItem>
+              <IonText color={'danger'} style={{fontSize: '10px', marginBottom: '11px', display: mobile.startsWith("0") || mobile.startsWith("+") ? "block": "none"}}>Mobile Number Must be In 333-1234567 Format</IonText>
               <IonItem>
                 <IonLabel position="floating">Password</IonLabel>
                 <IonInput

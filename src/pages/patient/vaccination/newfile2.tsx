@@ -10,20 +10,20 @@ import {
 import React, { useEffect, useState } from "react";
 import VaccinationCard from "./VaccinationCard";
 import axios from "axios";
-import { saveAs } from 'file-saver';
+import { saveAs } from "file-saver";
 import { groupBy } from "lodash";
 import { useLocation } from "react-router";
 import ErrorComponent from "../../Error/ErrorComponent";
-// export interface IPSchedule {
-//   Id: number;
-//   Date: string;
-//   DoseId: number;
-//   DoctorId: number;
-//   childId: number;
-//   isSkip: boolean;
-//   isDone: boolean;
-//   VaccineId: number;
-// }
+export interface IPSchedule {
+  Id: number;
+  Date: string;
+  DoseId: number;
+  DoctorId: number;
+  childId: number;
+  isSkip: boolean;
+  isDone: boolean;
+  VaccineId: number;
+}
 
 interface IVaccine {
   Id: number;
@@ -54,13 +54,10 @@ const VaccinationCardList: React.FC<IParam> = ({
   const doctorId = searchParams.get("doctorId");
   const dob = searchParams.get("DOB");
 
-  const date = dob && dob.split("T")[0]
-   
-    
-  
+  const date = dob && dob.split("T")[0];
 
   // const [date, time] = dob.split("T");
- 
+
   const [count, setCount] = useState(1);
   // const [doctorId, setdoctorId] = useState(2)
   const [patientSchedule, setPatientSchedule] = useState<IPSchedule[]>([]);
@@ -93,15 +90,15 @@ const VaccinationCardList: React.FC<IParam> = ({
     }
   }, [childId, doctorId]);
 
-  // useEffect(() => {
-  //   if (patientSchedule) {
-  //     const groupedD: Record<string, IPSchedule[]> = groupBy(
-  //       patientSchedule,
-  //       (item: IPSchedule) => item.Date.split("T")[0]
-  //     );
-  //     setGroupedPatientSchedule(groupedD);
-  //   }
-  // }, [patientSchedule]);
+  useEffect(() => {
+    if (patientSchedule) {
+      const groupedD: Record<string, IPSchedule[]> = groupBy(
+        patientSchedule,
+        (item: IPSchedule) => item.Date.split("T")[0]
+      );
+      setGroupedPatientSchedule(groupedD);
+    }
+  }, [patientSchedule]);
 
   function setName(name: string) {
     setPatientName(name);
@@ -109,18 +106,17 @@ const VaccinationCardList: React.FC<IParam> = ({
   const handleDownload = () => {
     axios({
       url: `${import.meta.env.VITE_API_URL}api/Child/pdf?childId=${childId}`, // Replace with the URL of your PDF file
-      method: 'GET',
-      responseType: 'blob', // Important! This tells axios to return a Blob object
+      method: "GET",
+      responseType: "blob", // Important! This tells axios to return a Blob object
     })
       .then((response) => {
-        const pdfBlob = new Blob([response.data], { type: 'application/pdf' });
-        saveAs(pdfBlob, 'downloaded.pdf'); // Specify the filename for the downloaded file
+        const pdfBlob = new Blob([response.data], { type: "application/pdf" });
+        saveAs(pdfBlob, "downloaded.pdf"); // Specify the filename for the downloaded file
       })
       .catch((error) => {
         console.log(error);
       });
   };
-  
 
   return (
     <>
