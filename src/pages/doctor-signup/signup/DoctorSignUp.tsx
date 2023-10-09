@@ -13,7 +13,6 @@ import {
   IonToolbar,
   useIonRouter,
   IonText,
-  IonText,
 } from "@ionic/react";
 import { person, arrowForward } from "ionicons/icons";
 import "./DocSignUp.css";
