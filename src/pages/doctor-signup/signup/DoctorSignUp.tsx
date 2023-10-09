@@ -13,6 +13,7 @@ import {
   IonToolbar,
   useIonRouter,
   IonText,
+  IonText,
 } from "@ionic/react";
 import { person, arrowForward } from "ionicons/icons";
 import "./DocSignUp.css";
@@ -24,6 +25,7 @@ const DoctorSignUp: React.FC = () => {
   const [mobile, setMobile] = useState("");
   const [password, setPassword] = useState("");
   const [pmdc, setPMDC] = useState("");
+  const isInvalid = mobile.startsWith("0") || mobile.startsWith("+");
   // const [doctorType, setDoctorType] = useState("");
 
   const canSubmit =
@@ -136,12 +138,7 @@ const DoctorSignUp: React.FC = () => {
                   value={mobile}
                   id="mobileNumber"
                   itemID="mobileNumber"
-                  style={{
-                    color:
-                      mobile.startsWith("0") || mobile.startsWith("+")
-                        ? "red"
-                        : "",
-                  }}
+                  style={{ color: isInvalid ? "red" : "" }}
                   placeholder="3331234567"
                   onIonChange={(e) => setMobile(e.detail.value!)}
                 />

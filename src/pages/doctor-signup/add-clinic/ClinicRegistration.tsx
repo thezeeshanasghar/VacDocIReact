@@ -27,6 +27,8 @@ const ClinicRegistration: React.FC = () => {
   const [mobile, setMobile] = useState("");
   const [clinicFee, setClinicFee] = useState("");
   const [city, setCity] = useState("");
+  const [error, setError] = useState(false);
+  const isInvalid = mobile.startsWith("0") || mobile.startsWith("+");
 
   const canSubmit =
     name.trim() === "" &&
@@ -73,6 +75,12 @@ const ClinicRegistration: React.FC = () => {
   };
   return (
     <IonPage>
+      <Toast
+        isOpen={error}
+        setOpen={setError}
+        color="danger"
+        errMsg="An error occurred while signing up, try again."
+      />
       <IonContent className="sign-up-content-clinic">
         <IonToolbar color={"primary"}>
           {" "}
@@ -158,7 +166,8 @@ const ClinicRegistration: React.FC = () => {
                   placeholder="PKR"
                   value={clinicFee}
                   onIonChange={(e) => setClinicFee(e.detail.value!)}
-                  id="fee"
+                  id="Fee"
+                  placeholder="fee must be in dollars or rupees"
                 />
               </IonItem>
               <IonButton expand="full" type="submit" id="submits">

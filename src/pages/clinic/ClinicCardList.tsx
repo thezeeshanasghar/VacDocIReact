@@ -34,6 +34,7 @@ const ClinicCardList: React.FC = ( DoctorId, Id) => {
       
       const res = await fetch(`${import.meta.env.VITE_API_URL}api/Clinic`);
       const data: Clinic[] = await res.json();
+      console.log(data)
       setClinics(data);
       setRerender(true);
      
@@ -75,6 +76,7 @@ const ClinicCardList: React.FC = ( DoctorId, Id) => {
                         Number={item.Number}
                         Address={item.Address}
                         DoctorId={item.DoctorId}
+                        Fees={item.Fees}
                         Renderlist={fetchClinicData}
                       />
                     </React.Fragment>

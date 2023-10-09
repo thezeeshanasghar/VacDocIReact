@@ -12,6 +12,7 @@ import {
   IonRow,
   IonCol,
   IonItemDivider,
+  IonText,
 } from "@ionic/react";
 import { trash, create, createOutline, body } from "ionicons/icons";
 import { format } from "date-fns";
@@ -38,6 +39,7 @@ interface ClinicCardProps {
   Address: string;
   Number: string;
   DoctorId: number;
+  Fees:string;
   Renderlist: () => void;
 }
 
@@ -50,6 +52,7 @@ const ClinicCard: React.FC<ClinicCardProps> = ({
   Address,
   Number,
   DoctorId,
+  Fees,
   Renderlist,
 }) => {
   const [offDays, setOffDays] = useState(initialOffDays);
@@ -69,7 +72,7 @@ const ClinicCard: React.FC<ClinicCardProps> = ({
           `${import.meta.env.VITE_API_URL}api/ClinicTiming`
         );
         const data: Session[] = await res.json();
-
+console.log(data)
         // setSameClinics(clinicTimings.filter((item) => item.ClinicId === Id));
         setclinicTimings(data);
       } catch (err) {
@@ -108,7 +111,7 @@ const ClinicCard: React.FC<ClinicCardProps> = ({
       {clinicTimings && (
         <IonCard>
           <IonCardHeader>
-            <IonCardSubtitle>{Address}</IonCardSubtitle>
+            {/* <IonCardSubtitle>{Address}</IonCardSubtitle> */}
             <IonCardTitle
               style={{ display: "flex", justifyContent: "space-between" }}
             >
@@ -124,8 +127,10 @@ const ClinicCard: React.FC<ClinicCardProps> = ({
             </IonCardTitle>
           </IonCardHeader>
           <IonCardContent>
+            <IonText>Consultation fee : {Fees}</IonText>
             <IonGrid>
               <IonRow>
+              Timming:- 
                 {clinicTimings.map((item, index) => {
                   if (item.ClinicId === Id) {
                     const count = clinicTimings.filter(
