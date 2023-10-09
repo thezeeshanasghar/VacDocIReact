@@ -11,8 +11,6 @@ import {
   IonButton,
   IonCol,
   IonRow,
-  IonSelect,
-  IonSelectOption,
   IonCheckbox,
   IonListHeader,
   IonText,
@@ -44,8 +42,8 @@ const AddPatient: React.FC = () => {
   const [isEPIDone, setIsEPIDone] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
   const history = useHistory();
-  const [clinicData, setClinicData] = useState<DoctorClinicType[]>([]);
-  const [doctorData, setDoctorData] = useState<DoctorClinicType[]>([]);
+  // const [clinicData, setClinicData] = useState<DoctorClinicType[]>([]);
+  // const [doctorData, setDoctorData] = useState<DoctorClinicType[]>([]);
   const [success, setSuccess] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
 
@@ -55,51 +53,58 @@ const AddPatient: React.FC = () => {
     //   new Date(dob),
     //   "yyyy-MM-dd'T'HH:mm:ss.SSSX"
     // );
-    const data_to_be_sent = {
-      name,
-      // guardian,
-      fatherName,
-      email,
-      dob,
-      gender,
-      // type: scheduleType,
-      password,
-      city,
-      cnic,
-      mobileNumber,
-      // preferredSchedule,
-      isEPIDone,
-      isVerified,
-      isInactive: false,
-      clinicId: selectedClinic,
-      doctorId: selectedDoctor,
-    };
+    if (mobileNumber.trim().length < 10) {
+      alert("Mobile Number must be at least 10 digit");
+    } else if (mobileNumber.trim().length > 10) {
+      alert("Mobile Number must be at least 10 digit long.");
+    } else if(cnic.trim().length < 14 || cnic.trim().length > 14) {
+      alert("CNIC Number must be 14 digits long.");
+    } else {
+      const data_to_be_sent = {
+        name,
+        // guardian,
+        guardianName: guardian,
+        email,
+        dob,
+        gender,
+        // type: scheduleType,
+        password,
+        city,
+        cnic,
+        mobileNumber,
+        // preferredSchedule,
+        isEPIDone,
+        isVerified,
+        isInactive: false,
+        clinicId: selectedClinic,
+        doctorId: selectedDoctor,
+      };
 
-    fetch(`${import.meta.env.VITE_API_URL}api/Child`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data_to_be_sent),
-    })
-      .then((res) => {
-        if (res.status === 204) {
-          setSuccess(true);
-          history.push("/members/child", "back");
-          // window.location.reload();
-        } else {
-          setError(true);
-        }
+      fetch(`${import.meta.env.VITE_API_URL}api/Child`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data_to_be_sent),
       })
-      .catch((err) => setError(true))
-      .finally(() => {
-        clearStateVariables();
-      });
+        .then((res) => {
+          if (res.status === 204) {
+            setSuccess(true);
+            history.push("/members/child", "back");
+            // window.location.reload();
+          } else {
+            setError(true);
+          }
+        })
+        .catch((err) => setError(true))
+        .finally(() => {
+          clearStateVariables();
+        });
+    }
   };
   // function to clear all state variables
   const clearStateVariables = () => {
     setName("");
-    setFatherName("");
     setGuardian("");
     setCnic("");
     setGender("Boy");
@@ -127,15 +132,15 @@ const AddPatient: React.FC = () => {
       setSelectedClinic(clinicID);
     }
 
-    fetch(`${import.meta.env.VITE_API_URL}api/Doctor`)
-      .then((res) => res.json())
-      .then((data) => setDoctorData(data))
-      .catch((err) => console.error(err));
+    // fetch(`${import.meta.env.VITE_API_URL}api/Doctor`)
+    //   .then((res) => res.json())
+    //   .then((data) => setDoctorData(data))
+    //   .catch((err) => console.error(err));
 
-    fetch(`${import.meta.env.VITE_API_URL}api/Clinic`)
-      .then((res) => res.json())
-      .then((data) => setClinicData(data))
-      .catch((err) => console.error(err));
+    // fetch(`${import.meta.env.VITE_API_URL}api/Clinic`)
+    //   .then((res) => res.json())
+    //   .then((data) => setClinicData(data))
+    //   .catch((err) => console.error(err));
 
     const currentDate = new Date();
     const year = currentDate.getFullYear();
@@ -144,13 +149,13 @@ const AddPatient: React.FC = () => {
 
     const today = `${year}-${month}-${day}`;
 
-    console.log(today);
+    // console.log(today);
     setToDay(today);
-  }, []);
+  }, [history]);
 
   const canSubmit =
     name !== "" &&
-    fatherName !== "" &&
+    guardian !== "" &&
     // guardian !== "" &&
     password !== "" &&
     cnic !== "" &&
@@ -196,11 +201,11 @@ const AddPatient: React.FC = () => {
               />
             </IonItem> */}
             <IonItem>
-              <IonLabel position="floating">Father's Name</IonLabel>
+              <IonLabel position="floating">Guardian's Name</IonLabel>
               <IonInput
                 type="text"
-                value={fatherName}
-                onIonChange={(e) => setFatherName(e.detail.value!)}
+                value={guardian}
+                onIonChange={(e) => setGuardian(e.detail.value!)}
                 required
                 id="fname"
               />

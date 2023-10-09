@@ -29,7 +29,7 @@ type UpdateType = { match: { params: { Id: number } } };
 interface IPatientData {
   Id: number;
   Name: string;
-  Guardian: string;
+  guardianName: string;
   FatherName: string;
   Email: string;
   DOB: string;
@@ -92,7 +92,7 @@ const UpdatePatient: React.FC<UpdateType> = ({
 
     if (guardian) {
       patchOperations.push({
-        path: "Guardian",
+        path: "guardianName",
         op: "replace",
         from: "",
         value: guardian,
@@ -356,11 +356,11 @@ const UpdatePatient: React.FC<UpdateType> = ({
                   />
                 </IonItem> */}
                 <IonItem>
-                  <IonLabel position="floating">Father's Name</IonLabel>
+                  <IonLabel position="floating">Guardian's Name</IonLabel>
                   <IonInput
                     type="text"
-                    value={fatherName || patientData.FatherName}
-                    onIonChange={(e) => setFatherName(e.detail.value!)}
+                    value={guardian || patientData.guardianName}
+                    onIonChange={(e) => setGuardian(e.detail.value!)}
                     required
                   />
                 </IonItem>

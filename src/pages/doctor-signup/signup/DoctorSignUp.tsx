@@ -35,35 +35,35 @@ const DoctorSignUp: React.FC = () => {
     pmdc.trim() === "";
 
   const handleSignUp = (e: any) => {
+    e.preventDefault();
     if (canSubmit) {
       alert("Please fill in all the fields.");
     } else {
-      localStorage.clear();
-      e.preventDefault();
-      console.log("Name:", name);
-      console.log("Email:", email);
-      console.log("Mobile:", mobile);
-      console.log("Password:", password);
-      console.log("PMDC:", pmdc);
-      // console.log("Doctor Type:", doctorType);
-
-      localStorage.setItem(
-        "drData",
-        JSON.stringify({
-          name,
-          mobileNumber: mobile,
-          password,
-          // isApproved: false,
-          // isEnabled: false,
-          email,
-          // doctorType,
-          pmdc,
-          // validUpto: new Date().toDateString(),
-          clinics: "",
-        })
-      );
-      router.push("/auth/reg_clinic");
-      clearForm();
+      if (mobile.trim().length < 10) {
+        alert("Mobile Number must be at least 10 digit");
+      } else if (mobile.trim().length > 10) {
+        alert("Mobile Number must be at least 10 digit long.");
+      } else {
+        localStorage.clear();
+        e.preventDefault();
+        localStorage.setItem(
+          "drData",
+          JSON.stringify({
+            name,
+            mobileNumber: mobile,
+            password,
+            // isApproved: false,
+            // isEnabled: false,
+            email,
+            // doctorType,
+            pmdc,
+            // validUpto: new Date().toDateString(),
+            clinics: "",
+          })
+        );
+        router.push("/auth/reg_clinic");
+        clearForm();
+      }
     }
   };
   const clearForm = () => {
@@ -142,7 +142,19 @@ const DoctorSignUp: React.FC = () => {
                   onIonChange={(e) => setMobile(e.detail.value!)}
                 />
               </IonItem>
-              <IonText color={'danger'} style={{fontSize: '10px', marginBottom: '11px', display: mobile.startsWith("0") || mobile.startsWith("+") ? "block": "none"}}>Mobile Number Must be In 333-1234567 Format</IonText>
+              <IonText
+                color={"danger"}
+                style={{
+                  fontSize: "10px",
+                  marginBottom: "11px",
+                  display:
+                    mobile.startsWith("0") || mobile.startsWith("+")
+                      ? "block"
+                      : "none",
+                }}
+              >
+                Mobile Number Must be In 333-1234567 Format
+              </IonText>
               <IonItem>
                 <IonLabel position="floating">Password</IonLabel>
                 <IonInput

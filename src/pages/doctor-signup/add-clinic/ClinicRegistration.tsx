@@ -43,28 +43,28 @@ const ClinicRegistration: React.FC = () => {
     if (canSubmit) {
       alert("Please fill in all the fields.");
     } else {
-      // Perform the registration logic here
-      // Handle sign-up logic here
-      console.log("Name:", name);
-      console.log("Address:", address);
-      console.log("Mobile:", mobile);
-
-      const Doc_data = localStorage.getItem("drData");
-      //@ts-ignore
-      const drData = JSON.parse(Doc_data);
-      drData.clinics = [
-        {
-          name,
-          address,
-          city,
-          fees: clinicFee,
-          number: mobile,
-          clinicTimings: "",
-        },
-      ];
-      localStorage.setItem("drData", JSON.stringify(drData));
-      router.push("/auth/clinic_schedule");
-      clearClinicForm();
+      if (mobile.trim().length < 10) {
+        alert("Mobile Number must be at least 10 digit");
+      } else if (mobile.trim().length > 10) {
+        alert("Mobile Number must be at least 10 digit long.");
+      } else {
+        const Doc_data = localStorage.getItem("drData");
+        //@ts-ignore
+        const drData = JSON.parse(Doc_data);
+        drData.clinics = [
+          {
+            name,
+            address,
+            city,
+            fees: clinicFee,
+            number: mobile,
+            clinicTimings: "",
+          },
+        ];
+        localStorage.setItem("drData", JSON.stringify(drData));
+        router.push("/auth/clinic_schedule");
+        clearClinicForm();
+      }
     }
   };
   const clearClinicForm = () => {
@@ -124,16 +124,25 @@ const ClinicRegistration: React.FC = () => {
                 />
               </IonItem>
               <IonItem style={{ width: "75%" }}>
-              <input
+                <input
                   type="text"
-                  list="cityOptions" 
+                  list="cityOptions"
                   value={city}
                   placeholder="Choose City"
                   className="custom-input-search"
-                  style={{border: 'none', width: '100%', height: '2.8rem', marginTop: '0.3px', paddingLeft: "6px"}}
+                  style={{
+                    border: "none",
+                    width: "100%",
+                    height: "2.8rem",
+                    marginTop: "0.3px",
+                    paddingLeft: "6px",
+                  }}
                   onChange={(e) => setCity(e.target.value)}
                 />
-                <datalist id="cityOptions" style={{width: '100%', border: 'none'}}>
+                <datalist
+                  id="cityOptions"
+                  style={{ width: "100%", border: "none" }}
+                >
                   {cities.map((city, index) => (
                     <option key={index} value={city} />
                   ))}
@@ -158,7 +167,19 @@ const ClinicRegistration: React.FC = () => {
                   onIonChange={(e) => setMobile(e.detail.value!)}
                 />
               </IonItem>
-              <IonText color={'danger'} style={{fontSize: '10px', marginBottom: '11px', display: mobile.startsWith("0") || mobile.startsWith("+") ? "block": "none"}}>Mobile Number Must be In 333-1234567 Format</IonText>
+              <IonText
+                color={"danger"}
+                style={{
+                  fontSize: "10px",
+                  marginBottom: "11px",
+                  display:
+                    mobile.startsWith("0") || mobile.startsWith("+")
+                      ? "block"
+                      : "none",
+                }}
+              >
+                Mobile Number Must be In 333-1234567 Format
+              </IonText>
               <IonItem style={{ width: "75%" }}>
                 <IonLabel position="floating">Fee</IonLabel>
                 <IonInput
