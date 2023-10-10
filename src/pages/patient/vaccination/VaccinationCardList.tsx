@@ -25,6 +25,7 @@ import syringImage from "../../../assets/injectionFilled.png";
 import VaccinationCard from "./VaccinationCard";
 import Toast from "../../../components/custom-toast/Toast";
 import { useLocation } from "react-router";
+import { v4 } from 'uuid';
 interface IVaccine {
   DoseName: string;
   IsDone: boolean;
@@ -292,8 +293,9 @@ const VaccinationCardList: React.FC<IParam> = (
             const isBulkSkip = data[date].every((item) => item.IsSkip === true);
             //@ts-ignore
             const isBulkDone = data[date].every((item) => item.IsDone === true);
+            const uniqueId = v4();
             return (
-              <>
+              <React.Fragment key={uniqueId}>
                 {!isBulkSkip && !isBulkDone && (
                   <IonItem lines="none" className="centered-item">
                     <IonText style={{ marginRight: "1rem" }}>{date}</IonText>
@@ -457,7 +459,7 @@ const VaccinationCardList: React.FC<IParam> = (
                     />
                   ))}
                 </IonCard>
-              </>
+              </React.Fragment>
             );
           })}
         </IonContent>

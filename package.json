@@ -36,7 +36,8 @@
     "react-dom": "^18.2.0",
     "react-router": "^5.3.4",
     "react-router-dom": "^5.3.4",
-    "secure-random-password": "^0.2.3"
+    "secure-random-password": "^0.2.3",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
     "@capacitor/cli": "5.0.4",
@@ -49,6 +50,7 @@
     "@types/react": "^18.0.27",
     "@types/react-dom": "^18.0.10",
     "@types/secure-random-password": "^0.2.1",
+    "@types/uuid": "^9.0.5",
     "@vitejs/plugin-legacy": "^4.0.2",
     "@vitejs/plugin-react": "^3.1.0",
     "cross-env": "^7.0.3",
