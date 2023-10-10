@@ -22,6 +22,7 @@ import { useHistory } from "react-router-dom";
 // import { format } from "date-fns";
 import Toast from "../../components/custom-toast/Toast";
 import cities from "../test/citiesData";
+import generatePassword from "generate-password";
 type DoctorClinicType = { Id: number; Name: string };
 const AddPatient: React.FC = () => {
   const [name, setName] = useState("");
@@ -68,7 +69,7 @@ const AddPatient: React.FC = () => {
         dob,
         gender,
         // type: scheduleType,
-        password,
+        password: generateRandomPassword(),
         city,
         cnic,
         mobileNumber,
@@ -111,7 +112,6 @@ const AddPatient: React.FC = () => {
     // setScheduleType("special");
     setDob("");
     setEmail("");
-    setPassword("");
     setMobileNumber("");
     // setpreferredSchedule("");
     setSelectedDoctor(0);
@@ -127,9 +127,9 @@ const AddPatient: React.FC = () => {
     const doctorData = JSON.parse(sessionStorage.getItem("docData"));
     if (doctorData) {
       // const lastIndex = doctorData.Clinics && doctorData.Clinics.length - 1;
-      const clinicID = doctorData.Clinics[0].Id;
+      const clinic = doctorData.Clinics.find((item: any) => item.IsOnline === true);
       setSelectedDoctor(doctorData["Id"]);
-      setSelectedClinic(clinicID);
+      setSelectedClinic(clinic.Id);
     }
 
     // fetch(`${import.meta.env.VITE_API_URL}api/Doctor`)
@@ -151,19 +151,24 @@ const AddPatient: React.FC = () => {
 
     // console.log(today);
     setToDay(today);
-  }, [history]);
+  }, [history, success, error]);
 
   const canSubmit =
     name !== "" &&
     guardian !== "" &&
-    // guardian !== "" &&
-    password !== "" &&
     cnic !== "" &&
     gender !== "" &&
     dob !== "" &&
     email !== "" &&
     mobileNumber !== "" &&
     city !== "";
+
+    function generateRandomPassword(length = 10) {
+      return generatePassword.generate({
+        length,
+        numbers: true,
+      });
+    }
   return (
     <IonPage>
       <Toast
