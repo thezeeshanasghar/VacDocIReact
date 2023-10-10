@@ -18,10 +18,11 @@ import {
 import React, { useEffect, useState } from "react";
 import Header from "../../components/header/Header";
 import "./css/addpatient.css";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 // import { format } from "date-fns";
 import Toast from "../../components/custom-toast/Toast";
 import cities from "../test/citiesData";
+import secureRandomPassword from "secure-random-password";
 type DoctorClinicType = { Id: number; Name: string };
 const AddPatient: React.FC = () => {
   const [name, setName] = useState("");
@@ -42,22 +43,24 @@ const AddPatient: React.FC = () => {
   const [isEPIDone, setIsEPIDone] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
   const history = useHistory();
+  const location = useLocation();
   // const [clinicData, setClinicData] = useState<DoctorClinicType[]>([]);
   // const [doctorData, setDoctorData] = useState<DoctorClinicType[]>([]);
   const [success, setSuccess] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
+  const [noClinic, setNoClinic] = useState<boolean>(false);
 
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // const formatedDate = format(
-    //   new Date(dob),
-    //   "yyyy-MM-dd'T'HH:mm:ss.SSSX"
-    // );
+    if (!selectedClinic) {
+      setNoClinic(true);
+      return;
+    }
     if (mobileNumber.trim().length < 10) {
       alert("Mobile Number must be at least 10 digit");
     } else if (mobileNumber.trim().length > 10) {
       alert("Mobile Number must be at least 10 digit long.");
-    } else if(cnic.trim().length < 14 || cnic.trim().length > 14) {
+    } else if (cnic.trim().length < 14 || cnic.trim().length > 14) {
       alert("CNIC Number must be 14 digits long.");
     } else {
       const data_to_be_sent = {
@@ -68,7 +71,7 @@ const AddPatient: React.FC = () => {
         dob,
         gender,
         // type: scheduleType,
-        password,
+        password: generateRandomPassword(),
         city,
         cnic,
         mobileNumber,
@@ -111,7 +114,6 @@ const AddPatient: React.FC = () => {
     // setScheduleType("special");
     setDob("");
     setEmail("");
-    setPassword("");
     setMobileNumber("");
     // setpreferredSchedule("");
     setSelectedDoctor(0);
@@ -127,9 +129,11 @@ const AddPatient: React.FC = () => {
     const doctorData = JSON.parse(sessionStorage.getItem("docData"));
     if (doctorData) {
       // const lastIndex = doctorData.Clinics && doctorData.Clinics.length - 1;
-      const clinicID = doctorData.Clinics[0].Id;
+      // const clinic = doctorData.Clinics.find(
+      //   (item: any) => item.IsOnline === true
+      // );
       setSelectedDoctor(doctorData["Id"]);
-      setSelectedClinic(clinicID);
+      // setSelectedClinic(clinic.Id);
     }
 
     // fetch(`${import.meta.env.VITE_API_URL}api/Doctor`)
@@ -137,10 +141,20 @@ const AddPatient: React.FC = () => {
     //   .then((data) => setDoctorData(data))
     //   .catch((err) => console.error(err));
 
-    // fetch(`${import.meta.env.VITE_API_URL}api/Clinic`)
-    //   .then((res) => res.json())
-    //   .then((data) => setClinicData(data))
-    //   .catch((err) => console.error(err));
+    fetch(
+      `${import.meta.env.VITE_API_URL}api/Clinic/clinicByDoctor?doctorId=${
+        doctorData["Id"]
+      }`
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        data.forEach((item: any) => {
+          if (item.IsOnline) {
+            setSelectedClinic(item.Id);
+          }
+        });
+      })
+      .catch((err) => console.error(err));
 
     const currentDate = new Date();
     const year = currentDate.getFullYear();
@@ -151,19 +165,28 @@ const AddPatient: React.FC = () => {
 
     // console.log(today);
     setToDay(today);
-  }, [history]);
+  }, [location, success, error]);
 
   const canSubmit =
     name !== "" &&
     guardian !== "" &&
-    // guardian !== "" &&
-    password !== "" &&
     cnic !== "" &&
     gender !== "" &&
     dob !== "" &&
     email !== "" &&
     mobileNumber !== "" &&
     city !== "";
+
+  function generateRandomPassword() {
+    return secureRandomPassword.randomPassword({
+      length: 8,
+      characters: [
+        secureRandomPassword.lower,
+        secureRandomPassword.upper,
+        secureRandomPassword.digits,
+      ],
+    });
+  }
   return (
     <IonPage>
       <Toast
@@ -176,6 +199,12 @@ const AddPatient: React.FC = () => {
         isOpen={error}
         setOpen={setError}
         message="An error occurred while adding patient. plz try again"
+        color="danger"
+      />
+      <Toast
+        isOpen={noClinic}
+        setOpen={setNoClinic}
+        message="currently there is no ONLINE clinic, please make one online."
         color="danger"
       />
       <Header pageName="Add Patient" />
