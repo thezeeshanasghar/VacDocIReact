@@ -200,7 +200,7 @@ const ClinicCard: React.FC<ClinicCardProps> = ({
             <IonText>Consultation fee : {Fees}</IonText>
             <IonGrid>
               <IonRow>
-                Timming:-
+             
                 {clinicTimings.map((item, index) => {
                   if (item.ClinicId === Id) {
                     const count = clinicTimings.filter(
