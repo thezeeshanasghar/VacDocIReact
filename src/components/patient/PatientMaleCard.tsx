@@ -9,6 +9,7 @@ import {
   IonLabel,
   IonThumbnail,
   useIonRouter,
+  IonText,
 } from "@ionic/react";
 import { create, trash, mail, call, person, calendar } from "ionicons/icons";
 import maleThumbmail from "../../assets/male.png";
@@ -18,6 +19,8 @@ import { useHistory } from "react-router";
 interface IMalePatient {
   Id: number;
   Name: string;
+  MobileNumber: string;
+  Email: string;
   renderList: () => void;
   DoctorId: number;
   ClinicId: number;
@@ -26,19 +29,24 @@ interface IMalePatient {
 const PatientMaleCard: React.FC<IMalePatient> = ({
   Name,
   Id,
+  MobileNumber,
+  Email,
   renderList,
   DoctorId,
   ClinicId,
-  DOB
+  DOB,
 }) => {
   const router = useIonRouter();
   const history = useHistory();
   const [deletePatient, setDeletePatient] = useState(false);
 
   const handleClick = () => {
-    history.push(`/members/child/vaccine/${Id}?DOB=${DOB}&doctorId=${DoctorId}`, {
-      state: { childId: Id, doctorId: DoctorId },
-    });
+    history.push(
+      `/members/child/vaccine/${Id}?DOB=${DOB}&doctorId=${DoctorId}`,
+      {
+        state: { childId: Id, doctorId: DoctorId },
+      }
+    );
   };
   return (
     <IonCard style={{ border: "2px solid blue" }}>
@@ -78,6 +86,17 @@ const PatientMaleCard: React.FC<IMalePatient> = ({
         ></IonIcon>
       </IonItem>
       <IonCardContent>
+        
+          <div style={{display:  'flex', marginBottom: "1rem" }}>
+            <div style={{display: 'flex', gap: '.3rem', marginRight: '1rem'}}>
+              <IonIcon icon={call} color="primary" size="small"></IonIcon>
+              <IonText style={{ fontSize: "12px" }}>{MobileNumber}</IonText>
+            </div>
+            <div style={{display: 'flex', gap: '.3rem'}}>
+              <IonIcon icon={mail} color="primary" size="small"></IonIcon>
+              <IonText style={{ fontSize: "12px" }}>{Email}</IonText>
+            </div>
+          </div>
         <IonButton
           color="tertiary"
           fill="outline"

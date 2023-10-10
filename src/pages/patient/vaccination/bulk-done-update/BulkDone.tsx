@@ -167,7 +167,7 @@ const BulkDone: React.FC<IParam> = ({
         currentDate: formatDate(oldDate),
         isDone: 1,
         isSkip: 0,
-        newDate: newDate,
+        givenDate: newDate,
         brandId: selectedBrandIds[i],
       };
 
