@@ -134,13 +134,42 @@ const AddClinic: React.FC = () => {
 
       if (response.status === 201) {
         const data = await response.json();
+        console.log(data);
+        
+        if (typeof sessionStorage !== 'undefined') {
+          const key = 'docData';
+      
+          // Retrieve the existing data from session storage
+          const existingData = sessionStorage.getItem(key);
+      
+          if (existingData) {
+            // Parse the existing data into a JavaScript object
+            const parsedData = JSON.parse(existingData);
+      
+            // Push the new data into the "ClinicTimings" array
+            parsedData.Clinics[0].ClinicTimings.push(...data.ClinicTimings);
+      
+            // Store the updated data in session storage
+            sessionStorage.setItem(key, JSON.stringify(parsedData));
+            
+            // Retrieve and log the updated value (optional)
+            const retrievedValue = sessionStorage.getItem(key);
+            console.log('Retrieved Value:', retrievedValue);
+          } else {
+            console.error('Existing data not found in session storage.');
+          }
+        } else {
+          console.error('Session storage is not supported in this browser.');
+        }
+        
         setSuccess(true);
         localStorage.clear();
         history.push("/members/doctor/clinic", "back");
-        // window.location.reload();
       } else {
         throw new Error("Failed to create clinic");
       }
+      
+      
     } catch (error) {
       localStorage.clear();
       setError(true);
