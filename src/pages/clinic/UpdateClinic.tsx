@@ -60,6 +60,7 @@ const UpdateClinic: React.FC<ClinicProps> = ({
   const [canSubmit, setCanSubmit] = useState(false);
   const [error, setError] = useState(false);
   const [clinicArray, setClinicArray] = useState<any>([]);
+  const [rerender, setRerender] = useState(false);
 
   useEffect(() => {
     localStorage.clear();
@@ -68,6 +69,7 @@ const UpdateClinic: React.FC<ClinicProps> = ({
     console.log(storedValue);
   }, []);
 
+  const doRender = () => setRerender(!rerender);
   const handleUnSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     let data_to_to_sent = [];
@@ -894,36 +896,57 @@ const UpdateClinic: React.FC<ClinicProps> = ({
                 name={"Monday"}
                 session={clinicArray}
                 clinicId={clinicId}
+                renderFunc={doRender} 
+                // id="name123" 
+                isRendering={rerender}
               />
               <DaysCard
                 name={"Tuesday"}
                 session={clinicArray}
                 clinicId={clinicId}
+                renderFunc={doRender} 
+                // id="name123" 
+                isRendering={rerender}
               />
               <DaysCard
                 name={"Wednesday"}
                 session={clinicArray}
                 clinicId={clinicId}
+                renderFunc={doRender}
+                //  id="name123"
+                  isRendering={rerender}
               />
               <DaysCard
                 name={"Thursday"}
                 session={clinicArray}
                 clinicId={clinicId}
+                renderFunc={doRender} 
+                // id="name123" 
+                isRendering={rerender}
               />
               <DaysCard
                 name={"Friday"}
                 session={clinicArray}
                 clinicId={clinicId}
+                renderFunc={doRender} 
+                // id="name123" 
+                isRendering={rerender}
               />
               <DaysCard
                 name={"Saturday"}
                 session={clinicArray}
                 clinicId={clinicId}
+                renderFunc={doRender} 
+                // id="name123"
+                 isRendering={rerender}
               />
               <DaysCard
                 name={"Sunday"}
                 session={clinicArray}
                 clinicId={clinicId}
+                renderFunc={doRender} 
+                // id="name123"
+                 isRendering={rerender}
               />
               <IonButton type="submit" disabled={!anSubmit}>
                 Update

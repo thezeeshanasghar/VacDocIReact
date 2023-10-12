@@ -11,11 +11,14 @@ import {
   IonInput,
   IonCardHeader,
   InputChangeEventDetail,
+  IonButton,
 } from "@ionic/react";
 import React, { useState, useEffect } from "react";
 
 type UpdateWeekDayCardProps = {
   name: string;
+  renderFunc: () => void;
+  isRendering: boolean;
   session: ISession[];
   clinicId: string;
   setSession?: React.Dispatch<React.SetStateAction<ISession[]>>;
@@ -37,7 +40,7 @@ interface CData {
     ClinicId: number;
   }
 
-const UpdateWeekDaysCard: React.FC<UpdateWeekDayCardProps> = ({ name, setSession,session ,clinicId}) => {
+const UpdateWeekDaysCard: React.FC<UpdateWeekDayCardProps> = ({ name, setSession,session ,clinicId, renderFunc,isRendering,}) => {
   const [showSession1, setShowSession1] = useState(false);
   const [showSession2, setShowSession2] = useState(false);
   const [clinicSession, setClinicSession] = useState("")
@@ -101,7 +104,7 @@ const UpdateWeekDaysCard: React.FC<UpdateWeekDayCardProps> = ({ name, setSession
       }
     }
   },[showCard, showSession2, mstart2, mend2, name]);
-  
+  // const doRender = () => setRerender(!rerender);
 
   useEffect(() => {
     dayData.length >= 1 && localStorage.setItem(name, JSON.stringify(dayData));
@@ -138,6 +141,42 @@ const UpdateWeekDaysCard: React.FC<UpdateWeekDayCardProps> = ({ name, setSession
         console.error("Error fetching clinic timing:", error);
       });
   }, []);
+
+  const ApplyTimingToAll = () => {
+    if (name === "Monday") {
+      const otherWeekdays = ["Tuesday", "Wednesday", "Thursday", "Friday"];
+
+      // const otherWeekdaysNotInLocalStorage = otherWeekdays.every((weekday) => {
+      //   return localStorage.getItem(weekday) === null;
+      // });
+
+      // if (otherWeekdaysNotInLocalStorage) {
+      const daysToStore = [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+      ];
+      // dayData.length >= 1 &&
+      daysToStore.forEach((day, index) => {
+        const lastIndex = index === daysToStore.length - 1;
+        localStorage.setItem(day, JSON.stringify(dayData));
+
+        // if (lastIndex) {
+        //   //@ts-ignore
+        //   let count = JSON.parse(localStorage.getItem("count")) || null;
+        //   if (count === 0 || count === null) {
+        //     renderFunc();
+        //     // window.location.reload();
+        //   }
+        // }
+      });
+      // localStorage.setItem("count", JSON.stringify(0));
+      renderFunc();
+      // }
+    }
+  };
   
 
   const handleToggleSession1 = (e: {
@@ -269,6 +308,24 @@ const UpdateWeekDaysCard: React.FC<UpdateWeekDayCardProps> = ({ name, setSession
           )}
         </IonCardContent>
       )}
+        <div
+        style={{
+          textAlign: "center",
+          display: name === "Monday" ? "block" : "none",
+        }}
+      >
+        <IonButton
+          size="small"
+          style={{
+            textTransform: "capitalize",
+            display:
+              (showCard && showSession1) || showSession2 ? "block" : "none",
+          }}
+          onClick={ApplyTimingToAll}
+        >
+          Apply to all
+        </IonButton>
+      </div>
     </IonCard>
   );
 };
