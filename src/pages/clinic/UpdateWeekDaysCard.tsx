@@ -29,32 +29,111 @@ export interface ISession {
   session: string;
   startTime: string;
   endTime: string;
-  
 }
 interface CData {
-    Id: number;
-    Day: string;
-    Session: string;
-    StartTime: string;
-    EndTime: string;
-    ClinicId: number;
-  }
+  Id: number;
+  Day: string;
+  Session: string;
+  StartTime: string;
+  EndTime: string;
+  ClinicId: number;
+}
 
-const UpdateWeekDaysCard: React.FC<UpdateWeekDayCardProps> = ({ name, setSession,session ,clinicId, renderFunc,isRendering,}) => {
+const UpdateWeekDaysCard: React.FC<UpdateWeekDayCardProps> = ({
+  name,
+  setSession,
+  session,
+  clinicId,
+  renderFunc,
+  isRendering,
+}) => {
   const [showSession1, setShowSession1] = useState(false);
   const [showSession2, setShowSession2] = useState(false);
-  const [clinicSession, setClinicSession] = useState("")
+  const [clinicSession, setClinicSession] = useState("");
   const [showCard, setShowCard] = useState(false);
   const [mstart, setMStart] = useState("");
   const [mend, setMEnd] = useState("");
   const [mstart2, setMStart2] = useState("");
   const [mend2, setMEnd2] = useState("");
   const [dayData, setDayData] = useState<ISession[]>([]);
-  const [clinicArray,setClinicArray]= useState([]);
-// console.log("session data",session)
-// const {Id, Day} = session && session[0];
-// console.log(clinicId)
+  const [clinicArray, setClinicArray] = useState([]);
+
   useEffect(() => {
+    const storageData: ISession[] | null = JSON.parse(
+      localStorage.getItem(name) || "null"
+    );
+
+    if (storageData) {
+      const morningSessions = storageData.filter(
+        (session) => session.session === "Morning"
+      );
+      const eveningSessions = storageData.filter(
+        (session) => session.session === "Evening"
+      );
+
+      if (morningSessions.length > 0) {
+        const firstMorningSession = morningSessions[0];
+        const { startTime, endTime } = firstMorningSession;
+        setMStart(startTime);
+        setMEnd(endTime);
+        setShowSession1(true);
+        setShowCard(true);
+        console.log("Morning session data:", firstMorningSession);
+      } else {
+        console.log("No Morning sessions found.");
+      }
+
+      if (eveningSessions.length > 0) {
+        const firstEveningSession = eveningSessions[0];
+        const { startTime, endTime } = firstEveningSession;
+        setMStart2(startTime);
+        setMEnd2(endTime);
+        setShowSession2(true);
+        setShowCard(true);
+        console.log("Evening session data:", firstEveningSession);
+      } else {
+        console.log("No Evening sessions found.");
+      }
+    } else {
+      console.log("No data found in localStorage for", name);
+    }
+  }, [isRendering]);
+
+  const removeDatabyToggle = () => {
+    if (!showCard) {
+      localStorage.removeItem(name);
+      setMStart("");
+      setMEnd("");
+      setMStart2("");
+      setMEnd2("");
+    }
+    if (!showSession1) {
+      setMStart("");
+      setMEnd("");
+    }
+    if (!showSession2) {
+      setMStart2("");
+      setMEnd2("");
+    }
+  };
+
+  const removeAllData = () => {
+    if (!showSession1 || showSession1) {
+      setMStart("");
+      setMEnd("");
+      setShowSession1(false);
+    }
+    if (!showSession2 || showSession2) {
+      setMStart2("");
+      setMEnd2("");
+      setShowSession2(false);
+    }
+    if (!showCard || showCard) {
+      setShowCard(false);
+    }
+  };
+  useEffect(() => {
+    removeDatabyToggle();
     if (showCard && showSession1 && mstart !== "" && mend !== "") {
       const existingIndex = dayData.findIndex(
         (entry) => entry.day === name && entry.session === "Morning"
@@ -73,19 +152,19 @@ const UpdateWeekDaysCard: React.FC<UpdateWeekDayCardProps> = ({ name, setSession
             session: "Morning",
             startTime: mstart,
             endTime: mend,
-            
           },
         ]);
       }
     }
-  },[showCard, showSession1, mstart, mend, name, ]);
+  }, [showCard, showSession1, mstart, mend, name]);
 
   useEffect(() => {
+    removeDatabyToggle();
     if (showCard && showSession2 && mstart2 !== "" && mend2 !== "") {
       const existingIndex = dayData.findIndex(
         (entry) => entry.day === name && entry.session === "Evening"
       );
-  
+
       if (existingIndex !== -1) {
         const updatedDayData = [...dayData];
         updatedDayData[existingIndex].startTime = mstart2;
@@ -103,12 +182,12 @@ const UpdateWeekDaysCard: React.FC<UpdateWeekDayCardProps> = ({ name, setSession
         ]);
       }
     }
-  },[showCard, showSession2, mstart2, mend2, name]);
+  }, [showCard, showSession2, mstart2, mend2, name]);
   // const doRender = () => setRerender(!rerender);
 
   useEffect(() => {
     dayData.length >= 1 && localStorage.setItem(name, JSON.stringify(dayData));
-  },[dayData]);
+  }, [dayData]);
   useEffect(() => {
     setShowCard(false);
     setShowSession1(false);
@@ -117,17 +196,29 @@ const UpdateWeekDaysCard: React.FC<UpdateWeekDayCardProps> = ({ name, setSession
     setMEnd("");
     setMStart2("");
     setMEnd2("");
-    fetch(`${import.meta.env.VITE_API_URL}api/ClinicTiming/GET-ClinicTiming/${clinicId}`)
+    fetch(
+      `${
+        import.meta.env.VITE_API_URL
+      }api/ClinicTiming/GET-ClinicTiming/${clinicId}`
+    )
       .then((response) => response.json())
       .then((data) => {
         if (data.length > 0) {
           const morningData = data.find(
-            (entry: { Session: string; Day: string; }) => entry.Session === "Morning" && entry.Day === name
+            (entry: { Session: string; Day: string }) =>
+              entry.Session === "Morning" && entry.Day === name
           );
           const eveningData = data.find(
-            (entry: { Session: string; Day: string; }) => entry.Session === "Evening" && entry.Day === name
+            (entry: { Session: string; Day: string }) =>
+              entry.Session === "Evening" && entry.Day === name
           );
-  
+          if (name === "Monday") {
+            let dataToBeStored = [];
+            morningData && dataToBeStored.push(morningData);
+            eveningData && dataToBeStored.push(eveningData);
+            localStorage.setItem(name, JSON.stringify(dataToBeStored));
+          }
+
           setShowCard(!!morningData || !!eveningData);
           setShowSession1(!!morningData);
           setShowSession2(!!eveningData);
@@ -135,7 +226,7 @@ const UpdateWeekDaysCard: React.FC<UpdateWeekDayCardProps> = ({ name, setSession
           setMEnd(morningData ? morningData.EndTime : null);
           setMStart2(eveningData ? eveningData.StartTime : null);
           setMEnd2(eveningData ? eveningData.EndTime : null);
-        } 
+        }
       })
       .catch((error) => {
         console.error("Error fetching clinic timing:", error);
@@ -177,7 +268,6 @@ const UpdateWeekDaysCard: React.FC<UpdateWeekDayCardProps> = ({ name, setSession
       // }
     }
   };
-  
 
   const handleToggleSession1 = (e: {
     detail: { checked: boolean | ((prevState: boolean) => boolean) };
@@ -216,9 +306,8 @@ const UpdateWeekDaysCard: React.FC<UpdateWeekDayCardProps> = ({ name, setSession
       setMEnd2(value);
     }
   };
-// console.log(showCard,showSession1,showSession2)
+  // console.log(showCard,showSession1,showSession2)
   return (
-    
     <IonCard style={{ width: "100%" }}>
       <IonCardHeader>
         <div
@@ -228,17 +317,12 @@ const UpdateWeekDaysCard: React.FC<UpdateWeekDayCardProps> = ({ name, setSession
             width: "100%",
           }}
         >
-            
           <IonCardTitle>{name}</IonCardTitle>
-          <IonToggle 
-          checked={showCard} 
-          onIonChange={handleToggleCard}
-          />
+          <IonToggle checked={showCard} onIonChange={handleToggleCard} />
         </div>
       </IonCardHeader>
-      
+
       {showCard && (
-        
         <IonCardContent>
           <IonItem lines="none">
             <IonLabel>Session: 1</IonLabel>
@@ -249,7 +333,6 @@ const UpdateWeekDaysCard: React.FC<UpdateWeekDayCardProps> = ({ name, setSession
           </IonItem>
 
           {showSession1 && (
-            
             <IonRow>
               <IonCol>
                 <IonItem>
@@ -308,7 +391,7 @@ const UpdateWeekDaysCard: React.FC<UpdateWeekDayCardProps> = ({ name, setSession
           )}
         </IonCardContent>
       )}
-        <div
+      <div
         style={{
           textAlign: "center",
           display: name === "Monday" ? "block" : "none",
