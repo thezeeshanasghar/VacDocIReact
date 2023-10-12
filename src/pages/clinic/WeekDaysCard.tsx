@@ -95,6 +95,10 @@ const WeekDaysCard: React.FC<WeekDayCardProps> = ({
   const removeDatabyToggle = () => {
     if (!showCard) {
       localStorage.removeItem(name);
+      setMStart("");
+      setMEnd("");
+      setMStart2("");
+      setMEnd2("");
     }
     if (!showSession1) {
       setMStart("");

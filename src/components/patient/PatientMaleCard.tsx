@@ -19,6 +19,7 @@ import { useHistory } from "react-router";
 interface IMalePatient {
   Id: number;
   Name: string;
+  Guardian: string;
   MobileNumber: string;
   Email: string;
   renderList: () => void;
@@ -28,6 +29,7 @@ interface IMalePatient {
 }
 const PatientMaleCard: React.FC<IMalePatient> = ({
   Name,
+  Guardian,
   Id,
   MobileNumber,
   Email,
@@ -87,13 +89,17 @@ const PatientMaleCard: React.FC<IMalePatient> = ({
       </IonItem>
       <IonCardContent>
         
-          <div style={{display:  'flex', marginBottom: "1rem" }}>
-            <div style={{display: 'flex', gap: '.3rem', marginRight: '1rem'}}>
-              <IonIcon icon={call} color="primary" size="small"></IonIcon>
+          <div style={{display:  'flex', marginBottom: ".5rem" }}>
+            <div style={{display: 'flex', gap: '.3rem', marginRight: '1rem', alignItems: 'center'}}>
+              <IonIcon icon={person} color="primary" style={{ fontSize: "14px" }}></IonIcon>
+              <IonText style={{ fontSize: "12px" }}>{Guardian}</IonText>
+            </div>
+            <div style={{display: 'flex', gap: '.3rem', marginRight: '1rem', alignItems: 'center'}}>
+              <IonIcon icon={call} color="primary" style={{ fontSize: "14px" }}></IonIcon>
               <IonText style={{ fontSize: "12px" }}>{MobileNumber}</IonText>
             </div>
-            <div style={{display: 'flex', gap: '.3rem'}}>
-              <IonIcon icon={mail} color="primary" size="small"></IonIcon>
+            <div style={{display: 'flex', gap: '.3rem', alignItems: 'center'}}>
+              <IonIcon icon={mail} color="primary" style={{ fontSize: "14px" }}></IonIcon>
               <IonText style={{ fontSize: "12px" }}>{Email}</IonText>
             </div>
           </div>

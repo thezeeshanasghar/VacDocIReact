@@ -54,6 +54,7 @@ const DoctorScheduleCardList: React.FC = () => {
   }, []);
 
   const fetchDoseData = async () => {
+    //@ts-ignore
     const storedValue = JSON.parse(sessionStorage.getItem("docData"));
     const DoctorId = storedValue && storedValue.Id;
     // try {
@@ -86,9 +87,11 @@ const DoctorScheduleCardList: React.FC = () => {
         <IonContent className="ion-padding">
           {Object.keys(data).map((date) => (
             <DoctorScheduleCard
+            //@ts-ignore
               key={data[date].Id}
               scheduleKey={date}
               date={date}
+              //@ts-ignore
               data={data[date]}
               renderList={forceRender}
             />

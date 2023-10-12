@@ -25,7 +25,7 @@ import syringImage from "../../../assets/injectionFilled.png";
 import VaccinationCard from "./VaccinationCard";
 import Toast from "../../../components/custom-toast/Toast";
 import { useLocation } from "react-router";
-import { v4 } from 'uuid';
+import { v4 } from "uuid";
 interface IVaccine {
   DoseName: string;
   IsDone: boolean;
@@ -164,11 +164,7 @@ const VaccinationCardList: React.FC<IParam> = (
     setSelectedDate(data2);
   };
 
-  const handleDateChange = async (
-    event: CustomEvent,
-    key: string,
-    inputValue: string
-  ) => {
+  const handleDateChange = async (event: CustomEvent) => {
     //@ts-ignore
     const storedValue = JSON.parse(sessionStorage.getItem("docData"));
     const DoctorID = storedValue && storedValue.Id;
@@ -237,7 +233,7 @@ const VaccinationCardList: React.FC<IParam> = (
       console.log(error);
     }
   };
- 
+
   const handleDownload = () => {
     axios({
       url: `${
@@ -306,7 +302,8 @@ const VaccinationCardList: React.FC<IParam> = (
                         router.push(
                           `/members/child/vaccine/${childId}/bulk/${1}?oldDate=${date}&No=${
                             //@ts-ignore
-                            data[date].filter(item => item.IsSkip === false).length
+                            data[date].filter((item) => item.IsSkip === false)
+                              .length
                           }`
                         )
                       }
@@ -325,7 +322,7 @@ const VaccinationCardList: React.FC<IParam> = (
                       onClick={openPopover}
                       icon={calendar}
                       style={{ marginRight: "10px", cursor: "pointer" }}
-                      onMouseOver={() => handelonmouseover(date)}
+                      // onMouseOver={() => handelonmouseover(date)}
                       id="bulk"
                     />
 
@@ -336,11 +333,19 @@ const VaccinationCardList: React.FC<IParam> = (
                     >
                       <IonDatetime
                         placeholder="Select Date"
-                        value={selectedDate || undefined}
-                        onIonChange={(e) =>
-                          handleDateChange(e, date, inputValue)
+                        value={
+                          selectedDate || date
                         }
+                        onIonChange={handleDateChange}
                       ></IonDatetime>
+
+                      {/* <IonInput
+                        type="date"
+                        value={
+                          selectedDate || format(new Date(date), "yyyy-MM-dd")
+                        }
+                        onIonChange={handleDateChange}
+                      /> */}
                     </IonPopover>
 
                     <IonButton
@@ -400,10 +405,10 @@ const VaccinationCardList: React.FC<IParam> = (
                     >
                       <IonDatetime
                         placeholder="Select Date"
-                        value={selectedDate || undefined}
-                        onIonChange={(e) =>
-                          handleDateChange(e, date, inputValue)
+                        value={
+                          selectedDate || format(new Date(date), "dd-MM-yyyy")
                         }
+                        onIonChange={handleDateChange}
                       ></IonDatetime>
                     </IonPopover>
                     <IonCol size="auto">

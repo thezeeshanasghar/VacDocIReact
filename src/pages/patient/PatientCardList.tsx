@@ -19,7 +19,7 @@ import { add } from "ionicons/icons";
 export interface IPatientData {
   Id: number;
   Name: string;
-  Guardian: string;
+  GuardianName: string;
   MobileNumber: string;
   Email: string;
   DOB: string;
@@ -55,7 +55,7 @@ const PatientCardList: React.FC = () => {
       .then((response) => response.json())
       .then((data: IPatientData[]) => {
         setPatientData(data);
-        console.log(data);
+        console.log("patent data : ",data);
         setCurrentPage(2);
       })
       .catch((error) => {
@@ -109,6 +109,7 @@ const PatientCardList: React.FC = () => {
                   <PatientMaleCard
                     key={item.Id}
                     Name={item.Name}
+                    Guardian={item.GuardianName}
                     Id={item.Id}
                     MobileNumber={item.MobileNumber}
                     Email={item.Email}
@@ -123,6 +124,7 @@ const PatientCardList: React.FC = () => {
                 <PatientFemaleCard
                   key={index * 3}
                   Name={item.Name}
+                  Guardian={item.GuardianName}
                   MobileNumber={item.MobileNumber}
                   Email={item.Email}
                   Id={item.Id}

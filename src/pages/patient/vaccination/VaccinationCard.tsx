@@ -215,7 +215,6 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
         message="An error occurred while updating patient schedule. Please try again."
         color="danger"
       />
-
       <IonGrid>
         <IonRow>
           <IonCol>

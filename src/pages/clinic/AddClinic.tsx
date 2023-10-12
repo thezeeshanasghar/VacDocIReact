@@ -35,6 +35,7 @@ const AddClinic: React.FC = () => {
   const [error, setError] = useState(false);
   const [cId, setCId] = useState(null);
   const [data, setData] = useState<any>(null);
+  const [rerender, setRerender] = useState(false);
 
   // const handleUnSubmit = async (e: React.FormEvent) => {
   //   e.preventDefault();
@@ -84,6 +85,7 @@ const AddClinic: React.FC = () => {
       postClinic();
     }
   };
+  const doRender = () => setRerender(!rerender);
 
   const postClinic = async () => {
     const weekdays = [
@@ -355,13 +357,13 @@ const AddClinic: React.FC = () => {
               onIonChange={(e) => setFees(e.detail.value!)}
             />
           </IonItem>
-          <AddWeekDaysCard name={"Monday"} />
-          <AddWeekDaysCard name={"Tuesday"} />
-          <AddWeekDaysCard name={"Wednesday"} />
-          <AddWeekDaysCard name={"Thursday"} />
-          <AddWeekDaysCard name={"Friday"} />
-          <AddWeekDaysCard name={"Saturday"} />
-          <AddWeekDaysCard name={"Sunday"} />
+          <WeekDaysCard name={"Monday"} renderFunc={doRender} id="name123" isRendering={rerender}/>
+          <WeekDaysCard name={"Tuesday"} renderFunc={doRender} id="name122" isRendering={rerender}/>
+          <WeekDaysCard name={"Wednesday"} renderFunc={doRender} id="name124" isRendering={rerender}/>
+          <WeekDaysCard name={"Thursday"} renderFunc={doRender} id="name125" isRendering={rerender}/>
+          <WeekDaysCard name={"Friday"} renderFunc={doRender} id="name126" isRendering={rerender}/>
+          <WeekDaysCard name={"Saturday"} renderFunc={doRender} id="name127" isRendering={rerender}/>
+          <WeekDaysCard name={"Sunday"} renderFunc={doRender} id="name128" isRendering={rerender}/>
           <IonButton disabled={!anSubmit} type="submit">
             Add
           </IonButton>

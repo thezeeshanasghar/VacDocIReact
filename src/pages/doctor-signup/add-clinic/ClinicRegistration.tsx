@@ -188,7 +188,7 @@ const ClinicRegistration: React.FC = () => {
                   value={clinicFee}
                   onIonChange={(e) => setClinicFee(e.detail.value!)}
                   id="Fee"
-                  placeholder="fee must be in dollars or rupees"
+                  placeholder="PKR"
                 />
               </IonItem>
               <IonButton expand="full" type="submit" id="submits">
