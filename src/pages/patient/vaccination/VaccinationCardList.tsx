@@ -289,9 +289,9 @@ const VaccinationCardList: React.FC<IParam> = (
             const isBulkSkip = data[date].every((item) => item.IsSkip === true);
             //@ts-ignore
             const isBulkDone = data[date].every((item) => item.IsDone === true);
-            const uniqueId = v4();
+
             return (
-              <React.Fragment key={uniqueId}>
+              <React.Fragment>
                 {!isBulkSkip && !isBulkDone && (
                   <IonItem lines="none" className="centered-item">
                     <IonText style={{ marginRight: "1rem" }}>{date}</IonText>
@@ -322,7 +322,7 @@ const VaccinationCardList: React.FC<IParam> = (
                       onClick={openPopover}
                       icon={calendar}
                       style={{ marginRight: "10px", cursor: "pointer" }}
-                      // onMouseOver={() => handelonmouseover(date)}
+                      onMouseOver={() => handelonmouseover(date)}
                       id="bulk"
                     />
 
@@ -333,9 +333,7 @@ const VaccinationCardList: React.FC<IParam> = (
                     >
                       <IonDatetime
                         placeholder="Select Date"
-                        value={
-                          selectedDate || date
-                        }
+                        value={selectedDate || date}
                         onIonChange={handleDateChange}
                       ></IonDatetime>
 
@@ -398,7 +396,7 @@ const VaccinationCardList: React.FC<IParam> = (
                     id="bulk"
                   /> */}
 
-                    <IonPopover
+                    {/* <IonPopover
                       isOpen={showPopover}
                       onDidDismiss={closePopover}
                       showBackdrop={false}
@@ -406,11 +404,11 @@ const VaccinationCardList: React.FC<IParam> = (
                       <IonDatetime
                         placeholder="Select Date"
                         value={
-                          selectedDate || format(new Date(date), "dd-MM-yyyy")
+                          selectedDate
                         }
                         onIonChange={handleDateChange}
                       ></IonDatetime>
-                    </IonPopover>
+                    </IonPopover> */}
                     <IonCol size="auto">
                       <IonButton
                         size="small"
@@ -447,22 +445,25 @@ const VaccinationCardList: React.FC<IParam> = (
                 <IonCard>
                   {/* <IonText>{data[date].length}</IonText>  */}
                   {/* @ts-ignore */}
-                  {data[date].map((item: IVaccine) => (
-                    <VaccinationCard
-                      // data={data[date].length}
-                      childId={childId}
-                      key={item.ScheduleId + childId}
-                      date={date}
-                      Id={item.ScheduleId}
-                      Name={item.DoseName}
-                      BrandName={item.BrandName}
-                      // MinAge={item.MinAge}
-                      IsDone={item.IsDone}
-                      IsSkip={item.IsSkip}
-                      // VaccineId={item.VaccineId}
-                      renderList={forceRender}
-                    />
-                  ))}
+                  {data[date].map((item: IVaccine) => {
+                    const uniqueId = v4();
+                    return (
+                      <VaccinationCard
+                        // data={data[date].length}
+                        childId={childId}
+                        key={uniqueId}
+                        date={date}
+                        Id={item.ScheduleId}
+                        Name={item.DoseName}
+                        BrandName={item.BrandName}
+                        // MinAge={item.MinAge}
+                        IsDone={item.IsDone}
+                        IsSkip={item.IsSkip}
+                        // VaccineId={item.VaccineId}
+                        renderList={forceRender}
+                      />
+                    );
+                  })}
                 </IonCard>
               </React.Fragment>
             );
