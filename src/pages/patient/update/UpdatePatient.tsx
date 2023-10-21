@@ -30,7 +30,7 @@ interface IPatientData {
   Id: number;
   Name: string;
   GuardianName: string;
-  // FatherName: string;
+  Guardian: string;
   Email: string;
   DOB: string;
   Gender: number;
@@ -53,6 +53,7 @@ const UpdatePatient: React.FC<UpdateType> = ({
   const [name, setName] = useState("");
   // const [fatherName, setFatherName] = useState("");
   const [guardian, setGuardian] = useState("");
+  const [guardianText, setGuardianText] = useState("");
   const [cnic, setCnic] = useState("");
   const [gender, setGender] = useState("");
   // const [scheduleType, setScheduleType] = useState("");
@@ -251,7 +252,8 @@ const UpdatePatient: React.FC<UpdateType> = ({
     // setFatherName("");
     setGuardian("");
     setCnic("");
-    setGender("Boy");
+    setGender("");
+    setGuardian("");
     // setScheduleType("special");
     setDob("");
     setEmail("");
@@ -359,14 +361,46 @@ const UpdatePatient: React.FC<UpdateType> = ({
                     onIonChange={(e) => setGuardian(e.detail.value!)}
                   />
                 </IonItem> */}
-                <IonItem>
-                  <IonLabel position="floating">Guardian's Name</IonLabel>
-                  <IonInput
-                    type="text"
-                    value={guardian || patientData.GuardianName}
-                    onIonChange={(e) => setGuardian(e.detail.value!)}
-                    required
-                  />
+                <IonItem lines="full">
+                  <IonItem lines="none">
+                    <IonLabel position="floating">Guardian's Name</IonLabel>
+                    <IonInput
+                      type="text"
+                      value={guardian || patientData.GuardianName}
+                      onIonChange={(e) => setGuardian(e.detail.value!)}
+                      required
+                      id="fname"
+                    />
+                  </IonItem>
+                  <IonItem lines="none">
+                    <IonRadioGroup
+                      value={guardianText || patientData.Guardian}
+                      onIonChange={(e) => setGuardianText(e.detail.value)}
+                    >
+                      <IonGrid>
+                        <IonRow>
+                          <IonCol>
+                            <IonItem>
+                              <IonLabel>Father</IonLabel>
+                              <IonRadio slot="start" value="father" />
+                            </IonItem>
+                          </IonCol>
+                          <IonCol>
+                            <IonItem>
+                              <IonLabel>Mother</IonLabel>
+                              <IonRadio slot="start" value="mother" />
+                            </IonItem>
+                          </IonCol>
+                          <IonCol>
+                            <IonItem>
+                              <IonLabel>Husband</IonLabel>
+                              <IonRadio slot="start" value="husband" />
+                            </IonItem>
+                          </IonCol>
+                        </IonRow>
+                      </IonGrid>
+                    </IonRadioGroup>
+                  </IonItem>
                 </IonItem>
                 <IonItem>
                   <IonLabel position="floating">Email</IonLabel>
@@ -416,13 +450,13 @@ const UpdatePatient: React.FC<UpdateType> = ({
                       <IonCol>
                         <IonItem>
                           <IonLabel>Boy</IonLabel>
-                          <IonRadio slot="start" value={"0"}/>
+                          <IonRadio slot="start" value={"0"} />
                         </IonItem>
                       </IonCol>
                       <IonCol>
                         <IonItem>
                           <IonLabel>Girl</IonLabel>
-                          <IonRadio slot="start" value={"1"}/>
+                          <IonRadio slot="start" value={"1"} />
                         </IonItem>
                       </IonCol>
                     </IonRow>

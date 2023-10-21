@@ -29,7 +29,7 @@ const AddPatient: React.FC = () => {
   const [fatherName, setFatherName] = useState("");
   const [guardian, setGuardian] = useState("");
   const [cnic, setCnic] = useState("");
-  const [gender, setGender] = useState("");
+  const [gender, setGender] = useState("Boy");
   // const [scheduleType, setScheduleType] = useState("");
   const [dob, setDob] = useState("");
   const [email, setEmail] = useState("");
@@ -42,6 +42,7 @@ const AddPatient: React.FC = () => {
   const [city, setCity] = useState<string>("");
   const [isEPIDone, setIsEPIDone] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
+  const [guardianText, setGuardianText] = useState("father");
   const history = useHistory();
   const location = useLocation();
   // const [clinicData, setClinicData] = useState<DoctorClinicType[]>([]);
@@ -65,7 +66,7 @@ const AddPatient: React.FC = () => {
     } else {
       const data_to_be_sent = {
         name,
-        // guardian,
+        guardian: guardianText,
         guardianName: guardian,
         email,
         dob,
@@ -110,6 +111,7 @@ const AddPatient: React.FC = () => {
     setName("");
     setGuardian("");
     setCnic("");
+    setGuardianText("father")
     setGender("Boy");
     // setScheduleType("special");
     setDob("");
@@ -229,15 +231,46 @@ const AddPatient: React.FC = () => {
                 onIonChange={(e) => setGuardian(e.detail.value!)}
               />
             </IonItem> */}
-            <IonItem>
-              <IonLabel position="floating">Guardian's Name</IonLabel>
-              <IonInput
-                type="text"
-                value={guardian}
-                onIonChange={(e) => setGuardian(e.detail.value!)}
-                required
-                id="fname"
-              />
+            <IonItem lines="full">
+              <IonItem lines="none">
+                <IonLabel position="floating">Guardian's Name</IonLabel>
+                <IonInput
+                  type="text"
+                  value={guardian}
+                  onIonChange={(e) => setGuardian(e.detail.value!)}
+                  required
+                  id="fname"
+                />
+              </IonItem>
+              <IonItem lines="none">
+                <IonRadioGroup
+                  value={guardianText}
+                  onIonChange={(e) => setGuardianText(e.detail.value)}
+                >
+                  <IonGrid>
+                    <IonRow>
+                      <IonCol>
+                        <IonItem>
+                          <IonLabel>Father</IonLabel>
+                          <IonRadio slot="start" value="father" />
+                        </IonItem>
+                      </IonCol>
+                      <IonCol>
+                        <IonItem>
+                          <IonLabel>Mother</IonLabel>
+                          <IonRadio slot="start" value="mother" />
+                        </IonItem>
+                      </IonCol>
+                      <IonCol>
+                        <IonItem>
+                          <IonLabel>Husband</IonLabel>
+                          <IonRadio slot="start" value="husband" />
+                        </IonItem>
+                      </IonCol>
+                    </IonRow>
+                  </IonGrid>
+                </IonRadioGroup>
+              </IonItem>
             </IonItem>
             <IonItem>
               <IonLabel position="floating">Email</IonLabel>
