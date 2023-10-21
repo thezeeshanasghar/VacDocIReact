@@ -380,19 +380,19 @@ const UpdatePatient: React.FC<UpdateType> = ({
                       <IonGrid>
                         <IonRow>
                           <IonCol>
-                            <IonItem>
+                            <IonItem lines="none">
                               <IonLabel>Father</IonLabel>
                               <IonRadio slot="start" value="father" />
                             </IonItem>
                           </IonCol>
                           <IonCol>
-                            <IonItem>
+                            <IonItem lines="none">
                               <IonLabel>Mother</IonLabel>
                               <IonRadio slot="start" value="mother" />
                             </IonItem>
                           </IonCol>
                           <IonCol>
-                            <IonItem>
+                            <IonItem lines="none">
                               <IonLabel>Husband</IonLabel>
                               <IonRadio slot="start" value="husband" />
                             </IonItem>
