@@ -48,7 +48,7 @@ const Login: React.FC = () => {
             console.log(res);
             setErrMsg("Your account has expired. Please contact the admin");
             setError(true);
-          }else {
+          } else {
             throw new Error("Internal server error.");
           }
         })
@@ -71,7 +71,8 @@ const Login: React.FC = () => {
   };
 
   const canSubmit = password.length > 0 && mobileNumber.length > 0;
-  
+  const isInvalid =
+    mobileNumber.startsWith("0") || mobileNumber.startsWith("+");
   return (
     <>
       <Toast
@@ -102,10 +103,25 @@ const Login: React.FC = () => {
                       labelPlacement="floating"
                       color="light"
                       value={mobileNumber}
+                      style={{ color: isInvalid ? "red" : "" }}
                       onIonChange={(e) => setmobileNumber(e.detail.value!)}
                       required
                       id="mobilenumber"
                     />
+                    <IonText
+                      style={{
+                        color: "red",
+                        fontSize: "12px",
+                        marginBottom: "11px",
+                        display:
+                          mobileNumber.startsWith("0") ||
+                          mobileNumber.startsWith("+")
+                            ? "block"
+                            : "none",
+                      }}
+                    >
+                      Mobile Number Must be In 333-1234567 Format
+                    </IonText>
                   </div>
                   <div className="input-container">
                     <IonIcon icon={lockClosed} id="myicon" />
@@ -121,6 +137,20 @@ const Login: React.FC = () => {
                       required
                       id="pass"
                     />
+                    <IonText
+                      style={{
+                        color: "red",
+                        fontSize: "12px",
+                        marginBottom: "11px",
+                        display: password.length > 2 &&
+                          (password.length < 4 ||
+                          /[^0-9]/.test(password))
+                            ? "block"
+                            : "none",
+                      }}
+                    >
+                      Password must be more than 4 digits and should be numbers only!
+                    </IonText>
                   </div>
                   <IonButton
                     type="submit"
