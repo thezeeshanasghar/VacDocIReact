@@ -35,3 +35,15 @@
 .gray-input {
   color: red !important; /* Change this to your desired gray color */
 }
+
+/* .input-container {
+  position: relative;
+}
+
+.password-toggle {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 10px;
+  cursor: pointer;
+} */

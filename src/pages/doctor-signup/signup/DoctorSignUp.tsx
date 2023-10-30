@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   IonContent,
   IonInput,
@@ -14,8 +14,10 @@ import {
   useIonRouter,
   IonText,
 } from "@ionic/react";
-import { person, arrowForward } from "ionicons/icons";
+import { person, arrowForward, eye, eyeOff } from "ionicons/icons";
 import "./DocSignUp.css";
+
+import secureRandomPassword from "secure-random-password";
 
 const DoctorSignUp: React.FC = () => {
   const router = useIonRouter();
@@ -25,6 +27,8 @@ const DoctorSignUp: React.FC = () => {
   const [password, setPassword] = useState("");
   const [pmdc, setPMDC] = useState("");
   const isInvalid = mobile.startsWith("0") || mobile.startsWith("+");
+  const [showPassword, setShowPassword] = useState(false);
+
   // const [doctorType, setDoctorType] = useState("");
 
   const canSubmit =
@@ -80,7 +84,15 @@ const DoctorSignUp: React.FC = () => {
   //     setPMDC(""); // This line is optional, it resets the input to an empty state immediately.
   //   }
   // };
-
+  useEffect(() => {
+    setPassword(generateRandomPassword());
+  }, []);
+  function generateRandomPassword() {
+    return secureRandomPassword.randomPassword({
+      length: 8,
+      characters: [secureRandomPassword.digits],
+    });
+  }
   return (
     <IonPage>
       <IonContent className="sign-up-content-doctor">
@@ -155,15 +167,29 @@ const DoctorSignUp: React.FC = () => {
               >
                 Mobile Number Must be In 333-1234567 Format
               </IonText>
-              <IonItem>
+              <IonItem style={{ width: "70%" }}>
                 <IonLabel position="floating">Password</IonLabel>
-                <IonInput
-                  required
-                  type="password"
-                  value={password}
-                  id="password"
-                  onIonChange={(e) => setPassword(e.detail.value!)}
-                />
+                <div style={{ display: "flex", alignItems: "center" }}>
+                  <IonInput
+                    required
+                    type={showPassword ? "text" : "password"}
+                    value={password}
+                    id="password"
+                    readonly
+                    // onIonChange={(e) => setPassword(e.detail.value!)}
+                  />
+                  <IonButton
+                    style={{ marginTop: "-.5rem" }}
+                    fill="clear"
+                    size="small"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    <IonIcon
+                      // slot="icon-only"
+                      icon={showPassword ? eyeOff : eye}
+                    />
+                  </IonButton>
+                </div>
               </IonItem>
               <IonItem>
                 <IonLabel position="floating">PMDC</IonLabel>

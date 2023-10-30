@@ -23,12 +23,14 @@ const Login: React.FC = () => {
   const [error, setError] = useState<boolean>(false);
   const [mobileNumber, setmobileNumber] = useState<string>("");
   const [password, setpassword] = useState<string>("");
-
+  const [errMsg, setErrMsg] = useState("");
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
       fetch(
-        `${import.meta.env.VITE_API_URL}api/Doctor/login?MobileNumber=${mobileNumber}&Password=${password}`,
+        `${
+          import.meta.env.VITE_API_URL
+        }api/Doctor/login?MobileNumber=${mobileNumber}&Password=${password}`,
         {
           method: "GET",
         }
@@ -38,9 +40,16 @@ const Login: React.FC = () => {
             setSuccess(true);
             navigation.push("/members", "root");
             return res.json();
-          } else {
+          } else if (res.status === 401) {
+            // console.log(res);
+            setErrMsg("Invalid credentials");
             setError(true);
-            throw new Error("An error occurred while logging in.");
+          } else if (res.status === 400) {
+            console.log(res);
+            setErrMsg("Your account has expired. Please contact the admin");
+            setError(true);
+          }else {
+            throw new Error("Internal server error.");
           }
         })
         .then((data) => {
@@ -55,14 +64,14 @@ const Login: React.FC = () => {
           setmobileNumber("");
           setpassword("");
         });
-    } catch (err) {
+    } catch (err: any) {
       setError(true);
-      console.error(err);
+      setErrMsg(err.message);
     }
   };
 
   const canSubmit = password.length > 0 && mobileNumber.length > 0;
-
+  
   return (
     <>
       <Toast
@@ -71,12 +80,7 @@ const Login: React.FC = () => {
         color="success"
         errMsg="Doctor Login successful"
       />
-      <Toast
-        isOpen={error}
-        setOpen={setError}
-        color="danger"
-        errMsg="An error occurred while logging in. Please try again."
-      />
+      <Toast isOpen={error} setOpen={setError} color="danger" errMsg={errMsg} />
       <IonPage>
         <IonHeader>
           <IonToolbar color="primary">

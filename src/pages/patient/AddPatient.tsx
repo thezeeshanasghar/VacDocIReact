@@ -183,8 +183,6 @@ const AddPatient: React.FC = () => {
     return secureRandomPassword.randomPassword({
       length: 8,
       characters: [
-        secureRandomPassword.lower,
-        secureRandomPassword.upper,
         secureRandomPassword.digits,
       ],
     });
