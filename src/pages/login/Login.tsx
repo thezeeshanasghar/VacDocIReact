@@ -70,7 +70,7 @@ const Login: React.FC = () => {
     }
   };
 
-  const canSubmit = password.length > 0 && mobileNumber.length > 0;
+  const canSubmit = password.length > 4 && mobileNumber.length > 0;
   const isInvalid =
     mobileNumber.startsWith("0") || mobileNumber.startsWith("+");
   return (
