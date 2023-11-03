@@ -104,7 +104,7 @@ const ClinicRegistration: React.FC = () => {
               className="form-wrapper-clinic"
               onSubmit={handleClinicRegistration}
             >
-              <IonItem style={{ width: "75%" }}>
+              <IonItem style={{ width: "100%" }}>
                 <IonLabel position="floating">Clinic Name</IonLabel>
                 <IonInput
                   required
@@ -114,7 +114,7 @@ const ClinicRegistration: React.FC = () => {
                   id="names"
                 />
               </IonItem>
-              <IonItem style={{ width: "75%" }}>
+              <IonItem style={{ width: "100%" }}>
                 <IonLabel position="floating"> Address</IonLabel>
                 <IonTextarea
                   required
@@ -123,7 +123,7 @@ const ClinicRegistration: React.FC = () => {
                   id="address"
                 />
               </IonItem>
-              <IonItem style={{ width: "75%" }}>
+              <IonItem style={{ width: "100%" }}>
                 <input
                   type="text"
                   list="cityOptions"
@@ -149,7 +149,7 @@ const ClinicRegistration: React.FC = () => {
                 </datalist>
               </IonItem>
 
-              <IonItem style={{ width: "75%" }}>
+              <IonItem style={{ width: "100%" }}>
                 <IonLabel position="floating">Mobile Number</IonLabel>
                 <IonInput
                   required
@@ -180,7 +180,7 @@ const ClinicRegistration: React.FC = () => {
               >
                 Mobile Number Must be In 333-1234567 Format
               </IonText>
-              <IonItem style={{ width: "75%" }}>
+              <IonItem style={{ width: "100%" }}>
                 <IonLabel position="floating">Fee</IonLabel>
                 <IonInput
                   required

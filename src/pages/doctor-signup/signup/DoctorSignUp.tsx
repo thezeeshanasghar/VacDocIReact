@@ -117,12 +117,13 @@ const DoctorSignUp: React.FC = () => {
             >
               <IonIcon
                 icon={person}
+                size="large"
                 className="signup-icon-doctor"
                 style={{ margin: "1rem" }}
               />
             </div>
             <form className="form-wrapper-doctor" onSubmit={handleSignUp}>
-              <IonItem style={{ width: "70%" }}>
+              <IonItem style={{ width: "100%" }}>
                 <IonLabel position="stacked" id="name">
                   Doctor Name
                 </IonLabel>
@@ -136,7 +137,7 @@ const DoctorSignUp: React.FC = () => {
                   onIonChange={(e) => setName(e.detail.value!)}
                 />
               </IonItem>
-              <IonItem style={{ width: "70%" }}>
+              <IonItem style={{ width: "100%" }}>
                 <IonLabel position="floating">Email</IonLabel>
                 <IonInput
                   required
@@ -147,7 +148,7 @@ const DoctorSignUp: React.FC = () => {
                   onIonChange={(e) => setEmail(e.detail.value!)}
                 />
               </IonItem>
-              <IonItem style={{ width: "70%" }}>
+              <IonItem style={{ width: "100%" }}>
                 <IonLabel position="floating">Mobile Number</IonLabel>
                 <IonInput
                   required
@@ -173,9 +174,9 @@ const DoctorSignUp: React.FC = () => {
               >
                 Mobile Number Must be In 333-1234567 Format
               </IonText>
-              <IonItem style={{ width: "70%" }}>
+              <IonItem style={{ width: "100%" }}>
                 <IonLabel position="floating">Password</IonLabel>
-                <div style={{ display: "flex", alignItems: "center" }}>
+                <div style={{ display: "flex", alignItems: "center", width: '100%' }}>
                   <IonInput
                     required
                     type={showPassword ? "text" : "password"}
@@ -210,7 +211,7 @@ const DoctorSignUp: React.FC = () => {
               >
                 Password must 4 character long and should contain only number
               </IonText>
-              <IonItem style={{ width: "70%" }}>
+              <IonItem style={{ width: "100%" }}>
                 <IonLabel position="floating">PMDC</IonLabel>
                 <IonInput
                   type="text"

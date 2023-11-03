@@ -99,7 +99,7 @@ const UpdateWeekDaysCard: React.FC<UpdateWeekDayCardProps> = ({
     }
   }, [isRendering]);
 
-  const removeDatabyToggle = () => {
+  const removeDatabyToggle = async () => {
     if (!showCard) {
       localStorage.removeItem(name);
       setMStart("");
@@ -108,6 +108,7 @@ const UpdateWeekDaysCard: React.FC<UpdateWeekDayCardProps> = ({
       setMEnd2("");
       setShowSession1(false)
       setShowSession2(false)
+      
     }
     if (!showSession1) {
       setMStart("");
