@@ -20,6 +20,7 @@ import { useIonRouter } from "@ionic/react";
 import Toast from "../custom-toast/Toast";
 import AlertSuccess from "../Alerts/ALertSuccess";
 import DeletePopup from "../deletepopup/DeletePopup";
+import { useLocation } from "react-router";
 
 interface Session {
   Id: number;
@@ -66,7 +67,7 @@ const ClinicCard: React.FC<ClinicCardProps> = ({
   const [showPopup, setShowPopup] = useState(false);
   const [clinicTimings, setclinicTimings] = useState<Session[]>([]);
   const [sameClinics, setSameClinics] = useState<Session[]>([]);
-
+  const location = useLocation();
   useEffect(() => {
     const fetchClinicTimings = async () => {
       try {
@@ -74,7 +75,7 @@ const ClinicCard: React.FC<ClinicCardProps> = ({
           `${import.meta.env.VITE_API_URL}api/ClinicTiming`
         );
         const data: Session[] = await res.json();
-        console.log(data);
+        console.log("Updated Data from backend : ", data);
         // setSameClinics(clinicTimings.filter((item) => item.ClinicId === Id));
         setclinicTimings(data);
       } catch (err) {
@@ -82,7 +83,7 @@ const ClinicCard: React.FC<ClinicCardProps> = ({
       }
     };
     fetchClinicTimings();
-  }, [Id]);
+  }, [Id, location]);
 
   useEffect(() => {
     setSameClinics(clinicTimings.filter((item) => item.ClinicId === Id));
@@ -152,14 +153,14 @@ const ClinicCard: React.FC<ClinicCardProps> = ({
         body: JSON.stringify(updatedData), // Convert your updated data to JSON
       }
     )
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      if (response.status === 204) {
-        Renderlist();
-      }
-    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        if (response.status === 204) {
+          Renderlist();
+        }
+      })
       .catch((error) => {
         console.error("Error:", error);
       });
@@ -200,7 +201,6 @@ const ClinicCard: React.FC<ClinicCardProps> = ({
             <IonText>Consultation fee : {Fees}</IonText>
             <IonGrid>
               <IonRow>
-             
                 {clinicTimings.map((item, index) => {
                   if (item.ClinicId === Id) {
                     const count = clinicTimings.filter(

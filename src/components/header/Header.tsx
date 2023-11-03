@@ -9,11 +9,31 @@ import {
   useIonRouter,
 } from "@ionic/react";
 import { add, alert, medkit, personAdd } from "ionicons/icons";
+import { useEffect, useState } from "react";
 import { useLocation } from "react-router";
 type IHeaderProps = { pageName: string };
 const Header: React.FC<IHeaderProps> = ({ pageName }) => {
+  const [clinicName, setClinicName] = useState("");
   const location = useLocation();
   const router = useIonRouter();
+  useEffect(() => {
+    //@ts-ignore
+    const docData = JSON.parse(sessionStorage.getItem("docData"));
+    fetch(
+      `${import.meta.env.VITE_API_URL}api/Clinic/clinicByDoctor?doctorId=${
+        docData["Id"]
+      }`
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        data.forEach((item: any) => {
+          if (item.IsOnline) {
+            setClinicName(item.Name);
+          }
+        });
+      })
+      .catch((err) => console.error(err));
+  }, [location]);
   return (
     <>
       <IonHeader
@@ -39,7 +59,7 @@ const Header: React.FC<IHeaderProps> = ({ pageName }) => {
             ("/members/doctor/brandinventory/add" ||
               "/members/doctor/brandamount/add")
               ? ""
-              : "Baby Medics"}
+              : clinicName}
           </IonTitle>
           {/* {location.pathname === "/members/doctor/brandinventory" && (
             <IonItem

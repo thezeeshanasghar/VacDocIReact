@@ -39,7 +39,7 @@ const ClinicCardList: React.FC = (DoctorId, Id) => {
     try {
       const res = await fetch(`${import.meta.env.VITE_API_URL}api/Clinic`);
       const data: Clinic[] = await res.json();
-      console.log(data);
+      // console.log("Updated Data from backend : ", data);
       setClinics(data);
       // setRerender(!rerender);
     } catch (err) {

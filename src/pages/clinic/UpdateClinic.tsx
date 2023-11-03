@@ -63,7 +63,6 @@ const UpdateClinic: React.FC<ClinicProps> = ({
   const [clinicArray, setClinicArray] = useState<any>([]);
   const [rerender, setRerender] = useState(false);
 
-  
   useEffect(() => {
     localStorage.clear();
     //@ts-ignore
@@ -156,9 +155,9 @@ const UpdateClinic: React.FC<ClinicProps> = ({
 
     const data = newArray.map(async (day) => {
       const storedData = localStorage.getItem(day);
-      console.log(storedData, "this is storedData"); // Retrieve the data from localStorage
+      console.log("data to be updated : ", storedData); // Retrieve the data from localStorage
 
-      const parsedData = storedData ? JSON.parse(storedData) : null;
+      const parsedData = storedData ? JSON.parse(storedData) : [];
       // return parsedData;
       const response = await fetch(
         `${
@@ -250,7 +249,7 @@ const UpdateClinic: React.FC<ClinicProps> = ({
           setFees(data.Fees);
           setClinic(data);
         }
-        console.log(data);
+        // console.log(, data);
       });
     fetch(
       `${import.meta.env.VITE_API_URL}api/Clinictiming?clinicId=${clinicId}`
@@ -313,7 +312,6 @@ const UpdateClinic: React.FC<ClinicProps> = ({
                 />
               </IonItem>
               <IonItem lines="full">
-              
                 <input
                   type="text"
                   list="cityOptions"

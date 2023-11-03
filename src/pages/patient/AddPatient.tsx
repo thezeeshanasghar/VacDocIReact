@@ -64,10 +64,9 @@ const AddPatient: React.FC = () => {
       alert("Mobile Number must be at least 10 digit");
     } else if (mobileNumber.trim().length > 10) {
       alert("Mobile Number must be at least 10 digit long.");
-    } else if (cnicOrPassPort.trim().length < 14 || cnicOrPassPort.trim().length > 14) {
-      alert("CNIC Number must be 14 digits long.");
-    } else if (!isValidEmail(email)) {
-    } else if (/\D/.test(cnicOrPassPort)) {
+    } else if (cnicOrPassPort.trim().length < 13 || cnicOrPassPort.trim().length > 13) {
+      alert("CNIC Number must be 13 digits long.");
+    } else if(/\D/.test(cnicOrPassPort)) {
       alert("CNIC Number can not contain any non digit");
     } else if (!isValidEmail(email)) {
       alert("Please enter correct email address");

@@ -110,28 +110,32 @@ const UpdateWeekDaysCard: React.FC<UpdateWeekDayCardProps> = ({
     if (!showSession1) {
       setMStart("");
       setMEnd("");
+      //@ts-ignore
+      let LocalData = dayData;
+      if (LocalData && LocalData.length < 2) {
+        localStorage.removeItem(name);
+      }
+      if (LocalData && LocalData.length > 1) {
+        let newData = [LocalData[1]];
+        setDayData(newData)
+      }
     }
     if (!showSession2) {
       setMStart2("");
       setMEnd2("");
+      //@ts-ignore
+      let LocalData = dayData;
+      if (LocalData && LocalData.length < 2) {
+        localStorage.removeItem(name);
+      }
+      if (LocalData && LocalData.length > 1) {
+        //@ts-ignore
+        let newData = [LocalData[0]];
+        setDayData(newData)
+      }
     }
   };
 
-  const removeAllData = () => {
-    if (!showSession1 || showSession1) {
-      setMStart("");
-      setMEnd("");
-      setShowSession1(false);
-    }
-    if (!showSession2 || showSession2) {
-      setMStart2("");
-      setMEnd2("");
-      setShowSession2(false);
-    }
-    if (!showCard || showCard) {
-      setShowCard(false);
-    }
-  };
   useEffect(() => {
     removeDatabyToggle();
     if (showCard && showSession1 && mstart !== "" && mend !== "") {

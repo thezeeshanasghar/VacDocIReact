@@ -161,6 +161,11 @@ const UpdatePatient: React.FC<UpdateType> = ({
     }
 
     if (cnicOrPassPort) {
+      if (cnicOrPassPort.trim().length < 13 || cnicOrPassPort.trim().length > 13) {
+        alert("CNIC Number must be 13 digits long.");
+      } else if (/\D/.test(cnicOrPassPort)) {
+        alert("CNIC Number can not contain any non digit");
+      }
       patchOperations.push({
         path: "cnicOrPassPort",
         op: "replace",
