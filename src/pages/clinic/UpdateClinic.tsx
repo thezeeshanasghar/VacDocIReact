@@ -312,7 +312,8 @@ const UpdateClinic: React.FC<ClinicProps> = ({
                   onIonChange={(e) => setPhoneNumber(e.detail.value!)}
                 />
               </IonItem>
-              <IonItem>
+              <IonItem lines="full">
+              
                 <input
                   type="text"
                   list="cityOptions"

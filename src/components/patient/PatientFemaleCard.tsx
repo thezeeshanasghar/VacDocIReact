@@ -66,8 +66,27 @@ const PatientFemaleCard: React.FC<IFemalePatient> = ({
         <IonLabel style={{ fontSize: "18px" }} className="name">
           {Name}
         </IonLabel>
+        <IonItem lines="none">
+          <IonIcon
+            color="primary"
+            icon={create}
+            onClick={() => router.push(`/members/child/edit/${Id}`, "forward")}
+            slot="end"
+            tabIndex={0}
+            aria-label="create"
+          ></IonIcon>
+          <IonIcon
+            className="iconchild"
+            color="primary"
+            icon={trash}
+            slot="end"
+            role="img"
+            aria-label="trash"
+            onClick={() => setDeletePatient(true)}
+          ></IonIcon>
+        </IonItem>
       </IonItem>
-      <IonItem className="ion-justify-content-center">
+      {/* <IonItem className="ion-justify-content-center">
         <IonIcon
           className="iconchild"
           color="primary"
@@ -86,21 +105,21 @@ const PatientFemaleCard: React.FC<IFemalePatient> = ({
           aria-label="trash"
           onClick={() => setDeletePatient(true)}
         ></IonIcon>
-      </IonItem>
+      </IonItem> */}
       <IonCardContent>
         <div style={{ display: "flex", marginBottom: ".5rem" }}>
           <div
             style={{
               display: "flex",
               gap: ".3rem",
-              marginRight: "1rem",
+              marginRight: "1.5rem",
               alignItems: "center",
             }}
           >
             <IonIcon
               icon={person}
               color="primary"
-              style={{ fontSize: "14px" }}
+              style={{ fontSize: "18px" }}
             ></IonIcon>
             <IonText style={{ fontSize: "12px" }}>{Guardian}</IonText>
           </div>
@@ -108,14 +127,14 @@ const PatientFemaleCard: React.FC<IFemalePatient> = ({
             style={{
               display: "flex",
               gap: ".3rem",
-              marginRight: "1rem",
+              marginRight: "1.5rem",
               alignItems: "center",
             }}
           >
             <IonIcon
               icon={call}
               color="primary"
-              style={{ fontSize: "14px" }}
+              style={{ fontSize: "18px" }}
             ></IonIcon>
             <IonText style={{ fontSize: "12px" }}>{MobileNumber}</IonText>
           </div>
@@ -123,9 +142,9 @@ const PatientFemaleCard: React.FC<IFemalePatient> = ({
             <IonIcon
               icon={mail}
               color="primary"
-              style={{ fontSize: "14px" }}
+              style={{ fontSize: "18px" }}
             ></IonIcon>
-            <IonText style={{ fontSize: "12px" }}>{Email}</IonText>
+            <IonText style={{ fontSize: "13px" }}>{Email}</IonText>
           </div>
         </div>
         <IonButton

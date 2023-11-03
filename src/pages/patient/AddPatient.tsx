@@ -23,13 +23,13 @@ import { useHistory, useLocation } from "react-router-dom";
 import Toast from "../../components/custom-toast/Toast";
 import cities from "../test/citiesData";
 import secureRandomPassword from "secure-random-password";
+import { isValidEmail } from "../../util/util";
 type DoctorClinicType = { Id: number; Name: string };
 const AddPatient: React.FC = () => {
   const [name, setName] = useState("");
-  const [fatherName, setFatherName] = useState("");
   const [guardian, setGuardian] = useState("");
   const [cnic, setCnic] = useState("");
-  const [gender, setGender] = useState("Boy");
+  const [gender, setGender] = useState("boy");
   // const [scheduleType, setScheduleType] = useState("");
   const [dob, setDob] = useState("");
   const [email, setEmail] = useState("");
@@ -39,10 +39,11 @@ const AddPatient: React.FC = () => {
   // const [preferredSchedule, setpreferredSchedule] = useState<string>("");
   const [selectedDoctor, setSelectedDoctor] = useState<number>();
   const [selectedClinic, setSelectedClinic] = useState<number>();
+  // const [passport, setPassport] = useState("");
   const [city, setCity] = useState<string>("");
   const [isEPIDone, setIsEPIDone] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
-  const [guardianText, setGuardianText] = useState("father");
+  const [guardianText, setGuardianText] = useState("Father");
   const history = useHistory();
   const location = useLocation();
   // const [clinicData, setClinicData] = useState<DoctorClinicType[]>([]);
@@ -50,6 +51,8 @@ const AddPatient: React.FC = () => {
   const [success, setSuccess] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
   const [noClinic, setNoClinic] = useState<boolean>(false);
+  const [cnicOrPassPort, setCnicOrPassPort] = useState("");
+  const [selectCnicOrPassport, setSelectCnicOrPassport] = useState("CNIC");
 
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -61,8 +64,13 @@ const AddPatient: React.FC = () => {
       alert("Mobile Number must be at least 10 digit");
     } else if (mobileNumber.trim().length > 10) {
       alert("Mobile Number must be at least 10 digit long.");
-    } else if (cnic.trim().length < 14 || cnic.trim().length > 14) {
+    } else if (cnicOrPassPort.trim().length < 14 || cnicOrPassPort.trim().length > 14) {
       alert("CNIC Number must be 14 digits long.");
+    } else if (!isValidEmail(email)) {
+    } else if (/\D/.test(cnicOrPassPort)) {
+      alert("CNIC Number can not contain any non digit");
+    } else if (!isValidEmail(email)) {
+      alert("Please enter correct email address");
     } else {
       const data_to_be_sent = {
         name,
@@ -70,11 +78,12 @@ const AddPatient: React.FC = () => {
         guardianName: guardian,
         email,
         dob,
-        gender,
+        gender : gender.trim() === "boy" ? 0 : 1,
         // type: scheduleType,
         password: generateRandomPassword(),
         city,
-        cnic,
+        selectCnicOrPassport,
+        cnicOrPassPort,
         mobileNumber,
         // preferredSchedule,
         isEPIDone,
@@ -110,9 +119,8 @@ const AddPatient: React.FC = () => {
   const clearStateVariables = () => {
     setName("");
     setGuardian("");
-    setCnic("");
-    setGuardianText("father")
-    setGender("Boy");
+    setGuardianText("Father");
+    setGender("boy");
     // setScheduleType("special");
     setDob("");
     setEmail("");
@@ -123,6 +131,8 @@ const AddPatient: React.FC = () => {
     setCity("");
     setIsEPIDone(false);
     setIsVerified(false);
+    setCnicOrPassPort("");
+    setSelectCnicOrPassport("CNIC")
   };
 
   // getting doctors list for dropdown and clinic;
@@ -172,7 +182,7 @@ const AddPatient: React.FC = () => {
   const canSubmit =
     name !== "" &&
     guardian !== "" &&
-    cnic !== "" &&
+    cnicOrPassPort !== "" &&
     gender !== "" &&
     dob !== "" &&
     email !== "" &&
@@ -182,9 +192,7 @@ const AddPatient: React.FC = () => {
   function generateRandomPassword() {
     return secureRandomPassword.randomPassword({
       length: 8,
-      characters: [
-        secureRandomPassword.digits,
-      ],
+      characters: [secureRandomPassword.digits],
     });
   }
   return (
@@ -231,7 +239,7 @@ const AddPatient: React.FC = () => {
             </IonItem> */}
             <IonItem lines="full">
               <IonItem lines="none">
-                <IonLabel position="floating">Guardian's Name</IonLabel>
+                <IonLabel position="stacked">Guardian's Name</IonLabel>
                 <IonInput
                   type="text"
                   value={guardian}
@@ -248,21 +256,21 @@ const AddPatient: React.FC = () => {
                   <IonGrid>
                     <IonRow>
                       <IonCol>
-                        <IonItem lines='none'>
+                        <IonItem lines="none">
                           <IonLabel>Father</IonLabel>
-                          <IonRadio slot="start" value="father" />
+                          <IonRadio slot="start" value="Father" />
                         </IonItem>
                       </IonCol>
                       <IonCol>
-                        <IonItem lines='none'>
+                        <IonItem lines="none">
                           <IonLabel>Mother</IonLabel>
-                          <IonRadio slot="start" value="mother" />
+                          <IonRadio slot="start" value="Mother" />
                         </IonItem>
                       </IonCol>
                       <IonCol>
-                        <IonItem lines='none'>
+                        <IonItem lines="none">
                           <IonLabel>Husband</IonLabel>
-                          <IonRadio slot="start" value="husband" />
+                          <IonRadio slot="start" value="Husband" />
                         </IonItem>
                       </IonCol>
                     </IonRow>
@@ -280,16 +288,41 @@ const AddPatient: React.FC = () => {
                 id="email"
               />
             </IonItem>
-            <IonItem>
-              <IonLabel position="floating">CNIC</IonLabel>
-              <IonInput
-                type="number"
-                placeholder="CNIC"
-                value={cnic}
-                onIonChange={(e) => setCnic(e.detail.value!)}
-                required
-                id="cnic"
-              />
+            
+            <IonItem lines="full">
+              <IonItem lines="none">
+                <IonLabel position="floating">Identity Number</IonLabel>
+                <IonInput
+                  type="text"
+                  value={cnicOrPassPort}
+                  onIonChange={(e) => setCnicOrPassPort(e.detail.value!)}
+                  required
+                  id="fname"
+                />
+              </IonItem>
+              <IonItem lines="none">
+                <IonRadioGroup
+                  value={selectCnicOrPassport}
+                  onIonChange={(e) => setSelectCnicOrPassport(e.detail.value)}
+                >
+                  <IonGrid>
+                    <IonRow>
+                      <IonCol>
+                        <IonItem lines="none">
+                          <IonLabel>CNIC #No</IonLabel>
+                          <IonRadio slot="start" value="CNIC" />
+                        </IonItem>
+                      </IonCol>
+                      <IonCol>
+                        <IonItem lines="none">
+                          <IonLabel>Passport #No</IonLabel>
+                          <IonRadio slot="start" value="Passport" />
+                        </IonItem>
+                      </IonCol>
+                    </IonRow>
+                  </IonGrid>
+                </IonRadioGroup>
+              </IonItem>
             </IonItem>
             <IonItem>
               <IonLabel position="floating">Mobile Number</IonLabel>

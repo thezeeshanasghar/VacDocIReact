@@ -59,15 +59,35 @@ const PatientMaleCard: React.FC<IMalePatient> = ({
         title="Patient"
         renderList={renderList}
       />
-      <IonItem className="item">
+      <IonItem className="">
         <IonThumbnail slot="start" className="avatar">
           <IonImg className="avatar-image" src={maleThumbmail}></IonImg>
         </IonThumbnail>
         <IonLabel style={{ fontSize: "18px" }} className="name">
           {Name}
         </IonLabel>
+        <IonItem lines="none">
+        <IonIcon
+          
+          color="primary"
+          icon={create}
+          onClick={() => router.push(`/members/child/edit/${Id}`, "forward")}
+          slot="end"
+          tabIndex={0}
+          aria-label="create"
+        ></IonIcon>
+        <IonIcon
+          className="iconchild"
+          color="primary"
+          icon={trash}
+          slot="end"
+          role="img"
+          aria-label="trash"
+          onClick={() => setDeletePatient(true)}
+        ></IonIcon>
       </IonItem>
-      <IonItem className="ion-justify-content-center">
+      </IonItem>
+      {/* <IonItem className="ion-justify-content-center">
         <IonIcon
           className="iconchild"
           color="primary"
@@ -86,20 +106,20 @@ const PatientMaleCard: React.FC<IMalePatient> = ({
           aria-label="trash"
           onClick={() => setDeletePatient(true)}
         ></IonIcon>
-      </IonItem>
+      </IonItem> */}
       <IonCardContent>
         
           <div style={{display:  'flex', marginBottom: ".5rem" }}>
-            <div style={{display: 'flex', gap: '.3rem', marginRight: '1rem', alignItems: 'center'}}>
-              <IonIcon icon={person} color="primary" style={{ fontSize: "14px" }}></IonIcon>
+            <div style={{display: 'flex', gap: '.3rem', marginRight: '1.5rem', alignItems: 'center'}}>
+              <IonIcon icon={person} color="primary" style={{ fontSize: "18px" }}></IonIcon>
               <IonText style={{ fontSize: "12px" }}>{Guardian}</IonText>
             </div>
-            <div style={{display: 'flex', gap: '.3rem', marginRight: '1rem', alignItems: 'center'}}>
-              <IonIcon icon={call} color="primary" style={{ fontSize: "14px" }}></IonIcon>
+            <div style={{display: 'flex', gap: '.3rem', marginRight: '1.5rem', alignItems: 'center'}}>
+              <IonIcon icon={call} color="primary" style={{ fontSize: "18px" }}></IonIcon>
               <IonText style={{ fontSize: "12px" }}>{MobileNumber}</IonText>
             </div>
             <div style={{display: 'flex', gap: '.3rem', alignItems: 'center'}}>
-              <IonIcon icon={mail} color="primary" style={{ fontSize: "14px" }}></IonIcon>
+              <IonIcon icon={mail} color="primary" style={{ fontSize: "18px" }}></IonIcon>
               <IonText style={{ fontSize: "12px" }}>{Email}</IonText>
             </div>
           </div>

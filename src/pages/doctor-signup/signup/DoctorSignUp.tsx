@@ -16,7 +16,7 @@ import {
 } from "@ionic/react";
 import { person, arrowForward, eye, eyeOff } from "ionicons/icons";
 import "./DocSignUp.css";
-
+import {isValidEmail} from '../../../util/util';
 import secureRandomPassword from "secure-random-password";
 
 const DoctorSignUp: React.FC = () => {
@@ -35,7 +35,8 @@ const DoctorSignUp: React.FC = () => {
     name.trim() === "" &&
     email.trim() === "" &&
     mobile.trim() === "" &&
-    password.trim() === "" &&
+    /\d/.test(password) !== true &&
+    password.trim().length > 4 &&
     pmdc.trim() === "";
 
   const handleSignUp = (e: any) => {
@@ -47,7 +48,10 @@ const DoctorSignUp: React.FC = () => {
         alert("Mobile Number must be at least 10 digit");
       } else if (mobile.trim().length > 10) {
         alert("Mobile Number must be at least 10 digit long.");
-      } else {
+      } else if(!isValidEmail(email)){
+          alert('please enter correct email address')
+      }
+      else {
         localStorage.clear();
         e.preventDefault();
         localStorage.setItem(
@@ -118,7 +122,7 @@ const DoctorSignUp: React.FC = () => {
               />
             </div>
             <form className="form-wrapper-doctor" onSubmit={handleSignUp}>
-              <IonItem>
+              <IonItem style={{ width: "70%" }}>
                 <IonLabel position="stacked" id="name">
                   Doctor Name
                 </IonLabel>
@@ -127,21 +131,23 @@ const DoctorSignUp: React.FC = () => {
                   type="text"
                   id="name"
                   value={name}
+                  
                   className="data"
                   onIonChange={(e) => setName(e.detail.value!)}
                 />
               </IonItem>
-              <IonItem>
+              <IonItem style={{ width: "70%" }}>
                 <IonLabel position="floating">Email</IonLabel>
                 <IonInput
                   required
                   type="email"
+                  pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
                   value={email}
                   id="email"
                   onIonChange={(e) => setEmail(e.detail.value!)}
                 />
               </IonItem>
-              <IonItem>
+              <IonItem style={{ width: "70%" }}>
                 <IonLabel position="floating">Mobile Number</IonLabel>
                 <IonInput
                   required
@@ -175,8 +181,8 @@ const DoctorSignUp: React.FC = () => {
                     type={showPassword ? "text" : "password"}
                     value={password}
                     id="password"
-                    readonly
-                    // onIonChange={(e) => setPassword(e.detail.value!)}
+                    // readonly
+                    onIonChange={(e) => setPassword(e.detail.value!)}
                   />
                   <IonButton
                     style={{ marginTop: "-.5rem" }}
@@ -191,7 +197,20 @@ const DoctorSignUp: React.FC = () => {
                   </IonButton>
                 </div>
               </IonItem>
-              <IonItem>
+              <IonText
+                color={"danger"}
+                style={{
+                  fontSize: "8px",
+                  marginBottom: "11px",
+                  display:
+                    password.trim().length < 4 || /\d/.test(password) !== true
+                      ? "block"
+                      : "none",
+                }}
+              >
+                Password must 4 character long and should contain only number
+              </IonText>
+              <IonItem style={{ width: "70%" }}>
                 <IonLabel position="floating">PMDC</IonLabel>
                 <IonInput
                   type="text"

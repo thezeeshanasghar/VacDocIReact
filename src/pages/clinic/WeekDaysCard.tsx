@@ -215,6 +215,8 @@ const WeekDaysCard: React.FC<WeekDayCardProps> = ({
         "Wednesday",
         "Thursday",
         "Friday",
+        "Saturday",
+        "Sunday",
       ];
       // dayData.length >= 1 &&
       daysToStore.forEach((day, index) => {

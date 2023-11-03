@@ -70,7 +70,7 @@ const Login: React.FC = () => {
     }
   };
 
-  const canSubmit = password.length > 4 && mobileNumber.length > 0;
+  const canSubmit = password.length >= 3 && mobileNumber.length > 0;
   const isInvalid =
     mobileNumber.startsWith("0") || mobileNumber.startsWith("+");
   return (
@@ -137,7 +137,7 @@ const Login: React.FC = () => {
                       required
                       id="pass"
                     />
-                    <IonText
+                    {/* <IonText
                       style={{
                         color: "red",
                         fontSize: "12px",
@@ -150,7 +150,7 @@ const Login: React.FC = () => {
                       }}
                     >
                       Password must be more than 4 digits and should be numbers only!
-                    </IonText>
+                    </IonText> */}
                   </div>
                   <IonButton
                     type="submit"

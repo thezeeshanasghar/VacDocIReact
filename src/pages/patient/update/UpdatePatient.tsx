@@ -21,7 +21,7 @@ import React, { useEffect, useState } from "react";
 import Toast from "../../../components/custom-toast/Toast";
 import Header from "../../../components/header/Header";
 import { format } from "date-fns";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import { checkbox, checkmarkOutline } from "ionicons/icons";
 import cities from "../../test/citiesData";
 type DoctorClinicType = { Id: number; Name: string };
@@ -36,8 +36,8 @@ interface IPatientData {
   Gender: number;
   Type: string;
   City: string;
-  CNIC: string;
-  // PreferredSchedule: string;
+  CnicOrPassPort: string;
+  SelectCnicOrPassport: string
   IsEPIDone: boolean;
   IsVerified: boolean;
   IsInactive: boolean;
@@ -49,6 +49,8 @@ const UpdatePatient: React.FC<UpdateType> = ({
     params: { Id },
   },
 }) => {
+  //@ts-ignore
+  const docData = JSON.parse(sessionStorage.getItem("docData"));
   const [patientData, setPatientData] = useState<IPatientData>();
   const [name, setName] = useState("");
   // const [fatherName, setFatherName] = useState("");
@@ -69,14 +71,18 @@ const UpdatePatient: React.FC<UpdateType> = ({
   const [isInactive, setIsInactive] = useState<boolean>();
   const history = useHistory();
   const [clinicData, setClinicData] = useState<DoctorClinicType[]>([]);
-  const [doctorData, setDoctorData] = useState<DoctorClinicType[]>([]);
+  // const [doctorData, setDoctorData] = useState<DoctorClinicType[]>([]);
 
   const [singleClinicData, setSignleClinicData] = useState<DoctorClinicType>();
-  const [singleDoctorData, setSingleDoctorData] = useState<DoctorClinicType>();
+  // const [singleDoctorData, setSingleDoctorData] = useState<DoctorClinicType>();
 
   const [success, setSuccess] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
 
+  const [cnicOrPassPort, setCnicOrPassPort] = useState("");
+  const [selectCnicOrPassport, setSelectCnicOrPassport] = useState("");
+
+  const location = useLocation();
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -132,7 +138,7 @@ const UpdatePatient: React.FC<UpdateType> = ({
         path: "Gender",
         op: "replace",
         from: "",
-        value: +gender,
+        value: gender.trim() === "girl" ? 1 : 0,
       });
     }
 
@@ -154,12 +160,20 @@ const UpdatePatient: React.FC<UpdateType> = ({
       });
     }
 
-    if (cnic) {
+    if (cnicOrPassPort) {
       patchOperations.push({
-        path: "CNIC",
+        path: "cnicOrPassPort",
         op: "replace",
         from: "",
-        value: cnic,
+        value: cnicOrPassPort,
+      });
+    }
+    if (selectCnicOrPassport) {
+      patchOperations.push({
+        path: "selectCnicOrPassport",
+        op: "replace",
+        from: "",
+        value: selectCnicOrPassport,
       });
     }
 
@@ -269,27 +283,27 @@ const UpdatePatient: React.FC<UpdateType> = ({
 
   useEffect(() => {
     //prefetching doctor data to pre-populate patient doctor dropdown list
-    preFetchPatientDoctorList();
+    // preFetchPatientDoctorList();
 
     //prefetching doctor data to pre-populate patient choosen clinic dropdown list
     preFetchPatientClinicList();
 
     //fetching childData with id to pre-populate form
     preFetchPatientData();
-  }, [Id]);
+  }, [location, Id]);
   const preFetchPatientData = async () => {
     try {
       const res = await fetch(`${import.meta.env.VITE_API_URL}api/Child/${Id}`);
       const PatientData: IPatientData = await res.json();
       //@ts-ignore
-      setGender(patientData?.Gender.toString());
+      // setGender(patientData?.Gender.toString());
 
       if (res.ok) {
-        const response = await fetch(
-          `${import.meta.env.VITE_API_URL}api/Doctor/${PatientData.DoctorId}`
-        );
-        const singleDoctorData = await response.json();
-        setSingleDoctorData(singleDoctorData);
+        // const response = await fetch(
+        //   `${import.meta.env.VITE_API_URL}api/Doctor/${PatientData.DoctorId}`
+        // );
+        // const singleDoctorData = await response.json();
+        // setSingleDoctorData(singleDoctorData);
 
         const anotherResponse = await fetch(
           `${import.meta.env.VITE_API_URL}api/Clinic/${PatientData.ClinicId}`
@@ -297,33 +311,38 @@ const UpdatePatient: React.FC<UpdateType> = ({
         const singleClinicData = await anotherResponse.json();
         setSignleClinicData(singleClinicData);
         //@ts-ignore
-        setGender(patientData?.Gender);
+        // setGender(PatientData?.Gender);
         setPatientData(PatientData);
       }
     } catch (err) {
       console.error(err);
     }
   };
-  const preFetchPatientDoctorList = () => {
-    fetch(`${import.meta.env.VITE_API_URL}api/Doctor`)
-      .then((res) => res.json())
-      .then((data: DoctorClinicType[]) => {
-        setDoctorData(data);
-      })
-      .catch((err) => console.error(err));
-  };
+  // const preFetchPatientDoctorList = () => {
+  //   fetch(`${import.meta.env.VITE_API_URL}api/Doctor`)
+  //     .then((res) => res.json())
+  //     .then((data: DoctorClinicType[]) => {
+  //       setDoctorData(data);
+  //     })
+  //     .catch((err) => console.error(err));
+  // };
   const preFetchPatientClinicList = () => {
-    fetch(`${import.meta.env.VITE_API_URL}api/Clinic`)
+    fetch(
+      `${import.meta.env.VITE_API_URL}api/Clinic/clinicByDoctor?doctorId=${
+        docData.Id
+      }`
+    )
       .then((res) => res.json())
       .then((data: DoctorClinicType[]) => setClinicData(data))
       .catch((err) => console.error(err));
   };
 
   const refetchAfterUpdate = () => {
-    preFetchPatientDoctorList();
+    // preFetchPatientDoctorList();
     preFetchPatientClinicList();
     preFetchPatientData();
   };
+  // console.log(patientData?.Gender + " gender");
   return (
     <>
       {patientData && (
@@ -331,13 +350,13 @@ const UpdatePatient: React.FC<UpdateType> = ({
           <Toast
             isOpen={success}
             setOpen={setSuccess}
-            message="Patient added successfully."
+            message="Data updated successfully."
             color="success"
           />
           <Toast
             isOpen={error}
             setOpen={setError}
-            message="An error occurred while adding patient. plz try again"
+            message="An error occurred while updating patient data. plz try again"
             color="danger"
           />
           <Header pageName="Update Patient" />
@@ -382,19 +401,19 @@ const UpdatePatient: React.FC<UpdateType> = ({
                           <IonCol>
                             <IonItem lines="none">
                               <IonLabel>Father</IonLabel>
-                              <IonRadio slot="start" value="father" />
+                              <IonRadio slot="start" value="Father" />
                             </IonItem>
                           </IonCol>
                           <IonCol>
                             <IonItem lines="none">
                               <IonLabel>Mother</IonLabel>
-                              <IonRadio slot="start" value="mother" />
+                              <IonRadio slot="start" value="Mother" />
                             </IonItem>
                           </IonCol>
                           <IonCol>
                             <IonItem lines="none">
                               <IonLabel>Husband</IonLabel>
-                              <IonRadio slot="start" value="husband" />
+                              <IonRadio slot="start" value="Husband" />
                             </IonItem>
                           </IonCol>
                         </IonRow>
@@ -410,15 +429,40 @@ const UpdatePatient: React.FC<UpdateType> = ({
                     onIonChange={(e) => setEmail(e.detail.value!)}
                   />
                 </IonItem>
-                <IonItem>
-                  <IonLabel position="floating">CNIC</IonLabel>
-                  <IonInput
-                    type="text"
-                    placeholder="CNIC"
-                    value={cnic || patientData.CNIC}
-                    onIonChange={(e) => setCnic(e.detail.value!)}
-                    required
-                  />
+                <IonItem lines="full">
+                  <IonItem lines="none">
+                    <IonLabel position="floating">Identity Number</IonLabel>
+                    <IonInput
+                      type="text"
+                      value={cnicOrPassPort || patientData.CnicOrPassPort}
+                      onIonChange={(e) => setCnicOrPassPort(e.detail.value!)}
+                      required
+                      id="fname"
+                    />
+                  </IonItem>
+                  <IonItem lines="none">
+                    <IonRadioGroup
+                      value={selectCnicOrPassport || patientData.SelectCnicOrPassport}
+                      onIonChange={(e) => setSelectCnicOrPassport(e.detail.value)}
+                    >
+                      <IonGrid>
+                        <IonRow>
+                          <IonCol>
+                            <IonItem lines="none">
+                              <IonLabel>CNIC #No</IonLabel>
+                              <IonRadio slot="start" value="CNIC" />
+                            </IonItem>
+                          </IonCol>
+                          <IonCol>
+                            <IonItem lines="none">
+                              <IonLabel>Passport #No</IonLabel>
+                              <IonRadio slot="start" value="Passport" />
+                            </IonItem>
+                          </IonCol>
+                        </IonRow>
+                      </IonGrid>
+                    </IonRadioGroup>
+                  </IonItem>
                 </IonItem>
                 {/* <IonItem>
                   <IonLabel position="floating">Mobile Number</IonLabel>
@@ -434,6 +478,7 @@ const UpdatePatient: React.FC<UpdateType> = ({
                   <IonInput
                     slot="end"
                     type="date"
+                    readonly
                     value={
                       dob || format(new Date(patientData.DOB), "yyyy-MM-dd")
                     }
@@ -441,7 +486,7 @@ const UpdatePatient: React.FC<UpdateType> = ({
                   />
                 </IonItem>
                 <IonRadioGroup
-                  value={gender || patientData.Gender}
+                  value={gender || patientData.Gender === 1 ? "girl" : "boy"}
                   onIonChange={(e) => setGender(e.detail.value)}
                 >
                   <IonListHeader>Gender</IonListHeader>
@@ -450,13 +495,13 @@ const UpdatePatient: React.FC<UpdateType> = ({
                       <IonCol>
                         <IonItem>
                           <IonLabel>Boy</IonLabel>
-                          <IonRadio slot="start" value={"0"} />
+                          <IonRadio slot="start" value={"boy"} />
                         </IonItem>
                       </IonCol>
                       <IonCol>
                         <IonItem>
                           <IonLabel>Girl</IonLabel>
-                          <IonRadio slot="start" value={"1"} />
+                          <IonRadio slot="start" value={"girl"} />
                         </IonItem>
                       </IonCol>
                     </IonRow>
@@ -492,7 +537,7 @@ const UpdatePatient: React.FC<UpdateType> = ({
                     onIonChange={(e) => setpreferredSchedule(e.detail.value!)}
                   />
                 </IonItem> */}
-                <IonItem lines="full">
+                {/* <IonItem lines="full">
                   <IonInput
                     disabled
                     color={"primary"}
@@ -517,7 +562,7 @@ const UpdatePatient: React.FC<UpdateType> = ({
                         ))}
                     </IonSelect>
                   </IonItem>
-                </IonItem>
+                </IonItem> */}
                 <IonItem lines="full">
                   <IonInput
                     disabled
