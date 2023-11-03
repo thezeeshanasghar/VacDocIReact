@@ -62,17 +62,22 @@ const AddPatient: React.FC = () => {
     }
     if (mobileNumber.trim().length < 10) {
       alert("Mobile Number must be at least 10 digit");
+      return;
     } else if (mobileNumber.trim().length > 10) {
       alert("Mobile Number must be at least 10 digit long.");
+      return;
     } else if (
       cnicOrPassPort.trim().length > 3 &&
       (cnicOrPassPort.trim().length < 13 || cnicOrPassPort.trim().length > 13)
     ) {
       alert("CNIC Number must be 13 digits long.");
+      return;
     } else if (cnicOrPassPort.trim().length > 3 && /\D/.test(cnicOrPassPort)) {
       alert("CNIC Number can not contain any non digit");
+      return;
     } else if (email.trim().length > 3 && !isValidEmail(email)) {
       alert("Please enter correct email address");
+      return;
     } else {
       const data_to_be_sent = {
         name,
@@ -184,7 +189,6 @@ const AddPatient: React.FC = () => {
   const canSubmit =
     name !== "" &&
     guardian !== "" &&
-    cnicOrPassPort !== "" &&
     gender !== "" &&
     dob !== "" &&
     mobileNumber !== "" &&
@@ -296,7 +300,6 @@ const AddPatient: React.FC = () => {
                   type="number"
                   value={cnicOrPassPort}
                   onIonChange={(e) => setCnicOrPassPort(e.detail.value!)}
-                  required
                   id="fname"
                 />
               </IonItem>

@@ -24,6 +24,7 @@ import { format } from "date-fns";
 import { useHistory, useLocation } from "react-router-dom";
 import { checkbox, checkmarkOutline } from "ionicons/icons";
 import cities from "../../test/citiesData";
+import { isValidEmail } from "../../../util/util";
 type DoctorClinicType = { Id: number; Name: string };
 type UpdateType = { match: { params: { Id: number } } };
 interface IPatientData {
@@ -37,7 +38,7 @@ interface IPatientData {
   Type: string;
   City: string;
   CnicOrPassPort: string;
-  SelectCnicOrPassport: string
+  SelectCnicOrPassport: string;
   IsEPIDone: boolean;
   IsVerified: boolean;
   IsInactive: boolean;
@@ -115,7 +116,11 @@ const UpdatePatient: React.FC<UpdateType> = ({
     //   });
     // }
 
-    if (email) {
+    if (email.trim().length>1) {
+      if(!isValidEmail(email)) {
+        alert('please enter correct email address')
+        return;
+      }
       patchOperations.push({
         path: "Email",
         op: "replace",
@@ -160,11 +165,16 @@ const UpdatePatient: React.FC<UpdateType> = ({
       });
     }
 
-    if (cnicOrPassPort) {
-      if (cnicOrPassPort.trim().length < 13 || cnicOrPassPort.trim().length > 13) {
+    if (cnicOrPassPort.trim().length > 3) {
+      if (
+        cnicOrPassPort.trim().length < 13 ||
+        cnicOrPassPort.trim().length > 13
+      ) {
         alert("CNIC Number must be 13 digits long.");
+        return;
       } else if (/\D/.test(cnicOrPassPort)) {
         alert("CNIC Number can not contain any non digit");
+        return;
       }
       patchOperations.push({
         path: "cnicOrPassPort",
@@ -441,14 +451,17 @@ const UpdatePatient: React.FC<UpdateType> = ({
                       type="number"
                       value={cnicOrPassPort || patientData.CnicOrPassPort}
                       onIonChange={(e) => setCnicOrPassPort(e.detail.value!)}
-                      required
                       id="fname"
                     />
                   </IonItem>
                   <IonItem lines="none">
                     <IonRadioGroup
-                      value={selectCnicOrPassport || patientData.SelectCnicOrPassport}
-                      onIonChange={(e) => setSelectCnicOrPassport(e.detail.value)}
+                      value={
+                        selectCnicOrPassport || patientData.SelectCnicOrPassport
+                      }
+                      onIonChange={(e) =>
+                        setSelectCnicOrPassport(e.detail.value)
+                      }
                     >
                       <IonGrid>
                         <IonRow>
