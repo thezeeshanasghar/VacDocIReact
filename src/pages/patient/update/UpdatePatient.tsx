@@ -433,7 +433,7 @@ const UpdatePatient: React.FC<UpdateType> = ({
                   <IonItem lines="none">
                     <IonLabel position="floating">Identity Number</IonLabel>
                     <IonInput
-                      type="text"
+                      type="number"
                       value={cnicOrPassPort || patientData.CnicOrPassPort}
                       onIonChange={(e) => setCnicOrPassPort(e.detail.value!)}
                       required
