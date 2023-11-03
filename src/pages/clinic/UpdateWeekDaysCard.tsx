@@ -106,6 +106,8 @@ const UpdateWeekDaysCard: React.FC<UpdateWeekDayCardProps> = ({
       setMEnd("");
       setMStart2("");
       setMEnd2("");
+      setShowSession1(false)
+      setShowSession2(false)
     }
     if (!showSession1) {
       setMStart("");

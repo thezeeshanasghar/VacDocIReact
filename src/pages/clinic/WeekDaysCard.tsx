@@ -99,14 +99,35 @@ const WeekDaysCard: React.FC<WeekDayCardProps> = ({
       setMEnd("");
       setMStart2("");
       setMEnd2("");
+      setShowSession1(false)
+      setShowSession2(false)
     }
     if (!showSession1) {
       setMStart("");
       setMEnd("");
+      //@ts-ignore
+      let LocalData = dayData;
+      if (LocalData && LocalData.length < 2) {
+        localStorage.removeItem(name);
+      }
+      if (LocalData && LocalData.length > 1) {
+        let newData = [LocalData[1]];
+        setDayData(newData);
+      }
     }
     if (!showSession2) {
       setMStart2("");
       setMEnd2("");
+      //@ts-ignore
+      let LocalData = dayData;
+      if (LocalData && LocalData.length < 2) {
+        localStorage.removeItem(name);
+      }
+      if (LocalData && LocalData.length > 1) {
+        //@ts-ignore
+        let newData = [LocalData[0]];
+        setDayData(newData);
+      }
     }
   };
 
