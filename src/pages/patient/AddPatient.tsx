@@ -64,11 +64,14 @@ const AddPatient: React.FC = () => {
       alert("Mobile Number must be at least 10 digit");
     } else if (mobileNumber.trim().length > 10) {
       alert("Mobile Number must be at least 10 digit long.");
-    } else if (cnicOrPassPort.trim().length < 13 || cnicOrPassPort.trim().length > 13) {
+    } else if (
+      cnicOrPassPort.trim().length > 3 &&
+      (cnicOrPassPort.trim().length < 13 || cnicOrPassPort.trim().length > 13)
+    ) {
       alert("CNIC Number must be 13 digits long.");
-    } else if(/\D/.test(cnicOrPassPort)) {
+    } else if (cnicOrPassPort.trim().length > 3 && /\D/.test(cnicOrPassPort)) {
       alert("CNIC Number can not contain any non digit");
-    } else if (!isValidEmail(email)) {
+    } else if (email.trim().length > 3 && !isValidEmail(email)) {
       alert("Please enter correct email address");
     } else {
       const data_to_be_sent = {
@@ -77,7 +80,7 @@ const AddPatient: React.FC = () => {
         guardianName: guardian,
         email,
         dob,
-        gender : gender.trim() === "boy" ? 0 : 1,
+        gender: gender.trim() === "boy" ? 0 : 1,
         // type: scheduleType,
         password: generateRandomPassword(),
         city,
@@ -131,7 +134,7 @@ const AddPatient: React.FC = () => {
     setIsEPIDone(false);
     setIsVerified(false);
     setCnicOrPassPort("");
-    setSelectCnicOrPassport("CNIC")
+    setSelectCnicOrPassport("CNIC");
   };
 
   // getting doctors list for dropdown and clinic;
@@ -184,7 +187,6 @@ const AddPatient: React.FC = () => {
     cnicOrPassPort !== "" &&
     gender !== "" &&
     dob !== "" &&
-    email !== "" &&
     mobileNumber !== "" &&
     city !== "";
 
@@ -283,11 +285,10 @@ const AddPatient: React.FC = () => {
                 type="email"
                 value={email}
                 onIonChange={(e) => setEmail(e.detail.value!)}
-                required
                 id="email"
               />
             </IonItem>
-            
+
             <IonItem lines="full">
               <IonItem lines="none">
                 <IonLabel position="floating">Identity Number</IonLabel>
