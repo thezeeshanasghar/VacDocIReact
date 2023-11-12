@@ -14,6 +14,7 @@ import {
   IonButton,
 } from "@ionic/react";
 import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router";
 
 type UpdateWeekDayCardProps = {
   name: string;
@@ -47,6 +48,7 @@ const UpdateWeekDaysCard: React.FC<UpdateWeekDayCardProps> = ({
   renderFunc,
   isRendering,
 }) => {
+  const location = useLocation();
   const [showSession1, setShowSession1] = useState(false);
   const [showSession2, setShowSession2] = useState(false);
   const [clinicSession, setClinicSession] = useState("");
@@ -57,6 +59,8 @@ const UpdateWeekDaysCard: React.FC<UpdateWeekDayCardProps> = ({
   const [mend2, setMEnd2] = useState("");
   const [dayData, setDayData] = useState<ISession[]>([]);
   const [clinicArray, setClinicArray] = useState([]);
+  const [session1_Id, setSession1_Id] = useState();
+  const [session2_Id, setSession2_Id] = useState();
 
   useEffect(() => {
     const storageData: ISession[] | null = JSON.parse(
@@ -100,15 +104,16 @@ const UpdateWeekDaysCard: React.FC<UpdateWeekDayCardProps> = ({
   }, [isRendering]);
 
   const removeDatabyToggle = async () => {
+    //@ts-ignore
+    let local_storage_data = JSON.parse(localStorage.getItem(name)) || null;
     if (!showCard) {
       localStorage.removeItem(name);
       setMStart("");
       setMEnd("");
       setMStart2("");
       setMEnd2("");
-      setShowSession1(false)
-      setShowSession2(false)
-      
+      setShowSession1(false);
+      setShowSession2(false);
     }
     if (!showSession1) {
       setMStart("");
@@ -120,7 +125,7 @@ const UpdateWeekDaysCard: React.FC<UpdateWeekDayCardProps> = ({
       }
       if (LocalData && LocalData.length > 1) {
         let newData = [LocalData[1]];
-        setDayData(newData)
+        setDayData(newData);
       }
     }
     if (!showSession2) {
@@ -134,7 +139,7 @@ const UpdateWeekDaysCard: React.FC<UpdateWeekDayCardProps> = ({
       if (LocalData && LocalData.length > 1) {
         //@ts-ignore
         let newData = [LocalData[0]];
-        setDayData(newData)
+        setDayData(newData);
       }
     }
   };
@@ -225,7 +230,8 @@ const UpdateWeekDaysCard: React.FC<UpdateWeekDayCardProps> = ({
             eveningData && dataToBeStored.push(eveningData);
             localStorage.setItem(name, JSON.stringify(dataToBeStored));
           }
-
+          setSession1_Id(morningData ? morningData.Id : 0);
+          setSession2_Id(eveningData ? eveningData.Id : 0);
           setShowCard(!!morningData || !!eveningData);
           setShowSession1(!!morningData);
           setShowSession2(!!eveningData);
@@ -238,7 +244,7 @@ const UpdateWeekDaysCard: React.FC<UpdateWeekDayCardProps> = ({
       .catch((error) => {
         console.error("Error fetching clinic timing:", error);
       });
-  }, []);
+  }, [location]);
 
   const ApplyTimingToAll = () => {
     if (name === "Monday") {
@@ -296,6 +302,33 @@ const UpdateWeekDaysCard: React.FC<UpdateWeekDayCardProps> = ({
     setShowCard(e.detail.checked);
   };
 
+  const deleteSession1Data = async () => {
+    if (session1_Id !== 0 && showSession1) {
+      await fetch(
+        `${import.meta.env.VITE_API_URL}api/ClinicTiming/${session1_Id}`,
+        {
+          method: "DELETE",
+        }
+      );
+    }
+  };
+  const deleteSession2Data = async () => {
+    if (session2_Id !== 0 && showSession2) {
+      await fetch(
+        `${import.meta.env.VITE_API_URL}api/ClinicTiming/${session2_Id}`,
+        {
+          method: "DELETE",
+        }
+      );
+    }
+  };
+
+  const deleteBothSessionData = () => {
+    if (showCard) {
+      deleteSession1Data();
+      deleteSession2Data();
+    }
+  };
   const handleTimeChange = (
     e: IonInputCustomEvent<InputChangeEventDetail>,
     input: string
@@ -327,7 +360,11 @@ const UpdateWeekDaysCard: React.FC<UpdateWeekDayCardProps> = ({
           }}
         >
           <IonCardTitle>{name}</IonCardTitle>
-          <IonToggle checked={showCard} onIonChange={handleToggleCard} />
+          <IonToggle
+            checked={showCard}
+            onIonChange={handleToggleCard}
+            onClick={deleteBothSessionData}
+          />
         </div>
       </IonCardHeader>
 
@@ -338,6 +375,7 @@ const UpdateWeekDaysCard: React.FC<UpdateWeekDayCardProps> = ({
             <IonToggle
               checked={showSession1}
               onIonChange={handleToggleSession1}
+              onClick={deleteSession1Data}
             />
           </IonItem>
 
@@ -371,6 +409,7 @@ const UpdateWeekDaysCard: React.FC<UpdateWeekDayCardProps> = ({
             <IonToggle
               checked={showSession2}
               onIonChange={handleToggleSession2}
+              onClick={deleteSession2Data}
             />
           </IonItem>
 
