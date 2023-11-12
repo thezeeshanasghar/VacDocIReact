@@ -26,10 +26,11 @@ import secureRandomPassword from "secure-random-password";
 import { isValidEmail } from "../../util/util";
 type DoctorClinicType = { Id: number; Name: string };
 const AddPatient: React.FC = () => {
+  const [Cities, setCities] = useState(cities)
   const [name, setName] = useState("");
   const [guardian, setGuardian] = useState("");
   const [cnic, setCnic] = useState("");
-  const [gender, setGender] = useState("boy");
+  const [gender, setGender] = useState("");
   // const [scheduleType, setScheduleType] = useState("");
   const [dob, setDob] = useState("");
   const [email, setEmail] = useState("");
@@ -127,7 +128,7 @@ const AddPatient: React.FC = () => {
     setName("");
     setGuardian("");
     setGuardianText("Father");
-    setGender("boy");
+    setGender("");
     // setScheduleType("special");
     setDob("");
     setEmail("");
@@ -225,8 +226,8 @@ const AddPatient: React.FC = () => {
         <IonCardContent>
           <form onSubmit={handleFormSubmit}>
             <IonItem>
-              <IonLabel position="floating">Patient Name</IonLabel>
               <IonInput
+                placeholder="Name"
                 type="text"
                 value={name}
                 onIonChange={(e) => setName(e.detail.value!)}
@@ -244,9 +245,9 @@ const AddPatient: React.FC = () => {
             </IonItem> */}
             <IonItem lines="full">
               <IonItem lines="none">
-                <IonLabel position="stacked">Guardian's Name</IonLabel>
                 <IonInput
                   type="text"
+                  placeholder="Guardian's Name"
                   value={guardian}
                   onIonChange={(e) => setGuardian(e.detail.value!)}
                   required
@@ -262,20 +263,26 @@ const AddPatient: React.FC = () => {
                     <IonRow>
                       <IonCol>
                         <IonItem lines="none">
-                          <IonLabel>Father</IonLabel>
                           <IonRadio slot="start" value="Father" />
+                          <IonLabel style={{ fontSize: "14px" }}>
+                            Father
+                          </IonLabel>
                         </IonItem>
                       </IonCol>
                       <IonCol>
                         <IonItem lines="none">
-                          <IonLabel>Mother</IonLabel>
                           <IonRadio slot="start" value="Mother" />
+                          <IonLabel style={{ fontSize: "14px" }}>
+                            Mother
+                          </IonLabel>
                         </IonItem>
                       </IonCol>
                       <IonCol>
                         <IonItem lines="none">
-                          <IonLabel>Husband</IonLabel>
                           <IonRadio slot="start" value="Husband" />
+                          <IonLabel style={{ fontSize: "14px" }}>
+                            Husband
+                          </IonLabel>
                         </IonItem>
                       </IonCol>
                     </IonRow>
@@ -284,9 +291,9 @@ const AddPatient: React.FC = () => {
               </IonItem>
             </IonItem>
             <IonItem>
-              <IonLabel position="floating">Email</IonLabel>
               <IonInput
                 type="email"
+                placeholder="Email"
                 value={email}
                 onIonChange={(e) => setEmail(e.detail.value!)}
                 id="email"
@@ -295,9 +302,9 @@ const AddPatient: React.FC = () => {
 
             <IonItem lines="full">
               <IonItem lines="none">
-                <IonLabel position="floating">Identity Number</IonLabel>
                 <IonInput
                   type="number"
+                  placeholder="Identity Number"
                   value={cnicOrPassPort}
                   onIonChange={(e) => setCnicOrPassPort(e.detail.value!)}
                   id="fname"
@@ -312,13 +319,17 @@ const AddPatient: React.FC = () => {
                     <IonRow>
                       <IonCol>
                         <IonItem lines="none">
-                          <IonLabel>CNIC #No</IonLabel>
+                          <IonLabel style={{ fontSize: "14px" }}>
+                            CNIC #
+                          </IonLabel>
                           <IonRadio slot="start" value="CNIC" />
                         </IonItem>
                       </IonCol>
                       <IonCol>
                         <IonItem lines="none">
-                          <IonLabel>Passport #No</IonLabel>
+                          <IonLabel style={{ fontSize: "14px" }}>
+                            Passport #
+                          </IonLabel>
                           <IonRadio slot="start" value="Passport" />
                         </IonItem>
                       </IonCol>
@@ -328,12 +339,12 @@ const AddPatient: React.FC = () => {
               </IonItem>
             </IonItem>
             <IonItem>
-              <IonLabel position="floating">Mobile Number</IonLabel>
               <IonInput
                 required
+                placeholder="Mobile Number"
                 type="number"
-                value={mobileNumber}
                 id="mobileNumber"
+                title="Please enter exactly 13 digits"
                 itemID="mobileNumber"
                 style={{
                   color:
@@ -341,7 +352,6 @@ const AddPatient: React.FC = () => {
                       ? "red"
                       : "",
                 }}
-                placeholder="3331234567"
                 onIonChange={(e) => setMobileNumber(e.detail.value!)}
               />
             </IonItem>
@@ -356,12 +366,13 @@ const AddPatient: React.FC = () => {
                     : "none",
               }}
             >
-              Mobile Number Must be In 333-1234567 Format
+              Mobile Number Must be In 333-1434567 Format
             </IonText>
             <IonItem>
-              <IonLabel position="stacked">Date of Birth</IonLabel>
+              {/* <IonLabel position="stacked">Date of Birth</IonLabel> */}
               <IonInput
                 // slot="end"
+                placeholder="Date of Birth"
                 type="date"
                 max={toDay}
                 value={dob}
@@ -378,13 +389,13 @@ const AddPatient: React.FC = () => {
                 <IonRow>
                   <IonCol>
                     <IonItem>
-                      <IonLabel>Boy</IonLabel>
+                      <IonLabel style={{ fontSize: "14px" }}>Boy</IonLabel>
                       <IonRadio slot="start" value="boy" />
                     </IonItem>
                   </IonCol>
                   <IonCol>
                     <IonItem>
-                      <IonLabel>Girl</IonLabel>
+                      <IonLabel style={{ fontSize: "14px" }}>Girl</IonLabel>
                       <IonRadio slot="start" value="girl" />
                     </IonItem>
                   </IonCol>
