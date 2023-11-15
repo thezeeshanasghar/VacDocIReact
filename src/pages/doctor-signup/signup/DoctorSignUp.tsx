@@ -16,7 +16,7 @@ import {
 } from "@ionic/react";
 import { person, arrowForward, eye, eyeOff } from "ionicons/icons";
 import "./DocSignUp.css";
-import {isValidEmail} from '../../../util/util';
+import { isValidEmail } from "../../../util/util";
 import secureRandomPassword from "secure-random-password";
 
 const DoctorSignUp: React.FC = () => {
@@ -45,13 +45,12 @@ const DoctorSignUp: React.FC = () => {
       alert("Please fill in all the fields.");
     } else {
       if (mobile.trim().length < 10) {
-        alert("Mobile Number must be at least 10 digit");
+        return;
       } else if (mobile.trim().length > 10) {
-        alert("Mobile Number must be at least 10 digit long.");
-      } else if(!isValidEmail(email)){
-          alert('please enter correct email address')
-      }
-      else {
+        return;
+      } else if (!isValidEmail(email)) {
+        alert("please enter correct email address");
+      } else {
         localStorage.clear();
         e.preventDefault();
         localStorage.setItem(
@@ -132,7 +131,6 @@ const DoctorSignUp: React.FC = () => {
                   type="text"
                   id="name"
                   value={name}
-                  
                   className="data"
                   onIonChange={(e) => setName(e.detail.value!)}
                 />
@@ -174,9 +172,37 @@ const DoctorSignUp: React.FC = () => {
               >
                 Mobile Number Must be In 333-1234567 Format
               </IonText>
+              {mobile.trim().length>2 && mobile.length < 10 && (
+                <IonText
+                  color={"danger"}
+                  style={{
+                    fontSize: "10px",
+                    marginBottom: "11px",
+                  }}
+                >
+                  Mobile Number can not be lesser than 10 digits!
+                </IonText>
+              )}
+              {mobile.trim().length>1 && mobile.length > 10 && (
+                <IonText
+                  color={"danger"}
+                  style={{
+                    fontSize: "10px",
+                    marginBottom: "11px",
+                  }}
+                >
+                  Mobile Number can not be greater than 10 digits!
+                </IonText>
+              )}
               <IonItem style={{ width: "100%" }}>
                 <IonLabel position="floating">Password</IonLabel>
-                <div style={{ display: "flex", alignItems: "center", width: '100%' }}>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    width: "100%",
+                  }}
+                >
                   <IonInput
                     required
                     type={showPassword ? "text" : "password"}
@@ -211,7 +237,7 @@ const DoctorSignUp: React.FC = () => {
               >
                 Password must 4 character long and should contain only number
               </IonText>
-              <IonItem style={{ width: "100%" }}>
+              <IonItem style={{ width: "100%", borderBottom: "red" }}>
                 <IonLabel position="floating">PMDC</IonLabel>
                 <IonInput
                   type="text"
