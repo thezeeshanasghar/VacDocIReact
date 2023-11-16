@@ -29,12 +29,12 @@ const ClinicRegistration: React.FC = () => {
   const [clinicFee, setClinicFee] = useState("");
   const [city, setCity] = useState("");
   const [error, setError] = useState(false);
-  const isInvalid = mobile.startsWith("0") || mobile.startsWith("+");
+  // const isInvalid = mobile.startsWith("0") || mobile.startsWith("+");
 
   const canSubmit =
     name.trim() === "" &&
     address.trim() === "" &&
-    mobile.trim() === "" &&
+    // mobile.trim() === "" &&
     city.trim() === "" &&
     clinicFee.trim() === "";
 
@@ -145,13 +145,13 @@ const ClinicRegistration: React.FC = () => {
 
               <IonItem style={{ width: "100%" }}>
                 <IonLabel position="floating">Contact Number</IonLabel>
+                <IonLabel position="floating">Contact Number</IonLabel>
                 <IonInput
                   required
                   type="number"
                   value={mobile}
                   id="mobileNumber"
                   itemID="mobileNumber"
-                  placeholder="3331234567"
                   onIonChange={(e) => setMobile(e.detail.value!)}
                 />
               </IonItem>
