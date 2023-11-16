@@ -145,7 +145,6 @@ const ClinicRegistration: React.FC = () => {
 
               <IonItem style={{ width: "100%" }}>
                 <IonLabel position="floating">Contact Number</IonLabel>
-                <IonLabel position="floating">Contact Number</IonLabel>
                 <IonInput
                   required
                   type="number"
