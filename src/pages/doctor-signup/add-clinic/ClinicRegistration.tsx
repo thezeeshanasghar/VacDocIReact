@@ -150,19 +150,17 @@ const ClinicRegistration: React.FC = () => {
               </IonItem>
 
               <IonItem style={{ width: "100%" }}>
-                <IonLabel position="floating">Mobile Number</IonLabel>
+                <IonLabel position="floating">Contact Number</IonLabel>
                 <IonInput
                   required
                   type="number"
                   value={mobile}
                   id="mobileNumber"
                   itemID="mobileNumber"
-                  style={{ color: isInvalid ? "red" : "" }}
-                  placeholder="3331234567"
                   onIonChange={(e) => setMobile(e.detail.value!)}
                 />
               </IonItem>
-              <IonText
+              {/* <IonText
                 color={"danger"}
                 style={{
                   fontSize: "10px",
@@ -174,8 +172,8 @@ const ClinicRegistration: React.FC = () => {
                 }}
               >
                 Mobile Number Must be In 333-1234567 Format
-              </IonText>
-              {mobile.trim().length>2 && mobile.length < 10 && (
+              </IonText> */}
+              {/* {mobile.trim().length>2 && mobile.length < 10 && (
                 <IonText
                   color={"danger"}
                   style={{
@@ -185,8 +183,8 @@ const ClinicRegistration: React.FC = () => {
                 >
                   Mobile Number can not be lesser than 10 digits!
                 </IonText>
-              )}
-              {mobile.trim().length>2 && mobile.length > 10 && (
+              )} */}
+              {/* {mobile.trim().length>2 && mobile.length > 10 && (
                 <IonText
                   color={"danger"}
                   style={{
@@ -196,7 +194,7 @@ const ClinicRegistration: React.FC = () => {
                 >
                   Mobile Number can not be greater than 10 digits!
                 </IonText>
-              )}
+              )} */}
               <IonItem style={{ width: "100%" }}>
                 <IonLabel position="floating">Fee</IonLabel>
                 <IonInput
