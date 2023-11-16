@@ -54,6 +54,7 @@ const Login: React.FC = () => {
         })
         .then((data) => {
           console.log(data);
+          sessionStorage.clear();
           sessionStorage.setItem("docData", JSON.stringify(data));
         })
         .catch((err: any) => {
