@@ -43,28 +43,22 @@ const ClinicRegistration: React.FC = () => {
     if (canSubmit) {
       alert("Please fill in all the fields.");
     } else {
-      if (mobile.trim().length < 10) {
-        return;
-      } else if (mobile.trim().length > 10) {
-        return;
-      } else {
-        const Doc_data = localStorage.getItem("drData");
-        //@ts-ignore
-        const drData = JSON.parse(Doc_data);
-        drData.clinics = [
-          {
-            name,
-            address,
-            city,
-            fees: clinicFee,
-            number: mobile,
-            clinicTimings: "",
-          },
-        ];
-        localStorage.setItem("drData", JSON.stringify(drData));
-        router.push("/auth/clinic_schedule");
-        clearClinicForm();
-      }
+      const Doc_data = localStorage.getItem("drData");
+      //@ts-ignore
+      const drData = JSON.parse(Doc_data);
+      drData.clinics = [
+        {
+          name,
+          address,
+          city,
+          fees: clinicFee,
+          number: mobile,
+          clinicTimings: "",
+        },
+      ];
+      localStorage.setItem("drData", JSON.stringify(drData));
+      router.push("/auth/clinic_schedule");
+      clearClinicForm();
     }
   };
   const clearClinicForm = () => {
@@ -150,53 +144,17 @@ const ClinicRegistration: React.FC = () => {
               </IonItem>
 
               <IonItem style={{ width: "100%" }}>
-                <IonLabel position="floating">Mobile Number</IonLabel>
+                <IonLabel position="floating">Contact Number</IonLabel>
                 <IonInput
                   required
                   type="number"
                   value={mobile}
                   id="mobileNumber"
                   itemID="mobileNumber"
-                  style={{ color: isInvalid ? "red" : "" }}
                   placeholder="3331234567"
                   onIonChange={(e) => setMobile(e.detail.value!)}
                 />
               </IonItem>
-              <IonText
-                color={"danger"}
-                style={{
-                  fontSize: "10px",
-                  marginBottom: "11px",
-                  display:
-                    mobile.startsWith("0") || mobile.startsWith("+")
-                      ? "block"
-                      : "none",
-                }}
-              >
-                Mobile Number Must be In 333-1234567 Format
-              </IonText>
-              {mobile.trim().length>2 && mobile.length < 10 && (
-                <IonText
-                  color={"danger"}
-                  style={{
-                    fontSize: "10px",
-                    marginBottom: "11px",
-                  }}
-                >
-                  Mobile Number can not be lesser than 10 digits!
-                </IonText>
-              )}
-              {mobile.trim().length>2 && mobile.length > 10 && (
-                <IonText
-                  color={"danger"}
-                  style={{
-                    fontSize: "10px",
-                    marginBottom: "11px",
-                  }}
-                >
-                  Mobile Number can not be greater than 10 digits!
-                </IonText>
-              )}
               <IonItem style={{ width: "100%" }}>
                 <IonLabel position="floating">Fee</IonLabel>
                 <IonInput

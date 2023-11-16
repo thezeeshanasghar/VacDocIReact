@@ -18,21 +18,25 @@ const Header: React.FC<IHeaderProps> = ({ pageName }) => {
   const router = useIonRouter();
   useEffect(() => {
     //@ts-ignore
-    const docData = JSON.parse(sessionStorage.getItem("docData"));
-    fetch(
-      `${import.meta.env.VITE_API_URL}api/Clinic/clinicByDoctor?doctorId=${
-        docData["Id"]
-      }`
-    )
-      .then((res) => res.json())
-      .then((data) => {
-        data.forEach((item: any) => {
-          if (item.IsOnline) {
-            setClinicName(item.Name);
-          }
-        });
-      })
-      .catch((err) => console.error(err));
+    const docDATA = sessionStorage.getItem("docData") || null;
+    //@ts-ignore
+    const docData = JSON.parse(docDATA);
+    if (docData) {
+      fetch(
+        `${import.meta.env.VITE_API_URL}api/Clinic/clinicByDoctor?doctorId=${
+          docData["Id"]
+        }`
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          data.forEach((item: any) => {
+            if (item.IsOnline) {
+              setClinicName(item.Name);
+            }
+          });
+        })
+        .catch((err) => console.error(err));
+    }
   }, [location]);
   return (
     <>
