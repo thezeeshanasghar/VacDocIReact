@@ -145,7 +145,7 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
   };
 
   const postSingleDone = async (date: String) => {
-    //@ts-ignore
+    //@ts-ignore\
     const ndate = formatDate(date);
     try {
       const res = await fetch(

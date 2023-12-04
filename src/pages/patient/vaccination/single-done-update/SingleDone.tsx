@@ -129,7 +129,7 @@ const SingleDone: React.FC<IParam> = () => {
           body: JSON.stringify({
             id: +scheduleId,
             isDone: 1,
-            date: newDate,
+            givenDate: newDate,
             brandId: brand,
           }),
         }

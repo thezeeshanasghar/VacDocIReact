@@ -71,24 +71,24 @@ const VaccinationCardList: React.FC<IParam> = ({
       .get(
         `${
           import.meta.env.VITE_API_URL
-        }api/PatientSchedule/patient_schedule/${childId}`
+        }api/PatientSchedule/PatientSchedule_by_childid/${childId}`
       )
       .then((res) => setPatientSchedule(res.data))
       .catch((err) => console.error(err));
   };
-  useEffect(() => {
-    if (count === 1) {
-      axios
-        .post(
-          `${
-            import.meta.env.VITE_API_URL
-          }api/PatientSchedule/Patient_DoseSchedule?ChildId=${childId}&DoctorId=${doctorId}`
-        )
-        .then((res) => res.status === 200 && fetchPatientScheduleData())
-        .catch((err) => console.log(err));
-      setCount(2);
-    }
-  }, [childId, doctorId]);
+  // useEffect(() => {
+  //   if (count === 1) {
+  //     axios
+  //       .post(
+  //         `${
+  //           import.meta.env.VITE_API_URL
+  //         }api/PatientSchedule/PatientSchedule_by_childid/${childId}`
+  //       )
+  //       .then((res) => res.status === 200 && fetchPatientScheduleData())
+  //       .catch((err) => console.log(err));
+  //     setCount(2);
+  //   }
+  // }, [childId, doctorId]);
 
   useEffect(() => {
     if (patientSchedule) {

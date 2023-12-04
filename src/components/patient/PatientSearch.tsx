@@ -13,6 +13,8 @@ import { IPatientData } from "../../pages/patient/PatientCardList";
 import PatientFemaleCard from "./PatientFemaleCard";
 import PatientMaleCard from "./PatientMaleCard";
 import axios, { AxiosError, AxiosResponse } from "axios";
+
+import {  useLocation } from "react-router-dom";
 interface ISearchData {
   hideCards: React.Dispatch<React.SetStateAction<boolean>>;
   renderList: () => void;
@@ -39,8 +41,15 @@ interface ISearchPatient {
 const PatientSearch: React.FC<ISearchData> = ({ hideCards, renderList }) => {
   const [searchData, setSearchData] = useState<IPatientData[]>([]);
   const [searchText, setSearchText] = useState("");
+ 
   const [errMsg, setErrMsg] = useState("");
   const [showErrorCard, setShowErrorCard] = useState(false);
+  // const [selectedDoctor2, setSelectedDoctor2] = useState<number>();
+  const location = useLocation();
+  const storedDocData = sessionStorage.getItem("docData");
+  const doctorData2 = storedDocData ? JSON.parse(storedDocData) : null;
+  const selectedDoctor2 = doctorData2 ? doctorData2.Id : undefined;
+  console.log(selectedDoctor2)
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -61,7 +70,7 @@ const PatientSearch: React.FC<ISearchData> = ({ hideCards, renderList }) => {
       .get<IPatientData[], AxiosResponse<IPatientData[]>>(
         `${
           import.meta.env.VITE_API_URL
-        }api/Child/search-by-doctor-name?name=${searchText}`
+        }api/Child/search-by-doctor-name?doctorId=${selectedDoctor2}&name=${searchText}`
       )
       .then((res: AxiosResponse<IPatientData[]>) => {
         if (Object.keys(res.data).length !== 0) {
@@ -158,3 +167,7 @@ const PatientSearch: React.FC<ISearchData> = ({ hideCards, renderList }) => {
 };
 
 export default PatientSearch;
+function useEffect(arg0: () => void) {
+  throw new Error("Function not implemented.");
+}
+

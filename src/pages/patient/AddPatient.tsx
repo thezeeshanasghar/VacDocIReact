@@ -24,9 +24,11 @@ import Toast from "../../components/custom-toast/Toast";
 import cities from "../test/citiesData";
 import secureRandomPassword from "secure-random-password";
 import { isValidEmail } from "../../util/util";
+import axios from "axios";
 type DoctorClinicType = { Id: number; Name: string };
 const AddPatient: React.FC = () => {
-  const [Cities, setCities] = useState(cities)
+  const [Cities, setCities] = useState(cities);
+  const [scheduleType, setScheduleType] = useState("");
   const [name, setName] = useState("");
   const [guardian, setGuardian] = useState("");
   const [cnic, setCnic] = useState("");
@@ -57,6 +59,7 @@ const AddPatient: React.FC = () => {
 
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    console.log("Form submitted with scheduleType:", scheduleType);
     if (!selectedClinic) {
       setNoClinic(true);
       return;
@@ -87,19 +90,21 @@ const AddPatient: React.FC = () => {
         email,
         dob,
         gender: gender.trim() === "boy" ? 0 : 1,
-        // type: scheduleType,
+        isSpecial: +scheduleType,
         password: generateRandomPassword(),
         city,
         selectCnicOrPassport,
         cnicOrPassPort,
         mobileNumber,
-        // preferredSchedule,
+       
         isEPIDone,
         isVerified,
         isInactive: false,
+       
         clinicId: selectedClinic,
         doctorId: selectedDoctor,
       };
+      console.log(data_to_be_sent)
 
       fetch(`${import.meta.env.VITE_API_URL}api/Child`, {
         method: "POST",
@@ -109,17 +114,35 @@ const AddPatient: React.FC = () => {
         body: JSON.stringify(data_to_be_sent),
       })
         .then((res) => {
-          if (res.status === 204) {
+          if (res.status === 200) {
             setSuccess(true);
-            history.push("/members/child", "back");
-            // window.location.reload();
+            return res.json().then((data)=>{
+              console.log(data)
+              const childId=data.Id;
+             
+              axios.get(`${import.meta.env.VITE_API_URL}api/PatientSchedule/Patient_DoseSchedule?ChildId=${childId}&DoctorId=${selectedDoctor}`).then((res: any)=> {
+              console.log('schedule created')
+              const isspecial=data.IsSpecial
+              console.log(isspecial)
+              if (isspecial==true){
+                history.push(`/members/child/special-vaccine/${childId}`)
+                
+              }
+              else{
+                history.push(`/members/child`)
+              }
+              }).catch((error: any)=>{ console.log(error)})
+              // .then(res => {
+              //   history.push("/members/child", "back");
+              //   clearStateVariables();
+              // })
+            })
           } else {
             setError(true);
           }
         })
         .catch((err) => setError(true))
         .finally(() => {
-          clearStateVariables();
         });
     }
   };
@@ -137,6 +160,7 @@ const AddPatient: React.FC = () => {
     setSelectedDoctor(0);
     setSelectedClinic(0);
     setCity("");
+    setScheduleType("");
     setIsEPIDone(false);
     setIsVerified(false);
     setCnicOrPassPort("");
@@ -402,9 +426,9 @@ const AddPatient: React.FC = () => {
                 </IonRow>
               </IonGrid>
             </IonRadioGroup>
-            {/* <IonRadioGroup
-              value={scheduleType}
-              onIonChange={(e) => setScheduleType(e.detail.value)}
+             <IonRadioGroup
+              value={scheduleType === "1"? 'true' : 'false'}
+              onIonChange={(e) => setScheduleType(e.detail.value!)}
             >
               <IonListHeader>Schedule Type</IonListHeader>
               <IonGrid>
@@ -412,26 +436,19 @@ const AddPatient: React.FC = () => {
                   <IonCol>
                     <IonItem>
                       <IonLabel>Regular</IonLabel>
-                      <IonRadio slot="start" value="regular" />
+                      <IonRadio slot="start" value="0"/>
                     </IonItem>
                   </IonCol>
                   <IonCol>
                     <IonItem>
                       <IonLabel>Special</IonLabel>
-                      <IonRadio slot="start" value="special" />
+                      <IonRadio slot="start" value="1" />
                     </IonItem>
                   </IonCol>
                 </IonRow>
               </IonGrid>
             </IonRadioGroup>
-            <IonItem>
-              <IonLabel position="floating">Preferred Schedule</IonLabel>
-              <IonInput
-                type="text"
-                value={preferredSchedule}
-                onIonChange={(e) => setpreferredSchedule(e.detail.value!)}
-              />
-            </IonItem> */}
+           
             {/* <IonItem>
               <IonLabel position="floating">Select Doctor</IonLabel>
               <IonSelect

@@ -142,7 +142,7 @@ const VaccinationCardList: React.FC<IParam> = (
       const response = await fetch(
         `${
           import.meta.env.VITE_API_URL
-        }api/PatientSchedule/Patient_DoseSchedule?ChildId=${childId}&DoctorId=${DoctorID}`
+        }api/PatientSchedule/PatientSchedule_by_childid/${childId}`
       );
       if (response.ok) {
         const data = await response.json();
@@ -238,7 +238,7 @@ const VaccinationCardList: React.FC<IParam> = (
     axios({
       url: `${
         import.meta.env.VITE_API_URL
-      }api/PatientSchedule/pdf?ChildId=${childId}`, // Replace with the URL of your PDF file
+      }api/PatientSchedule/DownLoad-Pdf?ChildId=${childId}`, // Replace with the URL of your PDF file
       method: "GET",
       responseType: "blob", // Important! This tells axios to return a Blob object
     })
