@@ -29,20 +29,19 @@ type DoctorClinicType = { Id: number; Name: string };
 const AddPatient: React.FC = () => {
   const [Cities, setCities] = useState(cities);
   const [scheduleType, setScheduleType] = useState("");
+  const [gender, setGender] = useState("");
+
   const [name, setName] = useState("");
   const [guardian, setGuardian] = useState("");
   const [cnic, setCnic] = useState("");
-  const [gender, setGender] = useState("");
-  // const [scheduleType, setScheduleType] = useState("");
+  
   const [dob, setDob] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("auto");
   const [mobileNumber, setMobileNumber] = useState("");
   const [toDay, setToDay] = useState("");
-  // const [preferredSchedule, setpreferredSchedule] = useState<string>("");
   const [selectedDoctor, setSelectedDoctor] = useState<number>();
   const [selectedClinic, setSelectedClinic] = useState<number>();
-  // const [passport, setPassport] = useState("");
   const [city, setCity] = useState<string>("");
   const [isEPIDone, setIsEPIDone] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
@@ -59,7 +58,6 @@ const AddPatient: React.FC = () => {
 
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form submitted with scheduleType:", scheduleType);
     if (!selectedClinic) {
       setNoClinic(true);
       return;
@@ -90,7 +88,7 @@ const AddPatient: React.FC = () => {
         email,
         dob,
         gender: gender.trim() === "boy" ? 0 : 1,
-        isSpecial: +scheduleType,
+        isSpecial: scheduleType.trim()=="regular"?0 : 1,
         password: generateRandomPassword(),
         city,
         selectCnicOrPassport,
@@ -152,13 +150,12 @@ const AddPatient: React.FC = () => {
     setGuardian("");
     setGuardianText("Father");
     setGender("");
-    // setScheduleType("special");
+    setScheduleType("");
     setDob("");
     setEmail("");
     setMobileNumber("");
     // setpreferredSchedule("");
-    setSelectedDoctor(0);
-    setSelectedClinic(0);
+    
     setCity("");
     setScheduleType("");
     setIsEPIDone(false);
@@ -209,6 +206,9 @@ const AddPatient: React.FC = () => {
 
     // console.log(today);
     setToDay(today);
+    clearStateVariables();
+    
+    
   }, [location, success, error]);
 
   const canSubmit =
@@ -217,7 +217,7 @@ const AddPatient: React.FC = () => {
     gender !== "" &&
     dob !== "" &&
     mobileNumber !== "" &&
-    city !== "";
+    city !== "" && scheduleType !=="";
 
   function generateRandomPassword() {
     return secureRandomPassword.randomPassword({
@@ -370,6 +370,7 @@ const AddPatient: React.FC = () => {
                 id="mobileNumber"
                 title="Please enter exactly 13 digits"
                 itemID="mobileNumber"
+                value={mobileNumber}
                 style={{
                   color:
                     mobileNumber.startsWith("0") || mobileNumber.startsWith("+")
@@ -405,8 +406,30 @@ const AddPatient: React.FC = () => {
               />
             </IonItem>
             <IonRadioGroup
+              value={scheduleType}
+              onIonChange={(e) => setScheduleType(e.detail.value!)}
+            >
+              <IonListHeader>Schedule Type</IonListHeader>
+              <IonGrid>
+                <IonRow>
+                  <IonCol>
+                    <IonItem>
+                      <IonLabel>Regular</IonLabel>
+                      <IonRadio slot="start" value="regular"/>
+                    </IonItem>
+                  </IonCol>
+                  <IonCol>
+                    <IonItem>
+                      <IonLabel>Special</IonLabel>
+                      <IonRadio slot="start" value="IsSpecial" />
+                    </IonItem>
+                  </IonCol>
+                </IonRow>
+              </IonGrid>
+            </IonRadioGroup>
+            <IonRadioGroup
               value={gender}
-              onIonChange={(e) => setGender(e.detail.value)}
+              onIonChange={(e) => setGender(e.detail.value!)}
             >
               <IonListHeader>Gender</IonListHeader>
               <IonGrid>
@@ -426,60 +449,9 @@ const AddPatient: React.FC = () => {
                 </IonRow>
               </IonGrid>
             </IonRadioGroup>
-             <IonRadioGroup
-              value={scheduleType === "1"? 'true' : 'false'}
-              onIonChange={(e) => setScheduleType(e.detail.value!)}
-            >
-              <IonListHeader>Schedule Type</IonListHeader>
-              <IonGrid>
-                <IonRow>
-                  <IonCol>
-                    <IonItem>
-                      <IonLabel>Regular</IonLabel>
-                      <IonRadio slot="start" value="0"/>
-                    </IonItem>
-                  </IonCol>
-                  <IonCol>
-                    <IonItem>
-                      <IonLabel>Special</IonLabel>
-                      <IonRadio slot="start" value="1" />
-                    </IonItem>
-                  </IonCol>
-                </IonRow>
-              </IonGrid>
-            </IonRadioGroup>
+             
            
-            {/* <IonItem>
-              <IonLabel position="floating">Select Doctor</IonLabel>
-              <IonSelect
-                value={selectedDoctor}
-                onIonChange={(e) => setSelectedDoctor(e.detail.value!)}
-                id="doc"
-              >
-                {doctorData &&
-                  doctorData.map((item, index) => (
-                    <IonSelectOption key={index} value={item.Id || 0}>
-                      {item.Name}
-                    </IonSelectOption>
-                  ))}
-              </IonSelect>
-            </IonItem>
-
-            <IonItem>
-              <IonLabel position="floating">Select Clinic</IonLabel>
-              <IonSelect
-                value={selectedClinic}
-                onIonChange={(e) => setSelectedClinic(e.detail.value!)}
-                id="clinic"
-              >
-                {clinicData &&
-                  clinicData.map((item, index) => (
-                    <IonSelectOption key={index} value={item.Id || 0}>
-                      {item.Name}
-                    </IonSelectOption>
-                  ))}
-              </IonSelect>
-            </IonItem> */}
+           
             <IonItem>
               <input
                 type="text"
