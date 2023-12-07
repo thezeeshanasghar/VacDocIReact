@@ -30,6 +30,7 @@ interface IVaccine {
   DoseName: string;
   IsDone: boolean;
   IsSkip: boolean;
+  DoseId: number;
   ScheduleId: number;
   BrandName: string;
 }
@@ -146,7 +147,7 @@ const VaccinationCardList: React.FC<IParam> = (
       );
       if (response.ok) {
         const data = await response.json();
-
+        console.log(data);
         setData(data);
         setIsLoading(false);
       } else {
@@ -256,7 +257,7 @@ const VaccinationCardList: React.FC<IParam> = (
     setButtonsVisible(!isButtonsVisible);
     postSkip(date, false); // Update the database value of isSkip
   };
-
+  console.log(data)
   return (
     <>
       <Toast
@@ -456,6 +457,7 @@ const VaccinationCardList: React.FC<IParam> = (
                         Id={item.ScheduleId}
                         Name={item.DoseName}
                         BrandName={item.BrandName}
+                        DoseId={item.DoseId}
                         // MinAge={item.MinAge}
                         IsDone={item.IsDone}
                         IsSkip={item.IsSkip}

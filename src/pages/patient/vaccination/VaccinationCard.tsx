@@ -37,6 +37,7 @@ interface IDoseSchedule {
   Name: string;
   IsDone: boolean;
   IsSkip: boolean;
+  DoseId:number;
   BrandName: string;
   renderList: () => void;
 }
@@ -49,6 +50,7 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
   childId,
   IsDone,
   IsSkip,
+  DoseId,
   BrandName,
   // VaccineId,
 }) => {
@@ -130,6 +132,7 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
           },
           body: JSON.stringify({
             id: Id,
+            DoseId,
             isSkip: !IsSkip ? 1 : 0,
           }),
         }
