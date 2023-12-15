@@ -28,7 +28,7 @@ import axios from "axios";
 type DoctorClinicType = { Id: number; Name: string };
 const AddPatient: React.FC = () => {
   const [Cities, setCities] = useState(cities);
-  const [scheduleType, setScheduleType] = useState("");
+  const [scheduleType, setScheduleType] = useState("regular");
   const [gender, setGender] = useState("");
 
   const [name, setName] = useState("");
@@ -150,14 +150,12 @@ const AddPatient: React.FC = () => {
     setGuardian("");
     setGuardianText("Father");
     setGender("");
-    setScheduleType("");
+    setScheduleType("regular");
     setDob("");
     setEmail("");
     setMobileNumber("");
-    // setpreferredSchedule("");
     
     setCity("");
-    setScheduleType("");
     setIsEPIDone(false);
     setIsVerified(false);
     setCnicOrPassPort("");
