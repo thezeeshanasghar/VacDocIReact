@@ -34,6 +34,7 @@ import Toast from "../../components/custom-toast/Toast";
   const SpecialVaccine: React.FC = () => {
     // const { childId } = useParams<{ childId: string }>();
     const currentUrl = window.location.href;
+    
     const history = useHistory();
 
     // Extract the last digit from the URL
@@ -47,7 +48,7 @@ import Toast from "../../components/custom-toast/Toast";
      useEffect(() => {
     // Fetch vaccine data from your API
     // Example using fetch:
-    fetch(`${import.meta.env.VITE_API_URL}api/Vaccine/IsSpecial`)
+    fetch(`${import.meta.env.VITE_API_URL}api/Dose`)
       .then(response => response.json())
       .then(data => setVaccineData(data))
       .catch(error => console.error('Error fetching vaccine data:', error));
@@ -67,7 +68,7 @@ import Toast from "../../components/custom-toast/Toast";
     .filter(([vaccineId, isSelected]) => isSelected)
     .map(([vaccineId]) => Number(vaccineId));
 
-    fetch(`${import.meta.env.VITE_API_URL}api/PatientSchedule/patient_IsSpecial_Vaccine?childId=${childId}`, {
+    fetch(`${import.meta.env.VITE_API_URL}api/PatientSchedule/patient_IsSpecial_doses?childId=${childId}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -100,17 +101,17 @@ import Toast from "../../components/custom-toast/Toast";
             <form onSubmit={handleFormSubmit}>
             
            
-                {vaccineData.map(vaccine => (
-                <div key={vaccine.Id}>
+                {vaccineData.map(dose => (
+                <div key={dose.Id}>
                     <IonCard >
                         <IonItem>
-                            <IonLabel>{vaccine.Name}</IonLabel>
+                            <IonLabel>{dose.Name}</IonLabel>
                             <IonCheckbox
                             slot="start"
-                            name={`vaccine_${vaccine.Id}`}
-                            checked={selectedVaccines[vaccine.Id] || false}
-                            onIonChange={(e) => handleCheckboxChange(vaccine.Id, e.detail.checked)}
-                            id={`vaccine_${vaccine.Id}`}
+                            name={`vaccine_${dose.Id}`}
+                            checked={selectedVaccines[dose.Id] || false}
+                            onIonChange={(e) => handleCheckboxChange(dose.Id, e.detail.checked)}
+                            id={`vaccine_${dose.Id}`}
                             />
                         </IonItem>
                     </IonCard>
