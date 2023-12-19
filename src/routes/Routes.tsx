@@ -25,6 +25,7 @@ import ChangePassword from "../pages/changepassword/ChangePassword";
 import SingleDone from "../pages/patient/vaccination/single-done-update/SingleDone";
 import UpdateClinic from "../pages/clinic/UpdateClinic";
 import SpecialVaccine from "../pages/patient/SpecialVaccine";
+import AddNewDosesList from "../pages/patient/AddNewDosesList";
 
 const Routes: React.FC = () => {
   return (
@@ -84,6 +85,11 @@ const Routes: React.FC = () => {
           exact
           path="/members/child/special-vaccine/:childId"
           component={SpecialVaccine}
+        />
+        <Route
+          exact
+          path="/members/child/AddNewDosesList/:childId"
+          component={AddNewDosesList}
         />
 
         <Route

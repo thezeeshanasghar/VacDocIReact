@@ -17,6 +17,7 @@ import {
   useIonRouter,
 } from "@ionic/react";
 import { calendar, key } from "ionicons/icons";
+import { useHistory } from "react-router-dom";
 import { format, isValid, parse } from "date-fns";
 import axios from "axios";
 import { saveAs } from "file-saver";
@@ -76,7 +77,7 @@ const VaccinationCardList: React.FC<IParam> = (
   const [showButton1, setShowButton1] = useState(true);
   const [showButton2, setShowButton2] = useState(false);
   const [skipStates, setSkipStates] = useState<{ [date: string]: boolean }>({});
-
+  const history = useHistory();
   const forceRender = () => {
     fetchDoseData();
     fetchPatientData();
@@ -234,6 +235,9 @@ const VaccinationCardList: React.FC<IParam> = (
       console.log(error);
     }
   };
+  const GoToNewDoses=()=>{
+    history.push(`/members/child/AddNewDosesList/${childId}`);
+  };
 
   const handleDownload = () => {
     axios({
@@ -251,6 +255,7 @@ const VaccinationCardList: React.FC<IParam> = (
         console.log(error);
       });
   };
+  
 
   const toggleButtonsVisibility = (date: string) => {
     // Toggle the visibility of all buttons and set isSkip to 0 (false)
@@ -280,6 +285,8 @@ const VaccinationCardList: React.FC<IParam> = (
             <IonButton size="small" slot="start" onClick={handleDownload}>
               print
             </IonButton>
+            <IonButton  size="small" slot="end" onClick={GoToNewDoses}>Add new Doses</IonButton>
+
             <IonText slot="end">{patientName}</IonText>
           </IonToolbar>
         </IonHeader>
@@ -293,6 +300,7 @@ const VaccinationCardList: React.FC<IParam> = (
 
             return (
               <React.Fragment>
+                
                 {!isBulkSkip && !isBulkDone && (
                   <IonItem lines="none" className="centered-item">
                     <IonText style={{ marginRight: "1rem" }}>{date}</IonText>
