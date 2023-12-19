@@ -23,6 +23,7 @@ const ClinicSchedule: React.FC = () => {
     const Doc_data = localStorage.getItem("drData");
     //@ts-ignore
     const drData = JSON.parse(Doc_data);
+    
 
     const weekdays = [
       "Monday",
@@ -60,6 +61,15 @@ const ClinicSchedule: React.FC = () => {
   };
 
   const RegisterDoctor = (data_to_be_sent: any) => {
+    //@ts-ignore
+    const DrData = JSON.parse(localStorage.getItem('drData'));
+    //@ts-ignore
+    const drEmail = DrData.email;
+    //@ts-ignore
+    const drName = DrData.name;
+
+    const payload = {userName: drName, userEmail: drEmail};
+    console.log(payload)
     fetch(`${import.meta.env.VITE_API_URL}api/Doctor`, {
       method: "POST",
       headers: {
@@ -70,9 +80,17 @@ const ClinicSchedule: React.FC = () => {
       .then((res) => {
         if (res.status === 200 || 204) {
           setSuccess(true);
+
           setTimeout(() => {
             router.push("/", "back");
           }, 1500);
+          fetch(`${import.meta.env.VITE_API_URL}api/email`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json-patch+json",
+            },
+            body: JSON.stringify({userName: drName, userEmail: drEmail}),
+          })
         } else {
           setError(false);
         }
