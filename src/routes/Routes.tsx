@@ -115,7 +115,7 @@ const Routes: React.FC = () => {
           // component={}
         />
 
-        <Route exact path={"/members/test"} component={Test} />
+        <Route exact path={"/members/dashboard"} component={Dashboard} />
         <Route exact path="/members">
           <Redirect to="/members/dashboard" />
         </Route>

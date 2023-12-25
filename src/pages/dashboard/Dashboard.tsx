@@ -13,6 +13,7 @@ import dashboardImage from "../../assets/vaccinepk.png";
 import "./dashboard.css";
 const Dashboard: React.FC = () => {
   useEffect(() => {
+    //@ts-ignore
     const storedValue = JSON.parse(sessionStorage.getItem("docData"));
     console.log(storedValue);
   }, []);
