@@ -40,7 +40,7 @@ const Login: React.FC = () => {
         .then((res) => {
           if (res.status === 200) {
             setSuccess(true);
-            history.push("/members", "root");
+            history.push("/members/Dashboard", "root");
             return res.json();
           } else if (res.status === 401) {
             // console.log(res);
