@@ -7,7 +7,7 @@
     "dev": "vite",
     "build:local": "vite build",
     "build:prod": "cross-env VITE_API_URL=https://api.skintechno.com/ vite build",
-    "build": "tsc && npm run build:local",
+    "build": "tsc && npm run build:prod",
     "preview": "vite preview",
     "test.e2e": "cypress run",
     "test.unit": "vitest",

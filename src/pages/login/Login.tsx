@@ -15,8 +15,10 @@ import {
 import { mail, lockClosed, logIn } from "ionicons/icons";
 import "./Login.css";
 import Toast from "../../components/custom-toast/Toast";
+import { useHistory } from "react-router";
 
 const Login: React.FC = () => {
+  const history = useHistory();
   const [showLoading, setShowLoading] = useState(false);
   const navigation = useIonRouter();
   const [success, setSuccess] = useState<boolean>(false);
@@ -38,7 +40,7 @@ const Login: React.FC = () => {
         .then((res) => {
           if (res.status === 200) {
             setSuccess(true);
-            navigation.push("/members", "root");
+            history.push("/members", "root");
             return res.json();
           } else if (res.status === 401) {
             // console.log(res);
@@ -138,20 +140,7 @@ const Login: React.FC = () => {
                       required
                       id="pass"
                     />
-                    {/* <IonText
-                      style={{
-                        color: "red",
-                        fontSize: "12px",
-                        marginBottom: "11px",
-                        display: password.length > 2 &&
-                          (password.length < 4 ||
-                          /[^0-9]/.test(password))
-                            ? "block"
-                            : "none",
-                      }}
-                    >
-                      Password must be more than 4 digits and should be numbers only!
-                    </IonText> */}
+                   
                   </div>
                   <IonButton
                     type="submit"

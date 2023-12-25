@@ -14,7 +14,7 @@ import {
   useIonRouter,
   IonButton,
 } from "@ionic/react";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 
 type WeekDayCardProps = {
   name: string;
@@ -51,6 +51,10 @@ const WeekDaysCard: React.FC<WeekDayCardProps> = ({
   const [mend2, setMEnd2] = useState("");
   const [dayData, setDayData] = useState<ISession[]>([]);
   const [clickRender, setClickRender] = useState(0);
+  const mendRef = useRef(null);
+  const mendRef2 = useRef(null);
+  const mstartRef = useRef(null);
+  const mstartRef2 = useRef(null);
   useEffect(() => {
     const storageData: SessionData[] | null = JSON.parse(
       localStorage.getItem(name) || "null"
@@ -276,26 +280,224 @@ const WeekDaysCard: React.FC<WeekDayCardProps> = ({
     removeAllData();
     renderFunc();
   };
-  const handleTimeChange = (
-    e: IonInputCustomEvent<InputChangeEventDetail>,
-    input: string
-  ) => {
-    const { value } = e.target;
-    if (input === "start") {
-      //@ts-ignore
-      setMStart(value);
-    } else if (input === "end") {
-      //@ts-ignore
-      setMEnd(value);
-    } else if (input === "start2") {
-      //@ts-ignore
-      setMStart2(value);
-    } else if (input === "end2") {
-      //@ts-ignore
-      setMEnd2(value);
+  // const handleTimeChange = (
+  //   e: IonInputCustomEvent<InputChangeEventDetail>,
+  //   input: string
+  // ) => {
+  //   const { value } = e.target;
+    
+    // if (input === "start") {
+    //   //@ts-ignore
+    //   setMStart(value);
+    // } else if (input === "end") {
+    //   if(input < mstart){
+    //     alert("Start time should be less than End time")
+    //     return;
+    //   }
+    //   //@ts-ignore
+    //   setMEnd(value);
+    // } else if (input === "start2") {
+    //   //@ts-ignore
+    //   setMStart2(value);
+    // } else if (input === "end2") {
+    //   if(input < mstart2){
+    //     alert("Start time should be less than End time")
+    //     return;
+    //   }
+    //   //@ts-ignore
+    //   setMEnd2(value);
+    // }
+  // };
+  // const handleTimeChange = (
+  //   e: IonInputCustomEvent<InputChangeEventDetail>,
+  //   input: string
+  // ) => {
+  //   const value = e.target.value ?? "";
+  
+  //   // Ensure that value is a string before using the split method
+  //   if (typeof value === 'string') {
+  //     // Extract hours and minutes from the time value
+  //     const [hours, minutes] = value.split(":").map(Number);
+  
+  //     // Convert extracted values to strings
+  //     const hoursStr = hours.toString();
+  //     const minutesStr = minutes.toString();
+  
+  //     if (input === "start" && (hoursStr > mend.split(":")[0] || (hoursStr === mend.split(":")[0] && minutesStr >= mend.split(":")[1]))) {
+  //       alert("Start time should be less than End time");
+  //       return;
+  //     }
+  
+  //     if (input === "end" && (hoursStr < mstart.split(":")[0] || (hoursStr === mstart.split(":")[0] && minutesStr <= mstart.split(":")[1]))) {
+  //       alert("End time should be greater than Start time");
+  //       return;
+  //     }
+  
+  //     if (input === "start2" && (hoursStr > mend2.split(":")[0] || (hoursStr === mend2.split(":")[0] && minutesStr >= mend2.split(":")[1]))) {
+  //       alert("Start time should be less than End time");
+  //       return;
+  //     }
+  
+  //     if (input === "end2" && (hoursStr < mstart2.split(":")[0] || (hoursStr === mstart2.split(":")[0] && minutesStr <= mstart2.split(":")[1]))) {
+  //       alert("End time should be greater than Start time");
+  //       return;
+  //     }
+  
+  //     if (input === "start") {
+  //       setMStart(value);
+  //     } else if (input === "end") {
+  //       setMEnd(value);
+  //     } else if (input === "start2") {
+  //       setMStart2(value);
+  //     } else if (input === "end2") {
+  //       setMEnd2(value);
+  //     }
+  //   }
+  // };
+  // const handleTimeChange = (
+  //   e: IonInputCustomEvent<InputChangeEventDetail>,
+  //   input: string
+  // ) => {
+  //   const value = e.target.value ?? "";
+  
+  //   // Ensure that value is a string before using the split method
+  //   if (typeof value === 'string') {
+  //     // Extract hours and minutes from the time value
+  //     const [hours, minutes] = value.split(":").map(Number);
+  
+  //     // Convert extracted values to strings
+  //     const hoursStr = hours.toString();
+  //     const minutesStr = minutes.toString();
+  
+     
+  
+     
+  
+      
+  
+      
+  
+  //     if (input === "start") {
+  //       if (input === "start" && (hoursStr > mend.split(":")[0] || (hoursStr === mend.split(":")[0] && minutesStr >= mend.split(":")[1]))) {
+  //         alert("Start time should be less than End time");
+  //         clearInputField(input);
+  //         return;
+  //       }
+  //       setMStart(value);
+  //     } else if (input === "end") {
+  //       if (input === "end" && (hoursStr < mstart.split(":")[0] || (hoursStr === mstart.split(":")[0] && minutesStr <= mstart.split(":")[1]))) {
+  //         alert("End time should be greater than Start time");
+  //         clearInputField(input);
+  //         return;
+  //       }
+  //       setMEnd(value);
+  //     } else if (input === "start2") {
+  //       if (input === "start2" && (hoursStr > mend2.split(":")[0] || (hoursStr === mend2.split(":")[0] && minutesStr >= mend2.split(":")[1]))) {
+  //         alert("Start time should be less than End time");
+  //         clearInputField(input);
+  //         return;
+  //       }
+  //       setMStart2(value);
+  //     } else if (input === "end2") {
+  //       if (input === "end2" && (hoursStr < mstart2.split(":")[0] || (hoursStr === mstart2.split(":")[0] && minutesStr <= mstart2.split(":")[1]))) {
+  //         alert("End time should be greater than Start time");
+  //         clearInputField(input);
+  //         return;
+  //       }
+  //       setMEnd2(value);
+  //     }
+  //   }
+  // };
+  const handleStartChange = (e: IonInputCustomEvent<InputChangeEventDetail>) => {
+    const value = e.detail.value ?? "";
+    if (typeof value === "string") {
+      const hours = parseInt(value.split(":")[0]);
+    
+      if (showSession1 &&  hours > parseInt(mend.split(":")[0])) {
+        alert("Start time should be less than End time");
+        setTimeout(()=>{
+          //@ts-ignore
+          mstartRef.current.clearTextInput();
+          
+        // console.log(mendRef)
+        setMStart("")
+        },1)
+      } else {
+        setMStart(value);
+      }
     }
   };
+  
+  const handleEndChange = (e: IonInputCustomEvent<InputChangeEventDetail>) => {
+    const value = e.detail.value ?? "";
+    if (typeof value === "string") {
+      const hours = parseInt(value.split(":")[0]);
+  
+      if (showSession1 && hours < parseInt(mstart.split(":")[0])) {
+        
+        setTimeout(()=>{
+          //@ts-ignore
+          mendRef.current.clearTextInput();
+          
+        // console.log(mendRef)
+        setMEnd("")
+        },1)
+        
+        alert("End time should be greater than Start time");
+        
 
+        
+      } else {
+        setMEnd(value);
+      }
+    }
+  };
+  
+  const handleStart2Change = (e: IonInputCustomEvent<InputChangeEventDetail>) => {
+    const value = e.detail.value ?? "";
+    if (typeof value === "string") {
+      const hours = parseInt(value.split(":")[0]);
+  
+      if (showSession2 && hours > parseInt(mend2.split(":")[0])) {
+        setTimeout(()=>{
+          //@ts-ignore
+          mstartRef2.current.clearTextInput();
+          
+        // console.log(mendRef)
+        setMStart2("");
+        },1)
+
+        alert("Start time should be less than End time");
+      } else {
+        setMStart2(value);
+      }
+    }
+  };
+  
+  const handleEnd2Change = (e: IonInputCustomEvent<InputChangeEventDetail>) => {
+    const value = e.detail.value ?? "";
+    if (typeof value === "string") {
+      const hours = parseInt(value.split(":")[0]);
+  
+      if (showSession2 && hours < parseInt(mstart2.split(":")[0])) {
+        setTimeout(()=>{
+          //@ts-ignore
+          mendRef2.current.clearTextInput();
+          
+        // console.log(mendRef)
+        setMEnd2("")
+        },1)
+        alert("End time should be greater than Start time");
+        
+      } else {
+        setMEnd2(value);
+      }
+    }
+  }; 
+  
+  
+  
+  
   return (
     <IonCard style={{ width: "100%" }}>
       <IonCardHeader>
@@ -334,7 +536,8 @@ const WeekDaysCard: React.FC<WeekDayCardProps> = ({
                   <IonInput
                     type="time"
                     value={mstart}
-                    onIonChange={(e) => handleTimeChange(e, "start")}
+                    ref={mstartRef}
+                    onIonChange={handleStartChange}
                     id="test2"
                   />
                 </IonItem>
@@ -345,7 +548,8 @@ const WeekDaysCard: React.FC<WeekDayCardProps> = ({
                   <IonInput
                     type="time"
                     value={mend}
-                    onIonChange={(e) => handleTimeChange(e, "end")}
+                    ref={mendRef}
+                    onIonChange={handleEndChange}
                     id="test3"
                   />
                 </IonItem>
@@ -369,7 +573,8 @@ const WeekDaysCard: React.FC<WeekDayCardProps> = ({
                   <IonInput
                     type="time"
                     value={mstart2}
-                    onIonChange={(e) => handleTimeChange(e, "start2")}
+                    ref={mstartRef2}
+                    onIonChange={handleStart2Change}
                   />
                 </IonItem>
               </IonCol>
@@ -379,7 +584,8 @@ const WeekDaysCard: React.FC<WeekDayCardProps> = ({
                   <IonInput
                     type="time"
                     value={mend2}
-                    onIonChange={(e) => handleTimeChange(e, "end2")}
+                    ref={mendRef2}
+                    onIonChange={handleEnd2Change}
                   />
                 </IonItem>
               </IonCol>
