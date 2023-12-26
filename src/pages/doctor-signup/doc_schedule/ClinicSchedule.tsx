@@ -91,6 +91,7 @@ const ClinicSchedule: React.FC = () => {
             },
             body: JSON.stringify({userName: drName, userEmail: drEmail}),
           })
+          
         } else {
           setError(false);
         }
