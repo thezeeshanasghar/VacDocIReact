@@ -5,6 +5,7 @@ import {
   IonCol,
   IonContent,
   IonDatetime,
+  IonGrid,
   IonHeader,
   IonIcon,
   IonImg,
@@ -12,6 +13,7 @@ import {
   IonItem,
   IonPage,
   IonPopover,
+  IonRow,
   IonText,
   IonToolbar,
   useIonRouter,
@@ -120,6 +122,21 @@ const VaccinationCardList: React.FC<IParam> = (
       localStorage.getItem("isDone") && localStorage.getItem("isDone");
     if (isDone) setButtonVisible(isDone === "true" ? true : false);
     // window.location.reload();
+   
+      // Fetch vaccine data from your API
+      // Example using fetch:
+      //@ts-ignore
+    const storedValue = JSON.parse(sessionStorage.getItem("docData"));
+    const DoctorId = storedValue && storedValue.Id;
+      fetch(`${import.meta.env.VITE_API_URL}api/PatientSchedule/GetMissingDoses?ChildId=${childId}&DoctorId=${DoctorId}`)
+        .then(response => {  if (response.status === 200) {
+          return response.json();
+        } else {
+          throw new Error('Failed to fetch vaccine data');
+        }})
+        .then()
+        .catch(error => console.error('Error fetching vaccine data:', error));
+    
   }, [location]);
 
   const fetchPatientData = async () => {
@@ -137,9 +154,7 @@ const VaccinationCardList: React.FC<IParam> = (
   };
 
   const fetchDoseData = async () => {
-    //@ts-ignore
-    const storedValue = JSON.parse(sessionStorage.getItem("docData"));
-    const DoctorID = storedValue && storedValue.Id;
+    
     try {
       const response = await fetch(
         `${
@@ -280,16 +295,35 @@ const VaccinationCardList: React.FC<IParam> = (
       <IonPage>
         <Header pageName="Vaccination" />
 
-        <IonHeader>
+        {/* <IonHeader>
           <IonToolbar style={{ padding: "0px 10px" }}>
             <IonButton size="small" slot="start" onClick={handleDownload}>
               print
             </IonButton>
             <IonButton  size="small" slot="end" onClick={GoToNewDoses}>Add new Doses</IonButton>
 
-            <IonText slot="end">{patientName}</IonText>
+            <IonText slot="end" class="ion-text-center">{patientName}</IonText>
           </IonToolbar>
-        </IonHeader>
+        </IonHeader> */}
+        <IonHeader>
+  <IonToolbar>
+    <IonGrid>
+      <IonRow class="ion-align-items-center">
+        <IonCol size="2">
+          <IonButton size="small" onClick={handleDownload}>
+            print
+          </IonButton>
+        </IonCol>
+        <IonCol size="8" class="ion-text-center">
+          <IonText>{patientName}</IonText>
+        </IonCol>
+        <IonCol size="2" class="ion-text-end">
+          <IonButton size="small" onClick={GoToNewDoses}>Add new Doses</IonButton>
+        </IonCol>
+      </IonRow>
+    </IonGrid>
+  </IonToolbar>
+</IonHeader>
 
         <IonContent className="ion-padding">
           {Object.keys(data).map((date) => {
