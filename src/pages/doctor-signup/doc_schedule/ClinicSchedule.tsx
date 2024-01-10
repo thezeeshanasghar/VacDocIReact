@@ -23,6 +23,7 @@ const ClinicSchedule: React.FC = () => {
     const Doc_data = localStorage.getItem("drData");
     //@ts-ignore
     const drData = JSON.parse(Doc_data);
+    console.log(drData)
     
 
     const weekdays = [
@@ -46,19 +47,27 @@ const ClinicSchedule: React.FC = () => {
     );
     if (newArray.length > 0) {
       setCanSubmit(false);
+      console.log("new Array ", newArray);
+      drData.clinics[0]["clinicTimings"] = newArray;
+      console.log("cdr  data ", drData);
+  
+      RegisterDoctor(drData);
+    }else {
+      setCanSubmit(true); // No data present, disable submit button
+      setTimeout(() => {
+        setCanSubmit(false);
+      }, 1000);
     }
     // console.log("clinics timing array,", newArray);
-    console.log("new Array ", newArray);
-    drData.clinics[0]["clinicTimings"] = newArray;
-    console.log("cdr  data ", drData);
-
-    RegisterDoctor(drData);
+   
   };
 
   const rerender = () => {
     // window.location.reload();
+    console.log("Rerender function called");
     setRender(!render);
   };
+
 
   const RegisterDoctor = (data_to_be_sent: any) => {
     //@ts-ignore
@@ -69,7 +78,7 @@ const ClinicSchedule: React.FC = () => {
     const drName = DrData.name;
 
     const payload = {userName: drName, userEmail: drEmail};
-    console.log(payload)
+    console.log(data_to_be_sent)
     fetch(`${import.meta.env.VITE_API_URL}api/Doctor`, {
       method: "POST",
       headers: {

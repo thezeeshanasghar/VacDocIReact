@@ -30,7 +30,12 @@ const ClinicRegistration: React.FC = () => {
   const [city, setCity] = useState("");
   const [error, setError] = useState(false);
   // const isInvalid = mobile.startsWith("0") || mobile.startsWith("+");
-
+  const Captalize = (input: string) => {
+    return input
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+  };
   const canSubmit =
     name.trim() === "" &&
     address.trim() === "" &&
@@ -104,7 +109,7 @@ const ClinicRegistration: React.FC = () => {
                   required
                   type="text"
                   value={name}
-                  onIonChange={(e) => setName(e.detail.value!)}
+                  onIonChange={(e) => setName(Captalize(e.detail.value!))}
                   id="names"
                 />
               </IonItem>
@@ -113,7 +118,7 @@ const ClinicRegistration: React.FC = () => {
                 <IonTextarea
                   required
                   value={address}
-                  onIonChange={(e) => setAddress(e.detail.value!)}
+                  onIonChange={(e) => setAddress(Captalize(e.detail.value!))}
                   id="address"
                 />
               </IonItem>
@@ -144,16 +149,41 @@ const ClinicRegistration: React.FC = () => {
               </IonItem>
 
               <IonItem style={{ width: "100%" }}>
-                <IonLabel position="floating">Contact Number</IonLabel>
-                <IonInput
-                  required
-                  type="number"
-                  value={mobile}
-                  id="mobileNumber"
-                  itemID="mobileNumber"
-                  onIonChange={(e) => setMobile(e.detail.value!)}
-                />
+                <IonLabel position="floating">Contact number</IonLabel>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    width: "100%",
+                  }}
+                >
+                  <IonInput
+                    required
+                    type={ "text" }
+                    value={mobile}
+                    id="mobile"
+                    // readonly
+                    onIonChange={(e) => setMobile(e.detail.value!)}
+                  />
+                  
+                   
+                </div>
               </IonItem>
+              <IonText
+                color={"danger"}
+                style={{
+                  fontSize: "8px",
+                  marginBottom: "11px",
+                  display:
+                  mobile.trim() !== "" &&
+                  !/^\d+$/.test(mobile)
+        ? "block"
+        : "none",
+                }}
+              >
+                Contact should contain only number
+              </IonText>
+              
               <IonItem style={{ width: "100%" }}>
                 <IonLabel position="floating">Fee</IonLabel>
                 <IonInput

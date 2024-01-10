@@ -17,7 +17,7 @@ import {
 import { person, arrowForward, eye, eyeOff } from "ionicons/icons";
 import "./DocSignUp.css";
 import { isValidEmail } from "../../../util/util";
-import secureRandomPassword from "secure-random-password";
+
 
 const DoctorSignUp: React.FC = () => {
   const router = useIonRouter();
@@ -80,22 +80,27 @@ const DoctorSignUp: React.FC = () => {
     setPassword("");
     setPMDC("");
   };
-
+  const formatDoctorName = (input: string) => {
+    return input
+      .split(" ")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+  };
   // const handleInputBlur = () => {
   //   if (pmdc.trim() === "") {
   //     // If the input is empty, disable the button
   //     setPMDC(""); // This line is optional, it resets the input to an empty state immediately.
   //   }
   // };
-  useEffect(() => {
-    setPassword(generateRandomPassword());
-  }, []);
-  function generateRandomPassword() {
-    return secureRandomPassword.randomPassword({
-      length: 8,
-      characters: [secureRandomPassword.digits],
-    });
-  }
+  // useEffect(() => {
+  //   // setPassword(generateRandomPassword());
+  // }, []);
+  // function generateRandomPassword() {
+  //   return secureRandomPassword.randomPassword({
+  //     length: 8,
+  //     characters: [secureRandomPassword.digits],
+  //   });
+  // }
   return (
     <IonPage>
       <IonContent className="sign-up-content-doctor">
@@ -132,7 +137,7 @@ const DoctorSignUp: React.FC = () => {
                   id="name"
                   value={name}
                   className="data"
-                  onIonChange={(e) => setName(e.detail.value!)}
+                  onIonChange={(e) => setName(formatDoctorName(e.detail.value!))}
                 />
               </IonItem>
               <IonItem style={{ width: "100%" }}>
@@ -230,9 +235,10 @@ const DoctorSignUp: React.FC = () => {
                   fontSize: "8px",
                   marginBottom: "11px",
                   display:
-                    password.trim().length < 4 || /\d/.test(password) !== true
-                      ? "block"
-                      : "none",
+      password.trim() !== "" &&
+      (!/\d/.test(password) ||  password.trim().length !== 4)
+        ? "block"
+        : "none",
                 }}
               >
                 Password must 4 character long and should contain only number
