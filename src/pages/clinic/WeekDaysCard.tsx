@@ -663,57 +663,85 @@ const WeekDaysCard: React.FC<WeekDayCardProps> = ({
     }
   };
 
+  // useEffect(() => {
+  //   removeDatabyToggle();
+  //   if (showCard && showSession1 && mstart !== "" && mend !== "") {
+  //     const existingIndex = dayData.findIndex(
+  //       (entry) => entry.day === name && entry.session === "Morning"
+  //     );
+
+  //     if (existingIndex !== -1) {
+  //       const updatedDayData = [...dayData];
+  //       updatedDayData[existingIndex].startTime = mstart;
+  //       updatedDayData[existingIndex].endTime = mend;
+  //       setDayData(updatedDayData);
+  //     } else {
+  //       setDayData((prevDayData) => [
+  //         ...prevDayData,
+  //         {
+  //           day: name,
+  //           session: "Morning",
+  //           startTime: mstart,
+  //           endTime: mend,
+  //         },
+  //       ]);
+  //     }
+  //   }
+  // }, [showCard, showSession1, mstart, mend, name]);
+
+  // useEffect(() => {
+  //   removeDatabyToggle();
+  //   if (showCard && showSession2 && mstart2 !== "" && mend2 !== "") {
+  //     const existingIndex = dayData.findIndex(
+  //       (entry) => entry.day === name && entry.session === "Evening"
+  //     );
+
+  //     if (existingIndex !== -1) {
+  //       const updatedDayData = [...dayData];
+  //       updatedDayData[existingIndex].startTime = mstart2;
+  //       updatedDayData[existingIndex].endTime = mend2;
+  //       setDayData(updatedDayData);
+  //     } else {
+  //       setDayData((prevDayData) => [
+  //         ...prevDayData,
+  //         {
+  //           day: name,
+  //           session: "Evening",
+  //           startTime: mstart2,
+  //           endTime: mend2,
+  //         },
+  //       ]);
+  //     }
+  //   }
+  // }, [showCard, showSession2, mstart2, mend2, name]);
   useEffect(() => {
     removeDatabyToggle();
+  
+    const removeDataBySession = (sessionToRemove:any) => {
+      setDayData((prevDayData) =>
+        prevDayData.filter(
+          (entry) => !(entry.day === name && entry.session === sessionToRemove)
+        )
+      );
+    };
+  
     if (showCard && showSession1 && mstart !== "" && mend !== "") {
-      const existingIndex = dayData.findIndex(
-        (entry) => entry.day === name && entry.session === "Morning"
-      );
-
-      if (existingIndex !== -1) {
-        const updatedDayData = [...dayData];
-        updatedDayData[existingIndex].startTime = mstart;
-        updatedDayData[existingIndex].endTime = mend;
-        setDayData(updatedDayData);
-      } else {
-        setDayData((prevDayData) => [
-          ...prevDayData,
-          {
-            day: name,
-            session: "Morning",
-            startTime: mstart,
-            endTime: mend,
-          },
-        ]);
-      }
+      removeDataBySession("Morning");
+      setDayData((prevDayData) => [
+        ...prevDayData,
+        { day: name, session: "Morning", startTime: mstart, endTime: mend },
+      ]);
     }
-  }, [showCard, showSession1, mstart, mend, name]);
-
-  useEffect(() => {
-    removeDatabyToggle();
+  
     if (showCard && showSession2 && mstart2 !== "" && mend2 !== "") {
-      const existingIndex = dayData.findIndex(
-        (entry) => entry.day === name && entry.session === "Evening"
-      );
-
-      if (existingIndex !== -1) {
-        const updatedDayData = [...dayData];
-        updatedDayData[existingIndex].startTime = mstart2;
-        updatedDayData[existingIndex].endTime = mend2;
-        setDayData(updatedDayData);
-      } else {
-        setDayData((prevDayData) => [
-          ...prevDayData,
-          {
-            day: name,
-            session: "Evening",
-            startTime: mstart2,
-            endTime: mend2,
-          },
-        ]);
-      }
+      removeDataBySession("Evening");
+      setDayData((prevDayData) => [
+        ...prevDayData,
+        { day: name, session: "Evening", startTime: mstart2, endTime: mend2 },
+      ]);
     }
-  }, [showCard, showSession2, mstart2, mend2, name]);
+  }, [showCard, showSession1, mstart, mend, showSession2, mstart2, mend2, name]);
+  
 
   useEffect(() => {
     dayData.length >= 1 && localStorage.setItem(name, JSON.stringify(dayData));
@@ -731,9 +759,18 @@ const WeekDaysCard: React.FC<WeekDayCardProps> = ({
     setShowSession2(e.detail.checked);
   };
 
+  // const handleToggleCard = (e: {
+  //   detail: { checked: boolean | ((prevState: boolean) => boolean) };
+  // }) => {
+  //   setShowCard(e.detail.checked);
+  // };
   const handleToggleCard = (e: {
     detail: { checked: boolean | ((prevState: boolean) => boolean) };
   }) => {
+    if (!e.detail.checked) {
+      // If the toggle is turned off, set dayData to an empty array
+      setDayData([]);
+    }
     setShowCard(e.detail.checked);
   };
 
