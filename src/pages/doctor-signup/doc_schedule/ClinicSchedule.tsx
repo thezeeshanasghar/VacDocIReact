@@ -18,12 +18,21 @@ const ClinicSchedule: React.FC = () => {
   const [error, setError] = useState(false);
   const [canSubmit, setCanSubmit] = useState(false);
   const [render, setRender] = useState(false);
+  //@ts-ignore
+  const storedValue = JSON.parse(sessionStorage.getItem("docData"));
+  console.log('clinic',storedValue);
+  const [doctorId, setdocorId] = useState(storedValue.Id);
   const handleUnSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const Doc_data = localStorage.getItem("drData");
+    const Doc_data = localStorage.getItem("docData");
+    const clinics = localStorage.getItem("clinic");
     //@ts-ignore
     const drData = JSON.parse(Doc_data);
-    console.log(drData)
+    //@ts-ignore
+    const clinic=JSON.parse(clinics);
+    console.log('parse',drData)
+    console.log('parse',clinic)
+    
     
 
     const weekdays = [
@@ -48,10 +57,52 @@ const ClinicSchedule: React.FC = () => {
     if (newArray.length > 0) {
       setCanSubmit(false);
       console.log("new Array ", newArray);
-      drData.clinics[0]["clinicTimings"] = newArray;
+      drData.Clinics[0]["clinicTimings"] = newArray;
       console.log("cdr  data ", drData);
-  
-      RegisterDoctor(drData);
+      clinic.clinicTimings = newArray;
+      
+      console.log("cdr  timing ", clinic);
+     //@ts-ignore
+    
+    console.log('final data',drData)
+    console.log('register',clinic)
+    // localStorage.clear()
+    // localStorage.setItem('docData',drData);
+   fetch(`${import.meta.env.VITE_API_URL}api/Clinic/${doctorId}`, {
+    method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(clinic)
+      
+    })
+      .then((res) => {
+        if (res.status === 200 || 204) {
+          setSuccess(true);
+          localStorage.clear();
+
+          // Store new data in local storage
+          localStorage.setItem('docData', JSON.stringify(drData));
+          setTimeout(() => {
+            router.push("/members/Dashboard", "root");
+          }, 1500);
+
+          
+          
+        } else {
+
+          setError(false);
+          Object.keys(localStorage).forEach(key => {
+            if (key !== 'docData') {
+              localStorage.removeItem(key);
+            }
+          });
+          router.push("/auth/reg_clinic");
+          localStorage.clear()
+        }
+      })
+      .catch((err) => setError(true));
+      
     }else {
       setCanSubmit(true); // No data present, disable submit button
       setTimeout(() => {
@@ -69,45 +120,30 @@ const ClinicSchedule: React.FC = () => {
   };
 
 
-  const RegisterDoctor = (data_to_be_sent: any) => {
-    //@ts-ignore
-    const DrData = JSON.parse(localStorage.getItem('drData'));
-    //@ts-ignore
-    const drEmail = DrData.email;
-    //@ts-ignore
-    const drName = DrData.name;
+  // const RegisterDoctor = (data_to_be_sent: any) => {
+  //   //@ts-ignore
+  //   const DrData = JSON.parse(localStorage.getItem('docData'));
+  //   console.log('final data',DrData)
+  //   console.log('register',data_to_be_sent)
+  //   // fetch(`${import.meta.env.VITE_API_URL}api/Doctor`, {
+      
+  //   // })
+  //   //   .then((res) => {
+  //   //     if (res.status === 200 || 204) {
+  //   //       setSuccess(true);
 
-    const payload = {userName: drName, userEmail: drEmail};
-    console.log(data_to_be_sent)
-    fetch(`${import.meta.env.VITE_API_URL}api/Doctor`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data_to_be_sent),
-    })
-      .then((res) => {
-        if (res.status === 200 || 204) {
-          setSuccess(true);
-
-          setTimeout(() => {
-            router.push("/", "back");
-          }, 1500);
-          fetch(`${import.meta.env.VITE_API_URL}api/email`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json-patch+json",
-            },
-            body: JSON.stringify({userName: drName, userEmail: drEmail}),
-          })
+  //   //       setTimeout(() => {
+  //   //         router.push("/members/Dashboard", "root");
+  //   //       }, 1500);
           
-        } else {
-          setError(false);
-        }
-      })
-      .catch((err) => setError(true));
-    localStorage.clear();
-  };
+          
+  //   //     } else {
+  //   //       setError(false);
+  //   //     }
+  //   //   })
+  //   //   .catch((err) => setError(true));
+  //   // localStorage.clear();
+  // };
 
   return (
     <IonPage>

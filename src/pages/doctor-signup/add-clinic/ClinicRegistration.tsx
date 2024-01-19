@@ -29,6 +29,12 @@ const ClinicRegistration: React.FC = () => {
   const [clinicFee, setClinicFee] = useState("");
   const [city, setCity] = useState("");
   const [error, setError] = useState(false);
+  
+  //@ts-ignore
+ 
+  const storedValue = JSON.parse(sessionStorage.getItem("docData"));
+  console.log('clinic',storedValue);
+  const [doctorId, setdocorId] = useState(storedValue.Id);
   // const isInvalid = mobile.startsWith("0") || mobile.startsWith("+");
   const Captalize = (input: string) => {
     return input
@@ -48,22 +54,43 @@ const ClinicRegistration: React.FC = () => {
     if (canSubmit) {
       alert("Please fill in all the fields.");
     } else {
-      const Doc_data = localStorage.getItem("drData");
+      
+      e.preventDefault();
       //@ts-ignore
-      const drData = JSON.parse(Doc_data);
-      drData.clinics = [
-        {
-          name,
-          address,
-          city,
-          fees: clinicFee,
-          number: mobile,
-          clinicTimings: "",
-        },
-      ];
-      localStorage.setItem("drData", JSON.stringify(drData));
-      router.push("/auth/clinic_schedule");
-      clearClinicForm();
+      const storedData = localStorage.getItem("docData");
+
+// Parse the existing data into an object
+const existingData = storedData ? JSON.parse(storedData) : {};
+
+// Create clinic data
+const clinicData = {
+  name,
+  address,
+  city,
+  fees: clinicFee,
+  number: mobile,
+  doctorId: doctorId,
+  clinicTimings: [],
+};
+
+// Update the existing data with clinic-related information
+const updatedData = {
+  ...existingData,
+  Clinics: [
+    ...(existingData.Clinics || []), // Keep existing clinics if any
+    clinicData,
+  ],
+  
+};
+
+      localStorage.clear()
+      localStorage.setItem("docData", JSON.stringify(updatedData));
+      localStorage.setItem("clinic",JSON.stringify(clinicData));
+     
+
+      console.log('updated drdata ',JSON.stringify(updatedData))
+    router.push("/auth/clinic_schedule")
+    clearClinicForm();
     }
   };
   const clearClinicForm = () => {

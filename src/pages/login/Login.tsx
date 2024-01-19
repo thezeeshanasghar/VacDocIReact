@@ -19,13 +19,37 @@ import { useHistory } from "react-router";
 
 const Login: React.FC = () => {
   const history = useHistory();
-  const [showLoading, setShowLoading] = useState(false);
+  const router = useIonRouter();
   const navigation = useIonRouter();
   const [success, setSuccess] = useState<boolean>(false);
   const [error, setError] = useState<boolean>(false);
   const [mobileNumber, setmobileNumber] = useState<string>("");
   const [password, setpassword] = useState<string>("");
+ 
   const [errMsg, setErrMsg] = useState("");
+  
+  const isNumber = (value: string) => /^\d+$/.test(value);
+
+  const handleMobileNumberChange = (e: CustomEvent) => {
+    const inputValue = e.detail.value;
+    if (!isNumber(inputValue)) {
+      setErrMsg("Mobile Number Must be In 3331234567 Format");
+      setError(true);
+      setmobileNumber("")
+    }else if(inputValue.length > 10){
+      setErrMsg("Mobile Number Must contain 10 digit");
+      setError(true);
+      setmobileNumber("")
+    }else if(!inputValue.startsWith('3')){
+      setErrMsg("Mobile Number Must Start wth 3");
+      setError(true);
+      setmobileNumber("")
+    } else {
+      setmobileNumber(inputValue);
+      setError(false);
+    }
+  };
+
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
@@ -40,24 +64,48 @@ const Login: React.FC = () => {
         .then((res) => {
           if (res.status === 200) {
             setSuccess(true);
-            history.push("/members/Dashboard", "root");
-            return res.json();
-          } else if (res.status === 401) {
+            return res.json(); // This returns a promise
+            
+          }else if (res.status === 401) {
             // console.log(res);
             setErrMsg("Invalid credentials");
             setError(true);
-          } else if (res.status === 400) {
+          }  else if (res.status === 400) {
             console.log(res);
             setErrMsg("Your account has expired. Please contact the admin");
             setError(true);
-          } else {
+          }else {
             throw new Error("Internal server error.");
           }
+          
         })
         .then((data) => {
+            
+            
+            const doctorId=data.Id;
+            console.log('doctorId :',doctorId)
+            sessionStorage.clear();
+            sessionStorage.setItem("docData", JSON.stringify(data));
+            
+            fetch(`${import.meta.env.VITE_API_URL}api/Clinic/clinicByDoctor?doctorId=${doctorId}`,{method:"GET"})
+            .then( (res)=>{
+             
+              if (data.Clinics.length === 0) {
+                localStorage.setItem("docData", JSON.stringify(data));
+                // If the result is an empty array, navigate to "/auth/reg_clinic"
+                router.push("/auth/reg_clinic");
+              } else {
+                // If there is data, navigate to "/members/Dashboard"
+                localStorage.setItem("docData", JSON.stringify(data));
+                history.push("/members/Dashboard", "root");
+              }
+            })
+            
+           
+            
+          
           console.log(data);
-          sessionStorage.clear();
-          sessionStorage.setItem("docData", JSON.stringify(data));
+          
         })
         .catch((err: any) => {
           setError(true);
@@ -99,7 +147,7 @@ const Login: React.FC = () => {
                   <div className="input-container">
                     <IonIcon icon={mail} id="myicon" />
                     <IonInput
-                      type="number"
+                      type="text"
                       placeholder=" "
                       className="animated-input"
                       label="&nbsp;&nbsp;&nbsp; Mobile Number"
@@ -107,7 +155,7 @@ const Login: React.FC = () => {
                       color="light"
                       value={mobileNumber}
                       style={{ color: isInvalid ? "red" : "" }}
-                      onIonChange={(e) => setmobileNumber(e.detail.value!)}
+                      onIonChange={handleMobileNumberChange}
                       required
                       id="mobilenumber"
                     />
@@ -123,7 +171,7 @@ const Login: React.FC = () => {
                             : "none",
                       }}
                     >
-                      Mobile Number Must be In 333-1234567 Format
+                      Mobile Number Must be In 3331234567 Format
                     </IonText>
                   </div>
                   <div className="input-container">

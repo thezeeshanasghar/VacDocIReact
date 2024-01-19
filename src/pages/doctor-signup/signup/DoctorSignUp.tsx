@@ -13,10 +13,12 @@ import {
   IonToolbar,
   useIonRouter,
   IonText,
+  IonHeader,
 } from "@ionic/react";
 import { person, arrowForward, eye, eyeOff } from "ionicons/icons";
 import "./DocSignUp.css";
 import { isValidEmail } from "../../../util/util";
+import Toast from "../../../components/custom-toast/Toast";
 
 
 const DoctorSignUp: React.FC = () => {
@@ -28,8 +30,32 @@ const DoctorSignUp: React.FC = () => {
   const [pmdc, setPMDC] = useState("");
   const isInvalid = mobile.startsWith("0") || mobile.startsWith("+");
   const [showPassword, setShowPassword] = useState(false);
+  const [success, setSuccess] = useState(false);
+  // const [error, setError] = useState(false);
+  const [errMsg, setErrMsg] = useState("");
+  const [error, setError] = useState<boolean>(false);
 
-  // const [doctorType, setDoctorType] = useState("");
+  const isNumber = (value: string) => /^\d+$/.test(value);
+
+  const handleMobileNumberChange = (e: CustomEvent) => {
+    const inputValue = e.detail.value;
+    if (!isNumber(inputValue)) {
+      setErrMsg("Mobile Number Must be In 3331234567 Format");
+      setError(true);
+      setMobile("")
+    }else if(inputValue.length > 10){
+      setErrMsg("Mobile Number Must contain 10 digit");
+      setError(true);
+      setMobile("")
+    }else if(!inputValue.startsWith('3')){
+      setErrMsg("Mobile Number Must Start wth 3");
+      setError(true);
+      setMobile("")
+    } else {
+      setMobile(inputValue);
+      setError(false);
+    }
+  };
 
   const canSubmit =
     name.trim() === "" &&
@@ -59,16 +85,47 @@ const DoctorSignUp: React.FC = () => {
             name,
             mobileNumber: mobile,
             password,
-            // isApproved: false,
-            // isEnabled: false,
             email,
-            // doctorType,
             pmdc,
-            // validUpto: new Date().toDateString(),
-            clinics: "",
+            clinics: [null],
           })
+          
         );
-        router.push("/auth/reg_clinic");
+        fetch(`${import.meta.env.VITE_API_URL}api/Doctor`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name,
+            mobileNumber: mobile,
+            password,
+            email,
+            pmdc,
+            clinics: [null],
+          }),
+        })
+          .then((res) => {
+            if (res.status === 200 || 204) {
+              setSuccess(true);
+    
+              setTimeout(() => {
+                router.push("/", "back");
+              }, 1500);
+              fetch(`${import.meta.env.VITE_API_URL}api/email`, {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json-patch+json",
+                },
+                body: JSON.stringify({userName: name, userEmail: email}),
+              })
+              
+            } else {
+              setError(false);
+            }
+          })
+          .catch((err) => setError(true));
+       
         clearForm();
       }
     }
@@ -86,6 +143,7 @@ const DoctorSignUp: React.FC = () => {
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
       .join(" ");
   };
+  
   // const handleInputBlur = () => {
   //   if (pmdc.trim() === "") {
   //     // If the input is empty, disable the button
@@ -103,6 +161,20 @@ const DoctorSignUp: React.FC = () => {
   // }
   return (
     <IonPage>
+      {/* <Toast
+        isOpen={error}
+        setOpen={setError}
+        color="danger"
+        errMsg="An error occurred while signing up, try again."
+      /> */}
+      <Toast
+        isOpen={success}
+        setOpen={setSuccess}
+        color="success"
+        errMsg="Registration successful. Please wait for approval!"
+      />
+      <Toast isOpen={error} setOpen={setError} color="danger" errMsg={errMsg} />
+      <IonHeader></IonHeader>
       <IonContent className="sign-up-content-doctor">
         <IonToolbar color={"primary"}>
           {" "}
@@ -155,50 +227,17 @@ const DoctorSignUp: React.FC = () => {
                 <IonLabel position="floating">Mobile Number</IonLabel>
                 <IonInput
                   required
-                  type="number"
+                  type="text"
                   value={mobile}
                   id="mobileNumber"
                   itemID="mobileNumber"
-                  style={{ color: isInvalid ? "red" : "" }}
                   placeholder="3331234567"
-                  onIonChange={(e) => setMobile(e.detail.value!)}
+                  onIonChange={handleMobileNumberChange}
                 />
               </IonItem>
-              <IonText
-                color={"danger"}
-                style={{
-                  fontSize: "10px",
-                  marginBottom: "11px",
-                  display:
-                    mobile.startsWith("0") || mobile.startsWith("+")
-                      ? "block"
-                      : "none",
-                }}
-              >
-                Mobile Number Must be In 333-1234567 Format
-              </IonText>
-              {mobile.trim().length>2 && mobile.length < 10 && (
-                <IonText
-                  color={"danger"}
-                  style={{
-                    fontSize: "10px",
-                    marginBottom: "11px",
-                  }}
-                >
-                  Mobile Number can not be lesser than 10 digits!
-                </IonText>
-              )}
-              {mobile.trim().length>1 && mobile.length > 10 && (
-                <IonText
-                  color={"danger"}
-                  style={{
-                    fontSize: "10px",
-                    marginBottom: "11px",
-                  }}
-                >
-                  Mobile Number can not be greater than 10 digits!
-                </IonText>
-              )}
+            
+              
+               
               <IonItem style={{ width: "100%" }}>
                 <IonLabel position="floating">Password</IonLabel>
                 <div
@@ -213,6 +252,7 @@ const DoctorSignUp: React.FC = () => {
                     type={showPassword ? "text" : "password"}
                     value={password}
                     id="password"
+                    placeholder=" Password must 4 character long and should contain only number"
                     // readonly
                     onIonChange={(e) => setPassword(e.detail.value!)}
                   />
@@ -271,8 +311,8 @@ const DoctorSignUp: React.FC = () => {
                 </IonSelect>
               </IonItem> */}
               <IonButton id="signup" expand="full" type="submit">
-                Next
-                <IonIcon slot="end" icon={arrowForward} />
+                Submit
+                {/* <IonIcon slot="end" icon={arrowForward} /> */}
               </IonButton>
             </form>
           </IonCard>

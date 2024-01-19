@@ -11,6 +11,7 @@ import ClinicCard from "../../components/clinic/ClinicCard";
 import ErrorComponent from "../Error/ErrorComponent";
 import { useHistory } from "react-router-dom";
 import { useLocation } from "react-router";
+import "./ClinicCardList.css";
 // import { useIonViewWillEnter } from "@ionic/react";
 
 import { add } from "ionicons/icons";
@@ -37,7 +38,7 @@ const ClinicCardList: React.FC = (DoctorId, Id) => {
   const [Clinics, setClinics] = useState<Clinic[]>([]);
   const fetchClinicData = async () => {
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_URL}api/Clinic`);
+      const res = await fetch(`${import.meta.env.VITE_API_URL}api/Clinic/clinicByDoctor?doctorId=${doctorId}`);
       const data: Clinic[] = await res.json();
       // console.log("Updated Data from backend : ", data);
       setClinics(data);
@@ -68,46 +69,44 @@ const ClinicCardList: React.FC = (DoctorId, Id) => {
   // });
 
   return (
-    <>
-      {Clinics && (
-        <IonPage>
-          <Header pageName="Clinic" />
-          <IonContent>
-            {Clinics.length > 0 ? (
-              Clinics.map((item, index) => {
-                if (item.DoctorId === doctorId) {
-                  return (
-                    <React.Fragment key={index}>
-                      <ClinicCard
-                        Id={item.Id}
-                        Name={item.Name}
-                        Number={item.Number}
-                        Address={item.Address}
-                        DoctorId={item.DoctorId}
-                        Fees={item.Fees}
-                        IsOnline={item.IsOnline}
-                        Renderlist={renderList}
-                      />
-                    </React.Fragment>
-                  );
-                }
-              })
-            ) : (
-              <ErrorComponent title="Clinics" />
-            )}
-            <IonFab slot="fixed" vertical="bottom" horizontal="end">
-              <IonFabButton
-                size="small"
-                routerLink={`/members/doctor/clinic/add?doctorId=${doctorId}`}
-                routerDirection="forward"
-              >
-                <IonIcon icon={add}></IonIcon>
-              </IonFabButton>
-            </IonFab>
-          </IonContent>
-        </IonPage>
-      )}
-    </>
+    <IonPage>
+      <Header pageName="Clinic" />
+      <IonContent>
+        {Clinics.length > 0 ? (
+          Clinics.map((item, index) => {
+            if (item.DoctorId === doctorId) {
+              return (
+                <React.Fragment key={index}>
+                  <ClinicCard
+                    Id={item.Id}
+                    Name={item.Name}
+                    Number={item.Number}
+                    Address={item.Address}
+                    DoctorId={item.DoctorId}
+                    Fees={item.Fees}
+                    IsOnline={item.IsOnline}
+                    Renderlist={renderList}
+                  />
+                </React.Fragment>
+              );
+            }
+          })
+        ) : (
+          <div className="no-clinic-message">
+            <p>No clinics available. Please add a clinic.</p>
+          </div>
+        )}
+        <IonFab slot="fixed" vertical="bottom" horizontal="end">
+          <IonFabButton
+            size="small"
+            routerLink={`/members/doctor/clinic/add?doctorId=${doctorId}`}
+            routerDirection="forward"
+          >
+            <IonIcon icon={add}></IonIcon>
+          </IonFabButton>
+        </IonFab>
+      </IonContent>
+    </IonPage>
   );
 };
 

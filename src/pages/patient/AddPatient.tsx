@@ -55,6 +55,29 @@ const AddPatient: React.FC = () => {
   const [noClinic, setNoClinic] = useState<boolean>(false);
   const [cnicOrPassPort, setCnicOrPassPort] = useState("");
   const [selectCnicOrPassport, setSelectCnicOrPassport] = useState("CNIC");
+  const [errMsg, setErrMsg] = useState("");
+
+  const isNumber = (value: string) => /^\d+$/.test(value);
+
+  const handleMobileNumberChange = (e: CustomEvent) => {
+    const inputValue = e.detail.value;
+    if (!isNumber(inputValue)) {
+      setErrMsg("Mobile Number Must be In 3331234567 Format");
+      setError(true);
+      setMobileNumber("")
+    }else if(inputValue.length > 10){
+      setErrMsg("Mobile Number Must contain 10 digit");
+      setError(true);
+      setMobileNumber("")
+    }else if(!inputValue.startsWith('3')){
+      setErrMsg("Mobile Number Must Start wth 3");
+      setError(true);
+      setMobileNumber("")
+    } else {
+      setMobileNumber(inputValue);
+      setError(false);
+    }
+  };
 
   const handleFormSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -231,12 +254,7 @@ const AddPatient: React.FC = () => {
         message="Patient added successfully."
         color="success"
       />
-      <Toast
-        isOpen={error}
-        setOpen={setError}
-        message="An error occurred while adding patient. plz try again"
-        color="danger"
-      />
+      <Toast isOpen={error} setOpen={setError} color="danger" errMsg={errMsg} />
       <Toast
         isOpen={noClinic}
         setOpen={setNoClinic}
@@ -325,7 +343,7 @@ const AddPatient: React.FC = () => {
             <IonItem lines="full">
               <IonItem lines="none">
                 <IonInput
-                  type="number"
+                  type="text"
                   placeholder="Identity Number"
                   value={cnicOrPassPort}
                   onIonChange={(e) => setCnicOrPassPort(e.detail.value!)}
@@ -363,10 +381,10 @@ const AddPatient: React.FC = () => {
             <IonItem>
               <IonInput
                 required
-                placeholder="Mobile Number"
-                type="number"
+                placeholder="3345678912"
+                type="text"
                 id="mobileNumber"
-                title="Please enter exactly 13 digits"
+                title="Please enter exactly 10 digits"
                 itemID="mobileNumber"
                 value={mobileNumber}
                 style={{
@@ -375,7 +393,7 @@ const AddPatient: React.FC = () => {
                       ? "red"
                       : "",
                 }}
-                onIonChange={(e) => setMobileNumber(e.detail.value!)}
+                onIonChange={handleMobileNumberChange}
               />
             </IonItem>
             <IonText

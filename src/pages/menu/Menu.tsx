@@ -88,6 +88,7 @@ const Menu: React.FC = () => {
   const location = useLocation();
   const logOut = () => {
     localStorage.clear();
+    sessionStorage.clear();
   };
 
   return (
