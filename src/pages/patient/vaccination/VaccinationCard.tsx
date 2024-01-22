@@ -318,20 +318,7 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
                   {date}
                 </span>
 
-                {/* <IonImg
-                  // size="small"
-                  src={emptySyringImage}
-                  onClick={() => toggleButtonVisibility(date)}
-                  style={{
-                    textTransform: "lowercase",
-                    height: "30px",
-                    display: "inline-block",
-                    margin: "0px 10px",
-                  }}
-                  color="danger"
-                >
-                  Undo
-                </IonImg> */}
+  
               </IonCol>
               
             </>
