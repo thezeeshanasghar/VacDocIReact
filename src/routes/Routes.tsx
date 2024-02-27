@@ -26,6 +26,8 @@ import SingleDone from "../pages/patient/vaccination/single-done-update/SingleDo
 import UpdateClinic from "../pages/clinic/UpdateClinic";
 import SpecialVaccine from "../pages/patient/SpecialVaccine";
 import AddNewDosesList from "../pages/patient/AddNewDosesList";
+import DosesSelection from "../pages/doctor-signup/doc_schedule/DosesSelection";
+import DosesSelection1 from "../pages/doctor-schedule/DosesSelection1";
 
 const Routes: React.FC = () => {
   return (
@@ -85,6 +87,16 @@ const Routes: React.FC = () => {
           exact
           path="/members/child/special-vaccine/:childId"
           component={SpecialVaccine}
+        />
+         <Route
+          exact
+          path="/members/alldosesforDoctor"
+          component={DosesSelection1}
+        />
+         <Route
+          exact
+          path="/alldosesforDoctor"
+          component={DosesSelection}
         />
         <Route
           exact

@@ -30,11 +30,8 @@ const ClinicSchedule: React.FC = () => {
     const drData = JSON.parse(Doc_data);
     //@ts-ignore
     const clinic=JSON.parse(clinics);
-    console.log('parse',drData)
-    console.log('parse',clinic)
-    
-    
-
+    console.log('parse',drData);
+    console.log('parse',clinic);
     const weekdays = [
       "Monday",
       "Tuesday",
@@ -78,17 +75,28 @@ const ClinicSchedule: React.FC = () => {
     })
       .then((res) => {
         if (res.status === 200 || 204) {
-          setSuccess(true);
+         
           localStorage.clear();
 
           // Store new data in local storage
           localStorage.setItem('docData', JSON.stringify(drData));
+          fetch(
+            `${import.meta.env.VITE_API_URL}api/DoctorSchedule/Doctor_DoseSchedule?doctorId=${doctorId}`,
+            {
+              method: "GET",
+            }
+          )
+            .then((res) => {
+              if (res.status === 200) {
+                setSuccess(true);
+                
+              }})
           setTimeout(() => {
-            router.push("/members/Dashboard", "root");
+            router.push("/members/alldosesforDoctor");
+            
+          
           }, 1500);
-
-          
-          
+  
         } else {
 
           setError(false);
@@ -109,8 +117,6 @@ const ClinicSchedule: React.FC = () => {
         setCanSubmit(false);
       }, 1000);
     }
-    // console.log("clinics timing array,", newArray);
-   
   };
 
   const rerender = () => {
@@ -157,7 +163,7 @@ const ClinicSchedule: React.FC = () => {
         isOpen={success}
         setOpen={setSuccess}
         color="success"
-        errMsg="Registration successful. Kindly login now!"
+        errMsg="Clinic and schedule is added now!"
       />
       <IonHeader>
         <IonToolbar color={"primary"}>

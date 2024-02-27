@@ -15,7 +15,7 @@ import React, { useState } from "react";
 import WeekDaysCard, { ISession } from "./WeekDaysCard";
 import Header from "../../components/header/Header";
 import Toast from "../../components/custom-toast/Toast";
-import AddWeekDaysCard from "./AddWeekDaysCard";
+// import AddWeekDaysCard from "./AddWeekDaysCard";
 import { useHistory } from "react-router-dom";
 import cities from "../test/citiesData";
 const AddClinic: React.FC = () => {
@@ -37,45 +37,7 @@ const AddClinic: React.FC = () => {
   const [data, setData] = useState<any>(null);
   const [rerender, setRerender] = useState(false);
 
-  // const handleUnSubmit = async (e: React.FormEvent) => {
-  //   e.preventDefault();
-  //   const weekdays = [
-  //     "Monday",
-  //     "Tuesday",
-  //     "Wednesday",
-  //     "Thursday",
-  //     "Friday",
-  //     "Saturday",
-  //     "Sunday",
-  //   ];
-  //   const newArray = weekdays.filter((day) => {
-  //     const storedData = localStorage.getItem(day);
-  //     return (
-  //       storedData &&
-  //       Array.isArray(JSON.parse(storedData)) &&
-  //       JSON.parse(storedData).length > 0
-  //     );
-  //   });
-
-  //   if (newArray.length > 0) {
-  //     setCanSubmit(false);
-  //   }
-
-  //   const data = newArray.map((day) => {
-  //     const storedData = localStorage.getItem(day);
-  //     console.log(storedData, "this is storedData"); // Retrieve the data from localStorage
-  //     return JSON.parse(storedData);
-  //   });
-
-  //   try {
-  //     const allData = data.map(i => i[0]);
-  //     await registerDoctor(allData);
-  //     setSuccess(true);
-  //     localStorage.clear();
-  //   } catch (error) {
-  //     setError(true);
-  //   }
-  // };
+  
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -178,71 +140,7 @@ const AddClinic: React.FC = () => {
     }
   };
 
-  // const postclinictiming = async (cid: string) => {
-  //   // localStorage.clear();
-  //   const weekdays = [
-  //     "Monday",
-  //     "Tuesday",
-  //     "Wednesday",
-  //     "Thursday",
-  //     "Friday",
-  //     "Saturday",
-  //     "Sunday",
-  //   ];
-  //   const newArray = weekdays.filter((day) => {
-  //     const storedData = localStorage.getItem(day);
-  //     return (
-  //       storedData &&
-  //       Array.isArray(JSON.parse(storedData)) &&
-  //       JSON.parse(storedData).length > 0
-  //     );
-  //   });
-
-  //   if (newArray.length > 0) {
-  //     setCanSubmit(false);
-  //   }
-
-  //   const data = newArray.map(async (day) => {
-  //     const storedData = localStorage.getItem(day);
-  //     console.log(storedData, "this is storedData");
-  //     // console.log(storedData.length)
-
-  //     const parsedData = storedData ? JSON.parse(storedData) : null;
-  //     console.log(parsedData);
-  //     const response = await fetch(
-  //       `${
-  //         import.meta.env.VITE_API_URL
-  //       }api/Clinictiming/api/clintimings/AddorUpdate/${cid}`,
-  //       {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //         },
-  //         body: JSON.stringify(parsedData),
-  //       }
-  //     )
-  //       .then((res) => {
-  //         if (res.status === 200) {
-  //           localStorage.clear();
-  //         } else {
-  //           setError(false);
-  //           localStorage.clear();
-  //         }
-  //       })
-  //       .catch((err) => setError(true));
-
-  //     // localStorage.clear();
-  //     // return parsedData;
-
-  //     // localStorage.clear()
-  //   });
-
-  //   // const allData = data.map((i) => i[0]);
-  //   // console.log(cid);
-  //   // registerDoctor(allData, cid);
-  //   // setSuccess(true);
-  //   localStorage.clear();
-  // };
+  
 
   const anSubmit =
     clinicName.trim() !== "" &&

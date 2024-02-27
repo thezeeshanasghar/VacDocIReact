@@ -45,7 +45,6 @@ const AddPatient: React.FC = () => {
   const [city, setCity] = useState<string>("");
   const [isEPIDone, setIsEPIDone] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
-  const [guardianText, setGuardianText] = useState("Father");
   const history = useHistory();
   const location = useLocation();
   // const [clinicData, setClinicData] = useState<DoctorClinicType[]>([]);
@@ -110,7 +109,6 @@ const AddPatient: React.FC = () => {
     } else {
       const data_to_be_sent = {
         name,
-        guardian: guardianText,
         guardianName: guardian,
         email,
         dob,
@@ -175,7 +173,6 @@ const AddPatient: React.FC = () => {
   const clearStateVariables = () => {
     setName("");
     setGuardian("");
-    setGuardianText("Father");
     setGender("");
     setScheduleType("regular");
     setDob("");
@@ -279,17 +276,9 @@ const AddPatient: React.FC = () => {
                 id="name"
               />
             </IonItem>
-            {/* <IonItem>
-              <IonLabel position="floating">Guardian's Name</IonLabel>
-              <IonInput
-                type="text"
-                value={guardian}
-                onIonChange={(e) => setGuardian(e.detail.value!)}
-              />
-            </IonItem> */}
+           
             <IonItem lines="full">
-              <IonItem lines="none">
-                <IonInput
+            <IonInput
                   type="text"
                   placeholder="Guardian's Name"
                   value={guardian}
@@ -297,42 +286,7 @@ const AddPatient: React.FC = () => {
                   required
                   id="fname"
                 />
-              </IonItem>
-              <IonItem lines="none">
-                <IonRadioGroup
-                  value={guardianText}
-                  onIonChange={(e) => setGuardianText(e.detail.value)}
-                >
-                  <IonGrid>
-                    <IonRow>
-                      <IonCol>
-                        <IonItem lines="none">
-                          <IonRadio slot="start" value="Father" />
-                          <IonLabel style={{ fontSize: "14px" }}>
-                            Father
-                          </IonLabel>
-                        </IonItem>
-                      </IonCol>
-                      <IonCol>
-                        <IonItem lines="none">
-                          <IonRadio slot="start" value="Mother" />
-                          <IonLabel style={{ fontSize: "14px" }}>
-                            Mother
-                          </IonLabel>
-                        </IonItem>
-                      </IonCol>
-                      <IonCol>
-                        <IonItem lines="none">
-                          <IonRadio slot="start" value="Husband" />
-                          <IonLabel style={{ fontSize: "14px" }}>
-                            Husband
-                          </IonLabel>
-                        </IonItem>
-                      </IonCol>
-                    </IonRow>
-                  </IonGrid>
-                </IonRadioGroup>
-              </IonItem>
+             
             </IonItem>
             <IonItem>
               <IonInput

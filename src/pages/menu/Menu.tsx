@@ -58,7 +58,7 @@ const appPages: AppPage[] = [
     mdIcon: moon,
   },
   {
-    title: "Schedule",
+    title: "Default Schedule",
     url: "/members/doctor/schedule",
     mdIcon: recording,
   },

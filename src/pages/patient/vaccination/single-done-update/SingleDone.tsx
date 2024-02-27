@@ -37,6 +37,7 @@ const SingleDone: React.FC<IParam> = () => {
   const location = useLocation();
   const history = useHistory();
   const router = useIonRouter();
+  const [errMsg, setErrMsg] = useState("");
   // Extract the query parameters from the location.search
   const queryParams = new URLSearchParams(location.search);
   // Get the value of the "oldDate" parameter from the query parameters
@@ -51,7 +52,9 @@ const SingleDone: React.FC<IParam> = () => {
   const [brand, setBrand] = useState<string>();
   const [brandData, setBrandData] = useState<IBrand[]>([]);
   const [scheduleDate, setScheduleDate] = useState<string>();
-
+  const [height, setHeight] = useState("");
+  const [weight, setWeight] = useState("");
+  const [ofc, setOFC] = useState("");
   const formatDate = (inputDate: string | null) => {
     if (!inputDate) {
       return null;
@@ -90,6 +93,19 @@ const SingleDone: React.FC<IParam> = () => {
 
   const [givenDate, setGivenDate] = useState<string | null>(formattedOldDate);
   const [newDate, setNewDate] = useState();
+  const validateDecimalInput = (input: string, allowEmpty: boolean = false) => {
+    // If the input is empty and empty inputs are allowed, return true
+    if (allowEmpty && input === '') {
+      return true;
+      
+    }
+    
+    // Regular expression to match numbers with at most one decimal point
+    const regex = /^[0-9]+(\.[0-9]+)?$/;
+  
+    // Test the input against the regular expression
+    return regex.test(input);
+  };
   useEffect(() => {
     fetch(
       `${
@@ -116,6 +132,7 @@ const SingleDone: React.FC<IParam> = () => {
     e.preventDefault();
     console.log(brand);
     console.log(newDate);
+    
     try {
       const res = await fetch(
         `${
@@ -145,39 +162,10 @@ const SingleDone: React.FC<IParam> = () => {
       }
     } catch (error) {
       console.log(error);
+      setErrMsg("Something went wrong");
       setError(true);
     }
-    // const dates=formatDate(givenDate);
-    // console.log(dates);
-    // const dataTobeSent = {
-    //   Id: doseId,
-    //   date: newDate,
-    // };
-    // console.log(dataTobeSent)
-    // try {
-    //   const response = await fetch(
-    //     `${import.meta.env.VITE_API_URL}api/PatientSchedule/single_updateDate?Id=${doseId}`,
-    //     {
-    //       method: "PATCH",
-    //       headers: {
-    //         "Content-Type": "application/json",
-    //       },
-    //       body: JSON.stringify(dataTobeSent),
-    //     }
-    //   );
-    //   if (response.ok) {
-    //     // Handle success, if needed
-    //     setSuccess(true);
-    //     router.push(`/members/child/vaccine/${childId}`, "back");
-    //     window.location.reload();
-    //   } else {
-    //     // Handle error, if needed
-    //     setError(true);
-    //   }
-    // } catch (error) {
-    //   // Handle error, if needed
-    //   setError(true);
-    // }
+   
   };
 
   return (
@@ -188,12 +176,8 @@ const SingleDone: React.FC<IParam> = () => {
         message="Single date of patient schedule updated successfully."
         color="success"
       />
-      <Toast
-        isOpen={error}
-        setOpen={setError}
-        message="An error occurred while updating patient schedule. Please try again."
-        color="danger"
-      />
+      
+      <Toast isOpen={error} setOpen={setError} color="danger" errMsg={errMsg} />
       <IonPage>
         <IonContent>
           <IonHeader>
@@ -202,20 +186,63 @@ const SingleDone: React.FC<IParam> = () => {
             </IonToolbar>
           </IonHeader>
           <form noValidate onSubmit={postSingleDone}>
-            <IonItem>
-              <IonLabel color="primary">Brands</IonLabel>
-              <IonSelect
-                value={brand}
-                onIonChange={(e) => setBrand(e.detail.value)}
-                id="brand1"
-              >
-                {brandData.map((brandOption) => (
-                  <IonSelectOption key={brandOption.Id} value={brandOption.Id}>
-                    {brandOption.Name}
-                  </IonSelectOption>
-                ))}
-              </IonSelect>
-            </IonItem>
+          <IonItem>
+            <IonLabel>Height</IonLabel>
+            <IonInput
+              placeholder="00.00"
+              type="text"
+              value={height}
+              onIonChange={(e) => {
+                const inputValue = e.detail.value || '';
+                if (!validateDecimalInput(inputValue, true)) {
+                  setErrMsg("Please enter a valid height ");
+                  setError(true);
+                } else {
+                  setError(false);
+                  setHeight(inputValue);
+                }
+              }}
+              id="height"
+            />
+              </IonItem>
+              <IonItem>
+              <IonLabel>Weight</IonLabel>
+                <IonInput
+                  placeholder="00.00"
+                  type="text"
+                  value={weight}
+                  onIonChange={(e) => {
+                    const inputValue = e.detail.value || '';
+                    if (!validateDecimalInput(inputValue, true)) {
+                      setErrMsg("Please enter a valid weight.");
+                      setError(true);
+                    } else {
+                      setError(false);
+                      setWeight(inputValue);
+                    }
+                  }}
+                  id="weight"
+                />
+              </IonItem>
+              <IonItem>
+              <IonLabel>OFC</IonLabel>
+                <IonInput
+                  placeholder="00.00"
+                  type="text"
+                  value={ofc}
+                  onIonChange={(e) => {
+                    const inputValue = e.detail.value || '';
+                    if (!validateDecimalInput(inputValue, true)) {
+                      setErrMsg("Please enter a valid OFC.");
+                      setError(true);
+                    } else {
+                      setError(false);
+                      setOFC(inputValue);
+                    }
+                  }}
+                  id="ofc"
+                />
+              </IonItem>
 
             <IonItem>
               <IonLabel color="primary">Old Date</IonLabel>
@@ -232,11 +259,25 @@ const SingleDone: React.FC<IParam> = () => {
               <IonInput
                 slot="end"
                 type="date"
-                value={newDate} // Use the givenDate directly without formatting it again
+                value={formattedOldDate} // Use the givenDate directly without formatting it again
                 //@ts-ignore
                 onIonChange={(e) => setNewDate(e.detail.value)}
                 id="date12"
               />
+            </IonItem>
+            <IonItem>
+              <IonLabel color="primary">Brands</IonLabel>
+              <IonSelect
+                value={brand}
+                onIonChange={(e) => setBrand(e.detail.value)}
+                id="brand1"
+              >
+                {brandData.map((brandOption) => (
+                  <IonSelectOption key={brandOption.Id} value={brandOption.Id}>
+                    {brandOption.Name}
+                  </IonSelectOption>
+                ))}
+              </IonSelect>
             </IonItem>
             <IonButton id="submit" type="submit">
               Submit
