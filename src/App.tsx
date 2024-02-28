@@ -26,6 +26,7 @@ import DoctorSignUp from "./pages/doctor-signup/signup/DoctorSignUp";
 import ClinicRegistration from "./pages/doctor-signup/add-clinic/ClinicRegistration";
 import ClinicSchedule from "./pages/doctor-signup/doc_schedule/ClinicSchedule";
 import { useEffect } from "react";
+import DosesSelection from "./pages/doctor-signup/doc_schedule/DosesSelection";
 
 setupIonicReact();
 
@@ -74,6 +75,11 @@ const App: React.FC = () => {
             exact
             path={"/auth/reg_clinic"}
             component={ClinicRegistration}
+          />
+          <Route
+            exact
+            path={"/auth/DoseSelection"}
+            component={DosesSelection}
           />
           <Route
             exact

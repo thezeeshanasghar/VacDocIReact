@@ -66,7 +66,7 @@ const DoctorScheduleCardList: React.FC = () => {
     localStorage.setItem("test", JSON.stringify(data))
     
     //@ts-ignore
-    router.push("/members/alldosesforDoctor","forward", { state: { vaccines: data } });
+    router.push("/members/alldosesforDoctor-defaultschedule","forward", { state: { vaccines: data } });
   };
 
   const fetchDoseData = async () => {

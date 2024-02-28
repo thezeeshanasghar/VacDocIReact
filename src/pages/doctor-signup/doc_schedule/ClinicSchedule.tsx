@@ -92,7 +92,7 @@ const ClinicSchedule: React.FC = () => {
                 
               }})
           setTimeout(() => {
-            router.push("/members/alldosesforDoctor");
+            router.push("/auth/DoseSelection");
             
           
           }, 1500);

@@ -130,7 +130,7 @@ import Toast from "../../components/custom-toast/Toast";
           if (res.status === 204) {
             setSuccess(true);
             localStorage.clear();
-            router.push("/members/Dashboard","root")
+            router.push("/members/doctor/Schedule")
             }
           else {
             setError(true);

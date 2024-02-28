@@ -90,14 +90,14 @@ const Routes: React.FC = () => {
         />
          <Route
           exact
-          path="/members/alldosesforDoctor"
+          path="/members/alldosesforDoctor-defaultschedule"
           component={DosesSelection1}
         />
-         <Route
+         {/* <Route
           exact
-          path="/alldosesforDoctor"
+          path=""
           component={DosesSelection}
-        />
+        /> */}
         <Route
           exact
           path="/members/child/AddNewDosesList/:childId"
@@ -133,6 +133,7 @@ const Routes: React.FC = () => {
         </Route>
 
         <Route exact path={"/auth/signup"} component={SignUp} />
+        {/* <Route exact path={"/DoseSelection"} component={DosesSelection} /> */}
       </IonRouterOutlet>
     </>
   );

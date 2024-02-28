@@ -8,6 +8,7 @@ import {
     IonFab,
     IonFabButton,
     IonGrid,
+    IonHeader,
     IonIcon,
     IonInfiniteScroll,
     IonInfiniteScrollContent,
@@ -94,7 +95,7 @@ import Toast from "../../../components/custom-toast/Toast";
     return (
       <>
         <IonPage>
-          <Header pageName="Vaccine" />
+          <IonHeader slot="">Doses Selection </IonHeader>
           <IonContent className="ion-padding">
             <form onSubmit={handleFormSubmit}>
             
