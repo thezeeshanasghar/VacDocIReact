@@ -26,6 +26,7 @@ import {
   import { add } from "ionicons/icons";
   import { useHistory } from 'react-router-dom';
 import Toast from "../../components/custom-toast/Toast";
+import LoadingSpinner from "../../components/loading-spinner/LoadingSpinner";
   
 
 
@@ -36,6 +37,7 @@ import Toast from "../../components/custom-toast/Toast";
     const location = useLocation();
     const dosesids=localStorage.getItem('test')
     const idsList: number[] = [];
+    const [showLoading, setShowLoading] = useState(false);
     //@ts-ignore
     const [vaccineData, setVaccineData] = useState<IVaccineData[]>([]);
     //@ts-ignore
@@ -130,7 +132,9 @@ import Toast from "../../components/custom-toast/Toast";
           if (res.status === 204) {
             setSuccess(true);
             localStorage.clear();
+            setShowLoading(true);
             router.push("/members/doctor/Schedule")
+            
             }
           else {
             setError(true);
@@ -147,6 +151,11 @@ import Toast from "../../components/custom-toast/Toast";
   
     return (
       <>
+      <LoadingSpinner
+        isOpen={showLoading}
+        setOpen={setShowLoading}
+        time={1000}
+      />
         <IonPage>
           <Header pageName="Vaccine" />
           <IonContent className="ion-padding">
