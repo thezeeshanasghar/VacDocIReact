@@ -37,7 +37,7 @@ interface IDoseSchedule {
   Name: string;
   IsDone: boolean;
   IsSkip: boolean;
-  DoseId:number;
+  DoseId: number;
   BrandName: string;
   renderList: () => void;
 }
@@ -66,7 +66,6 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
   const [success, setSuccess] = useState(false);
   const [isButtonsVisible, setButtonsVisible] = useState(true);
   const [isButtonVisible, setButtonVisible] = useState(true);
- 
 
   const formatDate = (dateString: string | null) => {
     //@ts-ignore
@@ -168,7 +167,7 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
       );
       if (res.status === 204) {
         setButtonVisible(!isButtonVisible);
-       
+
         renderList();
       }
     } catch (error) {
@@ -187,7 +186,6 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
     setButtonVisible(!isButtonVisible);
     postSingleDone(date); // Update the database value of isSkip
   };
- 
 
   useEffect(() => {
     // Update the visibility of buttons based on the database value of IsSkip
@@ -204,6 +202,10 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
       `?DOB=${DOB?.toString()}&doctorId=${doctorId?.toString()}`
     );
   }, []);
+
+  function clickedImage() {
+    alert("Image Clicked");
+  }
   return (
     <>
       <Toast
@@ -243,7 +245,7 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
               <IonCol size="auto">
                 <IonImg
                   // size="small"
-                  src={syringImage}
+                  src={emptySyringImage}
                   onClick={() =>
                     router.push(
                       `/members/child/vaccine/${childId}/fill/${Id}?oldDate=${date.toString()}&DOB=${DOB}&doctorId=${doctorId}`
@@ -251,7 +253,7 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
                   }
                   style={{
                     textTransform: "lowercase",
-                    height: "30px",
+                    height: "32px",
                     display: "inline-block",
                     margin: "0px 10px",
                   }}
@@ -280,47 +282,70 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
               </IonCol>
             </>
           )}
-          {IsSkip && !IsDone && ( // Show "unSkip" button when buttons are hidden
-            <IonCol size="auto">
-              <IonButton
-                size="small"
-                onClick={toggleButtonsVisibility}
-                style={{
-                  textTransform: "lowercase",
-                }}
-                color="danger"
-              >
-                UnSkip
-              </IonButton>
-            </IonCol>
-          )}
+          {IsSkip &&
+            !IsDone && ( // Show "unSkip" button when buttons are hidden
+              <IonCol size="auto">
+                <IonButton
+                  size="small"
+                  onClick={toggleButtonsVisibility}
+                  style={{
+                    textTransform: "lowercase",
+                  }}
+                  color="danger"
+                >
+                  UnSkip
+                </IonButton>
+              </IonCol>
+            )}
           {IsDone && (
             <>
-            {BrandName == null ? (
+              {BrandName == null ? (
                 ""
               ) : (
-                <IonCol size="">
-                  <p>Brand: {BrandName}</p>
-                </IonCol>
+                <div>
+                  <IonCol size="">
+                    <p>Brand: {BrandName}</p>
+                  </IonCol>
+                </div>
               )}
-              <IonCol
-                size="auto"
-                style={{ display: "flex", alignItems: "center" }}
-              >
-                <span
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <div
                   style={{
+                    textAlign: "center",
                     color: "#6ebf8b", // Set the color of the date to light green
                     height: "30px",
-                    display: "inline-block",
-                    margin: "0px 10px",
+                    display: "flex",
+                    alignContent: "center",
+                    alignItems: "center",
+                    margin: "5px 10px",
                   }}
                 >
-                  {date}
-                </span>
-
-  
-              </IonCol>
-              
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      margin: "1px 0px  0 10px",
+                    }}
+                  >
+                    <IonImg
+                      // size="small"
+                      src={syringImage}
+                      onClick={clickedImage}
+                      style={{
+                        textTransform: "lowercase",
+                        height: "32px",
+                        display: "inline-block",
+                        margin: "1px 20px  0 10px",
+                      }}
+                      color={IsDone ? "success" : "primary"}
+                      id="done1"
+                    >
+                      {IsDone ? "undo" : "done"}
+                    </IonImg>
+                  </div>
+                  <div>{date}</div>
+                </div>
+              </div>
             </>
           )}
         </IonRow>

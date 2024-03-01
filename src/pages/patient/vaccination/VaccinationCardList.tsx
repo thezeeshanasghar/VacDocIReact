@@ -24,7 +24,7 @@ import { format, isValid, parse } from "date-fns";
 import axios from "axios";
 import { saveAs } from "file-saver";
 import Header from "../../../components/header/Header";
-import syringImage from "../../../assets/injectionFilled.png";
+import syringImage from "../../../assets/injectionEmpty.png";
 import VaccinationCard from "./VaccinationCard";
 import Toast from "../../../components/custom-toast/Toast";
 import { useLocation } from "react-router";
@@ -122,21 +122,26 @@ const VaccinationCardList: React.FC<IParam> = (
       localStorage.getItem("isDone") && localStorage.getItem("isDone");
     if (isDone) setButtonVisible(isDone === "true" ? true : false);
     // window.location.reload();
-   
-      // Fetch vaccine data from your API
-      // Example using fetch:
-      //@ts-ignore
+
+    // Fetch vaccine data from your API
+    // Example using fetch:
+    //@ts-ignore
     const storedValue = JSON.parse(sessionStorage.getItem("docData"));
     const DoctorId = storedValue && storedValue.Id;
-      fetch(`${import.meta.env.VITE_API_URL}api/PatientSchedule/GetMissingDoses?ChildId=${childId}&DoctorId=${DoctorId}`)
-        .then(response => {  if (response.status === 200) {
+    fetch(
+      `${
+        import.meta.env.VITE_API_URL
+      }api/PatientSchedule/GetMissingDoses?ChildId=${childId}&DoctorId=${DoctorId}`
+    )
+      .then((response) => {
+        if (response.status === 200) {
           return response.json();
         } else {
-          throw new Error('Failed to fetch vaccine data');
-        }})
-        .then()
-        .catch(error => console.error('Error fetching vaccine data:', error));
-    
+          throw new Error("Failed to fetch vaccine data");
+        }
+      })
+      .then()
+      .catch((error) => console.error("Error fetching vaccine data:", error));
   }, [location]);
 
   const fetchPatientData = async () => {
@@ -154,7 +159,6 @@ const VaccinationCardList: React.FC<IParam> = (
   };
 
   const fetchDoseData = async () => {
-    
     try {
       const response = await fetch(
         `${
@@ -250,7 +254,7 @@ const VaccinationCardList: React.FC<IParam> = (
       console.log(error);
     }
   };
-  const GoToNewDoses=()=>{
+  const GoToNewDoses = () => {
     history.push(`/members/child/AddNewDosesList/${childId}`);
   };
 
@@ -270,14 +274,13 @@ const VaccinationCardList: React.FC<IParam> = (
         console.log(error);
       });
   };
-  
 
   const toggleButtonsVisibility = (date: string) => {
     // Toggle the visibility of all buttons and set isSkip to 0 (false)
     setButtonsVisible(!isButtonsVisible);
     postSkip(date, false); // Update the database value of isSkip
   };
-  console.log(data)
+  console.log(data);
   return (
     <>
       <Toast
@@ -306,24 +309,26 @@ const VaccinationCardList: React.FC<IParam> = (
           </IonToolbar>
         </IonHeader> */}
         <IonHeader>
-  <IonToolbar>
-    <IonGrid>
-      <IonRow class="ion-align-items-center">
-        <IonCol size="2">
-          <IonButton size="small" onClick={handleDownload}>
-            print
-          </IonButton>
-        </IonCol>
-        <IonCol size="8" class="ion-text-center">
-          <IonText>{patientName}</IonText>
-        </IonCol>
-        <IonCol size="2" class="ion-text-end">
-          <IonButton size="small" onClick={GoToNewDoses}>Add new Doses</IonButton>
-        </IonCol>
-      </IonRow>
-    </IonGrid>
-  </IonToolbar>
-</IonHeader>
+          <IonToolbar>
+            <IonGrid>
+              <IonRow class="ion-align-items-center">
+                <IonCol size="2">
+                  <IonButton size="small" onClick={handleDownload}>
+                    print
+                  </IonButton>
+                </IonCol>
+                <IonCol size="8" class="ion-text-center">
+                  <IonText>{patientName}</IonText>
+                </IonCol>
+                <IonCol size="2" class="ion-text-end">
+                  <IonButton size="small" onClick={GoToNewDoses}>
+                    Add new Doses
+                  </IonButton>
+                </IonCol>
+              </IonRow>
+            </IonGrid>
+          </IonToolbar>
+        </IonHeader>
 
         <IonContent className="ion-padding">
           {Object.keys(data).map((date) => {
@@ -334,7 +339,6 @@ const VaccinationCardList: React.FC<IParam> = (
 
             return (
               <React.Fragment>
-                
                 {!isBulkSkip && !isBulkDone && (
                   <IonItem lines="none" className="centered-item">
                     <IonText style={{ marginRight: "1rem" }}>{date}</IonText>
