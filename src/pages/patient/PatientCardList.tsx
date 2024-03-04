@@ -55,7 +55,7 @@ const PatientCardList: React.FC = () => {
       .then((response) => response.json())
       .then((data: IPatientData[]) => {
         setPatientData(data);
-        console.log("patent data : ",data);
+        console.log("patent data : ", data);
         setCurrentPage(2);
       })
       .catch((error) => {
@@ -167,4 +167,3 @@ const PatientCardList: React.FC = () => {
 };
 
 export default PatientCardList;
-

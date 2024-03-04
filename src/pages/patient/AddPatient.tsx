@@ -34,7 +34,7 @@ const AddPatient: React.FC = () => {
   const [name, setName] = useState("");
   const [guardian, setGuardian] = useState("");
   const [cnic, setCnic] = useState("");
-  
+
   const [dob, setDob] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("auto");
@@ -63,15 +63,15 @@ const AddPatient: React.FC = () => {
     if (!isNumber(inputValue)) {
       setErrMsg("Mobile Number Must be In 3331234567 Format");
       setError(true);
-      setMobileNumber("")
-    }else if(inputValue.length > 10){
+      setMobileNumber("");
+    } else if (inputValue.length > 10) {
       setErrMsg("Mobile Number Must contain 10 digit");
       setError(true);
-      setMobileNumber("")
-    }else if(!inputValue.startsWith('3')){
+      setMobileNumber("");
+    } else if (!inputValue.startsWith("3")) {
       setErrMsg("Mobile Number Must Start wth 3");
       setError(true);
-      setMobileNumber("")
+      setMobileNumber("");
     } else {
       setMobileNumber(inputValue);
       setError(false);
@@ -87,11 +87,11 @@ const AddPatient: React.FC = () => {
     // if (mobileNumber.trim().length < 10) {
     //   alert("Mobile Number must be at least 10 digit");
     //   return;
-    // } 
+    // }
     // else if (mobileNumber.trim().length > 10) {
     //   alert("Mobile Number must be at least 10 digit long.");
     //   return;
-    // } 
+    // }
     // else if (
     //   cnicOrPassPort.trim().length >= 1 &&
     //   (cnicOrPassPort.trim().length < 13 || cnicOrPassPort.trim().length > 13)
@@ -103,7 +103,7 @@ const AddPatient: React.FC = () => {
     //   alert("CNIC Number can not contain any non digit");
     //   return;
     // }
-     if (email.trim().length >= 1 && !isValidEmail(email)) {
+    if (email.trim().length >= 1 && !isValidEmail(email)) {
       alert("Please enter correct email address");
       return;
     } else {
@@ -113,21 +113,21 @@ const AddPatient: React.FC = () => {
         email,
         dob,
         gender: gender.trim() === "boy" ? 0 : 1,
-        isSpecial: scheduleType.trim()=="regular"?0 : 1,
+        isSpecial: scheduleType.trim() == "regular" ? 0 : 1,
         password: generateRandomPassword(),
         city,
         selectCnicOrPassport,
         cnicOrPassPort,
         mobileNumber,
-       
+
         isEPIDone,
         isVerified,
         isInactive: false,
-       
+
         clinicId: selectedClinic,
         doctorId: selectedDoctor,
       };
-      console.log(data_to_be_sent)
+      console.log(data_to_be_sent);
 
       fetch(`${import.meta.env.VITE_API_URL}api/Child`, {
         method: "POST",
@@ -139,34 +139,41 @@ const AddPatient: React.FC = () => {
         .then((res) => {
           if (res.status === 200) {
             setSuccess(true);
-            return res.json().then((data)=>{
-              console.log(data)
-              const childId=data.Id;
-             
-              axios.get(`${import.meta.env.VITE_API_URL}api/PatientSchedule/Patient_DoseSchedule?ChildId=${childId}&DoctorId=${selectedDoctor}`).then((res: any)=> {
-              console.log('schedule created')
-              const isspecial=data.IsSpecial
-              console.log(isspecial)
-              if (isspecial==true){
-                history.push(`/members/child/special-vaccine/${childId}`)
-                
-              }
-              else{
-                history.push(`/members/child`)
-              }
-              }).catch((error: any)=>{ console.log(error)})
+            return res.json().then((data) => {
+              console.log(data);
+              const childId = data.Id;
+              console.log(childId);
+
+              axios
+                .get(
+                  `${
+                    import.meta.env.VITE_API_URL
+                  }api/PatientSchedule/Patient_DoseSchedule?ChildId=${childId}&DoctorId=${selectedDoctor}`
+                )
+                .then((res: any) => {
+                  console.log("schedule created");
+                  const isspecial = data.IsSpecial;
+                  console.log(isspecial);
+                  if (isspecial == true) {
+                    history.push(`/members/child/special-vaccine/${childId}`);
+                  } else {
+                    history.push(`/members/child`);
+                  }
+                })
+                .catch((error: any) => {
+                  console.log(error);
+                });
               // .then(res => {
               //   history.push("/members/child", "back");
               //   clearStateVariables();
               // })
-            })
+            });
           } else {
             setError(true);
           }
         })
         .catch((err) => setError(true))
-        .finally(() => {
-        });
+        .finally(() => {});
     }
   };
   // function to clear all state variables
@@ -178,7 +185,7 @@ const AddPatient: React.FC = () => {
     setDob("");
     setEmail("");
     setMobileNumber("");
-    
+
     setCity("");
     setIsEPIDone(false);
     setIsVerified(false);
@@ -229,8 +236,6 @@ const AddPatient: React.FC = () => {
     // console.log(today);
     setToDay(today);
     clearStateVariables();
-    
-    
   }, [location, success, error]);
 
   const canSubmit =
@@ -239,7 +244,8 @@ const AddPatient: React.FC = () => {
     gender !== "" &&
     dob !== "" &&
     mobileNumber !== "" &&
-    city !== "" && scheduleType !=="";
+    city !== "" &&
+    scheduleType !== "";
 
   function generateRandomPassword() {
     return secureRandomPassword.randomPassword({
@@ -276,17 +282,16 @@ const AddPatient: React.FC = () => {
                 id="name"
               />
             </IonItem>
-           
+
             <IonItem lines="full">
-            <IonInput
-                  type="text"
-                  placeholder="Guardian's Name"
-                  value={guardian}
-                  onIonChange={(e) => setGuardian(e.detail.value!)}
-                  required
-                  id="fname"
-                />
-             
+              <IonInput
+                type="text"
+                placeholder="Guardian's Name"
+                value={guardian}
+                onIonChange={(e) => setGuardian(e.detail.value!)}
+                required
+                id="fname"
+              />
             </IonItem>
             <IonItem>
               <IonInput
@@ -389,7 +394,7 @@ const AddPatient: React.FC = () => {
                   <IonCol>
                     <IonItem>
                       <IonLabel>Regular</IonLabel>
-                      <IonRadio slot="start" value="regular"/>
+                      <IonRadio slot="start" value="regular" />
                     </IonItem>
                   </IonCol>
                   <IonCol>
@@ -423,9 +428,7 @@ const AddPatient: React.FC = () => {
                 </IonRow>
               </IonGrid>
             </IonRadioGroup>
-             
-           
-           
+
             <IonItem>
               <input
                 type="text"

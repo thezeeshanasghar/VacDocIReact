@@ -18,6 +18,7 @@ import Toast from "../../../components/custom-toast/Toast";
 import syringImage from "../../../assets/injectionFilled.png";
 import emptySyringImage from "../../../assets/injectionEmpty.png";
 import { useLocation } from "react-router";
+import LoadingSpinner from "../../../components/loading-spinner/LoadingSpinner";
 interface IBrand {
   Id: number;
   Name: string;
@@ -59,7 +60,7 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
   let urlParams = new URLSearchParams(location.search);
   let DOB = urlParams.get("DOB");
   let doctorId = urlParams.get("doctorId");
-
+  const [showLoading, setShowLoading] = useState(false);
   const [error, setError] = useState(false);
   const [showPopover, setShowPopover] = useState(false);
   const [selectedDate, setSelectedDate] = useState<string | undefined>(date);
@@ -203,11 +204,35 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
     );
   }, []);
 
-  function clickedImage() {
-    alert("Image Clicked");
-  }
+  const clickedImage = async (Id: any) => {
+    try {
+      console.log(Id);
+      const res = await fetch(
+        `${import.meta.env.VITE_API_URL}api/PatientSchedule/${Id}?isDone=false`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ Id: Id, isDone: false }),
+        }
+      );
+    } catch (error) {
+      console.error("Error:", error);
+    }
+
+    router.push(
+      `/members/child/vaccine/${childId}?DOB=${DOB}&docterId=${doctorId}`
+    );
+    setShowLoading(true);
+  };
   return (
     <>
+      <LoadingSpinner
+        isOpen={showLoading}
+        setOpen={setShowLoading}
+        time={1000}
+      />
       <Toast
         isOpen={success}
         setOpen={setSuccess}
@@ -330,7 +355,7 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
                     <IonImg
                       // size="small"
                       src={syringImage}
-                      onClick={clickedImage}
+                      onClick={() => clickedImage(Id)}
                       style={{
                         textTransform: "lowercase",
                         height: "32px",

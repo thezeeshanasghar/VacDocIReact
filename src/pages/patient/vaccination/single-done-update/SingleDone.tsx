@@ -61,12 +61,7 @@ const SingleDone: React.FC<IParam> = () => {
     }
 
     // List of possible date formats to try
-    const possibleFormats = [
-      "dd-MMM-yy",
-      "yyyy-MM-dd",
-      "M/d/yyyy", 
-      "yyyy-M-d",
-    ];
+    const possibleFormats = ["dd-MMM-yy", "yyyy-MM-dd", "M/d/yyyy", "yyyy-M-d"];
 
     let parsedDate = null;
 
@@ -92,17 +87,16 @@ const SingleDone: React.FC<IParam> = () => {
   const formattedOldDate = oldDate ? formatDate(oldDate) : null;
 
   const [givenDate, setGivenDate] = useState<string | null>(formattedOldDate);
-  const [newDate, setNewDate] = useState();
+  const [newDate, setNewDate] = useState(formattedOldDate);
   const validateDecimalInput = (input: string, allowEmpty: boolean = false) => {
     // If the input is empty and empty inputs are allowed, return true
-    if (allowEmpty && input === '') {
+    if (allowEmpty && input === "") {
       return true;
-      
     }
-    
+
     // Regular expression to match numbers with at most one decimal point
     const regex = /^[0-9]+(\.[0-9]+)?$/;
-  
+
     // Test the input against the regular expression
     return regex.test(input);
   };
@@ -123,7 +117,7 @@ const SingleDone: React.FC<IParam> = () => {
   const handleDateChange = (e: { target: { value: any } }, value: any) => {
     // Get the selected date from the event
     const selectedDate = e.target.value;
-
+    console.log(selectedDate);
     // Update the givenDate state with the selected date (no need to format it again)
     setNewDate(selectedDate);
   };
@@ -132,7 +126,7 @@ const SingleDone: React.FC<IParam> = () => {
     e.preventDefault();
     console.log(brand);
     console.log(newDate);
-    
+
     try {
       const res = await fetch(
         `${
@@ -165,7 +159,6 @@ const SingleDone: React.FC<IParam> = () => {
       setErrMsg("Something went wrong");
       setError(true);
     }
-   
   };
 
   return (
@@ -176,7 +169,7 @@ const SingleDone: React.FC<IParam> = () => {
         message="Single date of patient schedule updated successfully."
         color="success"
       />
-      
+
       <Toast isOpen={error} setOpen={setError} color="danger" errMsg={errMsg} />
       <IonPage>
         <IonContent>
@@ -186,63 +179,63 @@ const SingleDone: React.FC<IParam> = () => {
             </IonToolbar>
           </IonHeader>
           <form noValidate onSubmit={postSingleDone}>
-          <IonItem>
-            <IonLabel>Height</IonLabel>
-            <IonInput
-              placeholder="00.00"
-              type="text"
-              value={height}
-              onIonChange={(e) => {
-                const inputValue = e.detail.value || '';
-                if (!validateDecimalInput(inputValue, true)) {
-                  setErrMsg("Please enter a valid height ");
-                  setError(true);
-                } else {
-                  setError(false);
-                  setHeight(inputValue);
-                }
-              }}
-              id="height"
-            />
-              </IonItem>
-              <IonItem>
+            <IonItem>
+              <IonLabel>Height</IonLabel>
+              <IonInput
+                placeholder="00.00"
+                type="text"
+                value={height}
+                onIonChange={(e) => {
+                  const inputValue = e.detail.value || "";
+                  if (!validateDecimalInput(inputValue, true)) {
+                    setErrMsg("Please enter a valid height ");
+                    setError(true);
+                  } else {
+                    setError(false);
+                    setHeight(inputValue);
+                  }
+                }}
+                id="height"
+              />
+            </IonItem>
+            <IonItem>
               <IonLabel>Weight</IonLabel>
-                <IonInput
-                  placeholder="00.00"
-                  type="text"
-                  value={weight}
-                  onIonChange={(e) => {
-                    const inputValue = e.detail.value || '';
-                    if (!validateDecimalInput(inputValue, true)) {
-                      setErrMsg("Please enter a valid weight.");
-                      setError(true);
-                    } else {
-                      setError(false);
-                      setWeight(inputValue);
-                    }
-                  }}
-                  id="weight"
-                />
-              </IonItem>
-              <IonItem>
+              <IonInput
+                placeholder="00.00"
+                type="text"
+                value={weight}
+                onIonChange={(e) => {
+                  const inputValue = e.detail.value || "";
+                  if (!validateDecimalInput(inputValue, true)) {
+                    setErrMsg("Please enter a valid weight.");
+                    setError(true);
+                  } else {
+                    setError(false);
+                    setWeight(inputValue);
+                  }
+                }}
+                id="weight"
+              />
+            </IonItem>
+            <IonItem>
               <IonLabel>OFC</IonLabel>
-                <IonInput
-                  placeholder="00.00"
-                  type="text"
-                  value={ofc}
-                  onIonChange={(e) => {
-                    const inputValue = e.detail.value || '';
-                    if (!validateDecimalInput(inputValue, true)) {
-                      setErrMsg("Please enter a valid OFC.");
-                      setError(true);
-                    } else {
-                      setError(false);
-                      setOFC(inputValue);
-                    }
-                  }}
-                  id="ofc"
-                />
-              </IonItem>
+              <IonInput
+                placeholder="00.00"
+                type="text"
+                value={ofc}
+                onIonChange={(e) => {
+                  const inputValue = e.detail.value || "";
+                  if (!validateDecimalInput(inputValue, true)) {
+                    setErrMsg("Please enter a valid OFC.");
+                    setError(true);
+                  } else {
+                    setError(false);
+                    setOFC(inputValue);
+                  }
+                }}
+                id="ofc"
+              />
+            </IonItem>
 
             <IonItem>
               <IonLabel color="primary">Old Date</IonLabel>
@@ -259,8 +252,9 @@ const SingleDone: React.FC<IParam> = () => {
               <IonInput
                 slot="end"
                 type="date"
-                value={formattedOldDate} // Use the givenDate directly without formatting it again
+                value={newDate} // Use the givenDate directly without formatting it again
                 //@ts-ignore
+                // onIonChange={(e) => handleDateChange(e.detail.value)}
                 onIonChange={(e) => setNewDate(e.detail.value)}
                 id="date12"
               />
