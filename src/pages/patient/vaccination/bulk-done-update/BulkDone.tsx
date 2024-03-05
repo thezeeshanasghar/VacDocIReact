@@ -168,7 +168,7 @@ const BulkDone: React.FC<IParam> = ({
         isDone: 1,
         isSkip: 0,
         givenDate: newDate,
-        brandId: selectedBrandIds[i],
+        brandId: selectedBrandIds[i] !== null ? selectedBrandIds[i] : null,
       };
 
       dataToBeSent.push(obj);
