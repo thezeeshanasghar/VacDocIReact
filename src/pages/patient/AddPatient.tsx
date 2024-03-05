@@ -270,7 +270,7 @@ const AddPatient: React.FC = () => {
       />
       <Header pageName="Add Patient" />
       <IonCard style={{ overflowY: "scroll" }}>
-        <IonCardContent>
+        {/* <IonCardContent> */}
           <form onSubmit={handleFormSubmit}>
             <IonItem>
               <IonInput
@@ -491,7 +491,7 @@ const AddPatient: React.FC = () => {
               Add Patient
             </IonButton>
           </form>
-        </IonCardContent>
+        {/* </IonCardContent> */}
       </IonCard>
     </IonPage>
   );

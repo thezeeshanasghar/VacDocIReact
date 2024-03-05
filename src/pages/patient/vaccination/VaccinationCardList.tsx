@@ -29,6 +29,7 @@ import VaccinationCard from "./VaccinationCard";
 import Toast from "../../../components/custom-toast/Toast";
 import { useLocation } from "react-router";
 import { v4 } from "uuid";
+import LoadingSpinner from "../../../components/loading-spinner/LoadingSpinner";
 interface IVaccine {
   DoseName: string;
   IsDone: boolean;
@@ -283,6 +284,7 @@ const VaccinationCardList: React.FC<IParam> = (
   console.log(data);
   return (
     <>
+  <LoadingSpinner isOpen={isLoading} setOpen={setIsLoading} time={5000}/>
       <Toast
         isOpen={success}
         setOpen={setSuccess}

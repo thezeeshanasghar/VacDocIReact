@@ -268,6 +268,23 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
                 />
               </IonCol>
               <IonCol size="auto">
+                <IonButton
+                  // src={syringImage}
+                  size="small"
+                  onClick={() => postSkip()}
+                  style={{
+                    textTransform: "lowercase",
+                    height: "30px",
+                    display: "inline-block",
+                    margin: "0px 10px",
+                  }}
+                  color={IsSkip ? "danger" : "primary"}
+                  id="skip1"
+                >
+                  {IsSkip ? "UnSkip" : "Skip"}
+                </IonButton>
+              </IonCol>
+              <IonCol size="auto">
                 <IonImg
                   // size="small"
                   src={emptySyringImage}
@@ -288,23 +305,7 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
                   {IsDone ? "undo" : "done"}
                 </IonImg>
               </IonCol>
-              <IonCol size="auto">
-                <IonButton
-                  // src={syringImage}
-                  size="small"
-                  onClick={() => postSkip()}
-                  style={{
-                    textTransform: "lowercase",
-                    height: "30px",
-                    display: "inline-block",
-                    margin: "0px 10px",
-                  }}
-                  color={IsSkip ? "danger" : "primary"}
-                  id="skip1"
-                >
-                  {IsSkip ? "UnSkip" : "Skip"}
-                </IonButton>
-              </IonCol>
+
             </>
           )}
           {IsSkip &&
@@ -349,9 +350,13 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
                     style={{
                       display: "flex",
                       flexDirection: "row",
-                      margin: "1px 0px  0 10px",
+                      justifyContent:"center" ,
+                      alignItems: "center",
+                      margin: "0px 0px  0 0px",
+                      padding: "5px" ,
+                      // border:"1px solid black"
                     }}
-                  >
+                  >  <div style={{paddingRight:"10px"}} >{date}</div>
                     <IonImg
                       // size="small"
                       src={syringImage}
@@ -360,7 +365,7 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
                         textTransform: "lowercase",
                         height: "32px",
                         display: "inline-block",
-                        margin: "1px 20px  0 10px",
+                        margin: "1px 0px  0 10px",
                       }}
                       color={IsDone ? "success" : "primary"}
                       id="done1"
@@ -368,7 +373,7 @@ const VaccinationCard: React.FC<IDoseSchedule> = ({
                       {IsDone ? "undo" : "done"}
                     </IonImg>
                   </div>
-                  <div>{date}</div>
+                
                 </div>
               </div>
             </>
