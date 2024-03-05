@@ -165,11 +165,12 @@ const ClinicSchedule: React.FC = () => {
         color="success"
         errMsg="Clinic and schedule is added now!"
       />
-      <IonHeader>
-        <IonToolbar color={"primary"}>
-          <IonTitle>Clinic Schedule</IonTitle>
-        </IonToolbar>
-      </IonHeader>
+<IonHeader>
+  <IonToolbar color={"primary"} slot="center">
+    <IonTitle style={{ fontSize: '1.8em', textAlign: 'center'  }}>Clinic Schedule</IonTitle>
+  </IonToolbar>
+</IonHeader>
+
       <IonContent className="ion-padding">
         <form
           onSubmit={handleUnSubmit}

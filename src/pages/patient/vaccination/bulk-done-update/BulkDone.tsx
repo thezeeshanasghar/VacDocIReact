@@ -85,11 +85,14 @@ const BulkDone: React.FC<IParam> = ({
 
   const [successToast, setSuccessToast] = useState(false);
   const [errorToast, setErrorToast] = useState(false);
-  const [newDate, setNewDate] = useState();
+  const [newDate, setNewDate] = useState(formatDate(oldDate));
   const [brandId, setBrandId] = useState<number[]>([]); // Changed to specify the type as number[]
   const [brandData, setBrandData] = useState<IBrand[][]>([]); // Changed to specify the type as IBrand[][]
   const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState<String>("");
+  const [height, setHeight] = useState("");
+  const [weight, setWeight] = useState("");
+  const [ofc, setOfc] = useState("");
 
   // Get the value of the "oldDate" parameter from the query parameters
   console.log(formatDate(oldDate));
@@ -104,7 +107,10 @@ const BulkDone: React.FC<IParam> = ({
     )
       .then((res) => res.json())
       .then((data) => {
-        const ids = data.map((item: { Id: any, IsSkip: boolean }) => item.IsSkip === false && item.Id);
+        const ids = data.map(
+          (item: { Id: any; IsSkip: boolean }) =>
+            item.IsSkip === false && item.Id
+        );
         // const ids = data.map((item: { Id: any; }) => item.Id);
         setBrandId(ids);
         console.log("Initial Data:", data);
@@ -296,38 +302,85 @@ const BulkDone: React.FC<IParam> = ({
               </IonSelect>
             </IonItem> */}
             {/* @ts-ignore */}
+
             {Array.from({ length: numberOfInputs }, (_, index) => (
-              <IonItem key={index}>
-                <IonLabel color="primary">Brands {index + 1}</IonLabel>
-                {loading ? ( // Show loading message while fetching brandData
-                  <IonSelect disabled>
-                    <IonSelectOption>Loading...</IonSelectOption>
-                  </IonSelect>
-                ) : brandData[index] && brandData[index].length > 0 ? ( // Show options when brandData is available for this input
-                  <IonSelect
-                    value={selectedBrandIds[index]}
-                    onIonChange={(e) =>
-                      handleBrandChange(index, e.detail.value)
-                    }
-                    id="brand"
-                  >
-                    {brandData[index].map((brandOption) => (
-                      <IonSelectOption
-                        key={brandOption.Id}
-                        value={brandOption.Id}
-                      >
-                        {brandOption.Name}
-                      </IonSelectOption>
-                    ))}
-                  </IonSelect>
-                ) : (
-                  // Show message if no brands available for this input
-                  <IonSelect disabled>
-                    <IonSelectOption>No brands available</IonSelectOption>
-                  </IonSelect>
-                )}
-              </IonItem>
+              <>
+                <IonItem key={index}>
+                  <IonLabel color="primary">Brands {index + 1}</IonLabel>
+                  {loading ? ( // Show loading message while fetching brandData
+                    <IonSelect disabled>
+                      <IonSelectOption>Loading...</IonSelectOption>
+                    </IonSelect>
+                  ) : brandData[index] && brandData[index].length > 0 ? ( // Show options when brandData is available for this input
+                    <IonSelect
+                      value={selectedBrandIds[index]}
+                      onIonChange={(e) =>
+                        handleBrandChange(index, e.detail.value)
+                      }
+                      id="brand"
+                    >
+                      {brandData[index].map((brandOption) => (
+                        <IonSelectOption
+                          key={brandOption.Id}
+                          value={brandOption.Id}
+                        >
+                          {brandOption.Name}
+                        </IonSelectOption>
+                      ))}
+                    </IonSelect>
+                  ) : (
+                    // Show message if no brands available for this input
+                    <IonSelect disabled>
+                      <IonSelectOption>No brands available</IonSelectOption>
+                    </IonSelect>
+                  )}
+                </IonItem>
+                <IonItem>
+                  <IonLabel>Height {index + 1}:</IonLabel>
+                  <IonInput
+                    placeholder="00.00"
+                    type="text"
+                    value={height}
+                    onIonChange={(e) => {}}
+                  />
+                </IonItem>
+                <IonItem>
+                  <IonLabel>Weight {index + 1}:</IonLabel>
+                  <IonInput
+                    placeholder="00.00"
+                    type="text"
+                    value={weight}
+                    onIonChange={(e) => {}}
+                  />
+                </IonItem>
+                <IonItem>
+                  <IonLabel>OFC {index + 1}:</IonLabel>
+                  <IonInput
+                    placeholder="00.00"
+                    type="text"
+                    value={ofc}
+                    onIonChange={(e) => {}}
+                  />
+                </IonItem>
+              </>
             ))}
+            {/* 
+
+            <IonItem>
+              <IonLabel>Weight 1:</IonLabel>
+              <IonInput
+                placeholder="00.00"
+                type="text"
+                value={weight}
+                onIonChange={(e) => {
+                  
+                }}
+              />
+            </IonItem>
+
+
+ */}
+
             <IonItem>
               <IonLabel color="primary">Old Date</IonLabel>
               <IonInput

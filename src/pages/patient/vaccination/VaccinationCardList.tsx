@@ -24,7 +24,9 @@ import { format, isValid, parse } from "date-fns";
 import axios from "axios";
 import { saveAs } from "file-saver";
 import Header from "../../../components/header/Header";
-import syringImage from "../../../assets/injectionEmpty.png";
+import syringImageEmpty from "../../../assets/injectionEmpty.png";
+import syringImageFilled from "../../../assets/injectionFilled.png";
+
 import VaccinationCard from "./VaccinationCard";
 import Toast from "../../../components/custom-toast/Toast";
 import { useLocation } from "react-router";
@@ -344,9 +346,39 @@ const VaccinationCardList: React.FC<IParam> = (
                 {!isBulkSkip && !isBulkDone && (
                   <IonItem lines="none" className="centered-item">
                     <IonText style={{ marginRight: "1rem" }}>{date}</IonText>
+                   <div style={{display:"flex" , justifyContent:"center" , alignItems:"center" , paddingLeft:"30px"}}>
+                   <IonIcon
+                      color="primary"
+                      onClick={openPopover}
+                      icon={calendar}
+                      style={{ marginRight: "10px", cursor: "pointer" , fontSize:"25px" }}
+                      onMouseOver={() => handelonmouseover(date)}
+                      id="bulk"
+                    />
+
+                    
+                    <IonButton
+                      // src={syringImageEmpty}
+                      size="small"
+                      onClick={() => postSkip(date, true)}
+                      style={{
+                        textTransform: "lowercase",
+                        height: "30px",
+                        width:"60px" ,
+                        display: "inline-block",
+                        margin: "0px 10px",
+                        color: "primary",
+                        cursor: "pointer",
+                      }}
+                      color={isBulkSkip ? "danger" : "primary"}
+                      id="skip"
+                    >
+                      {isBulkSkip ? "UnSkip" : "Skip"}
+                    </IonButton>
+
 
                     <IonImg
-                      src={syringImage}
+                      src={syringImageEmpty}
                       onClick={() =>
                         router.push(
                           `/members/child/vaccine/${childId}/bulk/${1}?oldDate=${date}&No=${
@@ -365,16 +397,7 @@ const VaccinationCardList: React.FC<IParam> = (
                       className="ng-star-inserted md hydrated"
                       id="done"
                     />
-
-                    <IonIcon
-                      color="primary"
-                      onClick={openPopover}
-                      icon={calendar}
-                      style={{ marginRight: "10px", cursor: "pointer" }}
-                      onMouseOver={() => handelonmouseover(date)}
-                      id="bulk"
-                    />
-
+                   </div>
                     <IonPopover
                       isOpen={showPopover}
                       onDidDismiss={closePopover}
@@ -395,23 +418,7 @@ const VaccinationCardList: React.FC<IParam> = (
                       /> */}
                     </IonPopover>
 
-                    <IonButton
-                      // src={syringImage}
-                      size="small"
-                      onClick={() => postSkip(date, true)}
-                      style={{
-                        textTransform: "lowercase",
-                        height: "30px",
-                        display: "inline-block",
-                        margin: "0px 10px",
-                        color: "primary",
-                        cursor: "pointer",
-                      }}
-                      color={isBulkSkip ? "danger" : "primary"}
-                      id="skip"
-                    >
-                      {isBulkSkip ? "UnSkip" : "Skip"}
-                    </IonButton>
+
                   </IonItem>
                 )}
                 {isBulkSkip && ( // Show "unSkip" button when buttons are hidden
@@ -419,7 +426,7 @@ const VaccinationCardList: React.FC<IParam> = (
                     <IonText style={{ marginRight: "1rem" }}>{date}</IonText>
 
                     {/* <IonImg
-                    src={syringImage}
+                    src={syringImageEmpty}
                     onClick={() =>
                       router.push(
                         `/members/child/vaccine/${childId}/bulk/${1}?oldDate=${date}&No=${
@@ -484,10 +491,21 @@ const VaccinationCardList: React.FC<IParam> = (
                           height: "30px",
                           display: "inline-block",
                           marginLeft: "15px",
+                          marginRight:"10px"
                         }}
                       >
                         {date}
                       </span>
+                      
+                    <IonImg
+                      src={syringImageFilled}
+                      style={{
+                        height: "30px",
+                        display: "inline-block",
+                        margin: "0px 10px",
+                        cursor: "pointer",
+                      }}
+                    />
                     </IonCol>
                   </>
                 )}

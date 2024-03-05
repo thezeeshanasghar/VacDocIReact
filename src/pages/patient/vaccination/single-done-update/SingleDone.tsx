@@ -179,6 +179,7 @@ const SingleDone: React.FC<IParam> = () => {
             </IonToolbar>
           </IonHeader>
           <form noValidate onSubmit={postSingleDone}>
+
             <IonItem>
               <IonLabel>Height</IonLabel>
               <IonInput
@@ -198,6 +199,7 @@ const SingleDone: React.FC<IParam> = () => {
                 id="height"
               />
             </IonItem>
+            
             <IonItem>
               <IonLabel>Weight</IonLabel>
               <IonInput
@@ -217,6 +219,7 @@ const SingleDone: React.FC<IParam> = () => {
                 id="weight"
               />
             </IonItem>
+
             <IonItem>
               <IonLabel>OFC</IonLabel>
               <IonInput

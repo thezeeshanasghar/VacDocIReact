@@ -16,6 +16,8 @@ import {
   IonItem,
   IonLabel,
   IonPage,
+  IonTitle,
+  IonToolbar,
   useIonRouter,
 } from "@ionic/react";
 import React, { useEffect, useState } from "react";
@@ -93,9 +95,11 @@ const DosesSelection: React.FC = () => {
   return (
     <>
       <IonPage>
-        <IonHeader>
-          <IonItem style={{ textAlign: "center" }}>Doses Selection</IonItem>
-        </IonHeader>
+      <IonHeader>
+  <IonToolbar color={"primary"} slot="center">
+    <IonTitle style={{ fontSize: '2em', textAlign: 'center'  }}>Dose Selection</IonTitle>
+  </IonToolbar>
+</IonHeader>
         <IonContent className="ion-padding">
           <form onSubmit={handleFormSubmit}>
             {vaccineData.map((dose) => (
