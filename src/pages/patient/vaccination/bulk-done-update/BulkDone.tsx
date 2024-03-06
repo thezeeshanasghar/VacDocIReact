@@ -45,7 +45,8 @@ const BulkDone: React.FC<IParam> = ({
   // let DOB = queryParams.get("DOB");
   // let doctorId = queryParams.get("doctorId");
 
-
+  const [error, setError] = useState(false);
+  const [errMsg, setErrMsg] = useState("");
   const formatDate = (inputDate: string | null) => {
     if (!inputDate) {
       return null; // Handle null input gracefully
@@ -92,8 +93,31 @@ const BulkDone: React.FC<IParam> = ({
   const [height, setHeight] = useState("");
   const [weight, setWeight] = useState("");
   const [ofc, setOfc] = useState("");
-  const [heights, setHeights] = useState<(string | null)[]>(Array(numberOfInputs).fill(null));
- 
+  const [heights, setHeights] = useState<(string | null)[]>(
+    Array(numberOfInputs).fill(null)
+  );
+  const [weights, setWeights] = useState<(string | null)[]>(
+    Array(numberOfInputs).fill(null)
+  );
+  const [ofcs, setOfcs] = useState<(string | null)[]>(
+    Array(numberOfInputs).fill(null)
+  );
+
+const validateDecimalInput = (input: string, allowEmpty: boolean = false) => {
+  // If the input is empty and empty inputs are allowed, return true
+  if (allowEmpty && input === "") {
+    return true;
+  }
+
+  // Regular expression to match numbers with at most one decimal point
+  const regex = /^[0-9]+(\.[0-9]+)?$/;
+
+  // Test the input against the regular expression
+  return regex.test(input);
+};
+
+
+  
   useEffect(() => {
     let qry = localStorage.getItem("query") as String;
     setQuery(qry);
@@ -110,9 +134,8 @@ const BulkDone: React.FC<IParam> = ({
             item.IsSkip === false && item.Id
         );
         // const ids = data.map((item: { Id: any; }) => item.Id);
-        console.log('ids',ids)
+        console.log("ids", ids);
         setBrandId(ids);
-     
       })
       .catch((err) => console.error(err));
   }, []);
@@ -142,7 +165,6 @@ const BulkDone: React.FC<IParam> = ({
         // console.log('brand data', resultData)
         setBrandData(resultData);
         setLoading(false); // Set loading to false after data is fetched
-        
       } catch (err) {
         console.error(err);
         setLoading(false); // Set loading to false in case of an error
@@ -169,42 +191,59 @@ const BulkDone: React.FC<IParam> = ({
     for (let i = 0; i < numberOfInputs; i++) {
       const obj = {
         id: brandId[i],
-        currentdate:formatDate(oldDate),
+        currentdate: formatDate(oldDate),
         isDone: true,
         isSkip: false,
         givenDate: newDate,
-        brandId: selectedBrandIds[i] !== "" && selectedBrandIds[i] !== undefined ? selectedBrandIds[i] : null,
-        height: heights[i] !== "" && heights[i] !== undefined && heights[i] !== undefined   ? heights[i] : null,
+        brandId:
+          selectedBrandIds[i] !== "" && selectedBrandIds[i] !== undefined
+            ? selectedBrandIds[i]
+            : null,
+        height:
+          heights[i] !== "" &&
+          heights[i] !== undefined &&
+          heights[i] !== undefined
+            ? heights[i]
+            : null,
+        weight:
+          weights[i] !== "" &&
+          weights[i] !== undefined &&
+          weights[i] !== undefined
+            ? weights[i]
+            : null,
+        ofc:
+          ofcs[i] !== "" && ofcs[i] !== undefined && ofcs[i] !== undefined
+            ? ofcs[i]
+            : null,
       };
 
       dataToBeSent.push(obj);
     }
 
-    console.log('data to be sent',dataToBeSent);
-    // const url = `${
-    //   import.meta.env.VITE_API_URL
-    // }api/PatientSchedule/patient_bulk_updateDone`;
-    // try {
-    //   const response = await fetch(url, {
-    //     method: "PATCH",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify(dataToBeSent),
-    //   });
-    //   if (response.status === 204) {
-    //     setSuccessToast(true);
-    //     //@ts-ignore
-    //     localStorage.setItem("isDone", "true");
-    //     // router.push(`/members/child/vaccine/${Id}${query}`, "back");
-    //     // window.location.reload();
-    //   } else if (!response.ok) setErrorToast(true);
-    // } catch (err) {
-     
-    //   setErrorToast(true);
-    //   //@ts-ignore
-    //   localStorage.setItem("isDone", "false");
-    // }
+    console.log("data to be sent", dataToBeSent);
+    const url = `${
+      import.meta.env.VITE_API_URL
+    }api/PatientSchedule/patient_bulk_updateDone`;
+    try {
+      const response = await fetch(url, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(dataToBeSent),
+      });
+      if (response.status === 204) {
+        setSuccessToast(true);
+        //@ts-ignore
+        localStorage.setItem("isDone", "true");
+        // router.push(`/members/child/vaccine/${Id}${query}`, "back");
+        // window.location.reload();
+      } else if (!response.ok) setErrorToast(true);
+    } catch (err) {
+      setErrorToast(true);
+      //@ts-ignore
+      localStorage.setItem("isDone", "false");
+    }
   };
 
   // const [brands, setBrands] = useState([3]);
@@ -225,19 +264,60 @@ const BulkDone: React.FC<IParam> = ({
       return newSelectedBrandIds;
     });
   };
-  const handleHeightChange = (index: number, value: string) => {
-    setHeights((prevHeights) => {
-      const newHeights = [...prevHeights];
-      newHeights[index] = value;
-      return newHeights;
-    });
-  };
+
+const handleHeightChange = (index: number, value: string) => {
+  setHeights((prevHeights) => {
+    const newHeights = [...prevHeights];
+    const trimmedValue = value.trim(); // Trim the value
+    if (!validateDecimalInput(trimmedValue, true)) {
+      setErrMsg("Please enter a valid height");
+      setError(true);
+    } else {
+      setError(false);
+      newHeights[index] = trimmedValue !== "" ? trimmedValue : null;
+    }
+    return newHeights;
+  });
+};
+
+
+
+const handleWeightChange = (index: number, value: string) => {
+setWeights((prevWeights) => {
+  const newWeights = [...prevWeights];
+  const trimmedValue = value.trim(); // Trim the value
+  if (!validateDecimalInput(trimmedValue, true)) {
+    setErrMsg("Please enter a valid height");
+    setError(true);
+  } else {
+    setError(false);
+    newWeights[index] = trimmedValue !== "" ? trimmedValue : null;
+  }
+  return newWeights;
+});
+};
+
+
+
+const handleOfcChange = (index: number, value: string) => {
+  setOfcs((prevOfcs) => {
+    const newOfcs = [...prevOfcs];
+    const trimmedValue = value.trim(); // Trim the value
+    if (!validateDecimalInput(trimmedValue, true)) {
+      setErrMsg("Please enter a valid OFC");
+      setError(true);
+    } else {
+      setError(false);
+      newOfcs[index] = trimmedValue !== "" ? trimmedValue : null;
+    }
+    return newOfcs;
+  });
+};
+
   // ... (previous code)
 
   // Log selectedBrandIds whenever it changes
-  useEffect(() => {
-  
-  }, [selectedBrandIds]);
+  useEffect(() => {}, [selectedBrandIds]);
 
   const selected = newDate !== "";
 
@@ -263,7 +343,6 @@ const BulkDone: React.FC<IParam> = ({
             </IonToolbar>
           </IonHeader>
           <form noValidate onSubmit={handleSubmit}>
-            
             {/* @ts-ignore */}
 
             {Array.from({ length: numberOfInputs }, (_, index) => (
@@ -303,12 +382,36 @@ const BulkDone: React.FC<IParam> = ({
                   <IonInput
                     placeholder="00.00"
                     type="text"
-                    value={heights[index] || ''}
-                    onIonChange={(e) => handleHeightChange(index, e.detail.value || '')}
+                    value={heights[index] || ""}
+                    onIonChange={(e) =>
+                      handleHeightChange(index, e.detail.value || "")
+
+                    }
+
                   />
                 </IonItem>
-                
-                
+                <IonItem>
+                  <IonLabel>Weight {index + 1}:</IonLabel>
+                  <IonInput
+                    placeholder="00.00"
+                    type="text"
+                    value={weights[index] || ""}
+                    onIonChange={(e) =>
+                      handleWeightChange(index, e.detail.value || "")
+                    }
+                  />
+                </IonItem>
+                <IonItem>
+                  <IonLabel>OFC {index + 1}:</IonLabel>
+                  <IonInput
+                    placeholder="00.00"
+                    type="text"
+                    value={ofcs[index] || ""}
+                    onIonChange={(e) =>
+                      handleOfcChange(index, e.detail.value || "")
+                    }
+                  />
+                </IonItem>
               </>
             ))}
             {/* 
