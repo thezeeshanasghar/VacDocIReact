@@ -236,7 +236,8 @@ const validateDecimalInput = (input: string, allowEmpty: boolean = false) => {
         setSuccessToast(true);
         //@ts-ignore
         localStorage.setItem("isDone", "true");
-        // router.push(`/members/child/vaccine/${Id}${query}`, "back");
+        router.push(`/members/child/vaccine/${Id}${query}`, "back");
+        
         // window.location.reload();
       } else if (!response.ok) setErrorToast(true);
     } catch (err) {
