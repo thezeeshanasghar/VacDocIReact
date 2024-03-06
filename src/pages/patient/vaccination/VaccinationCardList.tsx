@@ -170,7 +170,7 @@ const VaccinationCardList: React.FC<IParam> = (
       );
       if (response.ok) {
         const data = await response.json();
-        console.log(data);
+       
         setData(data);
         setIsLoading(false);
       } else {
@@ -283,7 +283,7 @@ const VaccinationCardList: React.FC<IParam> = (
     setButtonsVisible(!isButtonsVisible);
     postSkip(date, false); // Update the database value of isSkip
   };
-  console.log(data);
+  console.log('data',data);
   return (
     <>
   <LoadingSpinner isOpen={isLoading} setOpen={setIsLoading} time={5000}/>

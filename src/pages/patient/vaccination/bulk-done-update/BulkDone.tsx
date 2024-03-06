@@ -44,8 +44,7 @@ const BulkDone: React.FC<IParam> = ({
   const numberOfInputs: string | null = queryParams.get("No");
   // let DOB = queryParams.get("DOB");
   // let doctorId = queryParams.get("doctorId");
-  console.log(numberOfInputs);
-  console.log(oldDate);
+
 
   const formatDate = (inputDate: string | null) => {
     if (!inputDate) {
@@ -93,9 +92,8 @@ const BulkDone: React.FC<IParam> = ({
   const [height, setHeight] = useState("");
   const [weight, setWeight] = useState("");
   const [ofc, setOfc] = useState("");
-
-  // Get the value of the "oldDate" parameter from the query parameters
-  console.log(formatDate(oldDate));
+  const [heights, setHeights] = useState<(string | null)[]>(Array(numberOfInputs).fill(null));
+ 
   useEffect(() => {
     let qry = localStorage.getItem("query") as String;
     setQuery(qry);
@@ -112,8 +110,9 @@ const BulkDone: React.FC<IParam> = ({
             item.IsSkip === false && item.Id
         );
         // const ids = data.map((item: { Id: any; }) => item.Id);
+        console.log('ids',ids)
         setBrandId(ids);
-        console.log("Initial Data:", data);
+     
       })
       .catch((err) => console.error(err));
   }, []);
@@ -143,7 +142,7 @@ const BulkDone: React.FC<IParam> = ({
         // console.log('brand data', resultData)
         setBrandData(resultData);
         setLoading(false); // Set loading to false after data is fetched
-        console.log("Data for Brand IDs:", resultData);
+        
       } catch (err) {
         console.error(err);
         setLoading(false); // Set loading to false in case of an error
@@ -170,41 +169,42 @@ const BulkDone: React.FC<IParam> = ({
     for (let i = 0; i < numberOfInputs; i++) {
       const obj = {
         id: brandId[i],
-        currentDate: formatDate(oldDate),
-        isDone: 1,
-        isSkip: 0,
+        currentdate:formatDate(oldDate),
+        isDone: true,
+        isSkip: false,
         givenDate: newDate,
-        brandId: selectedBrandIds[i] !== null ? selectedBrandIds[i] : null,
+        brandId: selectedBrandIds[i] !== "" && selectedBrandIds[i] !== undefined ? selectedBrandIds[i] : null,
+        height: heights[i] !== "" && heights[i] !== undefined && heights[i] !== undefined   ? heights[i] : null,
       };
 
       dataToBeSent.push(obj);
     }
 
-    console.log(dataToBeSent);
-    const url = `${
-      import.meta.env.VITE_API_URL
-    }api/PatientSchedule/patient_bulk_updateDone`;
-    try {
-      const response = await fetch(url, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(dataToBeSent),
-      });
-      if (response.status === 204) {
-        setSuccessToast(true);
-        //@ts-ignore
-        localStorage.setItem("isDone", "true");
-        router.push(`/members/child/vaccine/${Id}${query}`, "back");
-        // window.location.reload();
-      } else if (!response.ok) setErrorToast(true);
-    } catch (err) {
-      console.log("not add");
-      setErrorToast(true);
-      //@ts-ignore
-      localStorage.setItem("isDone", "false");
-    }
+    console.log('data to be sent',dataToBeSent);
+    // const url = `${
+    //   import.meta.env.VITE_API_URL
+    // }api/PatientSchedule/patient_bulk_updateDone`;
+    // try {
+    //   const response = await fetch(url, {
+    //     method: "PATCH",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify(dataToBeSent),
+    //   });
+    //   if (response.status === 204) {
+    //     setSuccessToast(true);
+    //     //@ts-ignore
+    //     localStorage.setItem("isDone", "true");
+    //     // router.push(`/members/child/vaccine/${Id}${query}`, "back");
+    //     // window.location.reload();
+    //   } else if (!response.ok) setErrorToast(true);
+    // } catch (err) {
+     
+    //   setErrorToast(true);
+    //   //@ts-ignore
+    //   localStorage.setItem("isDone", "false");
+    // }
   };
 
   // const [brands, setBrands] = useState([3]);
@@ -218,20 +218,25 @@ const BulkDone: React.FC<IParam> = ({
 
   // ... (previous code)
 
-  // Update selected brand IDs when a brand is selected in the <IonSelect> element
   const handleBrandChange = (index: number, value: string) => {
     setSelectedBrandIds((prevSelectedBrandIds) => {
       const newSelectedBrandIds = [...prevSelectedBrandIds];
-      newSelectedBrandIds[index] = value || ""; // Ensure a valid value is set or an empty string
+      newSelectedBrandIds[index] = value !== null ? value : ""; // Ensure null is converted to an empty string
       return newSelectedBrandIds;
     });
   };
-
+  const handleHeightChange = (index: number, value: string) => {
+    setHeights((prevHeights) => {
+      const newHeights = [...prevHeights];
+      newHeights[index] = value;
+      return newHeights;
+    });
+  };
   // ... (previous code)
 
   // Log selectedBrandIds whenever it changes
   useEffect(() => {
-    console.log("Selected Brand IDs:", selectedBrandIds);
+  
   }, [selectedBrandIds]);
 
   const selected = newDate !== "";
@@ -258,49 +263,7 @@ const BulkDone: React.FC<IParam> = ({
             </IonToolbar>
           </IonHeader>
           <form noValidate onSubmit={handleSubmit}>
-            {/* <IonItem>
-                  <IonLabel position="floating" color="primary">
-                    Weight
-                  </IonLabel>
-                  <IonInput
-                    type="number"
-                    value={weight}
-                    onIonChange={(e) => setWeight(parseFloat(e.detail.value!))}
-                  ></IonInput>
-                </IonItem>
-                <IonItem>
-                  <IonLabel position="floating" color="primary">
-                    Height
-                  </IonLabel>
-                  <IonInput
-                    type="number"
-                    value={height}
-                    onIonChange={(e) => setHeight(parseFloat(e.detail.value!))}
-                  ></IonInput>
-                </IonItem>
-                <IonItem>
-                  <IonLabel position="floating" color="primary">
-                    OFC
-                  </IonLabel>
-                  <IonInput
-                    type="number"
-                    value={OFC}
-                    onIonChange={(e) => setOFC(parseFloat(e.detail.value!))}
-                  ></IonInput>
-                </IonItem> */}
-            {/* <IonItem>
-              <IonLabel color="primary">Brands</IonLabel>
-              <IonSelect
-                value={brand}
-                onIonChange={(e) => setBrand(e.detail.value)}
-              >
-                {brandData.map((brandOption) => (
-                  <IonSelectOption key={brandOption.Id} value={brandOption.Id}>
-                    {brandOption.Name}
-                  </IonSelectOption>
-                ))}
-              </IonSelect>
-            </IonItem> */}
+            
             {/* @ts-ignore */}
 
             {Array.from({ length: numberOfInputs }, (_, index) => (
@@ -340,28 +303,12 @@ const BulkDone: React.FC<IParam> = ({
                   <IonInput
                     placeholder="00.00"
                     type="text"
-                    value={height}
-                    onIonChange={(e) => {}}
+                    value={heights[index] || ''}
+                    onIonChange={(e) => handleHeightChange(index, e.detail.value || '')}
                   />
                 </IonItem>
-                <IonItem>
-                  <IonLabel>Weight {index + 1}:</IonLabel>
-                  <IonInput
-                    placeholder="00.00"
-                    type="text"
-                    value={weight}
-                    onIonChange={(e) => {}}
-                  />
-                </IonItem>
-                <IonItem>
-                  <IonLabel>OFC {index + 1}:</IonLabel>
-                  <IonInput
-                    placeholder="00.00"
-                    type="text"
-                    value={ofc}
-                    onIonChange={(e) => {}}
-                  />
-                </IonItem>
+                
+                
               </>
             ))}
             {/* 
