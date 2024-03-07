@@ -84,6 +84,8 @@ import Toast from "../../components/custom-toast/Toast";
     .filter(([vaccineId, isSelected]) => isSelected)
     .map(([vaccineId]) => Number(vaccineId));
 
+  
+
     fetch(`${import.meta.env.VITE_API_URL}api/PatientSchedule/isspecial_true?ChildId=${childId}`, {
         method: "PATCH",
         headers: {
@@ -94,7 +96,7 @@ import Toast from "../../components/custom-toast/Toast";
         .then((res) => {
           if (res.status === 200) {
             setSuccess(true);
-            history.push("/members/child");
+            history.push( `/members/child/vaccine/${childId}`);
             }
           else {
             setError(true);
@@ -114,7 +116,7 @@ import Toast from "../../components/custom-toast/Toast";
         <IonPage>
           <Header pageName="Vaccine" />
           <IonContent className="ion-padding">
-          {noDoses && (
+          {vaccineData.length===0 && (
           <div className="ion-text-center ion-margin">
             <p>No doses are present. Please contact the admin.</p>
           </div>
